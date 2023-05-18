@@ -16,7 +16,7 @@ const BookingSchema = new Schema({
         required: true,
     },
     createdAt: {
-        type: Datetime,
+        type: Date,
         required: true,
     },
     createdBy: {
