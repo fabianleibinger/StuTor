@@ -1,6 +1,6 @@
-import University from "../models/University.js";
-import createError from "../utils/createError.js";
-import { ObjectId } from "mongodb";
+import University from '../models/University.js';
+import createError from '../utils/createError.js';
+import { ObjectId } from 'mongodb';
 
 export const createUniversity = async (req, res, next) => {
     try {
@@ -28,10 +28,10 @@ export const deleteUniversity = async (req, res, next) => {
     try {
         const university = await University.find({ _id: new ObjectId(req.params.universityId) });
         if (university.length === 0) {
-            return next(createError(404, "University not found!"));
+            return next(createError(404, 'University not found!'));
         }
         await University.findByIdAndDelete({ _id: new ObjectId(req.params.universityId) });
-        res.status(200).send("deleted.");
+        res.status(200).send('deleted.');
     } catch (err) {
         next(err);
     }
@@ -41,7 +41,7 @@ export const updateUniversity = async (req, res, next) => {
     try {
         const university = await University.find({ _id: new ObjectId(req.params.universityId) });
         if (university.length === 0) {
-            return next(createError(404, "University not found!"));
+            return next(createError(404, 'University not found!'));
         }
         const updatedUniversity = await University.findByIdAndUpdate(
             req.params.universityId,

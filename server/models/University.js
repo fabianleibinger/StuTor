@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const UniversitySchema = new Schema({
@@ -13,6 +13,6 @@ const UniversitySchema = new Schema({
     },
 });
 
-const University = mongoose.model("University", UniversitySchema);
+const University = mongoose.model('University', UniversitySchema);
 
 export default University;

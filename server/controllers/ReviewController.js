@@ -1,7 +1,7 @@
-import { ObjectId } from "mongodb";
-import createError from "../utils/createError.js";
-import Review from "../models/Review.js";
-import Booking from "../models/Booking.js";
+import { ObjectId } from 'mongodb';
+import createError from '../utils/createError.js';
+import Review from '../models/Review.js';
+import Booking from '../models/Booking.js';
 
 export const createReview = async (req, res, next) => {
 // cannot add reference to booking yet, this is just a dummy id
@@ -18,7 +18,7 @@ export const createReview = async (req, res, next) => {
 
     if (review)
       return next(
-        createError(403, "You have already created a review for this gig!")
+        createError(403, 'You have already created a review for this gig!')
       );
     
     //TO DO: Check more?
@@ -40,7 +40,7 @@ export const getReviews = async (req, res, next) => {
 export const deleteReview = async (req, res, next) => {
   try {
     Review.findByIdAndDelete(req.params.reviewId);
-    res.status(200).send("deleted.");
+    res.status(200).send('deleted.');
   } catch (err) {
     next(err);
   }
