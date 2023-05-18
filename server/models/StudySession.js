@@ -32,4 +32,4 @@ const StudySessionSchema = new mongoose.Schema({
 
 const StudySession = mongoose.model('StudySession', StudySessionSchema);
 
-module.exports = StudySession;
+export default StudySession;

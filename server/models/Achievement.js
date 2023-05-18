@@ -17,4 +17,4 @@ const AchievementSchema = new Schema({
 
 const Achievement = mongoose.model('Achievement', AchievementSchema);
 
-module.exports = Achievement;
+export default Achievement;

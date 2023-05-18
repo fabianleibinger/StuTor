@@ -15,4 +15,4 @@ const UserStudySessionSchema = new Schema({
 
 const UserStudySession = mongoose.model('UserStudySession', UserStudySessionSchema);
 
-module.exports = UserStudySession;
+export default UserStudySession;
