@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.post("/", createUniversity )
-router.get("/:bookingId", getUniversity )
+router.get("/:universityId", getUniversity )
 router.delete("/:id", deleteUniversity)
 router.put("/:id", updateUniversity)
 
