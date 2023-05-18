@@ -25,12 +25,12 @@ const connect = async() =>{
 app.use(express.json());
 
 app.use("/api/user", userRoute);
-app.use("api/booking", bookingRoute);
-app.use("api/course", courseRoute);
-app.use("api/achievement", achievementRoute);
-app.use("api/studysession", studysessionRoute);
-app.use("api/university", universityRoute);
-app.use("api/review", reviewRoute);
+app.use("/api/booking", bookingRoute);
+app.use("/api/course", courseRoute);
+app.use("/api/achievement", achievementRoute);
+app.use("/api/studysession", studysessionRoute);
+app.use("/api/university", universityRoute);
+app.use("/api/review", reviewRoute);
 
 const port = 3001;
 app.listen(port, () => {
