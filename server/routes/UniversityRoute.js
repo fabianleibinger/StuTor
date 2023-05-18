@@ -4,7 +4,7 @@ import {
   getUniversity,
   deleteUniversity,
   updateUniversity,
-} from "../controllers/university.controller.js";
+} from "../controllers/UniversityController.js";
 
 const router = express.Router();
 
