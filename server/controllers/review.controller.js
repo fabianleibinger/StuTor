@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import createError from "../utils/createError.js";
 import Review from "../models/Review.js";
