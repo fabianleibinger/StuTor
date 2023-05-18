@@ -1,4 +1,5 @@
 import University from "../models/University.js";
+import createError from "../utils/createError.js";
 import { ObjectId } from "mongodb";
 
 export const createUniversity = async (req, res, next) => {
@@ -25,21 +26,30 @@ export const getUniversity = async (req, res, next) => {
 };
 export const deleteUniversity = async (req, res, next) => {
     try {
-        University.findByIdAndDelete(req.params.id);
+        const university = await University.find({ _id: new ObjectId(req.params.universityId) });
+        if (university.length === 0) {
+            return next(createError(404, "University not found!"));
+        }
+        await University.findByIdAndDelete({ _id: new ObjectId(req.params.universityId) });
         res.status(200).send("deleted.");
     } catch (err) {
         next(err);
     }
 };
-
+// TO DO: Implement this
 export const updateUniversity = async (req, res, next) => {
     try {
-        const university = await University.findByIdAndUpdate(
-            req.params.id,
+        const university = await University.find({ _id: new ObjectId(req.params.universityId) });
+        if (university.length === 0) {
+            return next(createError(404, "University not found!"));
+        }
+        const updatedUniversity = await University.findByIdAndUpdate(
+            req.params.universityId,
             req.body,
-            { new: true }
+            { name: req.body.name,
+                country: req.body.country}
         );
-        res.status(200).send(university);
+        res.status(200).send(updatedUniversity);
     } catch (err) {
         next(err);
     }

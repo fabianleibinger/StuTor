@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post("/", createUniversity )
 router.get("/:universityId", getUniversity )
-router.delete("/:id", deleteUniversity)
-router.put("/:id", updateUniversity)
+router.delete("/:universityId", deleteUniversity)
+router.put("/:universityId", updateUniversity)
 
 export default router;
