@@ -1,6 +1,7 @@
 import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
+import userRoute from "./routes/user.route.js"
 
 
 const app = express();
@@ -14,6 +15,9 @@ const connect = async() =>{
         console.log(error);
     }
 };
+
+app.use("/api/user", userRoute);
+
 
 const port = 3001;
 app.listen(port, () => {
