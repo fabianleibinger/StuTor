@@ -22,6 +22,8 @@ const connect = async() =>{
     }
 };
 
+app.use(express.json());
+
 app.use("/api/user", userRoute);
 app.use("api/booking", bookingRoute);
 app.use("api/course", courseRoute);
