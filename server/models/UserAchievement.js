@@ -15,4 +15,4 @@ const UserAchievementSchema = new Schema({
 
 const UserAchievement = mongoose.model('UserAchievement', UserAchievementSchema);
 
-export default UserAchievementSchema;
+module.exports = UserAchievementModel;
