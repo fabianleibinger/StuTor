@@ -25,6 +25,19 @@ export const createUniversity = async (req, res) => {
     }
 };
 
+export const getUniversities = async (req, res) => {
+    try {
+        const universities = await University.find();
+        if (universities.length === 0) {
+            res.status(404).send('No universities found!');
+        } else {
+            res.status(200).send(universities);
+        }
+    } catch (err) {
+        res.status(500).send('Failed to retrieve universities!');
+    }
+};
+
 export const getUniversity = async (req, res) => {
     try {
         const universityId = new ObjectId(req.params.universityId);
@@ -40,19 +53,6 @@ export const getUniversity = async (req, res) => {
         }
     } catch (err) {
         res.status(400).send('Bad request!');
-    }
-};
-
-export const getUniversities = async (req, res) => {
-    try {
-        const universities = await University.find();
-        if (universities.length === 0) {
-            res.status(404).send('No universities found!');
-        } else {
-            res.status(200).send(universities);
-        }
-    } catch (err) {
-        res.status(500).send('Failed to retrieve universities!');
     }
 };
 

@@ -1,6 +1,6 @@
 import Course from '../models/Course.js';
-import { ObjectId } from 'mongodb';
 import University from '../models/University.js';
+import { ObjectId } from 'mongodb';
 
 export const createCourse = async (req, res) => {
     try {
@@ -31,6 +31,19 @@ export const createCourse = async (req, res) => {
     }
 };
 
+export const getCourses = async (req, res) => {
+    try {
+        const courses = await Course.find();
+        if (courses.length === 0) {
+            res.status(404).send('No courses found!');
+        } else {
+            res.status(200).send(courses);
+        }
+    } catch (err) {
+        res.status(500).send('Failed to retrieve courses!');
+    }
+};
+
 export const getCourse = async (req, res) => {
     try {
         const courseId = new ObjectId(req.params.courseId);
@@ -46,19 +59,6 @@ export const getCourse = async (req, res) => {
         }
     } catch (err) {
         res.status(400).send('Bad request!');
-    }
-};
-
-export const getCourses = async (req, res) => {
-    try {
-        const courses = await Course.find();
-        if (courses.length === 0) {
-            res.status(404).send('No courses found!');
-        } else {
-            res.status(200).send(courses);
-        }
-    } catch (err) {
-        res.status(500).send('Failed to retrieve courses!');
     }
 };
 
@@ -82,7 +82,7 @@ export const updateCourse = async (req, res) => {
             professor: req.body.professor,
         });
         try {
-            const course = await Course.findByIdAndUpdate(courseId, 
+            const course = await Course.findByIdAndUpdate(courseId,
                 {
                     name: updatedCourse.name,
                     external_identifier: updatedCourse.external_identifier,

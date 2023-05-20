@@ -1,8 +1,8 @@
 import express from 'express';
 import {
   createUniversity,
-  getUniversity,
   getUniversities,
+  getUniversity,
   deleteUniversity,
   updateUniversity,
 } from '../controllers/UniversityController.js';
