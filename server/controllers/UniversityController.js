@@ -3,6 +3,13 @@ import { ObjectId } from 'mongodb';
 
 export const createUniversity = async (req, res) => {
     try {
+        // Check if university exists already.
+        const existingUniversity = await University.findOne({ name: req.body.name });
+        if (existingUniversity) {
+            res.status(409).send('Object already exists!');
+            return;
+        }
+        // Create university.
         const newUniversity = new University({
             name: req.body.name,
             country: req.body.country,

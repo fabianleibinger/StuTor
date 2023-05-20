@@ -6,7 +6,7 @@ const CourseSchema = new Schema({
         type: String,
         required: true,
     },
-    internal_identifier: {
+    external_identifier: {
         type: String,
         required: true,
     },
