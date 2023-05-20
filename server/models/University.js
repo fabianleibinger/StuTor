@@ -5,6 +5,7 @@ const UniversitySchema = new Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     country: {
         type: String,

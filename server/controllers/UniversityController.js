@@ -7,91 +7,87 @@ export const createUniversity = async (req, res) => {
             name: req.body.name,
             country: req.body.country,
         });
-        newUniversity.save(newUniversity)
-            .then(university => {
-                res.status(201).send(university);
-            }).catch(err => {
-                res.status(500).send('Failed to create object!');
-            });
+        try {
+            const savedUniversity = await newUniversity.save();
+            res.status(201).send(savedUniversity);
+        } catch (err) {
+            res.status(500).send('Failed to create object!');
+        }
     } catch (err) {
         res.status(400).send('Bad request!');
     }
 };
 
 export const getUniversity = async (req, res) => {
-    var universityId;
     try {
-        universityId = new ObjectId(req.params.universityId);
-        University.findById(universityId)
-            .then(university => {
-                if (!university) {
-                    res.status(404).send('University not found!');
-                } else {
-                    res.status(200).send(university);
-                }
-            }).catch(err => {
-                res.status(500).send('Failed to retrieve university!');
-            });
+        const universityId = new ObjectId(req.params.universityId);
+        const unversity = await University.findById(universityId);
+        try {
+            if (!unversity) {
+                res.status(404).send('University not found!');
+            } else {
+                res.status(200).send(unversity);
+            }
+        } catch (err) {
+            res.status(500).send('Failed to retrieve university!');
+        }
     } catch (err) {
         res.status(400).send('Bad request!');
     }
 };
 
 export const getUniversities = async (req, res) => {
-    University.find()
-        .then(universities => {
-            if (universities.length === 0) {
-                res.status(404).send('No universities found!');
-            } else {
-                res.status(200).send(universities);
-            }
-        }).catch(err => {
-            res.status(500).send('Internal server error!');
-        });
+    try {
+        const universities = await University.find();
+        if (universities.length === 0) {
+            res.status(404).send('No universities found!');
+        } else {
+            res.status(200).send(universities);
+        }
+    } catch (err) {
+        res.status(500).send('Failed to retrieve universities!');
+    }
 };
 
 export const updateUniversity = async (req, res) => {
-    var universityId;
-    var updatedUniversity;
     try {
-        universityId = new ObjectId(req.params.universityId);
-        updatedUniversity = new University({
+        const universityId = new ObjectId(req.params.universityId);
+        const updatedUniversity = new University({
             name: req.body.name,
             country: req.body.country,
         });
-        University.findByIdAndUpdate(universityId,
-            {
-                name: updatedUniversity.name,
-                country: updatedUniversity.country,
-            })
-            .then(university => {
-                if (!university) {
-                    res.status(404).send('University not found!');
-                } else {
-                    res.status(200).send(updatedUniversity);
-                }
-            }).catch(err => {
-                res.status(500).send('Failed to update university!');
-            });
+        try {
+            const university = await University.findByIdAndUpdate(universityId,
+                {
+                    name: updatedUniversity.name,
+                    country: updatedUniversity.country,
+                });
+            if (!university) {
+                res.status(404).send('University not found!');
+            } else {
+                res.status(200).send(updatedUniversity);
+            }
+        } catch (err) {
+            res.status(500).send('Failed to update university!');
+        }
     } catch (err) {
         res.status(400).send('Bad request!');
     }
 };
 
 export const deleteUniversity = async (req, res) => {
-    var universityId;
     try {
-        universityId = new ObjectId(req.params.universityId);
-        University.findByIdAndDelete(universityId)
-            .then(university => {
-                if (!university) {
-                    res.status(404).send('University not found!');
-                } else {
-                    res.status(200).send('University deleted.');
-                }
-            }).catch(err => {
-                res.status(500).send('Failed to delete university!');
-            });
+        const universityId = new ObjectId(req.params.universityId);
+        try {
+            const university = await University.findByIdAndDelete(universityId)
+            if (!university) {
+                res.status(404).send('University not found!');
+            } else {
+                res.status(200).send('University deleted.');
+            }
+        } catch (err) {
+            res.status(500).send('Failed to delete university!');
+        }
     } catch (err) {
         res.status(400).send('Bad request!');
     }
