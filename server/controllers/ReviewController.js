@@ -6,7 +6,7 @@ import Booking from '../models/Booking.js';
 export const createReview = async (req, res, next) => {
 // cannot add reference to booking yet, this is just a dummy id
   const newReview = new Review({
-    booking: Booking.findOne({_id: new ObjectId(req.body.booking)})._id,
+    booking: req.body.bookingId,
     rating: req.body.rating,
     feedback: req.body.feedback,
   });
