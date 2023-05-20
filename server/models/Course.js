@@ -6,7 +6,7 @@ const CourseSchema = new Schema({
         type: String,
         required: true,
     },
-    id: {
+    internal_identifier: {
         type: String,
         required: true,
     },
