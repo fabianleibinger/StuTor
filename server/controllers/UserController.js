@@ -37,7 +37,7 @@ export const createUser = async (req, res) => {
       const savedUser = await newUser.save();
       res.status(201).send(savedUser);
     } catch (err) {
-      res.status(500).send('Failed to create object!');
+      res.status(500).send('Failed to create user!');
     }
   } catch (err) {
     res.status(400).send('Bad request!');

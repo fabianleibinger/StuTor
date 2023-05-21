@@ -18,7 +18,7 @@ export const createUniversity = async (req, res) => {
             const savedUniversity = await newUniversity.save();
             res.status(201).send(savedUniversity);
         } catch (err) {
-            res.status(500).send('Failed to create object!');
+            res.status(500).send('Failed to create university!');
         }
     } catch (err) {
         res.status(400).send('Bad request!');

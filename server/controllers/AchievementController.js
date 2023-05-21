@@ -21,7 +21,7 @@ export const createAchievement = async (req, res) => {
             const savedAchievement = await newAchievement.save();
             res.status(201).send(savedAchievement);
         } catch (err) {
-            res.status(500).send("Failed to create object!");
+            res.status(500).send("Failed to create achievement!");
         }
     } catch (err) {
         res.status(400).send("Bad request!");

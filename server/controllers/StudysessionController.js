@@ -1,5 +1,5 @@
 import Course from '../models/Course.js';
-import Studysession from '../models/Studysession.js';
+import Studysession from '../models/StudySession.js';
 import User from '../models/User.js';
 import { ObjectId } from 'mongodb';
 
@@ -40,7 +40,7 @@ export const createStudysession = async (req, res) => {
             const savedStudysession = await newStudysession.save();
             res.status(201).send(savedStudysession);
         } catch (err) {
-            res.status(500).send('Failed to create object!');
+            res.status(500).send('Failed to create studysession!');
         }
     } catch (err) {
         res.status(400).send('Bad request!');

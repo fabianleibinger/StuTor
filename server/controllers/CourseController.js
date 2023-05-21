@@ -24,7 +24,7 @@ export const createCourse = async (req, res) => {
             const savedCourse = await newCourse.save();
             res.status(201).send(savedCourse);
         } catch (err) {
-            res.status(500).send('Failed to create object!');
+            res.status(500).send('Failed to create course!');
         }
     } catch (err) {
         res.status(400).send('Bad request!');
