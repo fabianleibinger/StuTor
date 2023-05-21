@@ -98,7 +98,7 @@ export const updateUser = async (req, res) => {
       if (!user) {
         res.status(404).send('User not found!');
       } else {
-        res.status(200).send(user);
+        res.status(200).send(updatedUser);
       }
     } catch (err) {
       res.status(500).send('Failed to update user!');
