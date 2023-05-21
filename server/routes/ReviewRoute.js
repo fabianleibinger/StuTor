@@ -1,15 +1,10 @@
 import express from 'express';
-import {
-  createReview,
-  getReviews,
-  deleteReview,
-} from '../controllers/ReviewController.js';
+import { createReview, getReview, deleteReview } from '../controllers/ReviewController.js';
 
 const router = express.Router();
 
-router.post('/', createReview )
-router.get('/:bookingId', getReviews )
-router.delete('/:id', deleteReview)
-router.get('/test', (req, res) => res.send('test') )
+router.post('/', createReview);
+router.get('/:reviewId', getReview);
+router.delete('/:reviewId', deleteReview);
 
 export default router;

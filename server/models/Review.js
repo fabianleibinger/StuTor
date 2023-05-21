@@ -6,6 +6,7 @@ const ReviewSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Booking',
         required: true,
+        unique: true,
     },
     rating: {
         type: Number,
