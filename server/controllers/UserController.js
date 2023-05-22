@@ -62,6 +62,10 @@ export const getUser = async (req, res) => {
   }
 };
 
+// TODO: Implement getUsersOfUniversity().
+// TODO: Implement getUsersThatAchieved().
+// TODO: Implement getStudentsOfStudysession().
+
 export const updateUser = async (req, res) => {
   try {
     // Check if university exists.

@@ -59,6 +59,8 @@ export const getAchievement = async (req, res) => {
     }
 };
 
+// TODO: Implement getAchievementsOfUser().
+
 export const updateAchievement = async (req, res) => {
     try {
         const achievementId = new ObjectId(req.params.achievementId);

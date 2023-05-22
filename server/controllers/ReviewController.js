@@ -54,6 +54,8 @@ export const getReview = async (req, res) => {
   }
 };
 
+// TODO: Implement getReviewsReceivedByUser().
+
 export const deleteReview = async (req, res) => {
   try {
     const reviewId = new ObjectId(req.params.reviewId);

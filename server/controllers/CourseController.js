@@ -62,6 +62,8 @@ export const getCourse = async (req, res) => {
     }
 };
 
+// TODO: Implement getCoursesOfUniversity().
+
 export const updateCourse = async (req, res) => {
     try {
         // Check if university exists.

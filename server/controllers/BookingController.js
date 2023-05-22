@@ -49,7 +49,10 @@ export const getBooking = async (req, res) => {
     } catch (err) {
         res.status(400).send('Bad request!');
     }
-}
+};
+
+// TODO: Implement getBookingsOfStudysession().
+// TODO: Implement getBookingsCreatedByUser().
 
 export const updateBooking = async (req, res) => {
     try {
