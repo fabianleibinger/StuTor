@@ -14,17 +14,12 @@ export const createStudysession = async (req, res) => {
             res.status(409).send('Object already exists!');
             return;
         }
-        // Check if course exists.
+        // Check if course and tutor exist.
         const courseId = new ObjectId(req.body.course);
         const course = await Course.findById(courseId);
-        if (!course) {
-            res.status(404).send('Object reference not found!');
-            return;
-        }
-        // Check if tutor exists.
         const userId = new ObjectId(req.body.tutoredBy);
         const user = await User.findById(userId);
-        if (!user) {
+        if (!course || !user) {
             res.status(404).send('Object reference not found!');
             return;
         }
@@ -80,17 +75,12 @@ export const getStudysession = async (req, res) => {
 
 export const updateStudysession = async (req, res) => {
     try {
-        // Check if course exists.
+        // Check if course and tutor exist.
         const courseId = new ObjectId(req.body.course);
         const course = await Course.findById(courseId);
-        if (!course) {
-            res.status(404).send('Object reference not found!');
-            return;
-        }
-        // Check if tutor exists.
         const userId = new ObjectId(req.body.tutoredBy);
         const user = await User.findById(userId);
-        if (!user) {
+        if (!course || !user) {
             res.status(404).send('Object reference not found!');
             return;
         }

@@ -5,17 +5,12 @@ import { ObjectId } from 'mongodb';
 
 export const createBooking = async (req, res) => {
     try {
-        // Check if studysession exists.
+        // Check if studysession and user exist.
         const studySessionId = new ObjectId(req.body.studySession);
         const studySession = await StudySession.findById(studySessionId);
-        if (!studySession) {
-            res.status(404).send('Object reference not found!');
-            return;
-        }
-        // Check if user exists.
         const userId = new ObjectId(req.body.createdBy);
         const user = await User.findById(userId);
-        if (!user) {
+        if (!studySession || !user) {
             res.status(404).send('Object reference not found!');
             return;
         }
@@ -58,17 +53,12 @@ export const getBooking = async (req, res) => {
 
 export const updateBooking = async (req, res) => {
     try {
-        // Check if studysession exists.
+        // Check if studysession and user exist.
         const studySessionId = new ObjectId(req.body.studySession);
         const studySession = await StudySession.findById(studySessionId);
-        if (!studySession) {
-            res.status(404).send('Object reference not found!');
-            return;
-        }
-        // Check if user exists.
         const userId = new ObjectId(req.body.createdBy);
         const user = await User.findById(userId);
-        if (!user) {
+        if (!studySession || !user) {
             res.status(404).send('Object reference not found!');
             return;
         }
