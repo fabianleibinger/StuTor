@@ -9,6 +9,7 @@ import studysessionRoute from './routes/StudysessionRoute.js';
 import universityRoute from './routes/UniversityRoute.js';
 import userRoute from './routes/UserRoute.js';
 import userachievementRoute from './routes/UserAchievementRoute.js';
+import userStudysessionRoute from './routes/UserStudysessionRoute.js';
 
 
 const app = express();
@@ -32,7 +33,9 @@ app.use('/api/review', reviewRoute);
 app.use('/api/studysession', studysessionRoute);
 app.use('/api/university', universityRoute);
 app.use('/api/user', userRoute);
-app.use('/api/userachievement', userachievementRoute);
+app.use('/api/userAchievement', userachievementRoute);
+app.use('/api/userStudysession', userStudysessionRoute);
+
 
 const port = 3001;
 app.listen(port, () => {

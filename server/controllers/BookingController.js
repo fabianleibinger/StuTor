@@ -1,5 +1,5 @@
 import Booking from '../models/Booking.js';
-import StudySession from '../models/StudySession.js';
+import StudySession from '../models/Studysession.js';
 import User from '../models/User.js';
 import { ObjectId } from 'mongodb';
 

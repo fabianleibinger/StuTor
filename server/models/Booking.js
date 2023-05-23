@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const BookingSchema = new Schema({
-    studySession: {
+    studysession: {
         type: Schema.Types.ObjectId,
-        ref: 'StudySession',
+        ref: 'Studysession',
         required: true,
     },
     hours: {

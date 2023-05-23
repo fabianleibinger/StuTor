@@ -31,6 +31,6 @@ const StudysessionSchema = new mongoose.Schema({
     },
 });
 
-const Studysession = mongoose.model('StudySession', StudysessionSchema);
+const Studysession = mongoose.model('Studysession', StudysessionSchema);
 
 export default Studysession;

@@ -10,6 +10,10 @@ export const createUserAchievement = async (req, res) => {
             achievement: req.body.achievement,
             user: req.body.user,
         });
+        if (existingUserAchievement) {
+            res.status(409).send('UserAchievement already exists!');
+            return;
+        }
         // Check if achievement and user exist.
         const achievementId = new ObjectId(req.body.achievement);
         const achievement = await Achievement.findById(achievementId);
