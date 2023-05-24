@@ -54,7 +54,29 @@ export const getReview = async (req, res) => {
   }
 };
 
-// TODO: Implement getReviewsReceivedByUser().
+export const getReviewOfBooking = async (req, res) => {
+  try {
+    const bookingId = new ObjectId(req.params.bookingId);
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      res.status(404).send('Object reference not found!');
+      return;
+    }
+    const review = await Review.findOne({ booking: bookingId });
+    try {
+      if (!review) {
+        res.status(404).send('Review not found!');
+      } else {
+        res.status(200).send(review);
+      }
+    } catch (err) {
+      res.status(500).send('Failed to retrieve review!');
+    }
+  } catch (err) {
+    res.status(400).send('Bad request!');
+  }
+};
+
 
 export const deleteReview = async (req, res) => {
   try {
