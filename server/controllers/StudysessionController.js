@@ -73,8 +73,53 @@ export const getStudysession = async (req, res) => {
     }
 };
 
-// TODO: Implement getStudysessionsForCourse().
-// TODO: Implement getStudysessionsTutoredByUser().
+export const getStudysessionsForCourse = async (req, res) => {
+    try {
+        // Check if course exists.
+        const courseId = new ObjectId(req.params.courseId);
+        const course = await Course.findById(courseId);
+        if (!course) {
+            res.status(404).send('Object reference not found!');
+            return;
+        }
+        const studysessions = await Studysession.find({ course: courseId });
+        try {
+            if (studysessions.length === 0) {
+                res.status(404).send('No studysessions found!');
+            } else {
+                res.status(200).send(studysessions);
+            }
+        } catch (err) {
+            res.status(500).send('Failed to retrieve studysessions!');
+        }
+    } catch (err) {
+        res.status(400).send('Bad request!');
+    }
+};
+        
+export const getStudysessionsTutoredBy = async (req, res) => {
+    try {
+        // Check if user exists.
+        const userId = new ObjectId(req.params.userId);
+        const user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send('Object reference not found!');
+            return;
+        }
+        const studysessions = await Studysession.find({ tutoredBy: userId });
+        try {
+            if (studysessions.length === 0) {
+                res.status(404).send('No studysessions found!');
+            } else {
+                res.status(200).send(studysessions);
+            }
+        } catch (err) {
+            res.status(500).send('Failed to retrieve studysessions!');
+        }
+    } catch (err) {
+        res.status(400).send('Bad request!');
+    }
+};
 
 export const updateStudysession = async (req, res) => {
     try {
