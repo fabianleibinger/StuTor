@@ -62,7 +62,29 @@ export const getCourse = async (req, res) => {
     }
 };
 
-// TODO: Implement getCoursesOfUniversity().
+export const getCoursesOfUniversity = async (req, res) => {
+    try {
+        // Check if university exists.
+        const universityId = new ObjectId(req.params.universityId);
+        const university = await University.findById(universityId);
+        if (!university) {
+            res.status(404).send('Object reference not found!');
+            return;
+        }
+        const courses = await Course.find({ university: universityId });
+        try {
+            if (courses.length === 0) {
+                res.status(404).send('No courses found!');
+            } else {
+                res.status(200).send(courses);
+            }
+        } catch (err) {
+            res.status(500).send('Failed to retrieve courses!');
+        }
+    } catch (err) {
+        res.status(400).send('Bad request!');
+    }
+};
 
 export const updateCourse = async (req, res) => {
     try {

@@ -75,7 +75,6 @@ export const getStudysession = async (req, res) => {
 
 // TODO: Implement getStudysessionsForCourse().
 // TODO: Implement getStudysessionsTutoredByUser().
-// TODO: Implement getStudysessionsSavedByUser().
 
 export const updateStudysession = async (req, res) => {
     try {
