@@ -74,7 +74,7 @@ export const getUsersOfUniversity = async (req, res) => {
     const users = await User.find({ university: universityId });
     try {
       if (users.length === 0) {
-        res.status(404).send('Users not found!');
+        res.status(404).send('No users found!');
       } else {
         res.status(200).send(users);
       }
