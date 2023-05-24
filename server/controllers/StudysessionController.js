@@ -121,6 +121,8 @@ export const getStudysessionsTutoredBy = async (req, res) => {
     }
 };
 
+// TODO: Implement getStudySessionsOfStudent().
+
 export const updateStudysession = async (req, res) => {
     try {
         // Check if course and tutor exist.
