@@ -62,7 +62,30 @@ export const getUser = async (req, res) => {
   }
 };
 
-// TODO: Implement getUsersOfUniversity().
+export const getUsersOfUniversity = async (req, res) => {
+  try {
+    // Check if university exists.
+    const universityId = new ObjectId(req.params.universityId);
+    const university = await University.findById(universityId);
+    if (!university) {
+      res.status(404).send('Object reference not found!');
+      return;
+    }
+    const users = await User.find({ university: universityId });
+    try {
+      if (users.length === 0) {
+        res.status(404).send('Users not found!');
+      } else {
+        res.status(200).send(users);
+      }
+    } catch (err) {
+      res.status(500).send('Failed to retrieve users!');
+    }
+  } catch (err) {
+    res.status(400).send('Bad request!');
+  }
+};
+
 // TODO: Implement getUsersThatAchieved().
 // TODO: Implement getStudentsOfStudysession().
 
