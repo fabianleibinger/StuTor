@@ -7,12 +7,13 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
-    {<div className="App">
-      <BookingPage />
-    </div>}
+      <div className="App">
+        <BookingPage />
+      </div>
     </QueryClientProvider>
   );
 }
 
 export default App;
+
 

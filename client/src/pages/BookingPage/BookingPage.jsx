@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useQuery } from "@tanstack/react-query";
-import newRequest from "../../utils/newRequest";
 
 async function fetchStudySession() {
   const response = await fetch(`/api/studySession/`);
@@ -14,10 +14,16 @@ async function fetchStudySession() {
 function BookingPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data, error, isLoading } = useQuery(
+  /*const { data, error, isLoading } = useQuery(
     "course",
     () => fetchStudySession()
-  );
+  );*/
+
+  const [selectedNumber, setSelectedNumber] = React.useState('');
+
+  const handleNumberChange = (event) => {
+    setSelectedNumber(event.target.value);
+  };
 
   const handleBookingButtonClick = () => {
     setIsDialogOpen(true);
@@ -34,9 +40,16 @@ function BookingPage() {
         Book Now
       </Button>
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Course: {data.course}</DialogTitle>
+        <DialogTitle>Book a study session for Introduction to Quantum Computing</DialogTitle>
         <DialogContent>
-          <p>This is the dialog content.</p>
+          <InputLabel id="number-label">Select a number</InputLabel>
+          <Select labelId="number-label" value={selectedNumber} onChange={handleNumberChange}>
+            {Array.from({ length: 10 }, (_, index) => (
+              <MenuItem key={index + 1} value={index + 1}>
+                {index + 1}
+              </MenuItem>
+            ))}
+          </Select>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Close</Button>
