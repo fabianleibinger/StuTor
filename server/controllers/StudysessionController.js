@@ -210,4 +210,4 @@ export const deleteStudysession = async (req, res) => {
     } catch (err) {
         res.status(400).send('Bad request!');
     }
-}
+};
