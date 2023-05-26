@@ -1,4 +1,5 @@
 import Achievement from "../models/Achievement.js";
+import UserAchievement from "../models/UserAchievement.js";
 import { ObjectId } from "mongodb";
 
 export const createAchievement = async (req, res) => {
@@ -59,7 +60,33 @@ export const getAchievement = async (req, res) => {
     }
 };
 
-// TODO: Implement getAchievementsOfUser().
+export const getAchievementsOfUser = async (req, res) => {
+    try {
+        // Check if userAchievement exists.
+        const userId = new ObjectId(req.params.userId);
+        const userAchievements = await UserAchievement.find({ user: userId });
+        if (userAchievements.length === 0) {
+            res.status(404).send("Object reference not found!");
+            return;
+        }
+        const achievements = [];
+        for (const userAchievement of userAchievements) {
+            const achievement = await Achievement.findById(userAchievement.achievement);
+            achievements.push(achievement);
+        }
+        try {
+            if (achievements.length === 0) {
+                res.status(404).send("No achievements found!");
+            } else {
+                res.status(200).send(achievements);
+            }
+        } catch (err) {
+            res.status(500).send("Failed to retrieve achievements!");
+        }
+    } catch (err) {
+        res.status(400).send("Bad request!");
+    }
+};
 
 export const updateAchievement = async (req, res) => {
     try {
@@ -89,6 +116,7 @@ export const updateAchievement = async (req, res) => {
     }
 };
 
+//TODO: Delete all UserAchievements relevant.
 export const deleteAchievement = async (req, res) => {
     try {
         const achievementId = new ObjectId(req.params.achievementId);

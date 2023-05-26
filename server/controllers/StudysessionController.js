@@ -1,6 +1,7 @@
 import Course from '../models/Course.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
+import UserStudysession from '../models/UserStudysession.js';
 import { ObjectId } from 'mongodb';
 
 export const createStudysession = async (req, res) => {
@@ -121,7 +122,33 @@ export const getStudysessionsTutoredBy = async (req, res) => {
     }
 };
 
-// TODO: Implement getStudySessionsOfStudent().
+export const getStudysessionsOfStudent = async (req, res) => {
+    try {
+        // Check if userStudysession exists.
+        const userId = new ObjectId(req.params.userId);
+        const userStudysessions = await UserStudysession.find({ student: userId });
+        if (userStudysessions.length === 0) {
+            res.status(404).send('Object reference not found!');
+            return;
+        }
+        const studysessions = [];
+        for (const userStudysession of userStudysessions) {
+            const studysession = await Studysession.findById(userStudysession.studysession);
+            studysessions.push(studysession);
+        }
+        try {
+            if (studysessions.length === 0) {
+                res.status(404).send('No studysessions found!');
+            } else {
+                res.status(200).send(studysessions);
+            }
+        } catch (err) {
+            res.status(500).send('Failed to retrieve studysessions!');
+        }
+    } catch (err) {
+        res.status(400).send('Bad request!');
+    }
+};
 
 export const updateStudysession = async (req, res) => {
     try {
