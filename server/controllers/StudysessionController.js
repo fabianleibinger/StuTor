@@ -165,6 +165,7 @@ export const updateStudysession = async (req, res) => {
     }
 };
 
+//TODO: Delete all students of studysession.
 export const deleteStudysession = async (req, res) => {
     try {
         const studysessionId = new ObjectId(req.params.studysessionId);

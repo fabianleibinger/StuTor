@@ -57,6 +57,7 @@ export const getUserAchievement = async (req, res) => {
     }
 };
 
+//TODO: Delete all UserAchievements relevant.
 export const deleteUserAchievement = async (req, res) => {
     try {
         const userAchievementId = new ObjectId(req.params.userAchievementId);

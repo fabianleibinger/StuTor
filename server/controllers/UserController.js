@@ -1,5 +1,7 @@
 import University from '../models/University.js';
 import User from '../models/User.js';
+import UserAchievement from '../models/UserAchievement.js';
+import UserStudysession from '../models/UserStudysession.js';
 import { ObjectId } from 'mongodb';
 
 export const createUser = async (req, res) => {
@@ -86,8 +88,61 @@ export const getUsersOfUniversity = async (req, res) => {
   }
 };
 
-// TODO: Implement getUsersThatAchieved().
-// TODO: Implement getStudentsOfStudysession().
+export const getUsersThatAchieved = async (req, res) => {
+  try {
+    // Check if achievement exists.
+    const achievementId = new ObjectId(req.params.achievementId);
+    const userAchievements = await UserAchievement.find({ achievement: achievementId });
+    if (userAchievements.length === 0) {
+      res.status(404).send('Object reference not found!');
+      return;
+    }
+    const users = [];
+    for (const userAchievement of userAchievements) {
+      const user = await User.findById(userAchievement.user);
+      users.push(user);
+    }
+    try {
+      if (users.length === 0) {
+        res.status(404).send('No users found!');
+      } else {
+        res.status(200).send(users);
+      }
+    } catch (err) {
+      res.status(500).send('Failed to retrieve users!');
+    }
+  } catch (err) {
+    res.status(400).send('Bad request!');
+  }
+};
+
+export const getUsersOfStudysession = async (req, res) => {
+  try {
+    // Check if userStudysession exists.
+    const studysessionId = new ObjectId(req.params.studysessionId);
+    const userStudysessions = await UserStudysession.find({ studysession: studysessionId });
+    if (userStudysessions.length === 0) {
+      res.status(404).send('Object reference not found!');
+      return;
+    }
+    const users = [];
+    for (const userStudysession of userStudysessions) {
+      const student = await User.findById(userStudysession.student);
+      users.push(student);
+    }
+    try {
+      if (users.length === 0) {
+        res.status(404).send('No users found!');
+      } else {
+        res.status(200).send(users);
+      }
+    } catch (err) {
+      res.status(500).send('Failed to retrieve users!');
+    }
+  } catch (err) {
+    res.status(400).send('Bad request!');
+  }
+};
 
 export const updateUser = async (req, res) => {
   try {
@@ -135,6 +190,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
+//TODO: make sure all references in userachievement and userstudysession are deleted, including studysessions that he tutored.
 export const deleteUser = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.userId);
