@@ -1,3 +1,4 @@
+import Studysession from '../models/Studysession.js';
 import University from '../models/University.js';
 import User from '../models/User.js';
 import UserAchievement from '../models/UserAchievement.js';
@@ -190,12 +191,15 @@ export const updateUser = async (req, res) => {
   }
 };
 
-//TODO: make sure all references in userachievement and userstudysession are deleted, including studysessions that he tutored.
 export const deleteUser = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.userId);
     try {
       const user = await User.findByIdAndDelete(userId);
+      // Delete all achievement and studysession associations (student and tutor) of this user.
+      await UserAchievement.deleteMany({ user: userId });
+      await UserStudysession.deleteMany({ student: userId });
+      await Studysession.deleteMany({ tutor: userId });
       if (!user) {
         res.status(404).send('User not found!');
       } else {

@@ -192,12 +192,13 @@ export const updateStudysession = async (req, res) => {
     }
 };
 
-//TODO: Delete all students of studysession.
 export const deleteStudysession = async (req, res) => {
     try {
         const studysessionId = new ObjectId(req.params.studysessionId);
         try {
             const studysession = await Studysession.findByIdAndDelete(studysessionId);
+            // Delete all student associations of this studysession.
+            await UserStudysession.deleteMany({ studysession: studysessionId });
             if (!studysession) {
                 res.status(404).send('Studysession not found!');
             } else {

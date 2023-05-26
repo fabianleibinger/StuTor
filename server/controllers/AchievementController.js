@@ -116,12 +116,13 @@ export const updateAchievement = async (req, res) => {
     }
 };
 
-//TODO: Delete all UserAchievements relevant.
 export const deleteAchievement = async (req, res) => {
     try {
         const achievementId = new ObjectId(req.params.achievementId);
         try {
             const achievement = await Achievement.findByIdAndDelete(achievementId);
+            // Delete all user associations of this achievement.
+            await UserAchievement.deleteMany({ achievement: achievementId });
             if (!achievement) {
                 res.status(404).send("Achievement not found!");
             } else {
