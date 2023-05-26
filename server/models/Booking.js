@@ -1,9 +1,10 @@
-import Schema from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const BookingSchema = new Schema({
-    studySession: {
+    studysession: {
         type: Schema.Types.ObjectId,
-        ref: 'StudySession',
+        ref: 'Studysession',
         required: true,
     },
     hours: {
@@ -15,7 +16,7 @@ const BookingSchema = new Schema({
         required: true,
     },
     createdAt: {
-        type: Datetime,
+        type: Date,
         required: true,
     },
     createdBy: {
@@ -27,4 +28,4 @@ const BookingSchema = new Schema({
 
 const Booking = mongoose.model('Booking', BookingSchema);
 
-module.exports = Booking;
+export default Booking;

@@ -1,10 +1,12 @@
-import Schema from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const ReviewSchema = new Schema({
     booking: {
         type: Schema.Types.ObjectId,
         ref: 'Booking',
         required: true,
+        unique: true,
     },
     rating: {
         type: Number,
@@ -17,4 +19,4 @@ const ReviewSchema = new Schema({
 
 const Review = mongoose.model('Review', ReviewSchema);
 
-module.exports = Review;
+export default Review;

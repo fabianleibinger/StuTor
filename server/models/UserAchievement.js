@@ -1,4 +1,5 @@
-import Schema from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const UserAchievementSchema = new Schema({
     user: { 
@@ -15,4 +16,4 @@ const UserAchievementSchema = new Schema({
 
 const UserAchievement = mongoose.model('UserAchievement', UserAchievementSchema);
 
-module.exports = UserAchievement;
+export default UserAchievement;

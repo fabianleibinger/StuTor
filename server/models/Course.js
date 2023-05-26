@@ -1,11 +1,12 @@
-import Schema from "mongoose";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const CourseSchema = new Schema({
     name: {
         type: String,
         required: true,
     },
-    id: {
+    external_identifier: {
         type: String,
         required: true,
     },
@@ -29,4 +30,4 @@ const CourseSchema = new Schema({
 
 const Course = mongoose.model('Course', CourseSchema);
 
-module.exports = Course;
+export default Course;

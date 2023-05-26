@@ -1,4 +1,5 @@
-import Schema from "mongoose";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const UserSchema = new Schema({
     username: {
@@ -11,16 +12,17 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
     },
+    // save in a encrypted way
     password:{
         type: String,
         required: true,
         bcrypt: true,
     },
-    surname: {
+    lastname: {
         type: String,
         required: true,
     },
-    name: {
+    firstname: {
         type: String,
         required: true,
     },
@@ -31,6 +33,7 @@ const UserSchema = new Schema({
         type: String,
         enum: ['STUDENT', 'TUTOR'],
         default: 'STUDENT',
+        required: true,
     },
     university: {
         type: Schema.Types.ObjectId,
@@ -41,4 +44,4 @@ const UserSchema = new Schema({
 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = User;
+export default User;

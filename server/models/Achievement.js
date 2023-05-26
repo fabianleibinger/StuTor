@@ -1,9 +1,11 @@
-import Schema from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const AchievementSchema = new Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     description: {
         type: String,
@@ -17,4 +19,4 @@ const AchievementSchema = new Schema({
 
 const Achievement = mongoose.model('Achievement', AchievementSchema);
 
-module.exports = Achievement;
+export default Achievement;

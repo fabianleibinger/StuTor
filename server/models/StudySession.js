@@ -1,6 +1,7 @@
-import Schema from "mongoose";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-const StudySessionSchema = new mongoose.Schema({
+const StudysessionSchema = new mongoose.Schema({
     course: {
         type: Schema.Types.ObjectId,
         ref: 'Course',
@@ -30,6 +31,6 @@ const StudySessionSchema = new mongoose.Schema({
     },
 });
 
-const StudySession = mongoose.model('StudySession', StudySessionSchema);
+const Studysession = mongoose.model('Studysession', StudysessionSchema);
 
-module.exports = StudySession;
+export default Studysession;

@@ -1,18 +1,19 @@
-import Schema from 'mongoose';
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-const UserStudySessionSchema = new Schema({
-    user: {
+const UserStudysessionSchema = new Schema({
+    student: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
-    studySession: {
+    studysession: {
         type: Schema.Types.ObjectId,
-        ref: 'StudySession',
+        ref: 'Studysession',
         required: true,
     },
 });
 
-const UserStudySession = mongoose.model('UserStudySession', UserStudySessionSchema);
+const UserStudysession = mongoose.model('UserStudysession', UserStudysessionSchema);
 
-module.exports = UserStudySession;
+export default UserStudysession;

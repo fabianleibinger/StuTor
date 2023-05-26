@@ -1,9 +1,11 @@
-import Schema from "mongoose";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
 const UniversitySchema = new Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     country: {
         type: String,
@@ -12,6 +14,6 @@ const UniversitySchema = new Schema({
     },
 });
 
-const University = mongoose.model("University", UniversitySchema);
+const University = mongoose.model('University', UniversitySchema);
 
-module.exports = University;
+export default University;
