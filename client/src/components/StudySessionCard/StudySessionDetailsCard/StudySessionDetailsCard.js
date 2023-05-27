@@ -61,7 +61,7 @@ export default function StudySessionCard({ studySession }) {
           </IconButton>
         }
         title={studySession.course}
-        subheader={handleChangeDate({ studySession })}
+        //subheader={handleChangeDate({ studySession })}
       />
 
       <CardContent>
@@ -82,7 +82,7 @@ export default function StudySessionCard({ studySession }) {
             <strong>Costs (€): </strong> {studySession.pricePerHourEuro}
           </Typography>
           <Typography>
-            <strong>Costs (€): </strong> {studySession.languages}
+            <strong>Languages (€): </strong> {studySession.languages}
           </Typography>
         </Typography>
       </CardContent>

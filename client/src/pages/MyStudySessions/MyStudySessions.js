@@ -13,17 +13,16 @@ const MyStudySessions = () => {
   const { studySessions, dispatch } = useStudySessionsContext();
 
   useEffect(() => {
-    console.log("hi");
     const fetchStudySession = async () => {
-      //const response = await fetch("http://localhost:3001/api/studysession");
-      const response = await axios({
+      const response = await fetch("/api/studysession");
+      /*const response = await axios({
         method: "GET",
         url: "/api/studysession"
       });
-      console.log(response);
-      //const json = await response.json();
+      console.log("hi", response.data[0]);*/
+      const json = await response.json();
       if (response.ok) {
-        dispatch({ type: "SET_STUDY_SESSIONS", payload: response.data });
+        dispatch({ type: "SET_STUDY_SESSIONS", payload: json });
       }
     };
 
@@ -32,7 +31,6 @@ const MyStudySessions = () => {
 
   return (
     <Box style={{ maxHeight: "75vh", overflow: "auto" }}>
-      <div>Hi</div>
       <Grid container spacing={2}>
         {studySessions &&
           studySessions.map(studySession => (
