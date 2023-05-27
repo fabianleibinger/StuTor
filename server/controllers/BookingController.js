@@ -35,8 +35,10 @@ export const createBooking = async (req, res) => {
 
 export const getBooking = async (req, res) => {
     try {
-        const bookingId = new ObjectId(req.params.id);
+        const bookingId = new ObjectId(req.params.bookingId);
+        console.log(bookingId)
         const booking = await Booking.findById(bookingId);
+        console.log(booking)
         try {
             if (!booking) {
                 res.status(404).send('Object not found!');
