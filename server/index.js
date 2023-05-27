@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import achievementRoute from './routes/AchievementRoute.js';
@@ -36,6 +37,11 @@ app.use('/api/user', userRoute);
 app.use('/api/userAchievement', userachievementRoute);
 app.use('/api/userStudysession', userStudysessionRoute);
 
+// Allow requests from localhost:3000
+app.use(cors({
+    //credentials: true,
+    origin: 'http://localhost:3000',
+  }));
 
 const port = 3001;
 app.listen(port, () => {

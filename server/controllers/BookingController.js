@@ -59,20 +59,25 @@ export const getBookingsOfStudysession = async (req, res) => {
         const studysessionId = new ObjectId(req.params.studysessionId);
         const studysession = await Studysession.findById(studysessionId);
         if (!studysession) {
+            res.header("Access-Control-Allow-Origin", "*");
             res.status(404).send('Object reference not found!');
             return;
         }
         const bookings = await Booking.find({ studysession: studysessionId });
         try {
             if (bookings.length === 0) {
+                res.header("Access-Control-Allow-Origin", "*");
                 res.status(404).send('No bookings found!');
             } else {
+                res.header("Access-Control-Allow-Origin", "*");
                 res.status(200).send(bookings);
             }
         } catch (err) {
+            res.header("Access-Control-Allow-Origin", "*");
             res.status(500).send('Failed to retrieve bookings!');
         }
     } catch (err) {
+        res.header("Access-Control-Allow-Origin", "*");
         res.status(400).send('Bad request!');
     }
 };
