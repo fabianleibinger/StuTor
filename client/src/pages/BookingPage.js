@@ -13,9 +13,11 @@ const BookingBox = () => {
   const { isLoading, error, data } = useQuery(['bookings'], () => getBookingsOfStudysession(studySessionId));
   if (isLoading) return 'Loading...'
   if (error) return 'An error has occurred: ' + error.message
+  const booking = data[0]
+  // just random button for now
   return (
     <Button variant="contained" color="primary">
-      {data[0].priceEuro}
+      {booking.priceEuro}
     </Button>
   );
 };
