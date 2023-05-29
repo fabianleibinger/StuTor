@@ -29,16 +29,7 @@ const connect = async () => {
 app.use(express.json());
 // Http logger
 app.use((req, res, next) => {
-    console.log(`Received ${req.method} request for ${req.url}`);
-    const originalSend = res.send;
-    let responseSent = false;
-    res.send = function () {
-        if (!responseSent) {
-            responseSent = true;
-            console.log(`Response for ${req.method} ${req.url}: ${res.statusCode}, response body: ${arguments[0]}`);
-        }
-        originalSend.apply(res, arguments);
-    };
+    console.log(`Received ${req.method} request for ${req.url}: response ${res.statusCode}`);
     next();
 });
 
@@ -53,9 +44,6 @@ app.use('/api/university', universityRoute);
 app.use('/api/user', userRoute);
 app.use('/api/userAchievement', userachievementRoute);
 app.use('/api/userStudysession', userStudysessionRoute);
-
-// Allow requests from localhost:3000
-//app.use(cors());
 
 const port = 3001;
 app.listen(port, () => {
