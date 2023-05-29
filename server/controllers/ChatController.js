@@ -187,12 +187,13 @@ export const updateChat = async (req, res) => {
     }
 };
 
-// TODO: Delete all related messages. and make sure chat is deleted if studysession is deleted.
 export const deleteChat = async (req, res) => {
     try {
         const chatId = new ObjectId(req.params.chatId);
         try {
             const chat = await Chat.findByIdAndDelete(chatId);
+            // Delete messages of this chat.
+            await Message.deleteMany({ chat: chatId });
             if (!chat) {
                 res.status(404).send('Chat not found!');
             } else {

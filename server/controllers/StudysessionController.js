@@ -1,3 +1,4 @@
+import Chat from '../models/Chat.js';
 import Course from '../models/Course.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
@@ -199,6 +200,8 @@ export const deleteStudysession = async (req, res) => {
             const studysession = await Studysession.findByIdAndDelete(studysessionId);
             // Delete all student associations of this studysession.
             await UserStudysession.deleteMany({ studysession: studysessionId });
+            // Delete chats of this studysession.
+            await Chat.deleteMany({ studysession: studysessionId });
             if (!studysession) {
                 res.status(404).send('Studysession not found!');
             } else {
