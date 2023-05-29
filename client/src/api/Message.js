@@ -17,7 +17,7 @@ export const getMessagesOfChat = async (chatId) => {
     return response.data;
 }
 
-export const updateMessage = async (messageId, body) => {
-    const response = await axios.put(`${MESSAGE_URL}/${messageId}`, body);
+export const deleteMessage = async (messageId) => {
+    const response = await axios.delete(`${MESSAGE_URL}/${messageId}`);
     return response.data;
 }

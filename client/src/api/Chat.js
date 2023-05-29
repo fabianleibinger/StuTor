@@ -22,6 +22,9 @@ export const getChatsOfUser = async (userId) => {
     return response.data;
 }
 
+export const getChatsOfStudysessionAndUser = async (studysessionId, userId) => {
+    const response = await axios.get(`${CHAT_URL}/ofStudysession/${studysessionId}/ofUser/${userId}`);
+
 export const updateChat = async (chatId, body) => {
     const response = await axios.put(`${CHAT_URL}/${chatId}`, body);
     return response.data;
