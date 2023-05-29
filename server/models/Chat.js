@@ -18,6 +18,11 @@ const ChatSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Message',
     },
+    read_by_recipient: {
+        type: Boolean,
+        default: false,
+        required: true,
+    }
 },
     { timestamps: true }
 );
