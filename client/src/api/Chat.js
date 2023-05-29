@@ -1,6 +1,6 @@
 import axios from 'axios';
 const BASE_URL = '/api';
-const CHAT_URL = `${BASE_URL}/chat`;;
+const CHAT_URL = `${BASE_URL}/chat`;
 
 export const createChat = async (body) => {
     const response = await axios.post(`${CHAT_URL}`, body);
@@ -24,6 +24,8 @@ export const getChatsOfUser = async (userId) => {
 
 export const getChatsOfStudysessionAndUser = async (studysessionId, userId) => {
     const response = await axios.get(`${CHAT_URL}/ofStudysession/${studysessionId}/ofUser/${userId}`);
+    return response.data;
+}
 
 export const updateChat = async (chatId, body) => {
     const response = await axios.put(`${CHAT_URL}/${chatId}`, body);
