@@ -14,6 +14,7 @@ const BookingBox = () => {
   if (isLoading) return 'Loading...'
   if (error) return 'An error has occurred: ' + error.message
   const booking = data[0]
+  console.log(data)
   // just random button for now
   return (
     <Button variant="contained" color="primary">

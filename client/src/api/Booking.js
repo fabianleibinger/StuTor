@@ -1,5 +1,5 @@
 import axios from 'axios'
-const BASE_URL ='http://localhost:3001/api'
+const BASE_URL ='/api'
 const BOOKING_URL = `${BASE_URL}/booking`
 
 export const createBooking = async (body) => {
