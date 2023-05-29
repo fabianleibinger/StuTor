@@ -17,18 +17,28 @@ import userStudysessionRoute from './routes/UserStudysessionRoute.js';
 const app = express();
 dotenv.config();
 
-const connect = async() =>{
-    try{
+const connect = async () => {
+    try {
         await mongoose.connect(process.env.MONGO);
         console.log('*********** CONNECTED TO MONGODB ***********');
-    } catch (error){
+    } catch (error) {
         console.log(error);
     }
 };
 
 app.use(express.json());
+// Http logger
 app.use((req, res, next) => {
-    console.log(req.path, req.method);
+    console.log(`Received ${req.method} request for ${req.url}`);
+    const originalSend = res.send;
+    let responseSent = false;
+    res.send = function () {
+        if (!responseSent) {
+            responseSent = true;
+            console.log(`Response for ${req.method} ${req.url}: ${res.statusCode}, response body: ${arguments[0]}`);
+        }
+        originalSend.apply(res, arguments);
+    };
     next();
 });
 
