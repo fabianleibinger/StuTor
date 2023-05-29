@@ -27,6 +27,10 @@ const connect = async() =>{
 };
 
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log(req.path, req.method);
+    next();
+});
 
 app.use('/api/achievement', achievementRoute);
 app.use('/api/booking', bookingRoute);
@@ -40,6 +44,8 @@ app.use('/api/user', userRoute);
 app.use('/api/userAchievement', userachievementRoute);
 app.use('/api/userStudysession', userStudysessionRoute);
 
+// Allow requests from localhost:3000
+//app.use(cors());
 
 const port = 3001;
 app.listen(port, () => {
