@@ -1,53 +1,64 @@
-import { useEffect } from "react";
-import { useStudySessionsContext } from "../../hooks/UseStudySessionContext";
-import axios from "axios";
-
 // components
 import StudySessionCard from "../../components/StudySessionCard/StudySessionDetailsCard/StudySessionDetailsCard";
 import AddStudySessionCard from "../../components/StudySessionCard/AddStudySessionCard/AddStudySessionCard";
 import CreateStudySessionDialog from "../../components/CreateStudySessionDialog/CreateStudySessionDialog";
+import CourseSearch from "../../components/CourseSearch/CourseSearch";
 
+//api
+import { getStudysession, deleteStudysession } from "../../api/StudySession";
+
+//react-query
+import { useQuery, useMutation, useQueryClient } from "react-query";
+
+// frontend
 import { Box, Grid } from "@mui/material";
 
 const MyStudySessions = () => {
-  const { studySessions, dispatch } = useStudySessionsContext();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchStudySession = async () => {
-      const response = await fetch("/api/studysession");
-      /*const response = await axios({
-        method: "GET",
-        url: "/api/studysession"
-      });
-      console.log("hi", response.data[0]);*/
-      const json = await response.json();
-      if (response.ok) {
-        dispatch({ type: "SET_STUDY_SESSIONS", payload: json });
-      }
-    };
+  // fetch data
+  const { isLoading, error, data } = useQuery(
+    ["studysessions"],
+    getStudysession
+  );
 
-    fetchStudySession();
-  }, [dispatch]);
+  // use mutation to update data
+  const deleteStudySessionMutation = useMutation(deleteStudysession, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("studysessions");
+    }
+  });
+
+  // I actually dk for what this is
+  const handleDeleteStudySession = async studySessionId => {
+    await deleteStudySessionMutation.mutateAsync(studySessionId);
+  };
+
+  if (isLoading) return "Loading...";
+  if (error) return "An error has occurred: " + error.message;
+  const studySessions = data;
 
   return (
-    <Box style={{ maxHeight: "75vh", overflow: "auto" }}>
-      <Grid container spacing={2}>
-        {studySessions &&
-          studySessions.map(studySession => (
-            <Grid item xs={12} sm={6} md={4}>
-              <StudySessionCard
-                key={studySession._id}
-                studySession={studySession}
-              />
-            </Grid>
-          ))}
-        <Grid item xs={4}>
-          <AddStudySessionCard>
-            <CreateStudySessionDialog />
-          </AddStudySessionCard>
+    <div>
+      <Box style={{ maxHeight: "75vh", overflow: "auto" }}>
+        <Grid container spacing={2}>
+          {studySessions &&
+            studySessions.map(studySession => (
+              <Grid item xs={12} sm={6} md={4} key={studySession._id}>
+                <StudySessionCard
+                  studySession={studySession}
+                  onDelete={() => handleDeleteStudySession(studySession._id)}
+                />
+              </Grid>
+            ))}
+          <Grid item xs={4}>
+            <AddStudySessionCard>
+              <CreateStudySessionDialog key={"AddDialog"} />
+            </AddStudySessionCard>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </div>
   );
 };
 

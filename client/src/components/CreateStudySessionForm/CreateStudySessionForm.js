@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useStudySessionsContext } from "../../hooks/UseStudySessionContext";
 import { Button, Box, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 
+// import other components
+import CourseSearch from "../CourseSearch/CourseSearch";
+
 const StudySessionForm = ({ handleClose }) => {
-  const { dispatch } = useStudySessionsContext();
   const [course, setCourse] = useState("");
   const [pricePerHourEuro, setPricePerHourEuro] = useState("");
   const [languages, setLanguages] = useState([]);
@@ -39,6 +40,7 @@ const StudySessionForm = ({ handleClose }) => {
         "Content-Type": "application/json"
       }
     });
+
     const json = await response.json();
     if (!response.ok) {
       setError(json.error);
@@ -52,15 +54,20 @@ const StudySessionForm = ({ handleClose }) => {
       setError(null);
       setEmptyFields([]);
       console.log("new study session added", json);
-      dispatch({ type: "CREATE_STUDY_SESSION", payload: json });
       handleClose();
     }
+  };
+
+  const handleSelectCourse = selectedCourse => {
+    setCourse(selectedCourse);
   };
 
   return (
     <form className="create" onSubmit={handleSubmit}>
       <Stack spacing={2}>
         <Stack direction="column" spacing={2}>
+          <CourseSearch onSelectCourse={handleSelectCourse} />
+
           <TextField
             variant="outlined"
             autoFocus
@@ -71,7 +78,7 @@ const StudySessionForm = ({ handleClose }) => {
             fullWidth
             required
             onChange={e => setCourse(e.target.value)}
-            value={course}
+            value={course.name}
           />
           <TextField
             variant="outlined"

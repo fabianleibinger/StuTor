@@ -3,14 +3,16 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import { StudySessionsContextProvider } from "./context/MyStudySessionsContext";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <StudySessionsContextProvider>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </StudySessionsContextProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

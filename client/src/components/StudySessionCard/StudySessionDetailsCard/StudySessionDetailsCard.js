@@ -11,9 +11,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { Delete } from "@mui/icons-material/";
 
-//import studySessionCardStyles from "../StudySessionCardStyles";
+//api
 
-import { useStudySessionsContext } from "../../../hooks/UseStudySessionContext";
+// context
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const handleChangeDate = ({ studySession }) => {
@@ -23,18 +23,9 @@ const handleChangeDate = ({ studySession }) => {
   return titleText;
 };
 
-export default function StudySessionCard({ studySession }) {
-  const { dispatch } = useStudySessionsContext();
-
-  const handleDeleteClick = async () => {
-    const response = await fetch("/api/studySessions/" + studySession._id, {
-      method: "DELETE"
-    });
-    const json = await response.json();
-
-    if (response.ok) {
-      dispatch({ type: "DELETE_STUDY_SESSION", payload: json });
-    }
+export default function StudySessionCard({ studySession, onDelete }) {
+  const handleDeleteClick = () => {
+    onDelete(studySession._id);
   };
 
   return (
@@ -65,25 +56,18 @@ export default function StudySessionCard({ studySession }) {
       />
 
       <CardContent>
+        <Typography sx={{ mb: 5 }}>
+          <strong>Description (€): </strong> {studySession.description}
+        </Typography>
         <Typography>
-          <Typography
-            sx={{
-              mb: 5
-            }}
-          >
-            <Typography>
-              <strong>Costs (€): </strong> {studySession.description}
-            </Typography>
-          </Typography>
-          <Typography>
-            <strong>University: </strong> {studySession.university}
-          </Typography>
-          <Typography>
-            <strong>Costs (€): </strong> {studySession.pricePerHourEuro}
-          </Typography>
-          <Typography>
-            <strong>Languages (€): </strong> {studySession.languages}
-          </Typography>
+          <strong>University: </strong> {studySession.university}
+        </Typography>
+        <Typography>
+          <strong>Costs (€): </strong> {studySession.pricePerHourEuro}
+        </Typography>
+        <Typography>
+          <strong>Languages (€): </strong>
+          {studySession.languages.join(", ")}
         </Typography>
       </CardContent>
       <CardActions
