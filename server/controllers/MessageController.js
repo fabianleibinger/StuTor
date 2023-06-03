@@ -3,29 +3,32 @@ import Message from "../models/Message.js";
 import User from "../models/User.js";
 import { ObjectId } from "mongodb";
 
-export const createMessage = async (req, res) => {
+export const sendMessage = async (req, res) => {
     try {
-        // Check if chat and sender exist.
-        const chatId = new ObjectId(req.body.chat);
+        // Check if chat exists.
+        var { chatId, content } = req.body;
+        chatId = new ObjectId(chatId);
         const chat = await Chat.findById(chatId);
-        const senderId = new ObjectId(req.body.sender);
-        const sender = await User.findById(senderId);
-        if (!chat || !sender) {
+        if (!chat) {
             res.status(404).send('Object reference not found!');
             return;
         }
-        // Create message.
-        const newMessage = new Message({
+        // Send message.
+        const newMessage = {
             chat: chatId,
-            sender: senderId,
-            content: req.body.content,
-        });
+            sender: req.params.userId,
+            content: content,
+        };
         try {
-            const savedMessage = await newMessage.save();
-            res.status(201).send(savedMessage);
-        }
-        catch (err) {
-            res.status(500).send('Failed to create message!');
+            var message = await Message.create(newMessage);
+            message = await message.populate('sender', 'username picture');
+            message = await message.populate('chat');
+            message = await User.populate(message, { path: 'chat.users', select: '-password' });
+            // Update latest message in chat.
+            await Chat.findByIdAndUpdate(chatId, { latest_message: message._id });
+            res.status(201).send(message);
+        } catch (err) {
+            res.status(500).send('Failed to send message!');
         }
     } catch (err) {
         res.status(400).send('Bad request!');
@@ -50,6 +53,7 @@ export const getMessage = async (req, res) => {
     }
 };
 
+// TODO: Populate.
 export const getMessagesOfChat = async (req, res) => {
     try {
         // Check if chat exists.

@@ -47,42 +47,6 @@ export const accessChat = async (req, res) => {
     }
 };
 
-export const createChat = async (req, res) => {
-    try {
-        // Check if studysession exists.
-        const studysessionId = new ObjectId(req.body.studysession);
-        const studysession = await Studysession.findById(studysessionId);
-        if (!studysession) {
-            res.status(404).send('Object reference not found!');
-            return;
-        }
-        // Check if users exist.
-        const users = [];
-        for (const userId of req.body.users) {
-            const userIdObject = new ObjectId(userId);
-            const user = await User.findById(userIdObject);
-            if (!user) {
-                res.status(404).send('Object reference not found!');
-                return;
-            }
-            users.push(user);
-        }
-        // Create chat.
-        const newChat = new Chat({
-            studysession: studysessionId,
-            users: users,
-        });
-        try {
-            const savedChat = await newChat.save();
-            res.status(201).send(savedChat);
-        } catch (err) {
-            res.status(500).send('Failed to create chat!');
-        }
-    } catch (err) {
-        res.status(400).send('Bad request!');
-    }
-};
-
 export const getChat = async (req, res) => {
     try {
         const chatId = new ObjectId(req.params.chatId);
@@ -150,6 +114,7 @@ export const getChatsOfUser = async (req, res) => {
     }
 };
 
+// Should only be accessible by the tutor and populate.
 export const getChatsOfStudysessionAndUser = async (req, res) => {
     try {
         // Check if studysession and user exist.

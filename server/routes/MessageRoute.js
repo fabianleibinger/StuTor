@@ -1,7 +1,7 @@
 import express from 'express';
 
 import {
-    createMessage,
+    sendMessage,
     getMessage,
     getMessagesOfChat,
     deleteMessage
@@ -9,7 +9,8 @@ import {
 
 const router = express.Router();
 
-router.post('/', createMessage);
+// TODO: Authentication instead of id param.
+router.post('/:userId', sendMessage);
 router.get('/id/:messageId', getMessage);
 router.get('/ofChat/:chatId', getMessagesOfChat);
 router.delete('/:messageId', deleteMessage);
