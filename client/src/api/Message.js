@@ -2,13 +2,14 @@ import axios from 'axios';
 const BASE_URL = '/api';
 const MESSAGE_URL = `${BASE_URL}/message`;
 
-export const createMessage = async (body) => {
-    const response = await axios.post(`${MESSAGE_URL}`, body);
+// TODO: Authentication instead of id param.
+export const sendMessage = async (senderId, body) => {
+    const response = await axios.post(`${MESSAGE_URL}/${senderId}`, body);
     return response.data;
 }
 
 export const getMessage = async (messageId) => {
-    const response = await axios.get(`${MESSAGE_URL}/${messageId}`);
+    const response = await axios.get(`${MESSAGE_URL}/id/${messageId}`);
     return response.data;
 }
 

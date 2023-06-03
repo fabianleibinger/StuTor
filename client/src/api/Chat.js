@@ -2,13 +2,14 @@ import axios from 'axios';
 const BASE_URL = '/api';
 const CHAT_URL = `${BASE_URL}/chat`;
 
-export const createChat = async (body) => {
-    const response = await axios.post(`${CHAT_URL}`, body);
+//TODO: Authentication instead of id param.
+export const accessChat = async (userId, body) => {
+    const response = await axios.post(`${CHAT_URL}/${userId}`, body);
     return response.data;
 }
 
 export const getChat = async (chatId) => {
-    const response = await axios.get(`${CHAT_URL}/${chatId}`);
+    const response = await axios.get(`${CHAT_URL}/id/${chatId}`);
     return response.data;
 }
 
