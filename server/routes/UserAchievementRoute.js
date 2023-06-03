@@ -4,7 +4,7 @@ import { createUserAchievement, getUserAchievement, deleteUserAchievement } from
 const router = express.Router();
 
 router.post('/', createUserAchievement);
-router.get('/:userAchievementId', getUserAchievement);
+router.get('/id/:userAchievementId', getUserAchievement);
 router.delete('/:userAchievementId', deleteUserAchievement);
 
 export default router;

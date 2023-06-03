@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 
 router.post('/', createBooking);
-router.get('/:bookingId', getBooking);
+router.get('/id/:bookingId', getBooking);
 router.get('/ofStudysession/:studysessionId', getBookingsOfStudysession);
 router.get('/createdBy/:userId', getBookingsCreatedByUser);
 router.get('/ofStudysession/:studysessionId/createdBy/:userId/', getBookingsOfStudysessionCreatedByUser);

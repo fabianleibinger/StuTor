@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post('/', createAchievement);
 router.get('/', getAchievements);
-router.get('/:achievementId', getAchievement);
+router.get('/id/:achievementId', getAchievement);
 router.get('/ofUser/:userId', getAchievementsOfUser);
 router.put('/:achievementId', updateAchievement);
 router.delete('/:achievementId', deleteAchievement);

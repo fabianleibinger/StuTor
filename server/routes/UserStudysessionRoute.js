@@ -4,7 +4,7 @@ import { createUserStudysession, getUserStudysession, deleteUserStudysession } f
 const router = express.Router();
 
 router.post('/', createUserStudysession);
-router.get('/:userStudysessionId', getUserStudysession);
+router.get('/id/:userStudysessionId', getUserStudysession);
 router.delete('/:userStudysessionId', deleteUserStudysession);
 
 export default router;

@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post('/', createUniversity);
 router.get('/', getUniversities);
-router.get('/:universityId', getUniversity);
+router.get('/id/:universityId', getUniversity);
 router.put('/:universityId', updateUniversity);
 router.delete('/:universityId', deleteUniversity);
 

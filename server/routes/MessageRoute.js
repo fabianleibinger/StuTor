@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.post('/', createMessage);
-router.get('/:messageId', getMessage);
+router.get('/id/:messageId', getMessage);
 router.get('/ofChat/:chatId', getMessagesOfChat);
 router.delete('/:messageId', deleteMessage);
 

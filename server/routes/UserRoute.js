@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 
 router.post('/', createUser);
-router.get('/:userId', getUser);
+router.get('/id/:userId', getUser);
 router.get('/ofUniversity/:universityId', getUsersOfUniversity);
 router.get('/thatAchieved/:achievementId', getUsersThatAchieved);
 router.get('/ofStudysession/:studysessionId', getUsersOfStudysession);
