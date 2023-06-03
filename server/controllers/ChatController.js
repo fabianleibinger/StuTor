@@ -23,7 +23,8 @@ export const accessChat = async (req, res) => {
                 { users: { $elemMatch: { $eq: userId } } },
                 { users: { $elemMatch: { $eq: req.params.userId } } }
             ]
-        }).populate('users', '-password').populate('latest_message');
+        }).populate('users', '-password')
+        .populate('latest_message');
         chat = await User.populate(chat, { path: 'latest_message.sender', select: 'username picture' });
         // Create chat if it doesn't exist.
         if (chat.length > 0) {
@@ -100,7 +101,7 @@ export const getChat = async (req, res) => {
     }
 };
 
-// Should only be accessible by the tutor.
+// Should only be accessible by the tutor and populate.
 export const getChatsOfStudysession = async (req, res) => {
     try {
         // Check if studysession exists.
@@ -129,14 +130,11 @@ export const getChatsOfStudysession = async (req, res) => {
 // Should only be accessible by the user.
 export const getChatsOfUser = async (req, res) => {
     try {
-        // Check if user exists.
-        const userId = new ObjectId(req.params.userId);
-        const user = await User.findById(userId);
-        if (!user) {
-            res.status(404).send('Object reference not found!');
-            return;
-        }
-        const chats = await Chat.find({ users: { $elemMatch: { $eq: userId } } });
+        var chats = await Chat.find({users: { $elemMatch: { $eq: req.params.userId } } })
+        .populate('users', '-password')
+        .populate('latest_message')
+        .sort({ updatedAt: -1 });
+        chats = await User.populate(chats, { path: 'latest_message.sender', select: 'username picture' });
         try {
             if (chats.length === 0) {
                 res.status(404).send('No chats found!');
