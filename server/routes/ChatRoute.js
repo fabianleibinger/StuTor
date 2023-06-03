@@ -1,6 +1,7 @@
 import express from 'express';
 
 import {
+    accessChat,
     createChat,
     getChat,
     getChatsOfStudysession,
@@ -12,6 +13,8 @@ import {
 
 const router = express.Router();
 
+// TODO: Authentication instead of id param.
+router.post('/:userId', accessChat);
 router.post('/', createChat);
 router.get('/id/:chatId', getChat);
 router.get('/ofStudysession/:studysessionId', getChatsOfStudysession);

@@ -29,7 +29,7 @@ const connect = async () => {
 app.use(express.json());
 // Http logger
 app.use((req, res, next) => {
-    console.log(`Received ${req.method} request for ${req.url}: response ${res.statusCode}`);
+    console.log(`Received ${req.method} request for ${req.url}`);
     next();
 });
 

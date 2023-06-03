@@ -4,6 +4,48 @@ import Studysession from "../models/Studysession.js";
 import User from "../models/User.js";
 import { ObjectId } from "mongodb";
 
+export const accessChat = async (req, res) => {
+    try {
+        // Check if studysession and user exist.
+        var { userId, studysessionId } = req.body;
+        studysessionId = new ObjectId(studysessionId);
+        const studysession = await Studysession.findById(studysessionId);
+        userId = new ObjectId(userId);
+        const user = await User.findById(userId);
+        if (!studysession || !user) {
+            res.status(404).send('Object reference not found!');
+            return;
+        }
+        // Access chat.
+        var chat = await Chat.find({
+            studysession: studysessionId,
+            $and: [
+                { users: { $elemMatch: { $eq: userId } } },
+                { users: { $elemMatch: { $eq: req.params.userId } } }
+            ]
+        }).populate('users', '-password').populate('latest_message');
+        chat = await User.populate(chat, { path: 'latest_message.sender', select: 'username picture' });
+        // Create chat if it doesn't exist.
+        if (chat.length > 0) {
+            res.status(200).send(chat[0]);
+        } else {
+            var newChat = new Chat({
+                studysession: studysessionId,
+                users: [userId, req.params.userId],
+            });
+            try {
+                var savedChat = await newChat.save();
+                savedChat = await Chat.populate(savedChat, { path: 'users', select: '-password' });
+                res.status(201).send(savedChat);
+            } catch (err) {
+                res.status(500).send('Failed to create chat!');
+            }
+        }
+    } catch (err) {
+        res.status(400).send('Bad request!');
+    }
+};
+
 export const createChat = async (req, res) => {
     try {
         // Check if studysession exists.
@@ -58,6 +100,7 @@ export const getChat = async (req, res) => {
     }
 };
 
+// Should only be accessible by the tutor.
 export const getChatsOfStudysession = async (req, res) => {
     try {
         // Check if studysession exists.
@@ -83,6 +126,7 @@ export const getChatsOfStudysession = async (req, res) => {
     }
 };
 
+// Should only be accessible by the user.
 export const getChatsOfUser = async (req, res) => {
     try {
         // Check if user exists.
