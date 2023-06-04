@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import {
     useQuery,
@@ -6,8 +6,18 @@ import {
     useQueryClient,
   } from 'react-query'
 import { createBooking, getBookingsOfStudysession } from '../api/Booking.js';
+import BookingDialog from '../components/BookingDialog.js';
 
-const BookingBox = () => {
+const BookingPage = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
   // Hard coded studySessionId for now
   const studySessionId = "647213c2d119142ec0b57f30"
   const { isLoading, error, data } = useQuery(['bookings'], () => getBookingsOfStudysession(studySessionId));
@@ -15,12 +25,20 @@ const BookingBox = () => {
   if (error) return 'An error has occurred: ' + error.message
   const booking = data[0]
   console.log(data)
-  // just random button for now
+
   return (
-    <Button variant="contained" color="primary">
-      {booking.priceEuro}
-    </Button>
+    <div>
+      <Button variant="contained" color="primary" onClick={handleOpenDialog}>
+        Open Booking Dialog
+      </Button>
+
+      <BookingDialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        perHourPrice={booking.priceEuro} 
+      />
+    </div>
   );
 };
 
-export default BookingBox;
+export default BookingPage;
