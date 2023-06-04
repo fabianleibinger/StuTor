@@ -53,7 +53,6 @@ export const getMessage = async (req, res) => {
     }
 };
 
-// TODO: Populate.
 export const getMessagesOfChat = async (req, res) => {
     try {
         // Check if chat exists.
@@ -64,7 +63,10 @@ export const getMessagesOfChat = async (req, res) => {
             return;
         }
         // Get messages of chat.
-        const messages = await Message.find({ chat: chatId });
+        const messages = await Message.find({ chat: chatId })
+        .populate('sender', 'username picture')
+        .populate('chat');
+        messages = await User.populate(messages, { path: 'chat.users', select: '-password' });
         try {
             if (messages.length === 0) {
                 res.status(404).send('No messages found!');

@@ -65,7 +65,7 @@ export const getChat = async (req, res) => {
     }
 };
 
-// Should only be accessible by the tutor and populate.
+// Should only be accessible by the tutor.
 export const getChatsOfStudysession = async (req, res) => {
     try {
         // Check if studysession exists.
@@ -75,7 +75,11 @@ export const getChatsOfStudysession = async (req, res) => {
             res.status(404).send('Object reference not found!');
             return;
         }
-        const chats = await Chat.find({ studysession: studysessionId });
+        var chats = await Chat.find({ studysession: studysessionId })
+        .populate('users', '-password')
+        .populate('latest_message')
+        .sort({ updatedAt: -1 });
+        chats = await User.populate(chats, { path: 'latest_message.sender', select: 'username picture' });
         try {
             if (chats.length === 0) {
                 res.status(404).send('No chats found!');
@@ -114,7 +118,7 @@ export const getChatsOfUser = async (req, res) => {
     }
 };
 
-// Should only be accessible by the tutor and populate.
+// Should only be accessible by the tutor.
 export const getChatsOfStudysessionAndUser = async (req, res) => {
     try {
         // Check if studysession and user exist.
@@ -126,11 +130,15 @@ export const getChatsOfStudysessionAndUser = async (req, res) => {
             res.status(404).send('Object reference not found!');
             return;
         }
-        const chats = await Chat.find(
+        var chats = await Chat.find(
             {
                 studysession: studysessionId,
                 users: { $elemMatch: { $eq: userId } }
-            });
+            })
+            .populate('users', '-password')
+            .populate('latest_message')
+            .sort({ updatedAt: -1 });
+            chats = await User.populate(chats, { path: 'latest_message.sender', select: 'username picture' });
         try {
             if (chats.length === 0) {
                 res.status(404).send('No chats found!');
