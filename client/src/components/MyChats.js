@@ -1,40 +1,53 @@
 import React from 'react';
 import { getChatsOfUser } from '../api/Chat';
 import { useQuery } from 'react-query';
-import { Box, Button, Skeleton } from '@mui/material';
+import { Box, Skeleton, Snackbar, Alert } from '@mui/material';
 
 const MyChats = () => {
+
+    const boxSx = {
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        alignContent: 'center',
+        width: 0.5,
+    };
+
+    const loading_skeleton = <Skeleton variant='rounded' sx={{ flexGrow: 1, width: 1, marginBottom: '3vh' }} />
+
+    const [open, setOpen] = React.useState(false);
+
     const userId = '6468f36705853e6071dfec63';
     const { isLoading, error, data } = useQuery(['chats'], () => getChatsOfUser(userId));
     if (isLoading) return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                flexWrap: 'wrap',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                width: '100%',
-                height: '100%',
-                padding: '2vh',
-            }}
-        >
-            {<Skeleton variant='rounded' width='95%' sx={{ flexGrow: 1, marginBottom: '1vh' }}/>}
-            {<Skeleton variant='rounded' width='95%' sx={{ flexGrow: 1, marginBottom: '1vh' }}/>}
-            {<Skeleton variant='rounded' width='95%' sx={{ flexGrow: 1, marginBottom: '1vh' }}/>}
-            {<Skeleton variant='rounded' width='95%' sx={{ flexGrow: 1, marginBottom: '1vh' }}/>}
-            {<Skeleton variant='rounded' width='95%' sx={{ flexGrow: 1, marginBottom: '1vh' }}/>}
+        <Box sx={boxSx}>
+            {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
         </Box>
     );
-    if (error) return
+    if (error) return (
+        <Box sx={boxSx}>
+            <Alert severity='info' sx={{ flexGrow: 1, width: 0.95 }}>
+                Start a chat first!
+            </Alert>
+        </Box>
+    );
     const chats = data;
-    console.log(chats)
-    // just random button for now
+    console.log(chats);
     return (
-        <div>
-            <h1>My Chats</h1>
-
-        </div>
+        <Box sx={boxSx}>
+            {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
+        </Box>
     );
 };
 

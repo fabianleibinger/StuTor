@@ -8,44 +8,19 @@ const ChatPage = () => {
             sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-evenly',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                alignItems: 'stretch',
                 alignContent: 'stretch',
-                width: '100vw',
-                height: '100vh',
+                width: '96vw',
+                height: '94vh',
+                mx: 'auto',
+                marginTop: '3vh',
+                marginBottom: '3vh',
             }}
         >
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flexWrap: 'wrap',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    width: 0.475,
-                    height: '96vh',
-                    marginTop: '2vh',
-                    marginBottom: '2vh',
-                    backgroundColor: '#f5f5f5',
-                }}
-            >
-                {<MyChats />}
-            </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flexWrap: 'wrap',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    width: 0.475,
-                    height: '96vh',
-                    marginTop: '2vh',
-                    marginBottom: '2vh',
-                    backgroundColor: '#f5f5f5',
-                }}
-            >
-                {<ChatBox />}
-            </Box>
+            {<MyChats />}
+            {<ChatBox />}
         </Box>
     );
 };
