@@ -24,7 +24,12 @@ const BookingDialog = ({ open, onClose, priceEuro }) => {
   const jsonData = JSON.stringify(data);
 
   const createBooking = useMutation(
-    (jsonData) => createBookingCall(jsonData),
+    (jsonData) => createBookingCall({
+      "studysession": "647213c2d119142ec0b57f30",
+              "hours": "2",
+              "priceEuro": "30",
+              "createdBy": "6468f36705853e6071dfec63"
+  }),
     {
         onSuccess: () => {
             queryClient.invalidateQueries('bookings')
