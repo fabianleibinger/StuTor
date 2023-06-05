@@ -6,14 +6,25 @@ import { useMutation } from 'react-query';
 import { create } from '@mui/material/styles/createTransitions.js';
 import {createBooking as createBookingCall} from '../api/Booking.js';
 
-const BookingDialog = ({ open, onClose, perHourPrice }) => {
+const BookingDialog = ({ open, onClose, priceEuro }) => {
 
     const [hours, setHours] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
   const queryClient = useQueryClient();
+  const studysession = "647213c2d119142ec0b57f30"
+  const createdBy = "6468f36705853e6071dfec63"
+
+  const data = {
+    studysession,
+    hours,
+    priceEuro,
+    createdBy
+  };
+
+  const jsonData = JSON.stringify(data);
 
   const createBooking = useMutation(
-    (data) => createBookingCall(data),
+    (jsonData) => createBookingCall(jsonData),
     {
         onSuccess: () => {
             queryClient.invalidateQueries('bookings')
@@ -21,6 +32,7 @@ const BookingDialog = ({ open, onClose, perHourPrice }) => {
             onClose()
             },
         onError: (error) => {
+            console.log("in error:" + jsonData)
             console.log(error)
         }
             });
@@ -30,17 +42,13 @@ const BookingDialog = ({ open, onClose, perHourPrice }) => {
     setHours(value);
 
     // Calculate total amount
-    const amount = parseFloat(value) * perHourPrice;
+    const amount = parseFloat(value) * priceEuro;
     setTotalAmount(amount);
   };
 
   const handleBookingConfirm = async () => {
-        await createBooking.mutateAsync({
-            "studysession": "647213c2d119142ec0b57f30",
-                    "hours": "20",
-                    "priceEuro": "30",
-                    "createdBy": "6468f36705853e6071dfec63"
-        })
+    console.log("in HandleBookingConfirm" + jsonData)
+        await createBooking.mutateAsync(jsonData)
   };
 
   return (
