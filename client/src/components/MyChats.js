@@ -1,7 +1,7 @@
 import React from 'react';
 import { getChatsOfUser } from '../api/Chat';
 import { useQuery } from 'react-query';
-import { Box, Skeleton, Alert } from '@mui/material';
+import { Box, Skeleton, Alert, Stack } from '@mui/material';
 
 const MyChats = () => {
 
@@ -42,7 +42,11 @@ const MyChats = () => {
 
     return (
         <Box sx={boxSx}>
-            
+            <Stack>
+                {data.map((chat) => (
+                    chat.latest_message.sender.username
+                ))}
+            </Stack>
         </Box>
     );
 };
