@@ -12,7 +12,8 @@ const ChatBox = () => {
                 alignItems: 'center',
                 alignContent: 'center',
                 width: 0.49,
-                bgcolor: 'primary.main',
+                border: '1px solid lightgrey',
+                borderRadius: '6px',
             }}
         >
             
