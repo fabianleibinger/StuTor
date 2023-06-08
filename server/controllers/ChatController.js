@@ -24,8 +24,10 @@ export const accessChat = async (req, res) => {
                 { users: { $elemMatch: { $eq: req.params.userId } } }
             ]
         }).populate('users', '-password')
+        .populate('studysession')
         .populate('latest_message');
         chat = await User.populate(chat, { path: 'latest_message.sender', select: 'username picture' });
+        chats = await Studysession.populate(chats, { path: 'studysession.course', select: 'name' });
         // Create chat if it doesn't exist.
         if (chat.length > 0) {
             res.status(200).send(chat[0]);
@@ -77,9 +79,11 @@ export const getChatsOfStudysession = async (req, res) => {
         }
         var chats = await Chat.find({ studysession: studysessionId })
         .populate('users', '-password')
+        .populate('studysession')
         .populate('latest_message')
         .sort({ updatedAt: -1 });
         chats = await User.populate(chats, { path: 'latest_message.sender', select: 'username picture' });
+        chats = await Studysession.populate(chats, { path: 'studysession.course', select: 'name' });
         try {
             if (chats.length === 0) {
                 res.status(404).send('No chats found!');
@@ -100,9 +104,11 @@ export const getChatsOfUser = async (req, res) => {
     try {
         var chats = await Chat.find({users: { $elemMatch: { $eq: req.params.userId } } })
         .populate('users', '-password')
+        .populate('studysession')
         .populate('latest_message')
         .sort({ updatedAt: -1 });
         chats = await User.populate(chats, { path: 'latest_message.sender', select: 'username picture' });
+        chats = await Studysession.populate(chats, { path: 'studysession.course', select: 'name' });
         try {
             if (chats.length === 0) {
                 res.status(404).send('No chats found!');
@@ -136,9 +142,11 @@ export const getChatsOfStudysessionAndUser = async (req, res) => {
                 users: { $elemMatch: { $eq: userId } }
             })
             .populate('users', '-password')
+            .populate('studysession')
             .populate('latest_message')
             .sort({ updatedAt: -1 });
             chats = await User.populate(chats, { path: 'latest_message.sender', select: 'username picture' });
+            chats = await Studysession.populate(chats, { path: 'studysession.course', select: 'name' });
         try {
             if (chats.length === 0) {
                 res.status(404).send('No chats found!');

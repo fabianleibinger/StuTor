@@ -1,13 +1,13 @@
 import React from 'react';
 import { getChatsOfUser } from '../api/Chat';
 import { useQuery } from 'react-query';
-import { Box, Skeleton, Alert, Stack } from '@mui/material';
+import { Box, Skeleton, Alert, List, Divider, ListItemButton, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 
 const MyChats = () => {
 
     const userId = '6468f36705853e6071dfec63';
     // TODO: Move somewhere else after userid is retrieved from auth.
-    const { isLoading, error, data } = useQuery(['chats'], () => getChatsOfUser(userId));
+    const { isLoading, error, data } = useQuery(['chatsOfUser'], () => getChatsOfUser(userId));
 
     const boxSx = {
         display: 'flex',
@@ -29,6 +29,8 @@ const MyChats = () => {
             {loading_skeleton}
             {loading_skeleton}
             {loading_skeleton}
+            {loading_skeleton}
+            {loading_skeleton}
         </Box>
     );
 
@@ -42,11 +44,30 @@ const MyChats = () => {
 
     return (
         <Box sx={boxSx}>
-            <Stack>
-                {data.map((chat) => (
-                    chat.latest_message.sender.username
+            <List
+                sx={{
+                    width: 1,
+                    overflow: 'auto',
+                }}
+            >
+                {data.map((chat, index) => (
+                    <React.Fragment key={chat.id}>
+                        <ListItemButton 
+                            alignItems='flex-start'
+                            onClick={() => console.log(chat.id)}
+                        >
+                            <ListItemAvatar>
+                                <Avatar src={chat.users[0].picture} />
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={chat.users[0].firstname + ' ' + chat.users[0].lastname + ' - ' + chat.studysession.course.name}
+                                secondary={chat.latest_message?.content}
+                            />
+                        </ListItemButton>
+                        {index < data.length - 1 && <Divider />}
+                    </React.Fragment>
                 ))}
-            </Stack>
+            </List>
         </Box>
     );
 };
