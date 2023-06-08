@@ -58,7 +58,7 @@ const MyChats = () => {
                             alignItems='flex-start'
                             onClick={() => setSelectedChat(chat)}
                             sx={{
-                                backgroundColor: selectedChat === chat ? 'grey' : 'inherit',
+                                backgroundColor: selectedChat === chat ? 'lightgrey' : 'inherit',
                               }}
                         >
                             <ListItemAvatar>
