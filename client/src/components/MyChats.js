@@ -2,12 +2,14 @@ import React from 'react';
 import { getChatsOfUser } from '../api/Chat';
 import { useQuery } from 'react-query';
 import { Box, Skeleton, Alert, List, Divider, ListItemButton, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
+import { useAppContext } from '../context/ChatProvider';
 
 const MyChats = () => {
 
     const userId = '6468f36705853e6071dfec63';
-    // TODO: Move somewhere else after userid is retrieved from auth.
     const { isLoading, error, data } = useQuery(['chatsOfUser'], () => getChatsOfUser(userId));
+
+    const { selectedChat, setSelectedChat } = useAppContext();
 
     const boxSx = {
         display: 'flex',
@@ -42,7 +44,7 @@ const MyChats = () => {
         </Box>
     );
 
-    return (
+    if (data) return (
         <Box sx={boxSx}>
             <List
                 sx={{
@@ -52,9 +54,12 @@ const MyChats = () => {
             >
                 {data.map((chat, index) => (
                     <React.Fragment key={chat.id}>
-                        <ListItemButton 
+                        <ListItemButton
                             alignItems='flex-start'
-                            onClick={() => console.log(chat.id)}
+                            onClick={() => setSelectedChat(chat)}
+                            sx={{
+                                backgroundColor: selectedChat === chat ? 'grey' : 'inherit',
+                              }}
                         >
                             <ListItemAvatar>
                                 <Avatar src={chat.users[0].picture} />
