@@ -67,7 +67,7 @@ export default function LanguageSelection({ onSelectedLanguage }) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <FormControl sx={{ width: '200px' }}>
-        <InputLabel>Languages</InputLabel>
+        <InputLabel> Languages *</InputLabel>
         <Select
           open={menuOpen}
           onClose={handleMenuClose}

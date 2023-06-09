@@ -9,12 +9,12 @@ import CourseSearch from '../CourseSearch/CourseSearch';
 import LanguageSelection from '../LanguageSelection/LanguageSelection';
 import { createStudysession } from '../../api/StudySession';
 
-const StudySessionForm = ({ handleClose }) => {
+const CreateStudySessionForm = ({ handleClose }) => {
   const [course, setCourse] = useState('');
   const [pricePerHourEuro, setPricePerHourEuro] = useState('');
   const [languages, setLanguages] = useState([]);
   const [description, setDescription] = useState('');
-  const [e, setE] = useState('');
+  const [postError, setPostError] = useState('');
   const [emptyFields, setEmptyFields] = useState([]);
 
   const queryClient = useQueryClient();
@@ -25,29 +25,32 @@ const StudySessionForm = ({ handleClose }) => {
       setPricePerHourEuro('');
       setDescription('');
       setLanguages([]);
-      setE('');
+      setPostError('');
       setEmptyFields([]);
       handleClose();
       queryClient.invalidateQueries('studysessions');
     },
     onError: error => {
       // Handle error
-      console.log('EEEEEEEEERRRRRRRRRRROOOOOOOOOOR', error.data);
-      setE(error.data);
+      setPostError(error.message);
     }
   });
 
   const handleSubmit = event => {
     event.preventDefault();
+    setEmptyFields([]);
 
     if (!course) {
-      setEmptyFields(list(emptyFields).push('course'));
+      setEmptyFields(prevFields => [...prevFields, 'course']);
     }
-    if (!languages) {
-      setEmptyFields(emptyFields.push('LanguageSelection'));
+    if (languages.length === 0) {
+      console.log('ehh ok');
+      setEmptyFields(prevFields => [...prevFields, 'LanguageSelection']);
+      console.log(emptyFields);
+      return;
     }
 
-    if (emptyFields) {
+    if (emptyFields.length !== 0 || !course) {
       return;
     }
 
@@ -98,10 +101,7 @@ const StudySessionForm = ({ handleClose }) => {
             onChange={e => setPricePerHourEuro(e.target.value)}
             value={pricePerHourEuro}
           />
-          <LanguageSelection
-            onSelectedLanguage={handleSelectedLanguages}
-            required
-          />
+          <LanguageSelection onSelectedLanguage={handleSelectedLanguages} />
 
           <TextField
             variant="outlined"
@@ -122,9 +122,16 @@ const StudySessionForm = ({ handleClose }) => {
           </Box>
         </Stack>
       </Stack>
-      {emptyFields && <div className="error">{emptyFields[0]}</div>}
+      {emptyFields.length !== 0 && (
+        <div className="error">Please fill out all empty fields</div>
+      )}
+      {mutation.isError && emptyFields.length == 0 && (
+        <div className="error">
+          Please check if you already offer a study session for this course{' '}
+        </div>
+      )}
     </form>
   );
 };
 
-export default StudySessionForm;
+export default CreateStudySessionForm;
