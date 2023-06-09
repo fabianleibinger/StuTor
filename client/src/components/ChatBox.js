@@ -3,7 +3,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useAppContext } from '../context/ChatProvider';
 import { useQuery } from 'react-query';
 import { getMessagesOfChat } from '../api/Message';
-import { } from '@mui/material';
+import { Chip } from '@mui/material';
 
 const ChatBox = () => {
 
@@ -15,10 +15,7 @@ const ChatBox = () => {
     const gridSx = {
         display: 'flex',
         flexDirection: 'column',
-        flexWrap: 'wrap',
         justifyContent: 'flex-start',
-        alignItems: 'center',
-        alignContent: 'center',
         width: 0.49,
         border: '1px solid lightgrey',
         borderRadius: '6px',
@@ -27,9 +24,12 @@ const ChatBox = () => {
     if (data) return (
         <Grid container spacing={2} sx={gridSx}>
             {data.map((message, index) => (
-                <Grid item xs={12} key={index}>
-                    {message.content}
-                </Grid>
+                <React.Fragment key={'index'}>
+                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}/>
+                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <Chip label={message.content} />
+                    </Grid>
+                </React.Fragment>
             ))}
         </Grid>
     );
