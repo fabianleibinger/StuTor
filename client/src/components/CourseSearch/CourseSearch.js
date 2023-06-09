@@ -104,7 +104,7 @@ export default function CourseSearch({ onSelectCourse, onDeleteCourse }) {
         autoFocus
         margin="dense"
         id="course"
-        label="Course Search"
+        label="Course Search *"
         type="Search"
         fullWidth
       />

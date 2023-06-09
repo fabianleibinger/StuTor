@@ -72,7 +72,7 @@ export default function StudySessionCard({ studySession, onDelete }) {
 
       <CardContent>
         <Typography sx={{ mb: 5 }}>
-          <strong>Description (€): </strong> {studySession.description}
+          <strong>Description: </strong> {studySession.description}
         </Typography>
         <Typography>
           <strong>University: </strong> {studySession.university}
@@ -81,7 +81,7 @@ export default function StudySessionCard({ studySession, onDelete }) {
           <strong>Costs (€): </strong> {studySession.pricePerHourEuro}
         </Typography>
         <Typography>
-          <strong>Languages (€): </strong>
+          <strong>Languages: </strong>
           {studySession.languages.join(', ')}
         </Typography>
       </CardContent>
