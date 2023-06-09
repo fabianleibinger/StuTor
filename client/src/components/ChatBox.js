@@ -34,6 +34,12 @@ const ChatBox = () => {
         </Grid>
     );
 
+    if (selectedChat && !data) return (
+        <Grid container spacing={2} sx={gridSx}>
+            Start a conversation!
+        </Grid>
+    )
+
     return (
         <Grid container spacing={2} sx={gridSx}>
             Select a chat to start messaging!
