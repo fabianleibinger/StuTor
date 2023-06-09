@@ -35,7 +35,7 @@ const BookingPage = () => {
       <BookingDialog
         open={dialogOpen}
         onClose={handleCloseDialog}
-        perHourPrice={booking.priceEuro} 
+        priceEuro={booking.priceEuro} 
       />
     </div>
   );

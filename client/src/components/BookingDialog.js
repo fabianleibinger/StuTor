@@ -5,31 +5,17 @@ import { useCreateBooking } from '../hooks/CreateBooking.jsx';
 import { useMutation } from 'react-query';
 import { create } from '@mui/material/styles/createTransitions.js';
 import {createBooking as createBookingCall} from '../api/Booking.js';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const BookingDialog = ({ open, onClose, priceEuro }) => {
 
     const [hours, setHours] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
   const queryClient = useQueryClient();
-  const studysession = "647213c2d119142ec0b57f30"
-  const createdBy = "6468f36705853e6071dfec63"
+  const studysession = '647213c2d119142ec0b57f30'
+  const createdBy = '6468f36705853e6071dfec63'
 
-  const data = {
-    studysession,
-    hours,
-    priceEuro,
-    createdBy
-  };
-
-  const jsonData = JSON.stringify(data);
-
-  const createBooking = useMutation(
-    (jsonData) => createBookingCall({
-      "studysession": "647213c2d119142ec0b57f30",
-              "hours": "2",
-              "priceEuro": "30",
-              "createdBy": "6468f36705853e6071dfec63"
-  }),
+  const createBooking = useMutation( (data) => createBookingCall(data),
     {
         onSuccess: () => {
             queryClient.invalidateQueries('bookings')
@@ -37,7 +23,7 @@ const BookingDialog = ({ open, onClose, priceEuro }) => {
             onClose()
             },
         onError: (error) => {
-            console.log("in error:" + jsonData)
+            console.log("in error:" + studysession + hours + priceEuro + createdBy)
             console.log(error)
         }
             });
@@ -52,8 +38,12 @@ const BookingDialog = ({ open, onClose, priceEuro }) => {
   };
 
   const handleBookingConfirm = async () => {
-    console.log("in HandleBookingConfirm" + jsonData)
-        await createBooking.mutateAsync(jsonData)
+    try {
+    console.log("in HandleBookingConfirm" + studysession + hours + priceEuro + createdBy)
+        await createBooking.mutateAsync(studysession, hours, priceEuro, createdBy)
+    } catch (error) { 
+        console.log(error)
+    }
   };
 
   return (
@@ -74,6 +64,27 @@ const BookingDialog = ({ open, onClose, priceEuro }) => {
         <Button variant="contained" color="primary" onClick={handleBookingConfirm}>
           Confirm Booking
         </Button>
+        <PayPalScriptProvider options={{"client-id": "AdneQTEzxtUMB51tIffv4YLnIqT_Tlcpvdk856Q-plc0y4YP4LyjJNW2AucVSzEkTryUfdRwDu_VUlqi"}}>
+        <PayPalButtons
+                createOrder={(data, actions) => {
+                    return actions.order.create({
+                        purchase_units: [
+                            {
+                                amount: {
+                                    value: "1.99",
+                                },
+                            },
+                        ],
+                    });
+                }}
+                onApprove={(data, actions) => {
+                    return actions.order.capture().then((details) => {
+                        const name = details.payer.name.given_name;
+                        alert(`Transaction completed by ${name}`);
+                    });
+                }}
+            />
+        </PayPalScriptProvider>
       </DialogContent>
     </Dialog>
   );
