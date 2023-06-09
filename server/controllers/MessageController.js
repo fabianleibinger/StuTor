@@ -1,6 +1,5 @@
 import Chat from "../models/Chat.js";
 import Message from "../models/Message.js";
-import User from "../models/User.js";
 import { ObjectId } from "mongodb";
 
 export const sendMessage = async (req, res) => {
@@ -21,9 +20,8 @@ export const sendMessage = async (req, res) => {
         };
         try {
             var message = await Message.create(newMessage);
-            message = await message.populate('sender', 'username picture');
+            message = await message.populate('sender', 'username firstname lastname picture');
             message = await message.populate('chat');
-            message = await User.populate(message, { path: 'chat.users', select: '-password' });
             // Update latest message in chat.
             await Chat.findByIdAndUpdate(chatId, { latest_message: message._id });
             res.status(201).send(message);
@@ -64,9 +62,8 @@ export const getMessagesOfChat = async (req, res) => {
         }
         // Get messages of chat.
         const messages = await Message.find({ chat: chatId })
-        .populate('sender', 'username picture')
+        .populate('sender', 'username firstname lastname picture')
         .populate('chat');
-        messages = await User.populate(messages, { path: 'chat.users', select: '-password' });
         try {
             if (messages.length === 0) {
                 res.status(404).send('No messages found!');

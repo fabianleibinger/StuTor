@@ -13,9 +13,9 @@ const ChatPage = () => {
                 alignItems: 'stretch',
                 alignContent: 'stretch',
                 width: '96vw',
-                height: '94vh',
+                height: '92vh',
                 mx: 'auto',
-                marginTop: '3vh',
+                marginTop: '4vh',
                 marginBottom: '3vh',
             }}
         >

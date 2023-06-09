@@ -6,10 +6,10 @@ import { useAppContext } from '../context/ChatProvider';
 
 const MyChats = () => {
 
+    const { selectedChat, setSelectedChat } = useAppContext();
+
     const userId = '6468f36705853e6071dfec63';
     const { isLoading, error, data } = useQuery(['chatsOfUser'], () => getChatsOfUser(userId));
-
-    const { selectedChat, setSelectedChat } = useAppContext();
 
     const boxSx = {
         display: 'flex',

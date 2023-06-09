@@ -27,7 +27,7 @@ export const accessChat = async (req, res) => {
         .populate('studysession')
         .populate('latest_message');
         chat = await User.populate(chat, { path: 'latest_message.sender', select: 'username picture' });
-        chats = await Studysession.populate(chats, { path: 'studysession.course', select: 'name' });
+        chat = await Studysession.populate(chat, { path: 'studysession.course', select: 'name' });
         // Create chat if it doesn't exist.
         if (chat.length > 0) {
             res.status(200).send(chat[0]);
