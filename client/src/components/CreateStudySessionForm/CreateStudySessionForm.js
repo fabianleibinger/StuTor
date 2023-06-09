@@ -42,15 +42,11 @@ const CreateStudySessionForm = ({ handleClose }) => {
 
     if (!course) {
       setEmptyFields(prevFields => [...prevFields, 'course']);
-    }
-    if (languages.length === 0) {
-      console.log('ehh ok');
-      setEmptyFields(prevFields => [...prevFields, 'LanguageSelection']);
-      console.log(emptyFields);
       return;
     }
 
-    if (emptyFields.length !== 0 || !course) {
+    if (languages.length === 0) {
+      setEmptyFields(prevFields => [...prevFields, 'LanguageSelection']);
       return;
     }
 
