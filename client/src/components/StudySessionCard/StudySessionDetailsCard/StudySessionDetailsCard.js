@@ -1,20 +1,23 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { blue } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import { Delete } from "@mui/icons-material/";
+import * as React from 'react';
+import { useQuery } from 'react-query';
+
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { blue } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import { Delete } from '@mui/icons-material/';
 
 //api
+import { getCourse } from '../../../api/Course';
 
 // context
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const handleChangeDate = ({ studySession }) => {
   const createdAt = new Date(studySession.createdAt);
@@ -28,16 +31,24 @@ export default function StudySessionCard({ studySession, onDelete }) {
     onDelete(studySession._id);
   };
 
+  const { isLoading, error, data: relatedCourse } = useQuery(
+    `getCourse_${studySession._id}`,
+    () => getCourse(studySession.course)
+  );
+
+  if (isLoading) return 'Loading...';
+  if (error) return 'An error has occurred: ' + error.message;
+
   return (
     <Card
       sx={{
         maxWidth: 345,
-        height: "35vh",
+        height: '35vh',
         mr: 3,
         mb: 2,
-        display: "flex",
-        flexDirection: "column",
-        borderRadius: "12px"
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: '12px'
       }}
     >
       <CardHeader
@@ -51,7 +62,11 @@ export default function StudySessionCard({ studySession, onDelete }) {
             <Delete />
           </IconButton>
         }
-        title={studySession.course}
+        title={
+          relatedCourse && relatedCourse.name
+            ? relatedCourse.name
+            : 'Loading...'
+        }
         //subheader={handleChangeDate({ studySession })}
       />
 
@@ -67,12 +82,12 @@ export default function StudySessionCard({ studySession, onDelete }) {
         </Typography>
         <Typography>
           <strong>Languages (€): </strong>
-          {studySession.languages.join(", ")}
+          {studySession.languages.join(', ')}
         </Typography>
       </CardContent>
       <CardActions
         sx={{
-          mt: "auto"
+          mt: 'auto'
         }}
       >
         <IconButton aria-label="add to favorites">

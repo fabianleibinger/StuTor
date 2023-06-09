@@ -1,20 +1,20 @@
 import express from 'express';
-import { 
-    createStudysession, 
-    getStudysessions, 
-    getStudysession, 
-    getStudysessionsForCourse,
-    getStudysessionsTutoredBy,
-    getStudysessionsOfStudent,
-    updateStudysession, 
-    deleteStudysession 
+import {
+  createStudysession,
+  getStudysessions,
+  getStudysession,
+  getStudysessionsForCourse,
+  getStudysessionsTutoredBy,
+  getStudysessionsOfStudent,
+  updateStudysession,
+  deleteStudysession
 } from '../controllers/StudysessionController.js';
 
 const router = express.Router();
 
 router.post('/', createStudysession);
 router.get('/', getStudysessions);
-router.get('/:studysessionId', getStudysession);
+router.get('/byId/:studysessionId', getStudysession);
 router.get('/forCourse/:courseId', getStudysessionsForCourse);
 router.get('/tutoredBy/:userId', getStudysessionsTutoredBy);
 router.get('/ofStudent/:userId', getStudysessionsOfStudent);

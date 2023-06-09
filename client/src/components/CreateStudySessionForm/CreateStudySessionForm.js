@@ -1,85 +1,91 @@
-import { useState } from "react";
-import { Button, Box, TextField } from "@mui/material";
-import { Stack } from "@mui/system";
+import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+
+import { Button, Box, TextField } from '@mui/material';
+import { Stack } from '@mui/system';
 
 // import other components
-import CourseSearch from "../CourseSearch/CourseSearch";
+import CourseSearch from '../CourseSearch/CourseSearch';
+import LanguageSelection from '../LanguageSelection/LanguageSelection';
+import { createStudysession } from '../../api/StudySession';
 
 const StudySessionForm = ({ handleClose }) => {
-  const [course, setCourse] = useState("");
-  const [pricePerHourEuro, setPricePerHourEuro] = useState("");
+  const [course, setCourse] = useState('');
+  const [pricePerHourEuro, setPricePerHourEuro] = useState('');
   const [languages, setLanguages] = useState([]);
-  const [description, setDescription] = useState("");
-  const [error, setError] = useState(null);
+  const [description, setDescription] = useState('');
+  const [e, setE] = useState('');
   const [emptyFields, setEmptyFields] = useState([]);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const queryClient = useQueryClient();
 
-    const studySession = {
-      // needs to be changed to real course, real user
-      course: { course: "course" },
-      tutoredBy: {
-        username: "me",
-        email: "me@me.de",
-        password: "itsme",
-        lastname: "me",
-        firstname: "me",
-        role: "TUTOR",
-        university: "mine"
-      },
+  const mutation = useMutation(createStudysession, {
+    onSuccess: () => {
+      setCourse('');
+      setPricePerHourEuro('');
+      setDescription('');
+      setLanguages([]);
+      setE('');
+      setEmptyFields([]);
+      handleClose();
+      queryClient.invalidateQueries('studysessions');
+    },
+    onError: error => {
+      // Handle error
+      console.log('EEEEEEEEERRRRRRRRRRROOOOOOOOOOR', error.data);
+      setE(error.data);
+    }
+  });
+
+  const handleSubmit = event => {
+    event.preventDefault();
+
+    if (!course) {
+      setEmptyFields(list(emptyFields).push('course'));
+    }
+    if (!languages) {
+      setEmptyFields(emptyFields.push('LanguageSelection'));
+    }
+
+    if (emptyFields) {
+      return;
+    }
+
+    const newStudySession = {
+      course: String(course._id),
+      tutoredBy: '6468f36705853e6071dfec63',
       description: description,
       pricePerHourEuro: pricePerHourEuro,
       languages: languages
     };
 
-    const response = await fetch("/api/studysession", {
-      method: "POST",
-      body: JSON.stringify(studySession),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    const json = await response.json();
-    if (!response.ok) {
-      setError(json.error);
-      setEmptyFields(json.emptyFields);
-    }
-    if (response.ok) {
-      setCourse("");
-      setPricePerHourEuro("");
-      setDescription("");
-      setLanguages([]);
-      setError(null);
-      setEmptyFields([]);
-      console.log("new study session added", json);
-      handleClose();
-    }
+    mutation.mutate(newStudySession);
   };
 
+  // handle values of Course Search
   const handleSelectCourse = selectedCourse => {
     setCourse(selectedCourse);
+  };
+
+  const handleDeleteCourse = () => {
+    setCourse('');
+  };
+
+  // handle values of Language Selection
+  const handleSelectedLanguages = languages => {
+    setLanguages(languages);
   };
 
   return (
     <form className="create" onSubmit={handleSubmit}>
       <Stack spacing={2}>
         <Stack direction="column" spacing={2}>
-          <CourseSearch onSelectCourse={handleSelectCourse} />
-
-          <TextField
-            variant="outlined"
-            autoFocus
-            margin="dense"
-            id="course"
-            label="Course"
-            type="Text"
-            fullWidth
+          <CourseSearch
+            onSelectCourse={handleSelectCourse}
+            onDeleteCourse={handleDeleteCourse}
             required
-            onChange={e => setCourse(e.target.value)}
-            value={course.name}
           />
+
           <TextField
             variant="outlined"
             autoFocus
@@ -92,18 +98,11 @@ const StudySessionForm = ({ handleClose }) => {
             onChange={e => setPricePerHourEuro(e.target.value)}
             value={pricePerHourEuro}
           />
-          <TextField
-            variant="outlined"
-            autoFocus
-            margin="dense"
-            id="languages"
-            label="Languages"
-            type="Text"
-            fullWidth
+          <LanguageSelection
+            onSelectedLanguage={handleSelectedLanguages}
             required
-            onChange={e => setLanguages(e.target.value)}
-            value={languages}
           />
+
           <TextField
             variant="outlined"
             autoFocus
@@ -123,7 +122,7 @@ const StudySessionForm = ({ handleClose }) => {
           </Box>
         </Stack>
       </Stack>
-      {error && <div className="error">{error}</div>}
+      {emptyFields && <div className="error">{emptyFields[0]}</div>}
     </form>
   );
 };

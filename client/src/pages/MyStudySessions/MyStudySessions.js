@@ -1,31 +1,30 @@
 // components
-import StudySessionCard from "../../components/StudySessionCard/StudySessionDetailsCard/StudySessionDetailsCard";
-import AddStudySessionCard from "../../components/StudySessionCard/AddStudySessionCard/AddStudySessionCard";
-import CreateStudySessionDialog from "../../components/CreateStudySessionDialog/CreateStudySessionDialog";
-import CourseSearch from "../../components/CourseSearch/CourseSearch";
+import StudySessionCard from '../../components/StudySessionCard/StudySessionDetailsCard/StudySessionDetailsCard';
+import AddStudySessionCard from '../../components/StudySessionCard/AddStudySessionCard/AddStudySessionCard';
+import CreateStudySessionDialog from '../../components/CreateStudySessionDialog/CreateStudySessionDialog';
 
 //api
-import { getStudysession, deleteStudysession } from "../../api/StudySession";
+import { getStudysessions, deleteStudysession } from '../../api/StudySession';
 
 //react-query
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 // frontend
-import { Box, Grid } from "@mui/material";
+import { Box, Grid } from '@mui/material';
 
 const MyStudySessions = () => {
   const queryClient = useQueryClient();
 
   // fetch data
   const { isLoading, error, data } = useQuery(
-    ["studysessions"],
-    getStudysession
+    ['studysessions'],
+    getStudysessions
   );
 
   // use mutation to update data
   const deleteStudySessionMutation = useMutation(deleteStudysession, {
     onSuccess: () => {
-      queryClient.invalidateQueries("studysessions");
+      queryClient.invalidateQueries('studysessions');
     }
   });
 
@@ -34,13 +33,13 @@ const MyStudySessions = () => {
     await deleteStudySessionMutation.mutateAsync(studySessionId);
   };
 
-  if (isLoading) return "Loading...";
-  if (error) return "An error has occurred: " + error.message;
+  if (isLoading) return 'Loading...';
+  if (error) return 'An error has occurred: ' + error.message;
   const studySessions = data;
 
   return (
     <div>
-      <Box style={{ maxHeight: "75vh", overflow: "auto" }}>
+      <Box style={{ maxHeight: '75vh', overflow: 'auto' }}>
         <Grid container spacing={2}>
           {studySessions &&
             studySessions.map(studySession => (
@@ -53,7 +52,7 @@ const MyStudySessions = () => {
             ))}
           <Grid item xs={4}>
             <AddStudySessionCard>
-              <CreateStudySessionDialog key={"AddDialog"} />
+              <CreateStudySessionDialog key={'AddDialog'} />
             </AddStudySessionCard>
           </Grid>
         </Grid>
