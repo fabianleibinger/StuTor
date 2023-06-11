@@ -1,15 +1,17 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import achievementRoute from "./routes/AchievementRoute.js";
-import bookingRoute from "./routes/BookingRoute.js";
-import courseRoute from "./routes/CourseRoute.js";
-import reviewRoute from "./routes/ReviewRoute.js";
-import studysessionRoute from "./routes/StudysessionRoute.js";
-import universityRoute from "./routes/UniversityRoute.js";
-import userRoute from "./routes/UserRoute.js";
-import userachievementRoute from "./routes/UserAchievementRoute.js";
-import userStudysessionRoute from "./routes/UserStudysessionRoute.js";
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import achievementRoute from './routes/AchievementRoute.js';
+import bookingRoute from './routes/BookingRoute.js';
+import courseRoute from './routes/CourseRoute.js';
+import reviewRoute from './routes/ReviewRoute.js';
+import studysessionRoute from './routes/StudysessionRoute.js';
+import universityRoute from './routes/UniversityRoute.js';
+import userRoute from './routes/UserRoute.js';
+import userachievementRoute from './routes/UserAchievementRoute.js';
+import userStudysessionRoute from './routes/UserStudysessionRoute.js';
+import paymentRoute from './routes/PaymentRoute.js';
+import cors from 'cors';
 
 const app = express();
 dotenv.config();
@@ -25,19 +27,23 @@ const connect = async () => {
 
 app.use(express.json());
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
-  next();
+    console.log(req.path, req.method);
+    next();
 });
 
-app.use("/api/achievement", achievementRoute);
-app.use("/api/booking", bookingRoute);
-app.use("/api/course", courseRoute);
-app.use("/api/review", reviewRoute);
-app.use("/api/studysession", studysessionRoute);
-app.use("/api/university", universityRoute);
-app.use("/api/user", userRoute);
-app.use("/api/userAchievement", userachievementRoute);
-app.use("/api/userStudysession", userStudysessionRoute);
+app.use('/api/achievement', achievementRoute);
+app.use('/api/booking', bookingRoute);
+app.use('/api/course', courseRoute);
+app.use('/api/review', reviewRoute);
+app.use('/api/studysession', studysessionRoute);
+app.use('/api/university', universityRoute);
+app.use('/api/user', userRoute);
+app.use('/api/userAchievement', userachievementRoute);
+app.use('/api/userStudysession', userStudysessionRoute);
+app.use('/api/payment', paymentRoute);
+
+// Allow requests from localhost:3000
+app.use(cors());
 
 const port = 3001;
 app.listen(port, () => {
