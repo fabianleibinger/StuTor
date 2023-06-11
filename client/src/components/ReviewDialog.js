@@ -6,6 +6,7 @@ import { createReview } from '../api/Review.js';
 
 const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
   const [review, setReview] = useState('');
+  const [error, setError] = useState('');
     const queryClient = useQueryClient();
     console.log("open", open)
 
@@ -23,7 +24,7 @@ const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
                     queryClient.invalidateQueries(['reviews'])
                     },
                 onError: (error) => {
-                    console.log(error)
+                    console.log("error", error)
                 }
                     });
 
@@ -32,6 +33,7 @@ const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
                         giveReview.mutateAsync();
                         console.log('Review submitted:', review);
                         onClose();
+                        setReview('');
                       };
 
   return (
