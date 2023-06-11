@@ -7,6 +7,7 @@ import {
   } from 'react-query'
 import { createBooking, getBookingsOfStudysession } from '../api/Booking.js';
 import BookingDialog from '../components/BookingDialog.js';
+import PayPalDialog from '../components/PayPalDialog.js';
 
 const BookingPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);

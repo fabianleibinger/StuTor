@@ -6,6 +6,7 @@ import { useMutation } from 'react-query';
 import { create } from '@mui/material/styles/createTransitions.js';
 import {createBooking as createBookingCall} from '../api/Booking.js';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { createAccountCall } from '../api/Payment.js';
 
 const BookingDialog = ({ open, onClose, priceEuro }) => {
 
@@ -28,6 +29,16 @@ const BookingDialog = ({ open, onClose, priceEuro }) => {
         }
             });
 
+  const createAccount = useMutation( (data) => createAccountCall(data),
+    {
+        onSuccess: () => {
+            queryClient.invalidateQueries('payment')
+        },
+        onError: (error) => {
+            console.log(error)
+        }
+            });
+
   const handleHoursChange = (event) => {
     const { value } = event.target;
     setHours(value);
@@ -43,6 +54,14 @@ const BookingDialog = ({ open, onClose, priceEuro }) => {
         await createBooking.mutateAsync(studysession, hours, priceEuro, createdBy)
     } catch (error) { 
         console.log(error)
+    }
+  };
+
+  const handleStripeAccount = async () => {
+    try {
+      await createAccount.mutateAsync()
+    } catch (error) {
+      console.log(error)
     }
   };
 
@@ -64,27 +83,9 @@ const BookingDialog = ({ open, onClose, priceEuro }) => {
         <Button variant="contained" color="primary" onClick={handleBookingConfirm}>
           Confirm Booking
         </Button>
-        <PayPalScriptProvider options={{"client-id": "AdneQTEzxtUMB51tIffv4YLnIqT_Tlcpvdk856Q-plc0y4YP4LyjJNW2AucVSzEkTryUfdRwDu_VUlqi"}}>
-        <PayPalButtons
-                createOrder={(data, actions) => {
-                    return actions.order.create({
-                        purchase_units: [
-                            {
-                                amount: {
-                                    value: "1.99",
-                                },
-                            },
-                        ],
-                    });
-                }}
-                onApprove={(data, actions) => {
-                    return actions.order.capture().then((details) => {
-                        const name = details.payer.name.given_name;
-                        alert(`Transaction completed by ${name}`);
-                    });
-                }}
-            />
-        </PayPalScriptProvider>
+        <Button variant="contained" color="secondary" onClick={handleStripeAccount}>
+          Set up Stripe payment
+        </Button>
       </DialogContent>
     </Dialog>
   );
