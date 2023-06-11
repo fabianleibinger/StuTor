@@ -29,6 +29,11 @@ const BookingSchema = new Schema({
         required: false,
         default: false,
     },
+    reviewGiven: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 const Booking = mongoose.model('Booking', BookingSchema);
