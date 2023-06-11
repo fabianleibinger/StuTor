@@ -19,9 +19,13 @@ const ChatPage = () => {
                 marginBottom: '3vh',
             }}
         >
-            {<MyChats />}
-            {<ChatBox />}
-        </Box>
+            <Box width={0.49} height={1}>
+                {<MyChats />}
+            </Box>
+            <Box width={0.49} height={1}>
+                {<ChatBox />}
+            </Box>
+        </Box >
     );
 };
 

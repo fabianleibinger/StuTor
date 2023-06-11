@@ -18,7 +18,8 @@ const MyChats = () => {
         justifyContent: 'flex-start',
         alignItems: 'center',
         alignContent: 'center',
-        width: 0.5,
+        width: 1,
+        height: 1,
     };
 
     const loading_skeleton = <Skeleton variant='rounded' sx={{ flexGrow: 1, width: 1, marginBottom: '3vh' }} />;

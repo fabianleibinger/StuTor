@@ -1,9 +1,8 @@
 import React from 'react';
-import Grid from '@mui/material/Unstable_Grid2';
 import { useAppContext } from '../context/ChatProvider';
 import { useQuery } from 'react-query';
 import { getMessagesOfChat } from '../api/Message';
-import { Chip } from '@mui/material';
+import { Stack, Box, Chip } from '@mui/material';
 
 const ChatBox = () => {
 
@@ -12,38 +11,46 @@ const ChatBox = () => {
         enabled: Boolean(selectedChat?._id),
     });
 
-    const gridSx = {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        width: 0.49,
+    const stackSx = {
+        width: 0.95,
+        height: 0.94,
+        padding: 2,
         border: '1px solid lightgrey',
         borderRadius: '6px',
     };
 
-    if (data) return (
-        <Grid container spacing={2} sx={gridSx}>
-            {data.map((message, index) => (
-                <React.Fragment key={'index'}>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}/>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+    if (selectedChat && data) return (
+        <Box
+            sx={{
+                width: 1,
+                height: 1,
+                overflow: 'auto'
+            }}
+        >
+            <Stack direction='column' spacing={2} sx={stackSx}>
+                {data.map((message, index) => (
+                    <Stack
+                        key={index}
+                        direction='row'
+                        justifyContent={index % 2 == 0 ? 'flex-end' : 'flex-start'}
+                    >
                         <Chip label={message.content} />
-                    </Grid>
-                </React.Fragment>
-            ))}
-        </Grid>
+                    </Stack>
+                ))}
+            </Stack>
+        </Box>
     );
 
     if (selectedChat && !data) return (
-        <Grid container spacing={2} sx={gridSx}>
-            Start a conversation!
-        </Grid>
+        <Stack direction='column' spacing={2} sx={stackSx}>
+            <Chip label='Start a conversation!' />
+        </Stack>
     )
 
     return (
-        <Grid container spacing={2} sx={gridSx}>
-            Select a chat to start messaging!
-        </Grid>
+        <Stack direction='column' spacing={2} sx={stackSx}>
+            <Chip label='Select a chat to start messaging!' />
+        </Stack>
     );
 };
 
