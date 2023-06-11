@@ -10,7 +10,8 @@ import universityRoute from './routes/UniversityRoute.js';
 import userRoute from './routes/UserRoute.js';
 import userachievementRoute from './routes/UserAchievementRoute.js';
 import userStudysessionRoute from './routes/UserStudysessionRoute.js';
-
+import paymentRoute from './routes/PaymentRoute.js';
+import cors from 'cors';
 
 const app = express();
 dotenv.config();
@@ -39,9 +40,10 @@ app.use('/api/university', universityRoute);
 app.use('/api/user', userRoute);
 app.use('/api/userAchievement', userachievementRoute);
 app.use('/api/userStudysession', userStudysessionRoute);
+app.use('/api/payment', paymentRoute);
 
 // Allow requests from localhost:3000
-//app.use(cors());
+app.use(cors());
 
 const port = 3001;
 app.listen(port, () => {
