@@ -24,6 +24,11 @@ const BookingSchema = new Schema({
         ref: 'User',
         required: true,
     },
+    isConfirmed: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 const Booking = mongoose.model('Booking', BookingSchema);

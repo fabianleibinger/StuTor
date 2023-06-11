@@ -18,6 +18,11 @@ export const createBooking = async (studysession, hours, priceEuro, createdBy) =
   }
 }
 
+export const confirmBooking = async (bookingId) => {
+  const response = await axios.put(`${BOOKING_URL}/confirmBooking/${bookingId}`)
+  return response.data
+}
+
 export const getBookingsOfStudysession = async (studySessionId) => {
   const response = await axios.get(`${BOOKING_URL}/ofStudysession/${studySessionId}`)
   return response.data

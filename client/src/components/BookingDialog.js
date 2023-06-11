@@ -8,17 +8,18 @@ import {createBooking as createBookingCall} from '../api/Booking.js';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { createAccountCall } from '../api/Payment.js';
 
-const BookingDialog = ({ open, onClose, priceEuro }) => {
+const BookingDialog = ({ open, onClose, priceEuro, studysession, createdBy }) => {
 
     const [hours, setHours] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
   const queryClient = useQueryClient();
-  const studysession = '647213c2d119142ec0b57f30'
-  const createdBy = '6468f36705853e6071dfec63'
+  //const studysession = '647213c2d119142ec0b57f30'
+  //const createdBy = '6468f36705853e6071dfec63'
 
-  const createBooking = useMutation( (data) => createBookingCall(data),
+  const createBooking = useMutation( () => createBookingCall(studysession, hours, priceEuro, createdBy),
     {
         onSuccess: () => {
+          console.log("in success:" + studysession + hours + priceEuro + createdBy)
             queryClient.invalidateQueries('bookings')
             console.log("hours:"    + hours)
             onClose()

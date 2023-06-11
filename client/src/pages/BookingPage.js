@@ -25,6 +25,7 @@ const BookingPage = () => {
   };
 
   const handleCloseDialog = () => {
+    refetch();
     setDialogOpen(false);
   };
 
@@ -32,6 +33,7 @@ const BookingPage = () => {
 
   const handleHistoryOpenDialog = () => {
     setHistoryDialogOpen(true);
+    refetch();
     console.log("historyDialogOpen", historyDialogOpen)
   };
 
@@ -48,15 +50,9 @@ const BookingPage = () => {
   const { isLoading: isLoadingCourse, error: errorCourse, data: dataCourse } = useQuery(['course', courseId], () => getCourse(courseId));
   const { isLoading: isLoadingTutoredBy, error: errorTutoredBy, data: dataTutoredBy } = useQuery(['tutoredBy', tutoredById], () => getUser(tutoredById));
   const { isLoading: isLoadingUniversity, error: errorUniversity, data: dataUniversity } = useQuery(['university', universityId], () => getUniversity(universityId));
-  const { isLoading: isloadingBookings, error: errorBookings, data: dataBookings } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
+  const { isLoading: isloadingBookings, error: errorBookings, data: dataBookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
   if (isLoading || isLoadingCourse || isLoadingTutoredBy || isLoadingUniversity || isloadingBookings) return 'Loading...'
   if (error || errorCourse || errorTutoredBy || errorUniversity || errorBookings) return 'An error has occurred!'
-  //console.log("dataCourse ", dataCourse)
-  //const studySession = data[0]
-  //console.log("studySession", studySession)
-  console.log("dataTutoredBy", dataTutoredBy)
-  console.log("dataUniversity", dataUniversity)
-  console.log("dataBookings", dataBookings)
   
 
   return (
@@ -89,7 +85,9 @@ const BookingPage = () => {
       <BookingDialog
         open={dialogOpen}
         onClose={handleCloseDialog}
-        priceEuro={10} 
+        priceEuro={data.pricePerHourEuro}
+        createdBy={userId}
+        studysession={studySessionId}
       />
     </div>
   );

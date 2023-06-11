@@ -17,13 +17,16 @@ const BookingHistoryDialog = ({ open, onClose, bookings }) => {
             { bookings.map((booking) => (
               <ListItem key={booking._id}>
                 <ListItemText primary={booking.hours} secondary={booking.createdAt} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleConfirm(booking._id)}
-                >
-                  Confirm
-                </Button>
+                {!booking.isConfirmed && (
+        <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleConfirm(booking._id)}
+      >
+        Confirm
+      </Button>
+      )}
+                
               </ListItem>
             ))}
           </List>
