@@ -3,9 +3,11 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListIt
 import { useMutation, useQueryClient } from 'react-query';
 import { confirmBooking as confirmBookingCall } from '../api/Booking.js';
 import ReviewDialog from './ReviewDialog.js';
+import { createReview } from '../api/Review.js';
 
 const BookingHistoryDialog = ({ open, onClose, bookings, studysession }) => {
     const [openReviewDialog, setOpenReviewDialog] = useState(false);
+    const [selectedBookingId, setSelectedBookingId] = useState(null);
 
   const handleConfirm = async (bookingId) => {
     try {
@@ -27,15 +29,16 @@ const BookingHistoryDialog = ({ open, onClose, bookings, studysession }) => {
         }
             });
 
-    const handleGiveReview = () => {
+            
+
+    const handleGiveReview = (bookingId) => {
                 setOpenReviewDialog(true);
+                console.log("openReviewDialog", openReviewDialog)
+                setSelectedBookingId(bookingId);
+                console.log("selectedBookingId", selectedBookingId)
               };
             
-    const handleReviewSubmit = (review) => {
-                // Save the review
-                console.log('Review submitted:', review);
-                setOpenReviewDialog(false);
-              };
+    
 
   return (
     <>
@@ -59,7 +62,7 @@ const BookingHistoryDialog = ({ open, onClose, bookings, studysession }) => {
         <Button
         variant="contained"
         color="primary"
-        onClick={() => handleGiveReview()}
+        onClick={() => handleGiveReview(booking._id)}
       >
         Give review
       </Button>
@@ -70,13 +73,15 @@ const BookingHistoryDialog = ({ open, onClose, bookings, studysession }) => {
           </List>
         </DialogContent>
       </Dialog>
-      <ReviewDialog
-        open={openReviewDialog}
-        onClose={() => setOpenReviewDialog(false)}
-        onSubmit={handleReviewSubmit}
-      />
-      </>
       
+      {selectedBookingId && (
+        <ReviewDialog
+          open={openReviewDialog}
+          onClose={() => setOpenReviewDialog(false)}
+          bookingId={selectedBookingId}
+        />
+      )}
+      </>
   );
 };
 
