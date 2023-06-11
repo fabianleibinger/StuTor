@@ -80,6 +80,7 @@ const BookingPage = () => {
         open={historyDialogOpen}
         onClose={handleHistoryCloseDialog}
         bookings={dataBookings}
+        studysession={studySessionId}
       />
 
       <BookingDialog

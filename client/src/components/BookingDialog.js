@@ -13,19 +13,14 @@ const BookingDialog = ({ open, onClose, priceEuro, studysession, createdBy }) =>
     const [hours, setHours] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
   const queryClient = useQueryClient();
-  //const studysession = '647213c2d119142ec0b57f30'
-  //const createdBy = '6468f36705853e6071dfec63'
 
   const createBooking = useMutation( () => createBookingCall(studysession, hours, priceEuro, createdBy),
     {
         onSuccess: () => {
-          console.log("in success:" + studysession + hours + priceEuro + createdBy)
-            queryClient.invalidateQueries('bookings')
-            console.log("hours:"    + hours)
+            queryClient.invalidateQueries(['bookings', studysession])
             onClose()
             },
         onError: (error) => {
-            console.log("in error:" + studysession + hours + priceEuro + createdBy)
             console.log(error)
         }
             });
@@ -51,7 +46,6 @@ const BookingDialog = ({ open, onClose, priceEuro, studysession, createdBy }) =>
 
   const handleBookingConfirm = async () => {
     try {
-    console.log("in HandleBookingConfirm" + studysession + hours + priceEuro + createdBy)
         await createBooking.mutateAsync(studysession, hours, priceEuro, createdBy)
     } catch (error) { 
         console.log(error)
