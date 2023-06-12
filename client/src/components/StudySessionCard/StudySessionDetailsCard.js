@@ -81,7 +81,7 @@ export default function StudySessionCard({ studySession, onDelete }) {
           <strong>Costs (€): </strong> {studySession.pricePerHourEuro}
         </Typography>
         <Typography>
-          <strong>Languages (€): </strong>
+          <strong>Languages: </strong>
           {studySession.languages.join(', ')}
         </Typography>
       </CardContent>
