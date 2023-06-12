@@ -41,8 +41,8 @@ const BookingPage = () => {
     setHistoryDialogOpen(false);
   };
   // Hard coded studySessionId for now
-  const courseId = "6468d8b7a6b6ebbc588433aa"
-  const studySessionId = "647213c2d119142ec0b57f30"
+  const courseId = "64744a0eee6d5f6b120ddac2"
+  const studySessionId = "6482e56033dbeb977cf730fb"
   const tutoredById = "6468f36705853e6071dfec63"
   const universityId = "64665b948c647ea7f079f779"
   const userId = "6468f36705853e6071dfec63"
