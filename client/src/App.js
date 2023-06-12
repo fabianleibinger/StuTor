@@ -1,4 +1,3 @@
-<<<<<<< client/src/App.js
 import React from "react";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import {
