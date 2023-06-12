@@ -1,20 +1,20 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
-import CreateStudySessionForm from "../CreateStudySessionForm/CreateStudySessionForm";
+import CreateStudySessionForm from '../CreateStudySessionForm';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
+  '& .MuiDialogContent-root': {
     padding: theme.spacing(2)
   },
-  "& .MuiDialogActions-root": {
+  '& .MuiDialogActions-root': {
     padding: theme.spacing(1)
   }
 }));
@@ -30,7 +30,7 @@ function BootstrapDialogTitle(props) {
           aria-label="close"
           onClick={onClose}
           sx={{
-            position: "absolute",
+            position: 'absolute',
             right: 8,
             top: 8,
             color: theme => theme.palette.grey[500]
@@ -64,9 +64,9 @@ export default function AddStudySessionDialog({ children }) {
         variant="contained"
         onClick={handleClickOpen}
         sx={{
-          backgroundColor: "white",
-          color: "primary.main",
-          m: "auto"
+          backgroundColor: 'white',
+          color: 'primary.main',
+          m: 'auto'
         }}
       >
         Add new Study Session

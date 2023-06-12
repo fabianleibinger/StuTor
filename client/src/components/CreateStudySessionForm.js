@@ -5,9 +5,9 @@ import { Button, Box, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 
 // import other components
-import CourseSearch from '../CourseSearch/CourseSearch';
-import LanguageSelection from '../LanguageSelection/LanguageSelection';
-import { createStudysession } from '../../api/StudySession';
+import CourseSearch from './Searchbars/CourseSearch';
+import LanguageSelection from './Filters/LanguageSelection';
+import { createStudysession } from '../api/StudySession';
 
 const StudySessionForm = ({ handleClose }) => {
   const [course, setCourse] = useState('');

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCoursesFilteredBySearchString, getCourse } from './Course';
 const BASE_URL = '/api';
 const STUDYSESSION_URL = `${BASE_URL}/studysession`;
 
@@ -18,7 +19,87 @@ export const deleteStudysession = async studysessionId => {
   return response;
 };
 
-export const getBookingsTutoredByUser = async userId => {
+export const getStudysessionsTutoredByUser = async userId => {
   const response = await axios.get(`${STUDYSESSION_URL}/tutoredBy/${userId}`);
   return response.data;
+};
+
+export const getStudysessionsForCourse = async courseId => {
+  const response = await axios.get(`${STUDYSESSION_URL}/forCourse/${courseId}`);
+  return response.data;
+};
+
+export const getStudysessionFiltered = async (searchTerm, filters) => {
+  try {
+    // get all courses with the name or external identifier
+    const courses = await getCoursesFilteredBySearchString(searchTerm);
+    console.log('courses:', courses);
+    console.log('filters: ', filters);
+
+    // Array to store all study sessions
+    const allStudySessions = [];
+
+    if (courses) {
+      for (const c of courses) {
+        // get all study sessions for each course
+        try {
+          const additionalStudySessions = await getStudysessionsForCourse(
+            c._id
+          );
+          allStudySessions.push(...additionalStudySessions);
+        } catch (e) {
+          console.log(
+            'For course with id:',
+            c._id,
+            'there are no sessions available'
+          );
+        }
+      }
+
+      // Apply filters directly to each study session (e.g., price, languages, department)
+      const filteredStudySessions = await Promise.all(
+        allStudySessions.map(async studySession => {
+          let includeStudySession = true;
+
+          // Filter by price
+          if (
+            filters.maxPrice !== '' &&
+            studySession.pricePerHourEuro > filters.maxPrice
+          ) {
+            includeStudySession = false;
+          }
+
+          // Filter by languages (should include at least one selected language)
+          if (
+            filters.languages.length > 0 &&
+            !studySession.languages.some(language =>
+              filters.languages.includes(language)
+            )
+          ) {
+            includeStudySession = false;
+          }
+
+          // Filter by department
+          if (filters.department !== '') {
+            const course = await getCourse(studySession.course);
+            if (course.department !== filters.department) {
+              includeStudySession = false;
+            }
+          }
+
+          return includeStudySession ? studySession : null;
+        })
+      );
+
+      // Remove any null values from the filtered study sessions from the mapping before
+      const finalStudySessions = filteredStudySessions.filter(
+        studySession => studySession !== null
+      );
+
+      // Return filtered study sessions
+      return finalStudySessions;
+    }
+  } catch (error) {
+    console.log('Error occurred while filtering study sessions:', error);
+  }
 };

@@ -159,6 +159,30 @@ export const getStudysessionsOfStudent = async (req, res) => {
   }
 };
 
+export const getStudysessionsFiltered = async (req, res) => {
+  try {
+    const searchString = req.query.searchTerm;
+    const tutoredByIds = req.query.tutoredByIds;
+    const pricePerHour = req.query.pricePerHour;
+    const department = req.query.department;
+
+    const studysessions = await Studysession.find({
+      $or: [
+        { name: { $regex: searchString, $options: 'i' } },
+        { external_identifier: { $regex: searchString, $options: 'i' } }
+      ]
+    });
+
+    if (courses.length === 0) {
+      res.status(404).send('No courses found!');
+    } else {
+      res.status(200).send(courses);
+    }
+  } catch (err) {
+    res.status(500).send('Failed to retrieve courses!');
+  }
+};
+
 export const updateStudysession = async (req, res) => {
   try {
     // Check if course and tutor exist.

@@ -14,7 +14,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import { Delete } from '@mui/icons-material/';
 
 //api
-import { getCourse } from '../../../api/Course';
+import { getCourse } from '../../api/Course';
 
 // context
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -72,7 +72,7 @@ export default function StudySessionCard({ studySession, onDelete }) {
 
       <CardContent>
         <Typography sx={{ mb: 5 }}>
-          <strong>Description (€): </strong> {studySession.description}
+          <strong>Description: </strong> {studySession.description}
         </Typography>
         <Typography>
           <strong>University: </strong> {studySession.university}

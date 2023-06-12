@@ -1,8 +1,8 @@
 import './App.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MyStudySessions from './pages/MyStudySessions/MyStudySessions';
-import StudySessionSearch from './pages/StudySessionSearch/StudySessionSearch';
+import MyStudySessions from './pages/MyStudySessions';
+import StudySessionSearch from './pages/StudySessionSearch';
 
 function App() {
   return (

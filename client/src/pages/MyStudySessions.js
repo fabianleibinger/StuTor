@@ -1,10 +1,10 @@
 // components
-import StudySessionCard from '../../components/StudySessionCard/StudySessionDetailsCard/StudySessionDetailsCard';
-import AddStudySessionCard from '../../components/StudySessionCard/AddStudySessionCard/AddStudySessionCard';
-import CreateStudySessionDialog from '../../components/CreateStudySessionDialog/CreateStudySessionDialog';
+import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
+import AddStudySessionCard from '../components/StudySessionCard/AddStudySessionCard';
+import CreateStudySessionDialog from '../components/Dialogs/CreateStudySessionDialog';
 
 //api
-import { getStudysessions, deleteStudysession } from '../../api/StudySession';
+import { getStudysessions, deleteStudysession } from '../api/StudySession';
 
 //react-query
 import { useQuery, useMutation, useQueryClient } from 'react-query';
