@@ -38,9 +38,10 @@ export const onboardUser = async (req, res) => {
         
         //const body = await res.json()
         //window.location.href = body.url
-        res.header("Access-Control-Allow-Origin", "*");
-        //res.redirect(accountLink.url);
-        res.redirect('https://www.google.com/search?q=google&rlz=1C5CHFA_enDE970DE970&oq=google&aqs=chrome.0.0i67i131i355i433i650j46i67i131i199i433i465i650j0i131i433i512j0i67i131i433i650l2j0i67i650l2j69i60.1018j0j7&sourceid=chrome&ie=UTF-8');
+        //res.header("Access-Control-Allow-Origin", "*");
+        res.redirect(303, accountLink.url);
+        console.log("after redirect")
+        //res.redirect('https://www.google.com/search?q=google&rlz=1C5CHFA_enDE970DE970&oq=google&aqs=chrome.0.0i67i131i355i433i650j46i67i131i199i433i465i650j0i131i433i512j0i67i131i433i650l2j0i67i650l2j69i60.1018j0j7&sourceid=chrome&ie=UTF-8');
       } catch (err) {
         res.status(500).send({
           error: err.message,
