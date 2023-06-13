@@ -1,4 +1,5 @@
 import Course from '../models/Course.js';
+import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
 import UserStudysession from '../models/UserStudysession.js';
@@ -200,6 +201,38 @@ export const updateStudysession = async (req, res) => {
         res.status(400).send('Bad request!');
     }
 };
+
+export const getAverageRating = async (req, res) => {
+    try {
+        const studysessionId = new ObjectId(req.params.studysessionId);
+        const result = await Review.aggregate([
+            {
+              $match: {
+                'booking.studysession': studysessionId
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                averageRating: {
+                  $avg: '$value'
+                }
+              }
+            }
+          ])
+          if (result.length > 0) {
+            const averageRating = result[0].averageRating;
+            res.status(200).send(averageRating);
+            console.log('Average rating:', averageRating);
+          } else {
+            res.status(404).send('No ratings found!');
+          }
+    } catch (err) {
+        res.status(400).send('Bad request!');
+    }
+};
+
+
 
 export const deleteStudysession = async (req, res) => {
     try {

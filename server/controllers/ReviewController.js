@@ -77,6 +77,10 @@ export const getReviewOfBooking = async (req, res) => {
   }
 };
 
+export const getAverageRatingForTutor = async (req, res) => {
+  // dummy implementation
+  res.status(200, 4);
+};
 
 export const deleteReview = async (req, res) => {
   try {
