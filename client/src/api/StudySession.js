@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 const BASE_URL = '/api';
 const STUDYSESSION_URL = `${BASE_URL}/studysession`;
 

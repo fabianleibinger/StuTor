@@ -11,8 +11,6 @@ import {
   Menu,
   MenuItem,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import newRequest from "../utils/newRequest";
 
@@ -107,7 +105,7 @@ function Navbar() {
           <Link className={classes.link} to="/search-sessions">
             Search Sessions
           </Link>
-          <Link className={classes.link} to="/my-study-sessions">
+          <Link className={classes.link} to="/MyStudySessions">
             My Study Sessions
           </Link>
           <Link className={classes.link} to="/my-chats">
