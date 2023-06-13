@@ -11,6 +11,8 @@ import Navbar from "./components/Navbar.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
 
+import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
+
 function App() {
   const queryClient = new QueryClient();
 
