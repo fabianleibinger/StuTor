@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Box, Typography } from '@mui/material';
 import {
     useQuery,
     useMutation,
@@ -16,6 +16,7 @@ import { getUniversity } from '../api/University.js';
 import { getBookingsOfStudysessionCreatedByUser } from '../api/Booking.js';
 import Booking from '../api/Booking.js';
 import BookingHistoryDialog from '../components/BookingHistoryDialog.js';
+import StarRating from '../components/StarRating.js';
 
 const BookingPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -46,19 +47,19 @@ const BookingPage = () => {
   const tutoredById = "6468f36705853e6071dfec63"
   const universityId = "64665b948c647ea7f079f779"
   const userId = "6468f36705853e6071dfec63"
+  const rating = 4.5
   const { isLoading, error, data } = useQuery(['studysession', studySessionId], () => getStudySessionbyId(studySessionId));
-  if (isLoading) return 'Loading...'
+  if (isLoading) return 'Loading Studysession...'
   if (error) return 'An error has occurred!'
   
 
   return (
-    <div>
-      <StudySessionBox
-        title={data.course.name}
-        tutor={data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
-        university={data.course.university.name}
-        description={data.description}
-      />
+      <Box sx={{ backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '8px' }}>
+      <Typography variant="h5" sx={{ marginBottom: '0.5rem' }}>{data.course.name}</Typography>
+      <Typography variant="subtitle1" sx={{ marginBottom: '0.5rem' }}>{data.tutoredBy.firstname + " " + data.tutoredBy.lastname}</Typography>
+      <Typography variant="subtitle2" sx={{ marginBottom: '0.5rem' }}>{data.course.university.name}</Typography>
+      <StarRating value={rating} />
+      <Typography variant="body1">{data.description}</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
       <Button variant="contained" color="primary" onClick={handleHistoryOpenDialog}>
@@ -86,7 +87,7 @@ const BookingPage = () => {
         createdBy={userId}
         studysession={studySessionId}
       />
-    </div>
+      </Box>
   );
 };
 

@@ -3,7 +3,7 @@ import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
 import UserStudysession from '../models/UserStudysession.js';
-import { ObjectId } from 'mongodb';
+import { ObjectId, ReturnDocument } from 'mongodb';
 
 export const createStudysession = async (req, res) => {
     try {
@@ -231,6 +231,40 @@ export const getAverageRating = async (req, res) => {
         res.status(400).send('Bad request!');
     }
 };
+
+export const getReviewsOfStudysession = async (req, res) => {
+    try {
+        // Check if studysession exists.
+        const studysessionId = new ObjectId(req.params.studysessionId);
+        const studysession = await Studysession.findById(studysessionId);
+        if (!studysession) {
+            res.status(404).send('Object reference not found!');
+            return;
+        }
+        try {
+        const reviews = await Review.find()
+  .populate({
+    path: 'booking',
+    match: { studysession: studysessionId },
+    populate: {
+      path: 'studysession',
+      model: 'Studysession'
+    }})
+    const filteredReviews = reviews.filter(review => review.booking !== null);
+    const reviewData = filteredReviews.map(review => review.booking.studysession);
+    console.log('Reviews for Study Session:', reviewData);
+    res.status(200).send(reviewData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Failed to retrieve reviews!');
+    return;
+  }
+    } catch (err) {
+        console.log("err", err)
+        res.status(400).send('Bad request!');
+    }
+};
+
 
 
 

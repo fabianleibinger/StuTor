@@ -8,7 +8,8 @@ import {
     getStudysessionsOfStudent,
     updateStudysession, 
     deleteStudysession, 
-    getAverageRating
+    getAverageRating,
+    getReviewsOfStudysession
 } from '../controllers/StudysessionController.js';
 
 const router = express.Router();
@@ -22,5 +23,6 @@ router.get('/ofStudent/:userId', getStudysessionsOfStudent);
 router.put('/:studysessionId', updateStudysession);
 router.delete('/:studysessionId', deleteStudysession);
 router.get('/averageRating/:studysessionId', getAverageRating);
+router.get('/reviews/:studysessionId', getReviewsOfStudysession);
 
 export default router;
