@@ -25,7 +25,7 @@ const BookingPage = () => {
   };
 
   const handleCloseDialog = () => {
-    refetch();
+    //refetch();
     setDialogOpen(false);
   };
 
@@ -33,7 +33,7 @@ const BookingPage = () => {
 
   const handleHistoryOpenDialog = () => {
     setHistoryDialogOpen(true);
-    refetch();
+    //refetch();
     console.log("historyDialogOpen", historyDialogOpen)
   };
 
@@ -47,20 +47,16 @@ const BookingPage = () => {
   const universityId = "64665b948c647ea7f079f779"
   const userId = "6468f36705853e6071dfec63"
   const { isLoading, error, data } = useQuery(['studysession', studySessionId], () => getStudySessionbyId(studySessionId));
-  const { isLoading: isLoadingCourse, error: errorCourse, data: dataCourse } = useQuery(['course', courseId], () => getCourse(courseId));
-  const { isLoading: isLoadingTutoredBy, error: errorTutoredBy, data: dataTutoredBy } = useQuery(['tutoredBy', tutoredById], () => getUser(tutoredById));
-  const { isLoading: isLoadingUniversity, error: errorUniversity, data: dataUniversity } = useQuery(['university', universityId], () => getUniversity(universityId));
-  const { isLoading: isloadingBookings, error: errorBookings, data: dataBookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
-  if (isLoading || isLoadingCourse || isLoadingTutoredBy || isLoadingUniversity || isloadingBookings) return 'Loading...'
-  if (error || errorCourse || errorTutoredBy || errorUniversity || errorBookings) return 'An error has occurred!'
+  if (isLoading) return 'Loading...'
+  if (error) return 'An error has occurred!'
   
 
   return (
     <div>
       <StudySessionBox
-        title={dataCourse.name}
-        tutor={dataTutoredBy.firstname + " " + dataTutoredBy.lastname}
-        university={dataUniversity.name}
+        title={data.course.name}
+        tutor={data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
+        university={data.course.university.name}
         description={data.description}
       />
       <Grid container spacing={2}>
@@ -79,8 +75,8 @@ const BookingPage = () => {
       <BookingHistoryDialog
         open={historyDialogOpen}
         onClose={handleHistoryCloseDialog}
-        bookings={dataBookings}
-        studysession={studySessionId}
+        userId={userId}
+        studySessionId={studySessionId}
       />
 
       <BookingDialog

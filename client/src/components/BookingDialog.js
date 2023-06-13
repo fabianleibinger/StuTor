@@ -8,7 +8,7 @@ import {createBooking as createBookingCall} from '../api/Booking.js';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { createAccountCall } from '../api/Payment.js';
 
-const BookingDialog = ({ open, onClose, priceEuro, studysession, createdBy }) => {
+const BookingDialog = ({ open, onClose, priceEuro, createdBy, studysession }) => {
 
     const [hours, setHours] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);

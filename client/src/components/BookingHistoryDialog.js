@@ -1,13 +1,32 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText } from '@mui/material';
-import { useMutation, useQueryClient } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { confirmBooking as confirmBookingCall } from '../api/Booking.js';
 import ReviewDialog from './ReviewDialog.js';
 import { createReview } from '../api/Review.js';
+import { getBookingsOfStudysessionCreatedByUser } from '../api/Booking.js';
 
-const BookingHistoryDialog = ({ open, onClose, bookings, studysession }) => {
+const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     const [openReviewDialog, setOpenReviewDialog] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
+
+    const { isLoading: isloadingBookings, error: errorBookings, data: bookings } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
+    const queryClient = useQueryClient();
+
+    const confirmBooking = useMutation( (bookingId) => confirmBookingCall(bookingId),
+      {
+          onSuccess: () => {
+            //need studysessionId here?
+              queryClient.invalidateQueries(['bookings'])
+              },
+          onError: (error) => {
+              console.log(error)
+          }
+              });
+  
+    if (isloadingBookings) return 'Loading...'
+  if (errorBookings) return 'An error has occurred!'
+  if (bookings.length === 0) return 'No bookings found!'
 
   const handleConfirm = async (bookingId) => {
     try {
@@ -17,17 +36,7 @@ const BookingHistoryDialog = ({ open, onClose, bookings, studysession }) => {
     }
   };
 
-  const queryClient = useQueryClient();
-
-  const confirmBooking = useMutation( (bookingId) => confirmBookingCall(bookingId),
-    {
-        onSuccess: () => {
-            queryClient.invalidateQueries(['bookings', studysession])
-            },
-        onError: (error) => {
-            console.log(error)
-        }
-            });
+ 
 
             
 

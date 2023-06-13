@@ -59,7 +59,16 @@ export const getStudysessions = async (req, res) => {
 export const getStudysession = async (req, res) => {
     try {
         const studysessionId = new ObjectId(req.params.studysessionId);
-        const studysession = await Studysession.findById(studysessionId);
+        const studysession = await Studysession.findById(studysessionId)
+        .populate('course')
+        .populate({
+            path: 'course',
+            populate: {
+              path: 'university'
+            }
+          })
+        .populate('tutoredBy');
+        console.log("studysession", studysession)
         try {
             if (!studysession) {
                 res.status(404).send('Studysession not found!');
