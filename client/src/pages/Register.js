@@ -10,56 +10,11 @@ import {
   TextField,
   FormControlLabel,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
-  },
-  form: {
-    width: "100%",
-    maxWidth: 400,
-    maxHeight: 1000,
-    padding: theme.spacing(4),
-    backgroundColor: "#fff",
-    borderRadius: 25,
-    boxShadow: "1px 6px 12px rgba(0, 0, 0, 0.16)",
-  },
-  input: {
-    marginBottom: theme.spacing(10),
-    padding: "12px 16px",
-    fontSize: 16,
-    height: 100, // Update the height value
-  },
-  submitButton: {
-    marginTop: theme.spacing(3),
-  },
-  error: {
-    color: "red",
-    marginTop: theme.spacing(2),
-  },
-  fileInputContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  fileInputLabel: {
-    marginBottom: theme.spacing(1),
-  },
-  fileInput: {
-    marginTop: theme.spacing(3),
-  },
-}));
-
 const Register = () => {
-  const classes = useStyles();
-
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState("");
 
@@ -199,9 +154,9 @@ const Register = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <Container>
-        <form onSubmit={handleSubmit} className={classes.form}>
+        <form onSubmit={handleSubmit}>
           <Typography variant="h4" align="center" gutterBottom>
             Create a new account
           </Typography>
@@ -261,7 +216,6 @@ const Register = () => {
               id="profile-pic"
               type="file"
               onChange={handleProfilePicChange}
-              className={classes.fileInput}
             />
           </FormControl>
 
@@ -281,11 +235,7 @@ const Register = () => {
             ))}
           </datalist>
 
-          <FormControl
-            fullWidth
-            style={{ alignItems: "center" }}
-            className={classes.formControl}
-          >
+          <FormControl fullWidth>
             <FormControlLabel
               control={
                 <Switch
@@ -294,13 +244,8 @@ const Register = () => {
                   color="primary"
                 />
               }
-              label={
-                <Typography variant="button" color="textPrimary">
-                  Activate a tutor account
-                </Typography>
-              }
+              label="Activate a tutor account"
               labelPlacement="start"
-              style={{ alignItems: "center" }}
             />
           </FormControl>
 
@@ -309,7 +254,7 @@ const Register = () => {
           </Typography>
 
           {errorMessage && (
-            <Typography variant="body2" align="center" className={classes.error}>
+            <Typography variant="body2" align="center" color="error">
               {errorMessage}
             </Typography>
           )}
@@ -319,7 +264,6 @@ const Register = () => {
             variant="contained"
             color="primary"
             fullWidth
-            className={classes.submitButton}
           >
             Register
           </Button>

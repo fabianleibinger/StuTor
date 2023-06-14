@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { makeStyles } from "@mui/styles";
+import React, { useEffect } from "react";
+import { styled } from "@mui/system";
 import { useTheme } from "@mui/material/styles";
 import {
   Container,
@@ -10,94 +10,84 @@ import {
   CardContent,
 } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  title: {
-    marginBottom: theme.spacing(4),
-  },
-  card: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: theme.spacing(3),
-  },
-  cardTitle: {
-    marginBottom: theme.spacing(2),
-  },
-  cardButton: {
-    marginTop: theme.spacing(2),
-  },
-}));
+const RootContainer = styled("div")({
+  paddingTop: (theme) => theme.spacing(8),
+  paddingBottom: (theme) => theme.spacing(8),
+});
+
+const Title = styled(Typography)({
+  marginBottom: (theme) => theme.spacing(4),
+});
+
+const CardContainer = styled(Card)({
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: (theme) => theme.spacing(3),
+});
+
+const CardTitle = styled(Typography)({
+  marginBottom: (theme) => theme.spacing(2),
+});
+
+const CardButton = styled(Button)({
+  marginTop: (theme) => theme.spacing(2),
+});
 
 function Home() {
-  const classes = useStyles();
+  const theme = useTheme();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className={classes.root}>
+    <RootContainer>
       <Container maxWidth="md">
-        <Typography variant="h2" component="h1" className={classes.title}>
+        <Title variant="h2" component="h1">
           Welcome to STUTOR
-        </Typography>
+        </Title>
 
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6}>
-            <Card className={classes.card}>
+            <CardContainer>
               <CardContent>
-                <Typography
-                  variant="h5"
-                  component="h2"
-                  className={classes.cardTitle}
-                >
+                <CardTitle variant="h5" component="h2">
                   Search Sessions
-                </Typography>
+                </CardTitle>
                 <Typography variant="body2" color="textSecondary">
                   Find study sessions that match your interests and needs.
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.cardButton}
-                >
+                <CardButton variant="contained" color="primary">
                   Get Started
-                </Button>
+                </CardButton>
               </CardContent>
-            </Card>
+            </CardContainer>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Card className={classes.card}>
+            <CardContainer>
               <CardContent>
-                <Typography
-                  variant="h5"
-                  component="h2"
-                  className={classes.cardTitle}
-                >
+                <CardTitle variant="h5" component="h2">
                   My Study Sessions
-                </Typography>
+                </CardTitle>
                 <Typography variant="body2" color="textSecondary">
                   Access and manage your study sessions conveniently.
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.cardButton}
-                >
+                <CardButton variant="contained" color="primary">
                   Explore
-                </Button>
+                </CardButton>
               </CardContent>
-            </Card>
+            </CardContainer>
           </Grid>
         </Grid>
       </Container>
-    </div>
+    </RootContainer>
   );
 }
 

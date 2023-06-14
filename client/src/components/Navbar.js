@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/system";
 import {
   AppBar,
   Toolbar,
@@ -10,48 +10,50 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  ThemeProvider,
 } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import newRequest from "../utils/newRequest";
 
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-  },
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  logoContainer: {
-    display: "flex",
-    alignItems: "center",
-    textDecoration: "none",
-    color: "inherit",
-  },
-  logoText: {
-    marginLeft: theme.spacing(1),
-    fontWeight: "bold",
-  },
-  links: {
-    display: "flex",
-    alignItems: "center",
-  },
-  link: {
-    marginLeft: theme.spacing(2),
-    textDecoration: "none",
-    color: "inherit",
-  },
-  avatar: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
+const RootAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
 }));
 
-function Navbar() {
-  const classes = useStyles();
+const RootToolbar = styled(Toolbar)({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
+const LogoContainer = styled(Link)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  textDecoration: "none",
+  color: "inherit",
+}));
+
+const LogoText = styled(Typography)({
+  marginLeft: "8px",
+  fontWeight: "bold",
+});
+
+const LinksContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+}));
+
+const StyledLink = styled(Link)(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+  textDecoration: "none",
+  color: "inherit",
+}));
+
+const AvatarIconButton = styled(IconButton)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  marginRight: theme.spacing(1),
+}));
+
+const Navbar = () => {
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -91,45 +93,34 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="fixed" className={classes.appBar}>
-      <Toolbar className={classes.toolbar}>
+    <RootAppBar position="fixed">
+      <RootToolbar>
         {/* ---------- LOGO ----------*/}
-        <Link className={classes.logoContainer} to="/">
-          <Typography variant="h6" className={classes.logoText}>
+        <LogoContainer to="/">
+          <Typography variant="h6" component="div">
             STUTOR
           </Typography>
           <span className="dot">.</span>
-        </Link>
+        </LogoContainer>
 
         {/* ---------- LINKS ----------*/}
-        <div className={classes.links}>
-          <Link className={classes.link} to="/search-sessions">
-            Search Sessions
-          </Link>
-          <Link className={classes.link} to="/MyStudySessions">
-            My Study Sessions
-          </Link>
-          <Link className={classes.link} to="/my-chats">
-            My Chats
-          </Link>
+        <LinksContainer>
+          <StyledLink to="/search-sessions">Search Sessions</StyledLink>
+          <StyledLink to="/MyStudySessions">My Study Sessions</StyledLink>
+          <StyledLink to="/my-chats">My Chats</StyledLink>
           {!currentUser?.isSeller && (
-            <Link className={classes.link} to="/about-us">
-              About Us
-            </Link>
+            <StyledLink to="/about-us">About Us</StyledLink>
           )}
 
           {/* ---------- USER ----------*/}
           {currentUser ? (
             <>
-              <IconButton
-                className={classes.avatar}
-                onClick={handleMenuOpen}
-              >
+              <AvatarIconButton onClick={handleMenuOpen}>
                 <Avatar
                   src={currentUser.picture || "/img/noavatar.jpg"}
                   alt=""
                 />
-              </IconButton>
+              </AvatarIconButton>
 
               {/* ---------- DROP DOWN MENU ----------*/}
               <Menu
@@ -170,20 +161,18 @@ function Navbar() {
             </>
           ) : (
             <>
-              <Link className={classes.link} to="/login">
-                Sign in
-              </Link>
-              <Link className={classes.link} to="/register">
+              <StyledLink to="/login">Sign in</StyledLink>
+              <StyledLink to="/register">
                 <Button variant="contained" color="primary">
                   Join
                 </Button>
-              </Link>
+              </StyledLink>
             </>
           )}
-        </div>
-      </Toolbar>
-    </AppBar>
+        </LinksContainer>
+      </RootToolbar>
+    </RootAppBar>
   );
-}
+};
 
 export default Navbar;
