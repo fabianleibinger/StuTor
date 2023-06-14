@@ -206,12 +206,7 @@ const Register = () => {
           />
 
           <FormControl fullWidth>
-            <InputLabel
-              htmlFor="profile-pic"
-              className={classes.fileInputLabel}
-            >
-              Profile Picture
-            </InputLabel>
+            <InputLabel htmlFor="profile-pic">Profile Picture</InputLabel>
             <Input
               id="profile-pic"
               type="file"
