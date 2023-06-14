@@ -4,7 +4,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "react-query";
-
+import { createTheme, ThemeProvider} from "@mui/material";
 import Home from "./pages/Home.js";
 import Navbar from "./components/Navbar.js";
 // import Footer from "./components/footer/Footer";
@@ -13,6 +13,17 @@ import Register from "./pages/Register.js";
 
 import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
 
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#000000", // Replace with your desired primary color
+      contrastText: "#ffffff", // Replace with your desired contrast text color
+    },
+    // Add more palette colors as needed
+  },
+});
+
 function App() {
   const queryClient = new QueryClient();
 
@@ -20,9 +31,11 @@ function App() {
     return (
       <div className="app">
         <QueryClientProvider client={queryClient}>
-          <Navbar />
-          <Outlet />
-          {/* <Footer /> */}
+          <ThemeProvider theme={theme}>
+            <Navbar />
+            <Outlet />
+            {/* <Footer /> */}
+          </ThemeProvider>
         </QueryClientProvider>
       </div>
     );
