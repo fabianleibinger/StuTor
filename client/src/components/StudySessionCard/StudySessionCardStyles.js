@@ -1,4 +1,4 @@
-export default studySessionCardStyles = {
+const studySessionCardStyles = {
   maxWidth: 345,
   height: '35vh',
   mr: 3,
@@ -7,3 +7,5 @@ export default studySessionCardStyles = {
   flexDirection: 'column',
   borderRadius: '12px'
 };
+
+export default studySessionCardStyles;

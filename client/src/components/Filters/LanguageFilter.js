@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
 import {
   Box,
@@ -15,9 +15,10 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
-export default function LanguageSelection({ handleLanguageChange }) {
+const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+
   const LanguagesEnum = {
     English: 'English',
     Spanish: 'Spanish',
@@ -36,6 +37,15 @@ export default function LanguageSelection({ handleLanguageChange }) {
     Urdu: 'Urdu',
     Other: 'Other'
   };
+
+  const clearSelection = () => {
+    handleLanguageChange([]);
+    setSelectedItems([]);
+  };
+
+  useImperativeHandle(ref, () => ({
+    clearSelection: () => clearSelection()
+  }));
 
   const handleMenuItemClick = item => {
     const index = selectedItems.indexOf(item);
@@ -67,25 +77,16 @@ export default function LanguageSelection({ handleLanguageChange }) {
   return (
     <div>
       <FormControl sx={{ width: '200px' }}>
-        <InputLabel> Languages *</InputLabel>
         <Select
           open={menuOpen}
           onClose={handleMenuClose}
           onOpen={handleMenuOpen}
           value={selectedItems}
           multiple
-          renderValue={selected => (
-            <Stack direction="row" spacing={1}>
-              {selected.map(item => (
-                <Button key={item} onClick={() => handleMenuItemClick(item)}>
-                  {item}
-                </Button>
-              ))}
-            </Stack>
-          )}
+          displayEmpty
+          renderValue={() => 'Languages'}
         >
           <FormGroup>
-            <MenuItem disabled>Languages</MenuItem>
             {Object.keys(LanguagesEnum).map(key => (
               <MenuItem key={key}>
                 <FormControlLabel
@@ -115,4 +116,6 @@ export default function LanguageSelection({ handleLanguageChange }) {
       </FormControl>
     </div>
   );
-}
+});
+
+export default LanguageFilter;

@@ -1,10 +1,13 @@
 import React, { useRef } from 'react';
 import StudySessionSearchbar from '../components/Searchbars/StudySessionSearchbar';
-import Pricefilter from '../components/Filters/PriceFilter';
+import PriceFilter from '../components/Filters/PriceFilter';
 import DepartmentFilter from '../components/Filters/DepartmentFilter';
+import LanguageFilter from '../components/Filters/LanguageFilter';
 import LanguageSelection from '../components/Filters/LanguageSelection';
 
 import { Box, Button, Grid, Typography } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { styled } from '@mui/system';
 
 import { useState } from 'react';
 import { useQuery } from 'react-query';
@@ -12,6 +15,13 @@ import { useQuery } from 'react-query';
 import { getStudysessionFiltered } from '../api/StudySession';
 import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
 import useDebounce from '../hooks/useDebounce';
+import { left } from '@popperjs/core';
+import { Clear } from '@mui/icons-material';
+
+const ScrollableContainer = styled('div')({
+  maxHeight: '70vh',
+  overflow: 'auto'
+});
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
   // error is not thrown just loading???
@@ -28,7 +38,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
   }
   if (data) {
     return (
-      <div>
+      <ScrollableContainer>
         <Grid container spacing={2}>
           {data.map(studySession => (
             <Grid item xs={12} sm={6} md={4} key={studySession._id}>
@@ -39,7 +49,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
             </Grid>
           ))}
         </Grid>
-      </div>
+      </ScrollableContainer>
     );
   }
 
@@ -49,6 +59,8 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
 export default function StudySessionSearch() {
   const [search, setSearch] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [showClearButton, setShowClearButton] = useState(false);
+
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
 
@@ -60,9 +72,17 @@ export default function StudySessionSearch() {
 
   const handleMaxPriceChange = value => {
     setMaxPrice(value);
+    setShowClearButton(Boolean(value));
   };
 
-  const handleSelectedLanguages = value => {
+  const clearMaxPrice = () => {
+    handleMaxPriceChange('');
+    if (maxPriceSelectRef.current) {
+      maxPriceSelectRef.current.clearSelection();
+    }
+  };
+
+  const handleLanguageChange = value => {
     setSelectedLanguages(value);
   };
 
@@ -101,12 +121,24 @@ export default function StudySessionSearch() {
       maxPriceSelectRef.current.clearSelection();
     }
     if (languageSelectRef.current) {
-      languageSelectRef.current.value = [];
+      languageSelectRef.current.clearSelection();
     }
     if (departmentSelectRef.current) {
-      departmentSelectRef.current.value = '';
+      departmentSelectRef.current.clearSelection();
     }
   };
+
+  const ClearButton = styled(Button)(({ theme }) => ({
+    width: 'fit-content',
+    height: 'fit-content',
+    float: 'right',
+    minWidth: 'auto',
+    padding: '1px',
+    fontSize: '0.6rem',
+    textTransform: 'none',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2)
+  }));
 
   return (
     <Box sx={{ mt: 10, display: 'flex', justifyContent: 'center' }}>
@@ -114,33 +146,75 @@ export default function StudySessionSearch() {
         sx={{
           width: '75%',
           display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          alignItems: 'right',
+          pt: 0,
+          pb: 0,
+          pl: 1,
+          pr: 1
         }}
       >
-        <Box sx={{ maxHeight: '10' }}>
+        <Box sx={{ maxHeight: '10', width: '100%' }}>
           <StudySessionSearchbar
             handleSearchInputChange={handleSearchInputChange}
           />
         </Box>
-        <Box sx={{ display: 'flex', gap: '3px', maxHeight: '30px', mt: 2 }}>
-          <Pricefilter
-            handleMaxPriceChange={handleMaxPriceChange}
-            ref={maxPriceSelectRef}
-          />
-          <LanguageSelection
-            onSelectedLanguage={handleSelectedLanguages}
-            ref={languageSelectRef}
-          />
-          <DepartmentFilter
-            handleDepartmentChange={handleDepartmentChange}
-            ref={departmentSelectRef}
-          />
+        <Box
+          id="filterBox"
+          sx={{
+            display: 'flex',
+            gap: '3px',
+            maxHeight: '60px',
+            mt: 2
+          }}
+        >
+          <Box
+            id="PriceFilterBox"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end'
+            }}
+          >
+            <ClearButton variant="outlined" onClick={clearMaxPrice}>
+              Clear
+            </ClearButton>
+            <PriceFilter
+              handleMaxPriceChange={handleMaxPriceChange}
+              ref={maxPriceSelectRef}
+            />
+          </Box>
+          <Box>
+            <ClearButton variant="outlined" onClick={clearMaxPrice}>
+              Clear
+            </ClearButton>
+            <LanguageFilter
+              handleLanguageChange={handleLanguageChange}
+              ref={languageSelectRef}
+            />
+          </Box>
+          <Box>
+            <ClearButton variant="outlined" onClick={clearMaxPrice}>
+              Clear
+            </ClearButton>
+            <DepartmentFilter
+              handleDepartmentChange={handleDepartmentChange}
+              ref={departmentSelectRef}
+            />
+          </Box>
           <Button variant="outlined" onClick={clearFilters}>
             Clear Filters
           </Button>
         </Box>
-        <Box p={2} sx={{ width: '100%', mt: 4, maxHeight: '70vh' }}>
+        <Box
+          p={2}
+          sx={{
+            width: '100%',
+            mt: 4,
+            maxHeight: '70vh',
+            alignItems: 'stretch'
+          }}
+        >
           <StudySessionsSearchResult
             isLoading={isLoading}
             data={data}

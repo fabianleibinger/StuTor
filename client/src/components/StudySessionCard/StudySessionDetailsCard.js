@@ -13,6 +13,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { Delete } from '@mui/icons-material/';
 
+import studySessionCardStyles from './StudySessionCardStyles';
+
+import Scrollbars from 'react-scrollbars-custom';
+import { styled } from '@mui/system';
 //api
 import { getCourse } from '../../api/Course';
 
@@ -25,6 +29,11 @@ const handleChangeDate = ({ studySession }) => {
   const titleText = `Created ${timeAgo}`;
   return titleText;
 };
+
+const ScrollableCardContent = styled(CardContent)({
+  maxHeight: '20vh',
+  overflow: 'auto'
+});
 
 export default function StudySessionCard({ studySession, onDelete }) {
   const handleDeleteClick = () => {
@@ -40,17 +49,7 @@ export default function StudySessionCard({ studySession, onDelete }) {
   if (error) return 'An error has occurred: ' + error.message;
 
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        height: '35vh',
-        mr: 3,
-        mb: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '12px'
-      }}
-    >
+    <Card sx={studySessionCardStyles} raised>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
@@ -70,7 +69,7 @@ export default function StudySessionCard({ studySession, onDelete }) {
         //subheader={handleChangeDate({ studySession })}
       />
 
-      <CardContent>
+      <ScrollableCardContent>
         <Typography sx={{ mb: 5 }}>
           <strong>Description: </strong> {studySession.description}
         </Typography>
@@ -84,7 +83,7 @@ export default function StudySessionCard({ studySession, onDelete }) {
           <strong>Languages: </strong>
           {studySession.languages.join(', ')}
         </Typography>
-      </CardContent>
+      </ScrollableCardContent>
       <CardActions
         sx={{
           mt: 'auto'
