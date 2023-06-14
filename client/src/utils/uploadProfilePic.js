@@ -1,8 +1,11 @@
 import axios from "axios";
+import Resizer from "react-image-file-resizer";
 
 const uploadProfilePic = async (file) => {
+  const compressedFile = await compressImage(file);
+  
   const data = new FormData();
-  data.append("file", file);
+  data.append("file", compressedFile);
   data.append("upload_preset", "StuTor");
 
   try {
@@ -14,5 +17,21 @@ const uploadProfilePic = async (file) => {
     console.log(err);
   }
 };
+
+const compressImage = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      500, // max width
+      500, // max height
+      "JPEG", // compress format
+      70, // quality
+      0, // rotation
+      (compressedFile) => {
+        resolve(compressedFile);
+      },
+      "blob" // output type
+    );
+  });
 
 export default uploadProfilePic;

@@ -1,5 +1,6 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { useEffect } from "react";
+import { makeStyles } from "@mui/styles";
+import { useTheme } from "@mui/material/styles";
 import {
   Container,
   Typography,
@@ -7,7 +8,7 @@ import {
   Grid,
   Card,
   CardContent,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const classes = useStyles();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className={classes.root}>

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
+import { useTheme } from '@mui/material/styles';
 import {
   Container,
   Typography,
   TextField,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
 import newRequest from "../utils/newRequest";
 import { useNavigate } from "react-router-dom";
 
@@ -22,24 +23,24 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     width: "100%",
     maxWidth: "400px",
-    padding: theme.spacing(3),
+    padding: useTheme().spacing(3),
     backgroundColor: "#fff",
     borderRadius: "4px",
     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
   },
   formTitle: {
-    marginBottom: theme.spacing(2),
+    marginBottom: useTheme().spacing(2),
   },
   formInput: {
-    marginBottom: theme.spacing(2),
+    marginBottom: useTheme().spacing(2),
     width: "100%", // Set the width to 100%
   },
   formButton: {
-    marginTop: theme.spacing(3),
+    marginTop: useTheme().spacing(3),
   },
   formError: {
     color: "red",
-    marginTop: theme.spacing(2),
+    marginTop: useTheme().spacing(2),
   },
 }));
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 import {
   AppBar,
   Toolbar,
@@ -10,14 +10,15 @@ import {
   Avatar,
   Menu,
   MenuItem,
-} from "@material-ui/core";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+  ThemeProvider,
+} from "@mui/material";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import newRequest from "../utils/newRequest";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
   },
   toolbar: {
     display: "flex",

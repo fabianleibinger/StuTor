@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Switch from "@mui/material/Switch";
 import {
   Container,
   Typography,
@@ -6,14 +7,13 @@ import {
   InputLabel,
   Input,
   Button,
-  Checkbox,
+  TextField,
   FormControlLabel,
-  makeStyles,
-} from "@material-ui/core";
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,17 +24,18 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%",
-    maxWidth: "400px",
-    padding: theme.spacing(3),
+    maxWidth: 400,
+    maxHeight: 1000,
+    padding: theme.spacing(4),
     backgroundColor: "#fff",
-    borderRadius: "4px",
-    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
+    borderRadius: 25,
+    boxShadow: "1px 6px 12px rgba(0, 0, 0, 0.16)",
   },
   input: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(10),
     padding: "12px 16px",
-    fontSize: "16px",
-    height: "100px", // Update the height value
+    fontSize: 16,
+    height: 100, // Update the height value
   },
   submitButton: {
     marginTop: theme.spacing(3),
@@ -43,10 +44,21 @@ const useStyles = makeStyles((theme) => ({
     color: "red",
     marginTop: theme.spacing(2),
   },
+  fileInputContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  fileInputLabel: {
+    marginBottom: theme.spacing(1),
+  },
+  fileInput: {
+    marginTop: theme.spacing(3),
+  },
 }));
 
 const Register = () => {
-  const classes = useStyles(); // Added back useStyles
+  const classes = useStyles();
 
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState("");
@@ -63,7 +75,7 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     setUser((prev) => {
@@ -71,11 +83,10 @@ const Register = () => {
     });
   };
 
-  const handlePictureChange = (e) => {
+  const handleProfilePicChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
 
-    // Use FileReader to generate a preview URL for the selected file
     const reader = new FileReader();
     reader.onload = (event) => {
       setUrl(event.target.result);
@@ -83,26 +94,24 @@ const Register = () => {
     reader.readAsDataURL(selectedFile);
   };
 
-  const handleTutor = (e) => {
+  const handleTutorChange = (e) => {
     setUser((prev) => {
-      let role = 'STUDENT'
-      if (e.target.checked){
-        role = 'TUTOR'
+      let role = "STUDENT";
+      if (e.target.checked) {
+        role = "TUTOR";
       }
-      return { ...prev, role: role};
+      return { ...prev, role: role };
     });
   };
 
-  // University Search Bar
   const [universities, setUniversities] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    // Fetch universities from MongoDB database
     const fetchUniversities = async () => {
       try {
-        const response = await newRequest.get("/university");
+        const response = await newRequest.get("/university/");
         setUniversities(response.data);
       } catch (error) {
         console.log(error);
@@ -111,7 +120,7 @@ const Register = () => {
     fetchUniversities();
   }, []);
 
-  const handleUniversity = (e) => {
+  const handleUniversityChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
     if (universities && universities.length > 0) {
@@ -120,7 +129,9 @@ const Register = () => {
       );
       setSearchResults(results);
     }
-    const selectedUniversity = universities.find((university) => university.name === query);
+    const selectedUniversity = universities.find(
+      (university) => university.name === query
+    );
     if (selectedUniversity) {
       setUser((prev) => ({
         ...prev,
@@ -135,27 +146,27 @@ const Register = () => {
     e.preventDefault();
 
     if (!user.username) {
-      setErrorMessage("Please Enter an Username"); 
+      setErrorMessage("Please Enter an Username");
       return;
     }
     if (!user.firstname) {
-      setErrorMessage("Please Enter a First Name"); 
+      setErrorMessage("Please Enter a First Name");
       return;
     }
     if (!user.lastname) {
-      setErrorMessage("Please Enter a Last Name"); 
+      setErrorMessage("Please Enter a Last Name");
       return;
     }
     if (!user.email) {
-      setErrorMessage("Please Enter a Valid Email Address"); 
+      setErrorMessage("Please Enter a Valid Email Address");
       return;
     }
     if (!user.password) {
-      setErrorMessage("Please Enter a Password"); 
+      setErrorMessage("Please Enter a Password");
       return;
     }
     if (!user.university) {
-      setErrorMessage("Please Pick a University"); 
+      setErrorMessage("Please Pick a University");
       return;
     }
 
@@ -175,15 +186,12 @@ const Register = () => {
         ...user,
         picture: url,
       });
-      navigate("/")
-    } 
-    catch (err) {
+      navigate("/");
+    } catch (err) {
       console.log(err.response.status);
       if (err.response?.status === 409) {
-        // Duplicate user error
         setErrorMessage("Username or email is already taken");
       } else {
-        // Other Axios error
         const errorMessage = err.response?.data?.message || "An error occurred";
         setErrorMessage(errorMessage);
       }
@@ -198,118 +206,114 @@ const Register = () => {
             Create a new account
           </Typography>
 
-          {/* Username */}
-          <FormControl fullWidth>
-            <InputLabel htmlFor="username">Username*</InputLabel>
-            <Input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="username"
-              onChange={handleChange}
-            />
-          </FormControl>
+          <TextField
+            fullWidth
+            label="Username*"
+            name="username"
+            type="text"
+            placeholder="username"
+            onChange={handleChange}
+          />
 
-          {/* Firstname */}
-          <FormControl fullWidth>
-            <InputLabel htmlFor="firstname">Firstname*</InputLabel>
-            <Input
-              id="firstname"
-              name="firstname"
-              type="text"
-              placeholder="Jason"
-              onChange={handleChange}
-            />
-          </FormControl>
+          <TextField
+            fullWidth
+            label="Firstname*"
+            name="firstname"
+            type="text"
+            placeholder="Jason"
+            onChange={handleChange}
+          />
 
-          {/* Lastname */}
-          <FormControl fullWidth>
-            <InputLabel htmlFor="lastname">Lastname*</InputLabel>
-            <Input
-              id="lastname"
-              name="lastname"
-              type="text"
-              placeholder="Wen"
-              onChange={handleChange}
-            />
-          </FormControl>
+          <TextField
+            fullWidth
+            label="Lastname*"
+            name="lastname"
+            type="text"
+            placeholder="Wen"
+            onChange={handleChange}
+          />
 
-          {/* Email */}
-          <FormControl fullWidth>
-            <InputLabel htmlFor="email">Email*</InputLabel>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="email"
-              onChange={handleChange}
-            />
-          </FormControl>
+          <TextField
+            fullWidth
+            label="Email*"
+            name="email"
+            type="email"
+            placeholder="jasonwen@tum.de"
+            onChange={handleChange}
+          />
 
-          {/* Password */}
-          <FormControl fullWidth>
-            <InputLabel htmlFor="password">Password*</InputLabel>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              onChange={handleChange}
-            />
-          </FormControl>
+          <TextField
+            fullWidth
+            label="Password*"
+            name="password"
+            type="password"
+            onChange={handleChange}
+          />
 
-          {/* Profile Picture */}
           <FormControl fullWidth>
-            <InputLabel htmlFor="profile-pic">Profile Picture</InputLabel>
+            <InputLabel
+              htmlFor="profile-pic"
+              className={classes.fileInputLabel}
+            >
+              Profile Picture
+            </InputLabel>
             <Input
               id="profile-pic"
               type="file"
-              onChange={handlePictureChange}
+              onChange={handleProfilePicChange}
+              className={classes.fileInput}
             />
           </FormControl>
 
-          {/* University */}
-          <FormControl fullWidth>
-            <InputLabel htmlFor="university">University*</InputLabel>
-            <Input
-              id="university"
-              name="university"
-              type="text"
-              placeholder="Technische Universität München (TUM)"
-              value={searchQuery}
-              onChange={handleUniversity}
-              list="universities-list"
+          <TextField
+            fullWidth
+            label="University*"
+            name="university"
+            type="text"
+            placeholder="Technische Universität München (TUM)"
+            value={searchQuery}
+            onChange={handleUniversityChange}
+            list="universities-list"
+          />
+          <datalist id="universities-list">
+            {searchResults.map((result) => (
+              <option key={result._id} value={result.name} />
+            ))}
+          </datalist>
+
+          <FormControl
+            fullWidth
+            style={{ alignItems: "center" }}
+            className={classes.formControl}
+          >
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={user.role === "TUTOR"}
+                  onChange={handleTutorChange}
+                  color="primary"
+                />
+              }
+              label={
+                <Typography variant="button" color="textPrimary">
+                  Activate a tutor account
+                </Typography>
+              }
+              labelPlacement="start"
+              style={{ alignItems: "center" }}
             />
-            <datalist id="universities-list">
-              {searchResults.map((result) => (
-                <option key={result._id} value={result.name} />
-              ))}
-            </datalist>
           </FormControl>
 
-          {/* Tutor or Student
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={user.role === "TUTOR"}
-                onChange={handleTutor}
-              />
-            }
-            label="Activate a tutor account"
-          /> */}
-
-          {/* Mandatory fields */}
           <Typography align="center" color="textSecondary">
             (All * fields are mandatory)
           </Typography>
 
-          {/* Error message */}
           {errorMessage && (
             <Typography variant="body2" align="center" className={classes.error}>
               {errorMessage}
             </Typography>
           )}
 
-          {/* Submit button */}
           <Button
             type="submit"
             variant="contained"
