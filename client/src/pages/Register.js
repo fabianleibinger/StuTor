@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Autocomplete from "@mui/material/Autocomplete";
 import Switch from "@mui/material/Switch";
 import {
   Container,
@@ -15,8 +16,10 @@ import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
 
 const Register = () => {
-  const [file, setFile] = useState(null);
-  const [url, setUrl] = useState("");
+  const [profilePicFile, setProfilePicFile] = useState(null);
+  const [profilePicUrl, setProfilePicUrl] = useState("");
+  const [allUniversities, setAllUniversities] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   const [user, setUser] = useState({
     username: "",
@@ -40,11 +43,11 @@ const Register = () => {
 
   const handleProfilePicChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile);
+    setProfilePicFile(selectedFile);
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      setUrl(event.target.result);
+      setProfilePicUrl(event.target.result);
     };
     reader.readAsDataURL(selectedFile);
   };
@@ -59,76 +62,76 @@ const Register = () => {
     });
   };
 
-  const [universities, setUniversities] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-
   useEffect(() => {
-    const fetchUniversities = async () => {
+    const fetchAllUniversities = async () => {
       try {
-        const response = await newRequest.get("/university/");
-        setUniversities(response.data);
+        const response = await newRequest.get("/university");
+        setAllUniversities(response.data);
+        setSearchResults(response.data.map((university) => university.name));
       } catch (error) {
+        console.log("Failed to get universities!");
         console.log(error);
       }
     };
-    fetchUniversities();
+    fetchAllUniversities();
   }, []);
 
-  const handleUniversityChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    if (universities && universities.length > 0) {
-      const results = universities.filter((university) =>
+  const handleUniversityChange = (e, value) => {
+    const query = value || "";
+
+    let filteredUniversities = allUniversities;
+    if (query && query !== "") {
+      filteredUniversities = allUniversities.filter((university) =>
         university.name.toLowerCase().includes(query.toLowerCase())
       );
-      setSearchResults(results);
     }
-    const selectedUniversity = universities.find(
+    setSearchResults(filteredUniversities.map((university) => university.name));
+
+    const selectedUniversity = allUniversities.find(
       (university) => university.name === query
     );
     if (selectedUniversity) {
+      console.log(selectedUniversity._id);
       setUser((prev) => ({
         ...prev,
         university: selectedUniversity._id,
       }));
-      setSearchQuery(selectedUniversity.name);
       setSearchResults([]);
+    } else {
+      setUser((prev) => ({
+        ...prev,
+        university: "",
+      }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user.username) {
-      setErrorMessage("Please Enter an Username");
-      return;
+    const fields = ["username", "firstname", "lastname", "email", "password"];
+    const fieldNames = {
+      username: "Username",
+      firstname: "First Name",
+      lastname: "Last Name",
+      email: "Valid Email Address",
+      password: "Password",
+    };
+
+    for (const field of fields) {
+      if (!user[field]) {
+        setErrorMessage(`Please Enter a ${fieldNames[field]}`);
+        return;
+      }
     }
-    if (!user.firstname) {
-      setErrorMessage("Please Enter a First Name");
-      return;
-    }
-    if (!user.lastname) {
-      setErrorMessage("Please Enter a Last Name");
-      return;
-    }
-    if (!user.email) {
-      setErrorMessage("Please Enter a Valid Email Address");
-      return;
-    }
-    if (!user.password) {
-      setErrorMessage("Please Enter a Password");
-      return;
-    }
+
     if (!user.university) {
-      setErrorMessage("Please Pick a University");
+      setErrorMessage("Please Select a University");
       return;
     }
 
-    let uploadedUrl = "";
-    if (file) {
+    if (profilePicFile) {
       try {
-        uploadedUrl = await uploadProfilePic(file);
+        await uploadProfilePic(profilePicFile);
       } catch (error) {
         console.log(error);
         setErrorMessage("Error uploading the picture");
@@ -137,9 +140,10 @@ const Register = () => {
     }
 
     try {
+      console.log(user);
       await newRequest.post("/auth/register", {
         ...user,
-        picture: url,
+        picture: profilePicUrl,
       });
       navigate("/");
     } catch (err) {
@@ -147,7 +151,8 @@ const Register = () => {
       if (err.response?.status === 409) {
         setErrorMessage("Username or email is already taken");
       } else {
-        const errorMessage = err.response?.data?.message || "An error occurred";
+        const errorMessage =
+          err.response?.data?.message || "An error occurred when registering.";
         setErrorMessage(errorMessage);
       }
     }
@@ -157,10 +162,12 @@ const Register = () => {
     <div>
       <Container>
         <form onSubmit={handleSubmit}>
+          {/* ------------------- HEADING ------------------- */}
           <Typography variant="h4" align="center" gutterBottom>
             Create a new account
           </Typography>
 
+          {/* ------------------- USERNAME ------------------- */}
           <TextField
             fullWidth
             label="Username*"
@@ -170,6 +177,7 @@ const Register = () => {
             onChange={handleChange}
           />
 
+          {/* ------------------- FIRSTNAME ------------------- */}
           <TextField
             fullWidth
             label="Firstname*"
@@ -179,6 +187,7 @@ const Register = () => {
             onChange={handleChange}
           />
 
+          {/* ------------------- LASTNAME ------------------- */}
           <TextField
             fullWidth
             label="Lastname*"
@@ -188,6 +197,7 @@ const Register = () => {
             onChange={handleChange}
           />
 
+          {/* ------------------- EMAIL ------------------- */}
           <TextField
             fullWidth
             label="Email*"
@@ -197,6 +207,7 @@ const Register = () => {
             onChange={handleChange}
           />
 
+          {/* ------------------- PASSWORD ------------------- */}
           <TextField
             fullWidth
             label="Password*"
@@ -205,6 +216,7 @@ const Register = () => {
             onChange={handleChange}
           />
 
+          {/* ------------------- PROFILE PIC ------------------- */}
           <FormControl fullWidth>
             <InputLabel htmlFor="profile-pic">Profile Picture</InputLabel>
             <Input
@@ -214,22 +226,23 @@ const Register = () => {
             />
           </FormControl>
 
-          <TextField
+          {/* ------------------- UNIVERSITIY ------------------- */}
+          <Autocomplete
             fullWidth
-            label="University*"
-            name="university"
-            type="text"
-            placeholder="Technische Universität München (TUM)"
-            value={searchQuery}
-            onChange={handleUniversityChange}
-            list="universities-list"
+            options={searchResults}
+            onInputChange={handleUniversityChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="University*"
+                name="university"
+                type="text"
+                placeholder="Technische Universität München (TUM)"
+              />
+            )}
           />
-          <datalist id="universities-list">
-            {searchResults.map((result) => (
-              <option key={result._id} value={result.name} />
-            ))}
-          </datalist>
 
+          {/* ------------------- TUTOR ACCOUNT ------------------- */}
           <FormControl fullWidth>
             <FormControlLabel
               control={
@@ -244,6 +257,7 @@ const Register = () => {
             />
           </FormControl>
 
+          {/* ------------------- MANDATORY MESSAGE ------------------- */}
           <Typography align="center" color="textSecondary">
             (All * fields are mandatory)
           </Typography>
@@ -254,12 +268,8 @@ const Register = () => {
             </Typography>
           )}
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-          >
+          {/* ------------------- SIGN UP BUTTON ------------------- */}
+          <Button type="submit" variant="contained" color="primary" fullWidth>
             Register
           </Button>
         </form>

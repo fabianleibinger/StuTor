@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
 import {
   AppBar,
@@ -32,11 +32,6 @@ const LogoContainer = styled(Link)(({ theme }) => ({
   color: "inherit",
 }));
 
-const LogoText = styled(Typography)({
-  marginLeft: "8px",
-  fontWeight: "bold",
-});
-
 const LinksContainer = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -55,9 +50,8 @@ const AvatarIconButton = styled(IconButton)(({ theme }) => ({
 
 const Navbar = () => {
   const [active, setActive] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const { pathname } = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const anchorElRef = useRef(null);
 
   const isActive = () => {
     window.scrollY > 0 ? setActive(true) : setActive(false);
@@ -71,7 +65,6 @@ const Navbar = () => {
   }, []);
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -84,12 +77,12 @@ const Navbar = () => {
     }
   };
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleMenuOpen = () => {
+    setMenuOpen(true);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setMenuOpen(false);
   };
 
   return (
@@ -115,7 +108,12 @@ const Navbar = () => {
           {/* ---------- USER ----------*/}
           {currentUser ? (
             <>
-              <AvatarIconButton onClick={handleMenuOpen}>
+              <AvatarIconButton
+                ref={anchorElRef}
+                onClick={handleMenuOpen}
+                aria-controls="profile-menu"
+                aria-haspopup="true"
+              >
                 <Avatar
                   src={currentUser.picture || "/img/noavatar.jpg"}
                   alt=""
@@ -124,10 +122,10 @@ const Navbar = () => {
 
               {/* ---------- DROP DOWN MENU ----------*/}
               <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
+                id="profile-menu"
+                anchorEl={anchorElRef.current}
+                open={menuOpen}
                 onClose={handleMenuClose}
-                getContentAnchorEl={null}
                 anchorOrigin={{
                   vertical: "bottom",
                   horizontal: "right",
@@ -137,7 +135,7 @@ const Navbar = () => {
                   horizontal: "right",
                 }}
               >
-                {currentUser.isSeller && (
+                {/* {currentUser.isTutor && (
                   <>
                     <MenuItem onClick={handleMenuClose} component={Link} to="/mygigs">
                       Gigs
@@ -146,11 +144,19 @@ const Navbar = () => {
                       Add New Gig
                     </MenuItem>
                   </>
-                )}
-                <MenuItem onClick={handleMenuClose} component={Link} to="/orders">
-                  Orders
+                )} */}
+                <MenuItem
+                  onClick={handleMenuClose}
+                  component={Link}
+                  to="/userProfile"
+                >
+                  User Profile
                 </MenuItem>
-                <MenuItem onClick={handleMenuClose} component={Link} to="/messages">
+                <MenuItem
+                  onClick={handleMenuClose}
+                  component={Link}
+                  to="/messages"
+                >
                   Messages
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
