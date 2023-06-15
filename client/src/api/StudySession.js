@@ -58,12 +58,15 @@ export const getReviewsAndRatingOfStudysession = async (studysessionId) => {
   try {
   const reviews = await axios.get(`${STUDYSESSION_URL}/reviews/${studysessionId}`);
   const rating = await axios.get(`${STUDYSESSION_URL}/averageRating/${studysessionId}`);
+  console.log("reviews", reviews)
+  console.log("rating", rating)
   return {reviews: reviews.data, rating: rating.data};
 } catch (error) {
   if (error.response.status === 404) {
     return -1;
   } else {
     console.log(error);
+    throw error;
   }
 }
   };

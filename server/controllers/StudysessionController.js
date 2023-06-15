@@ -205,29 +205,23 @@ export const getAverageRating = async (req, res) => {
     try {
         const studysessionId = new ObjectId(req.params.studysessionId);
         console.log("studysessionId", studysessionId)
-        const result = await Review.aggregate([
-            {
-              $match: {
-                'booking.studysession': studysessionId
-              }
-            },
-            {
-              $group: {
-                _id: null,
-                averageRating: {
-                  $avg: '$value'
-                }
-              }
-            }
-          ])
-          console.log("result", result)
-          if (result.length > 0) {
-            const averageRating = result[0].averageRating;
-            res.status(200).send(averageRating);
-            console.log('Average rating:', averageRating);
-          } else {
-            res.status(404).send('No ratings found!');
-          }
+
+        const reviews = await Review.find()
+  .populate({
+    path: 'booking',
+    match: { studysession: studysessionId },
+    populate: {
+      path: 'studysession',
+      model: 'Studysession'
+    }})
+    if (!reviews) {
+        res.status(404).send('No ratings found!');
+    } else {
+        const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+        console.log("averageRating", averageRating)
+        res.status(200).send(averageRating.toString());
+    }
+
     } catch (err) {
         console.log(err);
         res.status(400).send('Bad request!');
@@ -252,10 +246,10 @@ export const getReviewsOfStudysession = async (req, res) => {
       path: 'studysession',
       model: 'Studysession'
     }})
+    console.log(reviews)
     const filteredReviews = reviews.filter(review => review.booking !== null);
-    const reviewData = filteredReviews.map(review => review.booking.studysession);
-    console.log('Reviews for Study Session:', reviewData);
-    res.status(200).send(reviewData);
+    console.log(filteredReviews)
+    res.status(200).send(filteredReviews);
   } catch (err) {
     console.log(err);
     res.status(500).send('Failed to retrieve reviews!');

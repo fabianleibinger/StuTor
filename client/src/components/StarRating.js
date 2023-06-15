@@ -29,6 +29,7 @@ const StarRating = ({ studySessionId }) => {
   rating = 0
   buttonText = "No Reviews yet"
   } else {
+    console.log(data)
   rating = data.rating
   reviews = data.reviews
   buttonDisabled = false
