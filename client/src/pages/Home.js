@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { styled } from "@mui/system";
-import { useTheme } from "@mui/material/styles";
 import {
   Container,
   Typography,
@@ -37,8 +36,6 @@ const CardButton = styled(Button)({
 });
 
 function Home() {
-  const theme = useTheme();
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

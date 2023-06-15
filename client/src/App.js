@@ -1,24 +1,18 @@
 import React from "react";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
-import { createTheme, ThemeProvider} from "@mui/material";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import Home from "./pages/Home.js";
 import Navbar from "./components/Navbar.js";
-// import Footer from "./components/footer/Footer";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
-
-import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
-
+import UserProfile from "./pages/UserProfile.js"
+import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#000000", // Replace with your desired primary color
-      contrastText: "#ffffff", // Replace with your desired contrast text color
+      main: "#1976d2", // Replace with your desired shade of blue
     },
     // Add more palette colors as needed
   },
@@ -29,19 +23,14 @@ function App() {
 
   const Layout = () => {
     return (
-      <div className="app">
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
-            <Navbar />
-            <Outlet />
-            {/* <Footer /> */}
-          </ThemeProvider>
-        </QueryClientProvider>
+      <div style={{ marginTop: "200px" }}>
+        <Navbar />
+        <Outlet />
       </div>
     );
   };
 
-    const router = createBrowserRouter([
+  const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
@@ -59,6 +48,10 @@ function App() {
           element: <Login />,
         },
         {
+          path: "/userProfile",
+          element: <UserProfile />,
+        },
+        {
           path: "/MyStudySessions",
           element: <MyStudySessions />,
         },
@@ -66,7 +59,16 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouterProvider router={router}>
+          <Outlet />
+        </RouterProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;
