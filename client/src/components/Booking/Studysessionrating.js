@@ -1,5 +1,5 @@
 import React from "react";
-import { Rating, Button } from "@mui/material";
+import { Rating, Button, Skeleton } from "@mui/material";
 import { getReviewsAndRatingOfStudysession } from "../../api/StudySession";
 import { useQuery } from "react-query";
 import { useState } from "react";
@@ -18,21 +18,30 @@ const StudysessionRating = ({ studySessionId }) => {
   };
   let buttonText = "See Reviews";
   let rating = 0;
-  let reviews = [];
+  let reviews = [2];
   let buttonDisabled = true;
+
+  const queryOptions = {
+    retries: 3, // Number of retries before giving up
+    retryDelay: 1000, // Delay in milliseconds between retries
+  };
+
   const { isLoading, error, data } = useQuery(["rating", studySessionId], () =>
-    getReviewsAndRatingOfStudysession(studySessionId)
+    getReviewsAndRatingOfStudysession(studySessionId),
+    queryOptions
   );
-  if (isLoading) return "Loading Rating...";
-  if (error) return "An error has occurred!";
-  if (data == -1) {
+  if (isLoading) return  <Skeleton variant="text" width={80} height={24} />;
+  if (error) {
     rating = 0;
-    buttonText = "No Reviews yet";
+    reviews = [];
+    buttonText = "No Reviews";
   } else {
-    rating = data.rating;
+  rating = data.rating;
     reviews = data.reviews;
     buttonDisabled = false;
   }
+  console.log("rating", rating);
+  console.log("reviews", reviews);
 
   return (
     <div>
@@ -48,6 +57,8 @@ const StudysessionRating = ({ studySessionId }) => {
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         reviews={reviews}
+        isLoading={isLoading}
+        error={error}
       />
     </div>
   );

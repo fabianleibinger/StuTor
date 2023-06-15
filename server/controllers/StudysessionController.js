@@ -223,15 +223,10 @@ export const getAverageRating = async (req, res) => {
         const studysessionId = new ObjectId(req.params.studysessionId);
         console.log("studysessionId", studysessionId)
 
-        const reviews = await Review.find()
-  .populate({
-    path: 'booking',
-    match: { studysession: studysessionId },
-    populate: {
-      path: 'studysession',
-      model: 'Studysession'
-    }})
-    if (!reviews) {
+        const reviews = await Review.find({ 'booking.studysession': studysessionId })
+        .populate('booking')
+    console.log(reviews.length)
+    if (reviews.length === 0) {
         res.status(404).send('No ratings found!');
     } else {
         const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
