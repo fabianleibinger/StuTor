@@ -63,7 +63,7 @@ const MyStudySessions = () => {
                   color="primary"
                   onClick={() => handleButtonClick(studySession._id)}
                 >
-                  View bookings
+                  View details
                 </Button>
               </Grid>
             ))}
