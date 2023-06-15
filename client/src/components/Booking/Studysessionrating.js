@@ -22,7 +22,7 @@ const StudysessionRating = ({ studySessionId }) => {
   let buttonDisabled = true;
 
   const queryOptions = {
-    retries: 3, // Number of retries before giving up
+    retries: 1, // Number of retries before giving up
     retryDelay: 1000, // Delay in milliseconds between retries
   };
 
