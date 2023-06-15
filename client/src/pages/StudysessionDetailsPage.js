@@ -26,16 +26,13 @@ const StudysessionDetailsPage = () => {
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
   const handleHistoryOpenDialog = () => {
     setHistoryDialogOpen(true);
-    console.log("historyDialogOpen", historyDialogOpen)
   };
   const handleHistoryCloseDialog = () => {
     setHistoryDialogOpen(false);
   };
 
-  // replace this by code below when log in is possible
-  const userId = "6468f36705853e6071dfec63"
-  //const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  //const userId = currentUser._id
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const userId = currentUser._id
   const { isLoading, error, data } = useQuery(['studysession', studySessionId], () => getStudySessionbyId(studySessionId));
 
   if (isLoading) return 'Loading Studysession...'
@@ -46,8 +43,7 @@ const StudysessionDetailsPage = () => {
     <div>
       <Box sx={{ backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '8px' }}>
       <Avatar
-      // insert currentUser.picture || here as soon as you can log in
-                  src={"/img/noavatar.jpg"}
+                  src={data.tutoredBy.picture}
                   alt=""
                   sx={{ width: 90, height: 90 }}
                 />

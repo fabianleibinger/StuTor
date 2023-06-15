@@ -15,9 +15,7 @@ export const getStudysessions = async () => {
 };
 
 export const getStudySessionbyId = async (studysessionId) => {
-  console.log("studysessionId", studysessionId)
   const response = await axios.get(`${STUDYSESSION_URL}/byId/${studysessionId}`);
-  console.log("response", response)
   return response.data;
 };
 
@@ -33,7 +31,6 @@ export const getBookingsTutoredByUser = async userId => {
 
 export const getReviewsForStudySession = async (studysessionId) => {
   const rating = await axios.get(`${STUDYSESSION_URL}/reviews/${studysessionId}`);
-  console.log("reviews", rating)
   return rating.data;
   };
 
@@ -58,7 +55,5 @@ export const getReviewsOfStudysession = async (studysessionId) => {
 export const getReviewsAndRatingOfStudysession = async (studysessionId) => {
   const reviews = await axios.get(`${STUDYSESSION_URL}/reviews/${studysessionId}`);
   const rating = await axios.get(`${STUDYSESSION_URL}/averageRating/${studysessionId}`);
-  console.log("reviews", reviews)
-  console.log("rating", rating)
   return {reviews: reviews.data, rating: rating.data};
   };

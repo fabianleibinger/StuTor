@@ -14,7 +14,6 @@ export const createBooking = async (studysession, hours, priceEuro, createdBy) =
   return response.data
   } catch (error) {
     console.log(error)
-    console.log(body)
   }
 }
 

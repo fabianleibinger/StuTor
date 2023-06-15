@@ -28,17 +28,11 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
   );
   const queryClient = useQueryClient();
 
-  console.log("in booking history dialog" + bookings);
-  console.log(isloading);
-  console.log(error);
-  console.log("open", open);
-
   const confirmBooking = useMutation(
     (bookingId) => confirmBookingCall(bookingId),
     {
       onSuccess: () => {
         refetch();
-        console.log("in on success" + bookings);
         queryClient.invalidateQueries(["bookings", studySessionId]);
       },
       onError: (error) => {
@@ -58,9 +52,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
 
   const handleGiveReview = (bookingId) => {
     setOpenReviewDialog(true);
-    console.log("openReviewDialog", openReviewDialog);
     setSelectedBookingId(bookingId);
-    console.log("selectedBookingId", selectedBookingId);
   };
 
   return (
