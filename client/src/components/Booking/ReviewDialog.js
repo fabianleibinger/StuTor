@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Rating, TextField } from '@mui/material';
 import { useMutation, useQueryClient } from 'react-query';
-import { confirmBooking as confirmBookingCall } from '../api/Booking.js';
-import { createReview } from '../api/Review.js';
+import { confirmBooking as confirmBookingCall } from '../../api/Booking.js';
+import { createReview } from '../../api/Review.js';
 import StarRating from './Studysessionrating.js';
 
 const ReviewDialog = ({ open, onClose, onSubmit, bookingId, studysessionId }) => {

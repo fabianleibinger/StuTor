@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, TextField, Button, Typography } from '@mui/material';
 import { useQueryClient } from 'react-query';
-import { useCreateBooking } from '../hooks/CreateBooking.jsx';
+import { useCreateBooking } from '../../hooks/CreateBooking.jsx';
 import { useMutation } from 'react-query';
 import { create } from '@mui/material/styles/createTransitions.js';
-import {createBooking as createBookingCall} from '../api/Booking.js';
+import {createBooking as createBookingCall} from '../../api/Booking.js';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { createAccountCall } from '../api/Payment.js';
+import { createAccountCall } from '../../api/Payment.js';
 
 const BookingDialog = ({ open, onClose, priceEuro, createdBy, studysession }) => {
 

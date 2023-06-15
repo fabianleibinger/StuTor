@@ -1,66 +1,56 @@
 import React, {useState} from 'react';
-import { Grid, Button, Box, Typography } from '@mui/material';
+import { Grid, Button, Box, Typography, Avatar } from '@mui/material';
 import {
-    useQuery,
-    useMutation,
-    useQueryClient,
+    useQuery
   } from 'react-query'
-import { createBooking, getBookingsOfStudysession } from '../api/Booking.js';
-import BookingDialog from '../components/BookingDialog.js';
-import PayPalDialog from '../components/PayPalDialog.js';
+import BookingDialog from '../components/Booking/BookingDialog.js';
 import { getStudySessionbyId, getStudysessions } from '../api/StudySession.js';
-import StudySessionBox from '../components/StudySessionBox.js';
-import { getCourse } from '../api/Course.js';
-import { getUser } from '../api/User.js';
-import { getUniversity } from '../api/University.js';
-import { getBookingsOfStudysessionCreatedByUser } from '../api/Booking.js';
-import Booking from '../api/Booking.js';
-import BookingHistoryDialog from '../components/BookingHistoryDialog.js';
-import StudysessionRating from '../components/Studysessionrating.js';
+import BookingHistoryDialog from '../components/Booking/BookingHistoryDialog.js';
+import StudysessionRating from '../components/Booking/Studysessionrating.js';
 import './styles.css'
 import { useParams } from 'react-router-dom';
 
 const StudysessionDetailsPage = () => {
-  const { studySessionId } = useParams();
-  console.log("id", studySessionId) 
+  const { studySessionId } = useParams()
 
-  console.log("StudysessionDetailsPage")
+  // states and functions for booking dialog
   const [dialogOpen, setDialogOpen] = useState(false);
-  console.log("after state")
-
   const handleOpenDialog = () => {
     setDialogOpen(true);
   };
-
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
 
+  // states and functions for booking history dialog
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
-
   const handleHistoryOpenDialog = () => {
     setHistoryDialogOpen(true);
     console.log("historyDialogOpen", historyDialogOpen)
   };
-
   const handleHistoryCloseDialog = () => {
     setHistoryDialogOpen(false);
   };
-  let buttonText = "View Bookings"
+
+  // replace this by code below when log in is possible
   const userId = "6468f36705853e6071dfec63"
+  //const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  //const userId = currentUser._id
   const { isLoading, error, data } = useQuery(['studysession', studySessionId], () => getStudySessionbyId(studySessionId));
-  console.log("data", data)
-  console.log("error", error)
-  console.log("isLoading", isLoading)
+
   if (isLoading) return 'Loading Studysession...'
   if (error) return 'An error has occurred!'
-  console.log("data", data)
-  console.log("historyDialogOpen", historyDialogOpen)
   
 
   return (
     <div>
       <Box sx={{ backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '8px' }}>
+      <Avatar
+      // insert currentUser.picture || here as soon as you can log in
+                  src={"/img/noavatar.jpg"}
+                  alt=""
+                  sx={{ width: 90, height: 90 }}
+                />
       <Typography variant="h5" sx={{ marginBottom: '0.5rem' }}>{data.course.name}</Typography>
       <Typography variant="subtitle1" sx={{ marginBottom: '0.5rem' }}>{data.tutoredBy.firstname + " " + data.tutoredBy.lastname}</Typography>
       <Typography variant="subtitle2" sx={{ marginBottom: '0.5rem' }}>{data.course.university.name}</Typography>
