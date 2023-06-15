@@ -29,3 +29,41 @@ export const getBookingsTutoredByUser = async userId => {
   const response = await axios.get(`${STUDYSESSION_URL}/tutoredBy/${userId}`);
   return response.data;
 };
+
+export const getReviewsForStudySession = async (studysessionId) => {
+  const rating = await axios.get(`${STUDYSESSION_URL}/reviews/${studysessionId}`);
+  console.log("reviews", rating)
+  return rating.data;
+  };
+
+export const getAverageRating = async (studysessionId) => {
+  try {
+  const rating = await axios.get(`${STUDYSESSION_URL}/averageRating/${studysessionId}`);
+  return rating.data;
+  } catch (error) {
+    if (error.response.status === 404) {
+      return -1;
+    } else {
+      console.log(error);
+    }
+  }
+  };
+
+export const getReviewsOfStudysession = async (studysessionId) => {
+  const reviews = await axios.get(`${STUDYSESSION_URL}/reviews/${studysessionId}`);
+  return reviews.data;
+  };
+
+export const getReviewsAndRatingOfStudysession = async (studysessionId) => {
+  try {
+  const reviews = await axios.get(`${STUDYSESSION_URL}/reviews/${studysessionId}`);
+  const rating = await axios.get(`${STUDYSESSION_URL}/averageRating/${studysessionId}`);
+  return {reviews: reviews.data, rating: rating.data};
+} catch (error) {
+  if (error.response.status === 404) {
+    return -1;
+  } else {
+    console.log(error);
+  }
+}
+  };

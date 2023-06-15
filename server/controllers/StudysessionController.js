@@ -69,7 +69,6 @@ export const getStudysession = async (req, res) => {
             }
           })
         .populate('tutoredBy');
-        console.log("studysession", studysession)
         try {
             if (!studysession) {
                 res.status(404).send('Studysession not found!');
@@ -205,6 +204,7 @@ export const updateStudysession = async (req, res) => {
 export const getAverageRating = async (req, res) => {
     try {
         const studysessionId = new ObjectId(req.params.studysessionId);
+        console.log("studysessionId", studysessionId)
         const result = await Review.aggregate([
             {
               $match: {
@@ -220,6 +220,7 @@ export const getAverageRating = async (req, res) => {
               }
             }
           ])
+          console.log("result", result)
           if (result.length > 0) {
             const averageRating = result[0].averageRating;
             res.status(200).send(averageRating);
@@ -228,6 +229,7 @@ export const getAverageRating = async (req, res) => {
             res.status(404).send('No ratings found!');
           }
     } catch (err) {
+        console.log(err);
         res.status(400).send('Bad request!');
     }
 };

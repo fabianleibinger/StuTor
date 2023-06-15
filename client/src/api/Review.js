@@ -16,8 +16,4 @@ export const createReview = async (booking, rating, feedback) => {
     }
     }
 
-export const getReviewsForStudySession = async (studysessionId) => {
-    const rating = await axios.get(`${STUDYSESSION_URL}/reviews/${studysessionId}`);
-    console.log("reviews", rating)
-    return rating.data;
-    };
+

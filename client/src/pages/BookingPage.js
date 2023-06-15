@@ -58,7 +58,7 @@ const BookingPage = () => {
       <Typography variant="h5" sx={{ marginBottom: '0.5rem' }}>{data.course.name}</Typography>
       <Typography variant="subtitle1" sx={{ marginBottom: '0.5rem' }}>{data.tutoredBy.firstname + " " + data.tutoredBy.lastname}</Typography>
       <Typography variant="subtitle2" sx={{ marginBottom: '0.5rem' }}>{data.course.university.name}</Typography>
-      <StarRating value={rating} />
+      <StarRating studySessionId={studySessionId} />
       <Typography variant="body1">{data.description}</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
