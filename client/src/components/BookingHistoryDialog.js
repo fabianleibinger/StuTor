@@ -10,14 +10,16 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     const [openReviewDialog, setOpenReviewDialog] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
-    const { isLoading: isloadingBookings, error: errorBookings, data: bookings } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
+    const { isLoading: isloadingBookings, error: errorBookings, data: bookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
     const queryClient = useQueryClient();
 
     const confirmBooking = useMutation( (bookingId) => confirmBookingCall(bookingId),
       {
           onSuccess: () => {
             //need studysessionId here?
-              queryClient.invalidateQueries(['bookings'])
+            refetch()
+            console.log("in on success" + bookings)
+              queryClient.invalidateQueries(['bookings', studySessionId])
               },
           onError: (error) => {
               console.log(error)
@@ -31,6 +33,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
   const handleConfirm = async (bookingId) => {
     try {
         await confirmBooking.mutateAsync(bookingId)
+        refetch()
     } catch (error) { 
         console.log(error)
     }
@@ -67,15 +70,22 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
         Confirm
       </Button>
       )}
-      {booking.isConfirmed && (
+      {booking.isConfirmed && !booking.reviewGiven &&(
         <Button
         variant="contained"
         color="primary"
         onClick={() => handleGiveReview(booking._id)}
+        studySessionId={studySessionId}
       >
         Give review
       </Button>
       )}
+      {booking.reviewGiven && (
+        <Button
+        variant="contained"
+        color="primary">
+          Show review
+        </Button>)}
                 
               </ListItem>
             ))}

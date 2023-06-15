@@ -5,7 +5,7 @@ import { confirmBooking as confirmBookingCall } from '../api/Booking.js';
 import { createReview } from '../api/Review.js';
 import StarRating from './Studysessionrating.js';
 
-const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
+const ReviewDialog = ({ open, onClose, onSubmit, bookingId, studysessionId }) => {
   const [review, setReview] = useState('');
   const [error, setError] = useState('');
     const queryClient = useQueryClient();
@@ -22,7 +22,7 @@ const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
   const giveReview = useMutation( () => createReview(bookingId, rating, review),
             {
                 onSuccess: () => {
-                    queryClient.invalidateQueries(['reviews'])
+                    queryClient.invalidateQueries(['bookings'], studysessionId)
                     },
                 onError: (error) => {
                     console.log("error", error)
