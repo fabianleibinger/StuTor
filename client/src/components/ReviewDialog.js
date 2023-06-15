@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Rating, Text
 import { useMutation, useQueryClient } from 'react-query';
 import { confirmBooking as confirmBookingCall } from '../api/Booking.js';
 import { createReview } from '../api/Review.js';
-import StarRating from './StarRating.js';
+import StarRating from './Studysessionrating.js';
 
 const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
   const [review, setReview] = useState('');

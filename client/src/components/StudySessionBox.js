@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import StarRating from './StarRating';
+import StarRating from './Studysessionrating';
 
 const StudySessionBox = ({ title, tutor, university, description, rating }) => {
   return (
