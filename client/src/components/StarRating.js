@@ -38,7 +38,7 @@ const StarRating = ({ studySessionId }) => {
   return (
     <div>
     <Rating
-      name="customized-empty"
+      name="star-rating"
       value={rating}
       precision={0.5} // Set the precision to half stars if desired
       readOnly // Make the rating read-only

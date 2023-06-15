@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, TextField } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Rating, TextField } from '@mui/material';
 import { useMutation, useQueryClient } from 'react-query';
 import { confirmBooking as confirmBookingCall } from '../api/Booking.js';
 import { createReview } from '../api/Review.js';
+import StarRating from './StarRating.js';
 
 const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
   const [review, setReview] = useState('');
   const [error, setError] = useState('');
     const queryClient = useQueryClient();
-    console.log("open", open)
+  const [rating, setRating] = useState(0);
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
@@ -18,7 +19,7 @@ const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
     onSubmit(review);
   };*/
   // hard coded rating for now
-  const giveReview = useMutation( () => createReview(bookingId, 5, review),
+  const giveReview = useMutation( () => createReview(bookingId, rating, review),
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries(['reviews'])
@@ -48,6 +49,13 @@ const ReviewDialog = ({ open, onClose, onSubmit, bookingId }) => {
           fullWidth
           autoFocus
         />
+      <Rating
+  name="simple-controlled"
+  value={rating}
+  onChange={(event, newValue) => {
+    setRating(newValue);
+  }}
+/>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleReviewSubmit} color="primary">
