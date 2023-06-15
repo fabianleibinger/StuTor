@@ -34,7 +34,6 @@ const StudysessionRating = ({ studySessionId }) => {
   rating = data.rating
   reviews = data.reviews
   buttonDisabled = false
-  console.log(reviews)
   }
 
 

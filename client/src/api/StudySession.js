@@ -16,7 +16,7 @@ export const getStudysessions = async () => {
 
 export const getStudySessionbyId = async (studysessionId) => {
   console.log("studysessionId", studysessionId)
-  const response = await axios.get(`${STUDYSESSION_URL}/${studysessionId}`);
+  const response = await axios.get(`${STUDYSESSION_URL}/byId/${studysessionId}`);
   console.log("response", response)
   return response.data;
 };

@@ -12,6 +12,7 @@ import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
 
 import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
+import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js"
 
 
 const theme = createTheme({
@@ -48,7 +49,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <StudysessionDetailsPage />,
         },
         {
           path: "/register",
@@ -62,6 +63,10 @@ function App() {
           path: "/MyStudySessions",
           element: <MyStudySessions />,
         },
+        { 
+          path: "/StudysessionDetailsPage/:id",
+          element: <StudysessionDetailsPage />,
+        }
       ],
     },
   ]);

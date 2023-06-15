@@ -17,9 +17,16 @@ import { getBookingsOfStudysessionCreatedByUser } from '../api/Booking.js';
 import Booking from '../api/Booking.js';
 import BookingHistoryDialog from '../components/BookingHistoryDialog.js';
 import StudysessionRating from '../components/Studysessionrating.js';
+import './styles.css'
+import { useParams } from 'react-router-dom';
 
-const BookingPage = () => {
+const StudysessionDetailsPage = () => {
+  const { id } = useParams();
+  console.log("id", id) 
+
+  console.log("StudysessionDetailsPage")
   const [dialogOpen, setDialogOpen] = useState(false);
+  console.log("after state")
 
   const handleOpenDialog = () => {
     setDialogOpen(true);
@@ -48,12 +55,18 @@ const BookingPage = () => {
   const universityId = "64665b948c647ea7f079f779"
   const userId = "6468f36705853e6071dfec63"
   const rating = 4.5
+  console.log(rating)
   const { isLoading, error, data } = useQuery(['studysession', studySessionId], () => getStudySessionbyId(studySessionId));
+  console.log("data", data)
+  console.log("error", error)
+  console.log("isLoading", isLoading)
   if (isLoading) return 'Loading Studysession...'
   if (error) return 'An error has occurred!'
+  console.log("data", data)
   
 
   return (
+    <div>
       <Box sx={{ backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '8px' }}>
       <Typography variant="h5" sx={{ marginBottom: '0.5rem' }}>{data.course.name}</Typography>
       <Typography variant="subtitle1" sx={{ marginBottom: '0.5rem' }}>{data.tutoredBy.firstname + " " + data.tutoredBy.lastname}</Typography>
@@ -87,8 +100,9 @@ const BookingPage = () => {
         createdBy={userId}
         studysession={studySessionId}
       />
-      </Box>
+      </Box> 
+      </div> 
   );
 };
 
-export default BookingPage;
+export default StudysessionDetailsPage;
