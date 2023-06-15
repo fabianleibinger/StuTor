@@ -10,7 +10,10 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     const [openReviewDialog, setOpenReviewDialog] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
-    const { isLoading: isloadingBookings, error: errorBookings, data: bookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
+    const { isLoading: isloading, error: error, data: bookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId),
+    {
+      enabled: open,
+      });
     const queryClient = useQueryClient();
 
     const confirmBooking = useMutation( (bookingId) => confirmBookingCall(bookingId),
@@ -26,9 +29,9 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
           }
               });
   
-    if (isloadingBookings) return 'Loading...'
-  if (errorBookings) return 'An error has occurred!'
-  if (bookings.length === 0) return 'No bookings found!'
+    //if (isloadingBookings) return 'Loading...'
+  //if (errorBookings) return 'An error has occurred!'
+  //if (bookings.length === 0) return 'No bookings found!'
 
   const handleConfirm = async (bookingId) => {
     try {
@@ -57,6 +60,9 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     <Dialog open={open} onClose={onClose}>
         <DialogTitle>Bookings</DialogTitle>
         <DialogContent>
+        {isloading && <div>Loading...</div>}
+        {error && <div>No bookings found!</div>}
+        {!isloading && !error && (
           <List>
             { bookings.map((booking) => (
               <ListItem key={booking._id}>
@@ -89,7 +95,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                 
               </ListItem>
             ))}
-          </List>
+          </List>)}
         </DialogContent>
       </Dialog>
       

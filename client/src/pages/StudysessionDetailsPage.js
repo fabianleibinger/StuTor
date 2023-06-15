@@ -21,8 +21,8 @@ import './styles.css'
 import { useParams } from 'react-router-dom';
 
 const StudysessionDetailsPage = () => {
-  const { id } = useParams();
-  console.log("id", id) 
+  const { studySessionId } = useParams();
+  console.log("id", studySessionId) 
 
   console.log("StudysessionDetailsPage")
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,7 +33,6 @@ const StudysessionDetailsPage = () => {
   };
 
   const handleCloseDialog = () => {
-    //refetch();
     setDialogOpen(false);
   };
 
@@ -41,25 +40,21 @@ const StudysessionDetailsPage = () => {
 
   const handleHistoryOpenDialog = () => {
     setHistoryDialogOpen(true);
-    //refetch();
     console.log("historyDialogOpen", historyDialogOpen)
   };
 
   const handleHistoryCloseDialog = () => {
     setHistoryDialogOpen(false);
   };
-  // Hard coded studySessionId for now
-  const courseId = "64744a0eee6d5f6b120ddac2"
-  const studySessionId = "6482e56033dbeb977cf730fb"
-  const tutoredById = "6468f36705853e6071dfec63"
-  const universityId = "64665b948c647ea7f079f779"
+  let buttonText = "View Bookings"
   const userId = "6468f36705853e6071dfec63"
-  const rating = 4.5
-  console.log(rating)
   const { isLoading, error, data } = useQuery(['studysession', studySessionId], () => getStudySessionbyId(studySessionId));
+  //const { isLoading: isloadingBookings, error: errorBookings, data: bookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
   console.log("data", data)
   console.log("error", error)
   console.log("isLoading", isLoading)
+  //if (isloadingBookings) return buttonText = 'Loading Bookings...'
+  //if (errorBookings) return buttonText = 'An error has occurred!'
   if (isLoading) return 'Loading Studysession...'
   if (error) return 'An error has occurred!'
   console.log("data", data)

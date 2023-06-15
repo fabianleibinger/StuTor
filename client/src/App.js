@@ -64,7 +64,7 @@ function App() {
           element: <MyStudySessions />,
         },
         { 
-          path: "/StudysessionDetailsPage/:id",
+          path: "/StudysessionDetailsPage/:studySessionId",
           element: <StudysessionDetailsPage />,
         }
       ],
