@@ -26,22 +26,21 @@ const StudysessionRating = ({ studySessionId }) => {
     retryDelay: 1000, // Delay in milliseconds between retries
   };
 
-  const { isLoading, error, data } = useQuery(["rating", studySessionId], () =>
-    getReviewsAndRatingOfStudysession(studySessionId),
+  const { isLoading, error, data } = useQuery(
+    ["rating", studySessionId],
+    () => getReviewsAndRatingOfStudysession(studySessionId),
     queryOptions
   );
-  if (isLoading) return  <Skeleton variant="text" width={80} height={24} />;
+  if (isLoading) return <Skeleton variant="text" width={80} height={24} />;
   if (error) {
     rating = 0;
     reviews = [];
     buttonText = "No Reviews";
   } else {
-  rating = data.rating;
+    rating = data.rating;
     reviews = data.reviews;
     buttonDisabled = false;
   }
-  console.log("rating", rating);
-  console.log("reviews", reviews);
 
   return (
     <div>
