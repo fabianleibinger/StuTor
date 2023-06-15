@@ -5,16 +5,20 @@ import { confirmBooking as confirmBookingCall } from '../api/Booking.js';
 import ReviewDialog from './ReviewDialog.js';
 import { createReview } from '../api/Review.js';
 import { getBookingsOfStudysessionCreatedByUser } from '../api/Booking.js';
+import { is } from 'date-fns/locale';
 
 const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     const [openReviewDialog, setOpenReviewDialog] = useState(false);
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
     const { isLoading: isloading, error: error, data: bookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId),
-    {
-      enabled: open,
-      });
+    );
     const queryClient = useQueryClient();
+
+    console.log("in booking history dialog" + bookings)
+    console.log(isloading)
+    console.log(error)
+    console.log("open", open)
 
     const confirmBooking = useMutation( (bookingId) => confirmBookingCall(bookingId),
       {

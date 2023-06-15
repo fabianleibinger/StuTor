@@ -49,15 +49,13 @@ const StudysessionDetailsPage = () => {
   let buttonText = "View Bookings"
   const userId = "6468f36705853e6071dfec63"
   const { isLoading, error, data } = useQuery(['studysession', studySessionId], () => getStudySessionbyId(studySessionId));
-  //const { isLoading: isloadingBookings, error: errorBookings, data: bookings, refetch } = useQuery(['bookings', studySessionId], () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId));
   console.log("data", data)
   console.log("error", error)
   console.log("isLoading", isLoading)
-  //if (isloadingBookings) return buttonText = 'Loading Bookings...'
-  //if (errorBookings) return buttonText = 'An error has occurred!'
   if (isLoading) return 'Loading Studysession...'
   if (error) return 'An error has occurred!'
   console.log("data", data)
+  console.log("historyDialogOpen", historyDialogOpen)
   
 
   return (
