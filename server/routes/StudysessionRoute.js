@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.post('/', createStudysession);
 router.get('/', getStudysessions);
-router.get('/:studysessionId', getStudysession);
+router.get('/byId/:studysessionId', getStudysession);
 router.get('/forCourse/:courseId', getStudysessionsForCourse);
 router.get('/tutoredBy/:userId', getStudysessionsTutoredBy);
 router.get('/ofStudent/:userId', getStudysessionsOfStudent);

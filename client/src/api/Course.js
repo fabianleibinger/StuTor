@@ -23,7 +23,6 @@ export const getCourses = async () => {
 };
 
 export const getCourse = async courseId => {
-  // probably needs to be changed to /byId/:courseId again
-  const response = await axios.get(`${COURSE_URL}/${courseId}`);
+  const response = await axios.get(`${COURSE_URL}/byId/${courseId}`);
   return response.data;
 };
