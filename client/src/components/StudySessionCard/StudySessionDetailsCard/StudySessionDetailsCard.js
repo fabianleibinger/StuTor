@@ -12,6 +12,10 @@ import { blue } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import { Delete } from '@mui/icons-material/';
+import Button from '@mui/material/Button';
+
+// routing
+import { useNavigate } from 'react-router-dom';
 
 //api
 import { getCourse } from '../../../api/Course';
@@ -27,6 +31,8 @@ const handleChangeDate = ({ studySession }) => {
 };
 
 export default function StudySessionCard({ studySession, onDelete }) {
+  const navigate = useNavigate();
+
   const handleDeleteClick = () => {
     onDelete(studySession._id);
   };
@@ -35,6 +41,12 @@ export default function StudySessionCard({ studySession, onDelete }) {
     `getCourse_${studySession._id}`,
     () => getCourse(studySession.course)
   );
+
+  const handleButtonClick = (studysessionId) => {
+
+    // Route to another page and pass the studysessionId as a parameter
+    navigate(`/StudysessionDetailsPage/${studysessionId}`);
+  };
 
   if (isLoading) return 'Loading...';
   if (error) return 'An error has occurred: ' + error.message;
@@ -84,6 +96,13 @@ export default function StudySessionCard({ studySession, onDelete }) {
           <strong>Languages: </strong>
           {studySession.languages.join(', ')}
         </Typography>
+        <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleButtonClick(studySession._id)}
+                >
+                  View details
+                </Button>
       </CardContent>
       <CardActions
         sx={{

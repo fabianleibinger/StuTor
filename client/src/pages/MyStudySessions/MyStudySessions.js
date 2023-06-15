@@ -12,12 +12,8 @@ import { useQuery, useMutation, useQueryClient } from 'react-query';
 // frontend
 import { Box, Button, Grid } from '@mui/material';
 
-// routing
-import { useNavigate } from 'react-router-dom';
-
 const MyStudySessions = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   // fetch data
   const { isLoading, error, data } = useQuery(
@@ -37,12 +33,6 @@ const MyStudySessions = () => {
     await deleteStudySessionMutation.mutateAsync(studySessionId);
   };
 
-  const handleButtonClick = (studysessionId) => {
-
-    // Route to another page and pass the studysessionId as a parameter
-    navigate(`/StudysessionDetailsPage/${studysessionId}`);
-  };
-
   if (isLoading) return 'Loading...';
   if (error) return 'An error has occurred: ' + error.message;
   const studySessions = data;
@@ -58,13 +48,6 @@ const MyStudySessions = () => {
                   studySession={studySession}
                   onDelete={() => handleDeleteStudySession(studySession._id)}
                 />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleButtonClick(studySession._id)}
-                >
-                  View details
-                </Button>
               </Grid>
             ))}
           <Grid item xs={4}>

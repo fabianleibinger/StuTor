@@ -223,14 +223,21 @@ export const getAverageRating = async (req, res) => {
         const studysessionId = new ObjectId(req.params.studysessionId);
         console.log("studysessionId", studysessionId)
 
-        const reviews = await Review.find({ 'booking.studysession': studysessionId })
-        .populate('booking')
-    console.log(reviews.length)
+        let reviews = await Review.find()
+        .populate({
+          path: 'booking',
+          match: { studysession: studysessionId },
+          populate: {
+            path: 'studysession',
+            model: 'Studysession'
+          }
+        })
+
+        reviews = reviews.filter(review => review.booking !== null);
     if (reviews.length === 0) {
         res.status(404).send('No ratings found!');
     } else {
         const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
-        console.log("averageRating", averageRating)
         res.status(200).send(averageRating.toString());
     }
 
@@ -258,9 +265,7 @@ export const getReviewsOfStudysession = async (req, res) => {
       path: 'studysession',
       model: 'Studysession'
     }})
-    console.log(reviews)
     const filteredReviews = reviews.filter(review => review.booking !== null);
-    console.log(filteredReviews)
     res.status(200).send(filteredReviews);
   } catch (err) {
     console.log(err);
