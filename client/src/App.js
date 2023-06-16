@@ -39,7 +39,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Register />,
+          element: <Home />,
         },
         {
           path: "/register",

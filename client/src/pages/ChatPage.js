@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
-import MyChats from '../components/MyChats';
-import ChatBox from '../components/ChatBox';
+import MyChats from '../components/Chat/MyChats';
+import ChatBox from '../components/Chat/ChatBox';
 
 const ChatPage = () => {
     return (

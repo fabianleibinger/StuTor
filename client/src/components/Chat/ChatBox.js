@@ -1,11 +1,12 @@
 import React from "react";
-import { useAppContext } from "../context/ChatProvider";
+import { useAppContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   getMessagesOfChat,
   sendMessage as sendMessageCall,
-} from "../api/Message";
+} from "../../api/Message";
 import { Stack, Box, Chip, TextField, Button } from "@mui/material";
+import getCurrentUser from "../../utils/getCurrentUser";
 
 const ChatBox = () => {
   const { selectedChat, newMessage, setNewMessage } = useAppContext();
@@ -21,7 +22,7 @@ const ChatBox = () => {
 
   const sendMessage = useMutation(
     () =>
-      sendMessageCall("6468f36705853e6071dfec63", newMessage, selectedChat._id),
+      sendMessageCall(getCurrentUser()._id, newMessage, selectedChat._id),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("messagesOfChat");

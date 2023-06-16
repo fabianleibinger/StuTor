@@ -1,15 +1,15 @@
 import React from 'react';
-import { getChatsOfUser } from '../api/Chat';
+import { getChatsOfUser } from '../../api/Chat';
 import { useQuery } from 'react-query';
 import { Box, Skeleton, Alert, List, Divider, ListItemButton, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
-import { useAppContext } from '../context/ChatProvider';
+import { useAppContext } from '../../context/ChatProvider';
+import getCurrentUser from '../../utils/getCurrentUser';
 
 const MyChats = () => {
 
     const { selectedChat, setSelectedChat } = useAppContext();
 
-    const userId = '6468f36705853e6071dfec63';
-    const { isLoading, error, data } = useQuery(['chatsOfUser'], () => getChatsOfUser(userId));
+    const { isLoading, error, data } = useQuery(['chatsOfUser'], () => getChatsOfUser(getCurrentUser()._id));
 
     const boxSx = {
         display: 'flex',

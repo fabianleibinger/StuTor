@@ -2,7 +2,6 @@ import axios from 'axios';
 const BASE_URL = '/api';
 const MESSAGE_URL = `${BASE_URL}/message`;
 
-// TODO: Authentication instead of id param.
 export const sendMessage = async (senderId, content, chatId) => {
     const body = {
         "content": content,
