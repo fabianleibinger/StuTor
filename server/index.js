@@ -14,7 +14,7 @@ import userRoute from './routes/UserRoute.js';
 import authRoute from "./routes/AuthenticationRoute.js";
 import userachievementRoute from './routes/UserAchievementRoute.js';
 import userStudysessionRoute from './routes/UserStudysessionRoute.js';
-
+import paymentRoute from './routes/PaymentRoute.js';
 
 const app = express();
 dotenv.config();
@@ -34,6 +34,10 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log(req.path, req.method);
+    next();
+});
 app.use(cookieParser());
 
 app.use('/api/achievement', achievementRoute);
@@ -46,6 +50,7 @@ app.use('/api/user', userRoute);
 app.use("/api/auth", authRoute);
 app.use('/api/userAchievement', userachievementRoute);
 app.use('/api/userStudysession', userStudysessionRoute);
+app.use('/api/payment', paymentRoute);
 
 // For generating error messages & codes
 // app.use((err, req, res, next) => {

@@ -6,8 +6,10 @@ import Home from "./pages/Home.js";
 import Navbar from "./components/Navbar.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
+
+import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
+import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js"
 import UserProfile from "./pages/UserProfile.js"
-import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js";
 
 const theme = createTheme({
   palette: {
@@ -37,7 +39,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <StudysessionDetailsPage />,
         },
         {
           path: "/register",
@@ -55,6 +57,10 @@ function App() {
           path: "/MyStudySessions",
           element: <MyStudySessions />,
         },
+        { 
+          path: "/StudysessionDetailsPage/:studySessionId",
+          element: <StudysessionDetailsPage />,
+        }
       ],
     },
   ]);

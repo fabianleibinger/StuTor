@@ -27,6 +27,12 @@ export const createReview = async (req, res) => {
     });
     try {
       const savedReview = await newReview.save();
+      const updatedBooking = await Booking.findByIdAndUpdate(
+        bookingId,
+        { reviewGiven: true },
+        { new: true }
+      );
+      console.log(updatedBooking);
       res.status(201).send(savedReview);
     } catch (err) {
       res.status(500).send('Failed to create review!');
@@ -76,6 +82,7 @@ export const getReviewOfBooking = async (req, res) => {
     res.status(400).send('Bad request!');
   }
 };
+
 
 
 export const deleteReview = async (req, res) => {

@@ -10,7 +10,7 @@ import { getStudysessions, deleteStudysession } from '../../api/StudySession';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 // frontend
-import { Box, Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 
 const MyStudySessions = () => {
   const queryClient = useQueryClient();
