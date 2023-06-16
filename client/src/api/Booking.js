@@ -2,8 +2,23 @@ import axios from 'axios'
 const BASE_URL ='/api'
 const BOOKING_URL = `${BASE_URL}/booking`
 
-export const createBooking = async (body) => {
+export const createBooking = async (studysession, hours, priceEuro, createdBy) => {
+  const body = {
+    "studysession": studysession,
+            "hours": hours,
+            "priceEuro": priceEuro,
+            "createdBy": createdBy
+}
+  try {
   const response = await axios.post(`${BOOKING_URL}`, body)
+  return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const confirmBooking = async (bookingId) => {
+  const response = await axios.put(`${BOOKING_URL}/confirmBooking/${bookingId}`)
   return response.data
 }
 

@@ -4,14 +4,14 @@ import {
   getUniversities,
   getUniversity,
   deleteUniversity,
-  updateUniversity,
+  updateUniversity
 } from '../controllers/UniversityController.js';
 
 const router = express.Router();
 
 router.post('/', createUniversity);
 router.get('/', getUniversities);
-router.get('/id/:universityId', getUniversity);
+router.get('/byId/:universityId', getUniversity);
 router.put('/:universityId', updateUniversity);
 router.delete('/:universityId', deleteUniversity);
 
