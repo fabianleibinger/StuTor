@@ -41,7 +41,7 @@ export const getBooking = async (req, res) => {
         console.log(booking)
         try {
             if (!booking) {
-                res.status(404).send('Object not found!');
+                res.status(404).send('Booking not found!');
             } else {
                 res.status(200).send(booking);
             }
@@ -190,7 +190,7 @@ export const confirmBooking = async (req, res) => {
 
 export const deleteBooking = async (req, res) => {
     try {
-        const bookingId = new ObjectId(req.params.id);
+        const bookingId = new ObjectId(req.params.bookingId);
         try {
             const booking = await Booking.findByIdAndDelete(bookingId);
             if (!booking) {

@@ -1,3 +1,4 @@
+import Chat from '../models/Chat.js';
 import Studysession from '../models/Studysession.js';
 import University from '../models/University.js';
 import User from '../models/User.js';
@@ -148,7 +149,11 @@ export const deleteUser = async (req, res) => {
       // Delete all achievement and studysession associations (student and tutor) of this user.
       await UserAchievement.deleteMany({ user: userId });
       await UserStudysession.deleteMany({ student: userId });
-      await Studysession.deleteMany({ tutor: userId });
+      // Delete all studysessions tutored by this user including related chats.
+      const deletedStudysessions = await Studysession.deleteMany({ tutor: userId });
+      for (const studysession of deletedStudysessions) {
+        await Chat.deleteMany({ studysession: studysession._id });
+      }
       if (!user) {
         res.status(404).send('User not found!');
       } else {

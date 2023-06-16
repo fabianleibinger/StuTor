@@ -6,7 +6,7 @@ import Home from "./pages/Home.js";
 import Navbar from "./components/Navbar.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
-
+import ChatPage from './pages/ChatPage';
 import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
 import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js"
 import UserProfile from "./pages/UserProfile.js"
@@ -39,7 +39,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <StudysessionDetailsPage />,
+          element: <Home />,
         },
         {
           path: "/register",
@@ -48,6 +48,10 @@ function App() {
         {
           path: "/login",
           element: <Login />,
+        },
+        {
+          path: "/my-chats",
+          element: <ChatPage />,
         },
         {
           path: "/userProfile",

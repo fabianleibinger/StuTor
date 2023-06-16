@@ -1,3 +1,4 @@
+import Chat from '../models/Chat.js';
 import Course from '../models/Course.js';
 import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
@@ -288,10 +289,12 @@ export const deleteStudysession = async (req, res) => {
       const studysession = await Studysession.findByIdAndDelete(studysessionId);
       // Delete all student associations of this studysession.
       await UserStudysession.deleteMany({ studysession: studysessionId });
+      // Delete chats of this studysession.
+      await Chat.deleteMany({ studysession: studysessionId });
       if (!studysession) {
-        res.status(404).send('Studysession not found!');
+          res.status(404).send('Studysession not found!');
       } else {
-        res.status(200).send('Studysession deleted!');
+          res.status(200).send('Studysession deleted!');
       }
     } catch (err) {
       res.status(500).send('Failed to delete studysession!');

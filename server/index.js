@@ -6,7 +6,9 @@ import cors from "cors";
 
 import achievementRoute from './routes/AchievementRoute.js';
 import bookingRoute from './routes/BookingRoute.js';
+import chatRoute from './routes/ChatRoute.js';
 import courseRoute from './routes/CourseRoute.js';
+import messageRoute from './routes/MessageRoute.js';
 import reviewRoute from './routes/ReviewRoute.js';
 import studysessionRoute from './routes/StudysessionRoute.js';
 import universityRoute from './routes/UniversityRoute.js';
@@ -34,15 +36,18 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
+// Http logger
 app.use((req, res, next) => {
-    console.log(req.path, req.method);
+    console.log(`Received ${req.method} request for ${req.url}`);
     next();
 });
 app.use(cookieParser());
 
 app.use('/api/achievement', achievementRoute);
 app.use('/api/booking', bookingRoute);
+app.use('/api/chat', chatRoute);
 app.use('/api/course', courseRoute);
+app.use('/api/message', messageRoute);
 app.use('/api/review', reviewRoute);
 app.use('/api/studysession', studysessionRoute);
 app.use('/api/university', universityRoute);
@@ -56,7 +61,6 @@ app.use('/api/payment', paymentRoute);
 // app.use((err, req, res, next) => {
 //   const errorStatus = err.status || 500;
 //   const errorMessage = err.message || "Something went wrong!";
-
 //   return res.status(errorStatus).send(errorMessage);
 // });
 

@@ -4,7 +4,7 @@ import { createReview, getReview, getReviewOfBooking, deleteReview } from '../co
 const router = express.Router();
 
 router.post('/', createReview);
-router.get('/:reviewId', getReview);
+router.get('/id/:reviewId', getReview);
 router.get('/ofBooking/:bookingId', getReviewOfBooking);
 router.delete('/:reviewId', deleteReview);
 
