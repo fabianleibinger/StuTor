@@ -39,7 +39,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <StudysessionDetailsPage />,
+          element: <Register />,
         },
         {
           path: "/register",
@@ -50,7 +50,7 @@ function App() {
           element: <Login />,
         },
         {
-          path: "/chat",
+          path: "/my-chats",
           element: <ChatPage />,
         },
         {
