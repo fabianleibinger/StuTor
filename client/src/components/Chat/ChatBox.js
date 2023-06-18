@@ -25,15 +25,15 @@ const ChatBox = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("message recieved", (newMessageRecieved) => {
-      console.log("message received" + newMessageRecieved);
+    socket.on("message recieved", (newMessageReceived) => {
+      console.log("message received" + newMessageReceived);
       if (
         !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageRecieved.chat._id
+        selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
         // TODO: Notification.
       } else {
-        setMessages([...messages, newMessageRecieved]);
+        setMessages([...messages, newMessageReceived]);
       }
     });
   });
