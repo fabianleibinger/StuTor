@@ -9,7 +9,10 @@ const MyChats = () => {
 
     const { selectedChat, setSelectedChat } = useAppContext();
 
-    const { isLoading, error, data } = useQuery(['chatsOfUser'], () => getChatsOfUser(getCurrentUser()._id));
+    const { isLoading, error, data } = useQuery(
+        ['chatsOfUser'],
+        () => getChatsOfUser(getCurrentUser()._id)
+    );
 
     const boxSx = {
         display: 'flex',
@@ -59,8 +62,8 @@ const MyChats = () => {
                             alignItems='flex-start'
                             onClick={() => setSelectedChat(chat)}
                             sx={{
-                                backgroundColor: selectedChat._id === chat._id ? 'lightgrey' : 'inherit',
-                              }}
+                                backgroundColor: selectedChat?._id === chat._id ? 'lightgrey' : 'inherit',
+                            }}
                         >
                             <ListItemAvatar>
                                 <Avatar src={chat.users[0].picture} />
