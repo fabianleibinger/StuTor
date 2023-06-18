@@ -93,9 +93,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new message", (newMessageRecieved) => {
-    newMessageRecieved.chat.users.forEach((userId) => {
+    console.log("message sent: " + newMessageRecieved);
+    const chat = newMessageRecieved.chat;
+    chat.users.forEach((userId) => {
       if (userId == newMessageRecieved.sender._id) return;
-      socket.in(userId).emit("message recieved", newMessageRecieved);
+      socket.in(chat._id).emit("message recieved", newMessageRecieved);
     });
   });
 });

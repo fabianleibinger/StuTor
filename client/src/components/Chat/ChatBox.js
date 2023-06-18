@@ -26,7 +26,7 @@ const ChatBox = () => {
 
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
-      console.log(newMessageRecieved);
+      console.log("message received" + newMessageRecieved);
       if (
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageRecieved.chat._id
