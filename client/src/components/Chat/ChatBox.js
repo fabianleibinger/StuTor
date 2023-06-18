@@ -103,7 +103,7 @@ const ChatBox = () => {
                 <Stack
                   key={index}
                   direction="row"
-                  justifyContent={index % 2 === 0 ? "flex-end" : "flex-start"}
+                  justifyContent={getCurrentUser()._id === message.sender._id ? "flex-end" : "flex-start"}
                 >
                   <Chip label={message.content} />
                 </Stack>
