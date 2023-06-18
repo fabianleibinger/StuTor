@@ -24,6 +24,20 @@ const ChatBox = () => {
     socket.on("connection", () => setSocketConnected(true));
   }, []);
 
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      console.log(newMessageRecieved);
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        // TODO: Notification.
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
+
   const { data } = useQuery(
     ["messagesOfChat", selectedChat?._id],
     () => getMessagesOfChat(selectedChat?._id),
@@ -51,19 +65,6 @@ const ChatBox = () => {
       },
     }
   );
-
-  useEffect(() => {
-    socket.on("message recieved", (newMessageRecieved) => {
-      if (
-        !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageRecieved.chat._id
-      ) {
-        // TODO: Notification.
-      } else {
-        setMessages([...messages, newMessageRecieved]);
-      }
-    });
-  });
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
