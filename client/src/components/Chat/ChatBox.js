@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
@@ -7,24 +7,42 @@ import {
 } from "../../api/Message";
 import { Stack, Box, Chip, TextField, Button } from "@mui/material";
 import getCurrentUser from "../../utils/getCurrentUser";
+import io from "socket.io-client";
+
+const ENDPOINT = "localhost:5000";
+var socket, selectedChatCompare;
 
 const ChatBox = () => {
-  const { selectedChat, newMessage, setNewMessage } = useAppContext();
+  const { selectedChat, messages, setMessages, newMessage, setNewMessage } =
+    useAppContext();
+  const [socketConnected, setSocketConnected] = useState(false);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", getCurrentUser());
+    socket.on("connection", () => setSocketConnected(true));
+  }, []);
 
   const { data } = useQuery(
     ["messagesOfChat", selectedChat?._id],
     () => getMessagesOfChat(selectedChat?._id),
     {
       enabled: Boolean(selectedChat?._id),
+      onSuccess: (data) => {
+        socket.emit("join chat", selectedChat._id);
+        selectedChatCompare = selectedChat;
+        setMessages(data);
+      },
     }
   );
 
   const sendMessage = useMutation(
-    () =>
-      sendMessageCall(getCurrentUser()._id, newMessage, selectedChat._id),
+    () => sendMessageCall(getCurrentUser()._id, newMessage, selectedChat._id),
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        setMessages([...messages, data]);
+        socket.emit("new message", data);
         queryClient.invalidateQueries("messagesOfChat");
         queryClient.invalidateQueries("chatsOfUser");
       },
@@ -33,6 +51,19 @@ const ChatBox = () => {
       },
     }
   );
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        // TODO: Notification.
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
@@ -68,7 +99,7 @@ const ChatBox = () => {
         <Box overflow={"auto"} height={0.88}>
           <Stack direction="column" spacing={2} sx={stackSx}>
             {data ? (
-              data.map((message, index) => (
+              messages.map((message, index) => (
                 <Stack
                   key={index}
                   direction="row"
