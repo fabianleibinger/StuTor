@@ -92,12 +92,10 @@ io.on("connection", (socket) => {
     console.log("User joined chat " + chat);
   });
 
-  socket.on("new message", (newMessageRecieved) => {
-    console.log("message sent: " + newMessageRecieved);
-    const chat = newMessageRecieved.chat;
-    chat.users.forEach((userId) => {
-      if (userId == newMessageRecieved.sender._id) return;
-      socket.in(chat._id).emit("message recieved", newMessageRecieved);
+  socket.on("new message", (newMessageReceived) => {
+    newMessageReceived.chat.users.forEach((userId) => {
+      if (userId == newMessageReceived.sender._id) return;
+      socket.in(userId).emit("message recieved", newMessageReceived);
     });
   });
 });
