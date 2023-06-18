@@ -9,7 +9,7 @@ import { Stack, Box, Chip, TextField, Button } from "@mui/material";
 import getCurrentUser from "../../utils/getCurrentUser";
 import io from "socket.io-client";
 
-const ENDPOINT = "localhost:5000";
+const ENDPOINT = "localhost:3001";
 var socket, selectedChatCompare;
 
 const ChatBox = () => {
