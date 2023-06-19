@@ -103,3 +103,11 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
     console.log('Error occurred while filtering study sessions:', error);
   }
 };
+
+export const updateStudysession = async (studysessionId, body) => {
+  const response = await axios.put(
+    `${STUDYSESSION_URL}/${studysessionId}`,
+    body
+  );
+  return response.data;
+};

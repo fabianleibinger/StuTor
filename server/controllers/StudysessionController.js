@@ -114,7 +114,9 @@ export const getStudysessionsTutoredBy = async (req, res) => {
       res.status(404).send('Object reference not found!');
       return;
     }
-    const studysessions = await Studysession.find({ tutoredBy: userId });
+    const studysessions = await Studysession.find({
+      tutoredBy: userId
+    }).populate('course');
     try {
       if (studysessions.length === 0) {
         res.status(404).send('No studysessions found!');

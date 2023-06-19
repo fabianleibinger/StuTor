@@ -40,13 +40,15 @@ export default function StudySessionCard({ studySession, onDelete }) {
     onDelete(studySession._id);
   };
 
-  const { isLoading, error, data: relatedCourse } = useQuery(
+  /*const { isLoading, error, data: relatedCourse } = useQuery(
     `getCourse_${studySession._id}`,
     () => getCourse(studySession.course)
   );
 
   if (isLoading) return 'Loading...';
-  if (error) return 'An error has occurred: ' + error.message;
+  if (error) return 'An error has occurred: ' + error.message;*/
+
+  const relatedCourse = studySession.course;
 
   return (
     <Card sx={studySessionCardStyles} raised>
