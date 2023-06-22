@@ -22,6 +22,7 @@ const BookingDialog = ({
   const [hours, setHours] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
   const queryClient = useQueryClient();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const createBooking = useMutation(
     () => createBookingCall(studysession, hours, priceEuro, createdBy),
@@ -36,7 +37,7 @@ const BookingDialog = ({
     }
   );
 
-  const createAccount = useMutation((data) => createAccountCall(data), {
+  const createAccount = useMutation(() => createAccountCall(currentUser._id), {
     onSuccess: () => {
       queryClient.invalidateQueries("payment");
     },
