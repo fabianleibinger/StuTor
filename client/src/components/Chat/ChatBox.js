@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAppContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
@@ -81,6 +81,14 @@ const ChatBox = () => {
     }
   };
 
+  // Scroll to the bottom of the chatbox when messages change.
+  const chatboxRef = useRef(null);
+  useEffect(() => {
+    if (chatboxRef.current) {
+      chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const boxSx = {
     width: 1,
     height: 1,
@@ -97,7 +105,7 @@ const ChatBox = () => {
   if (selectedChat)
     return (
       <Box sx={boxSx}>
-        <Box overflow={"auto"} height={0.88}>
+        <Box ref={chatboxRef} overflow={"auto"} height={0.88}>
           <Stack direction="column" spacing={2} sx={stackSx}>
             {data ? (
               messages.map((message, index) => (
