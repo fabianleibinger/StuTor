@@ -6,6 +6,7 @@ import {
   sendMessage as sendMessageCall,
 } from "../../api/Message";
 import { Stack, Box, Chip, TextField, Button } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 import getCurrentUser from "../../utils/getCurrentUser";
 import io from "socket.io-client";
 
@@ -126,14 +127,13 @@ const ChatBox = () => {
             value={newMessage}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            marginRight={1}
-            fullWidth
+            sx={{ width: 0.8 }}
           />
-          <Button variant="contained" onClick={handleSendClick}>
+          <Button variant="contained" onClick={handleSendClick} endIcon={<SendIcon />} sx={{ marginLeft: 1 }}>
             Send
           </Button>
         </Box>
-      </Box>
+      </Box >
     );
 
   return (
