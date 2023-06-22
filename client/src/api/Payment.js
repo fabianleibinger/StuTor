@@ -26,3 +26,31 @@ export const createAccountCall = async (userId) => {
   }
 }
 
+export const getPaymentInfo = async (userId) => {
+  try {
+    const response = await axios.get(`${PAYMENT_URL}/account/${userId}`)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const createPayment = async (userId, price) => {
+  //console.log("in create payment api")
+  try {
+    console.log("here")
+    const response = await axios.post(`${PAYMENT_URL}/createPayment`, {
+      user: userId,
+      price: price
+    })
+    console.log("URL in API", response.data.url)
+    console.log("Response", response)
+    console.log("test")
+    return response.data.url
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+
+

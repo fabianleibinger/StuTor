@@ -10,7 +10,9 @@ import {
 import { useQueryClient } from "react-query";
 import { useMutation } from "react-query";
 import { createBooking as createBookingCall } from "../../api/Booking.js";
+import { createPayment as createPaymentCall } from "../../api/Payment.js";
 import { createAccountCall } from "../../api/Payment.js";
+import { useNavigate } from 'react-router-dom';
 
 const BookingDialog = ({
   open,
@@ -23,6 +25,18 @@ const BookingDialog = ({
   const [totalAmount, setTotalAmount] = useState(0);
   const queryClient = useQueryClient();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  // hardcoded for now (tutorId for stripe payment)
+  const customerId = "6468f36705853e6071dfec63";
+
+  const navigate = useNavigate();
+
+  // Redirect to Stripe checkout
+  const handleRedirect = (url) => {
+    //const path = new URL(url).pathname
+    window.location.replace(url);
+    //navigate(path);
+  };
 
   const createBooking = useMutation(
     () => createBookingCall(studysession, hours, priceEuro, createdBy),
@@ -37,8 +51,10 @@ const BookingDialog = ({
     }
   );
 
-  const createAccount = useMutation(() => createAccountCall(currentUser._id), {
-    onSuccess: () => {
+  // TODO: replace customerId with currentUser._id
+  const createPayment = useMutation(() => createPaymentCall(customerId, totalAmount), {
+    onSuccess: (url) => {
+      handleRedirect(url);
       queryClient.invalidateQueries("payment");
     },
     onError: (error) => {
@@ -68,9 +84,9 @@ const BookingDialog = ({
     }
   };
 
-  const handleStripeAccount = async () => {
+  const handlePayment = async () => {
     try {
-      await createAccount.mutateAsync();
+      await createPayment.mutateAsync();
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +117,7 @@ const BookingDialog = ({
         <Button
           variant="contained"
           color="secondary"
-          onClick={handleStripeAccount}
+          onClick={handlePayment}
         >
           Set up Stripe payment
         </Button>
