@@ -5,7 +5,7 @@ import {
   getMessagesOfChat,
   sendMessage as sendMessageCall,
 } from "../../api/Message";
-import { Stack, Box, Chip, TextField, Button } from "@mui/material";
+import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import getCurrentUser from "../../utils/getCurrentUser";
 import io from "socket.io-client";
@@ -114,6 +114,9 @@ const ChatBox = () => {
                   direction="row"
                   justifyContent={getCurrentUser()._id === message.sender._id ? "flex-end" : "flex-start"}
                 >
+                  {getCurrentUser()._id !== message.sender._id ? (
+                    <Avatar src={message.sender.profilePicture} sx={{ marginRight: 1 }} />
+                  ) : (null)}
                   <Chip label={message.content} />
                 </Stack>
               ))
