@@ -1,8 +1,32 @@
 import Stripe from 'stripe';
 import Session from 'express-session';
+import Payment from '../models/Payment.js';
 
 const stripe = new Stripe('sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01');
 const session = new Session();
+
+export const createAccount = async (req, res) => {
+  const user = req.body.user;
+  const existingPayment = await Payment.findOne({ user: user });
+  if (!existingPayment) {
+  try {
+  const customer = await stripe.customers.create({
+    email: 'customer@example.com',
+  });
+  console.log(customer.id);
+  const payment = new Payment({
+    user: user,
+    customerId: customer.id,
+  });
+  const account = await payment.save();
+  res.status(200).send(account);
+} catch (err) {
+  res.status(500).send(err);
+}
+  } else {
+    res.status(400).send("User already has a payment account!")
+  }
+}
 
 export const onboardUser = async (req, res) => {
     try {
