@@ -6,7 +6,7 @@ import {
   sendMessage as sendMessageCall,
 } from "../../api/Message";
 import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 import getCurrentUser from "../../utils/getCurrentUser";
 import io from "socket.io-client";
 
@@ -112,12 +112,29 @@ const ChatBox = () => {
                 <Stack
                   key={index}
                   direction="row"
-                  justifyContent={getCurrentUser()._id === message.sender._id ? "flex-end" : "flex-start"}
+                  justifyContent={
+                    getCurrentUser()._id === message.sender._id
+                      ? "flex-end"
+                      : "flex-start"
+                  }
                 >
                   {getCurrentUser()._id !== message.sender._id ? (
-                    <Avatar src={message.sender.profilePicture} sx={{ marginRight: 1 }} />
-                  ) : (null)}
-                  <Chip label={message.content} />
+                    <Avatar
+                      src={message.sender.profilePicture}
+                      sx={{ marginRight: 1 }}
+                    />
+                  ) : null}
+                  <Chip
+                    label={message.content}
+                    sx={{
+                      height: "auto",
+                      padding: 0.75,
+                      "& .MuiChip-label": {
+                        display: "block",
+                        whiteSpace: "normal",
+                      },
+                    }}
+                  />
                 </Stack>
               ))
             ) : (
@@ -140,11 +157,16 @@ const ChatBox = () => {
             onKeyDown={handleKeyDown}
             sx={{ width: 0.8 }}
           />
-          <Button variant="contained" onClick={handleSendClick} endIcon={<SendIcon />} sx={{ marginLeft: 1 }}>
+          <Button
+            variant="contained"
+            onClick={handleSendClick}
+            endIcon={<SendIcon />}
+            sx={{ marginLeft: 1 }}
+          >
             Send
           </Button>
         </Box>
-      </Box >
+      </Box>
     );
 
   return (

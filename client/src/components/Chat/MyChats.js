@@ -71,6 +71,12 @@ const MyChats = () => {
                             <ListItemText
                                 primary={chat.users[0].firstname + ' ' + chat.users[0].lastname + ' - ' + chat.studysession.course.name}
                                 secondary={chat.latest_message?.content}
+                                sx={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    maxWidth: '100%',
+                                  }}
                             />
                         </ListItemButton>
                         {index < data.length - 1 && <Divider />}
