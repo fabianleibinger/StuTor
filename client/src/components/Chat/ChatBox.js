@@ -1,30 +1,77 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAppContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   getMessagesOfChat,
   sendMessage as sendMessageCall,
 } from "../../api/Message";
-import { Stack, Box, Chip, TextField, Button } from "@mui/material";
+import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import getCurrentUser from "../../utils/getCurrentUser";
+import io from "socket.io-client";
+
+const ENDPOINT = "localhost:3001";
+var socket, selectedChatCompare;
 
 const ChatBox = () => {
-  const { selectedChat, newMessage, setNewMessage } = useAppContext();
+  const {
+    selectedChat,
+    messages,
+    setMessages,
+    newMessage,
+    setNewMessage,
+    typing,
+    setTyping,
+    isTyping,
+    setIsTyping,
+    notification,
+    setNotification,
+  } = useAppContext();
+  const [socketConnected, setSocketConnected] = useState(false);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", getCurrentUser());
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  }, []);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageReceived) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
+        if (!notification.includes(newMessageReceived)) {
+          setNotification([...notification, newMessageReceived]);
+        }
+      } else {
+        setMessages([...messages, newMessageReceived]);
+      }
+    });
+  });
 
   const { data } = useQuery(
     ["messagesOfChat", selectedChat?._id],
     () => getMessagesOfChat(selectedChat?._id),
     {
       enabled: Boolean(selectedChat?._id),
+      onSuccess: (data) => {
+        socket.emit("join chat", selectedChat._id);
+        selectedChatCompare = selectedChat;
+        setMessages(data);
+      },
     }
   );
 
   const sendMessage = useMutation(
-    () =>
-      sendMessageCall(getCurrentUser()._id, newMessage, selectedChat._id),
+    () => sendMessageCall(getCurrentUser()._id, newMessage, selectedChat._id),
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        setMessages([...messages, data]);
+        socket.emit("new message", data);
         queryClient.invalidateQueries("messagesOfChat");
         queryClient.invalidateQueries("chatsOfUser");
       },
@@ -36,10 +83,26 @@ const ChatBox = () => {
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
+    if (!socketConnected) return;
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
   const handleSendClick = async () => {
     await sendMessage.mutateAsync();
+    socket.emit("stop typing", selectedChat._id);
     setNewMessage("");
   };
 
@@ -48,6 +111,14 @@ const ChatBox = () => {
       handleSendClick();
     }
   };
+
+  // Scroll to the bottom of the chatbox when messages change.
+  const chatboxRef = useRef(null);
+  useEffect(() => {
+    if (chatboxRef.current) {
+      chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const boxSx = {
     width: 1,
@@ -65,16 +136,36 @@ const ChatBox = () => {
   if (selectedChat)
     return (
       <Box sx={boxSx}>
-        <Box overflow={"auto"} height={0.88}>
+        <Box ref={chatboxRef} overflow={"auto"} height={0.88}>
           <Stack direction="column" spacing={2} sx={stackSx}>
             {data ? (
-              data.map((message, index) => (
+              messages.map((message, index) => (
                 <Stack
                   key={index}
                   direction="row"
-                  justifyContent={index % 2 === 0 ? "flex-end" : "flex-start"}
+                  justifyContent={
+                    getCurrentUser()._id === message.sender._id
+                      ? "flex-end"
+                      : "flex-start"
+                  }
                 >
-                  <Chip label={message.content} />
+                  {getCurrentUser()._id !== message.sender._id ? (
+                    <Avatar
+                      src={message.sender.profilePicture}
+                      sx={{ marginRight: 1 }}
+                    />
+                  ) : null}
+                  <Chip
+                    label={message.content}
+                    sx={{
+                      height: "auto",
+                      padding: 0.75,
+                      "& .MuiChip-label": {
+                        display: "block",
+                        whiteSpace: "normal",
+                      },
+                    }}
+                  />
                 </Stack>
               ))
             ) : (
@@ -91,14 +182,18 @@ const ChatBox = () => {
           }}
         >
           <TextField
-            label="Message"
+            label={isTyping ? "Typing..." : "Message"}
             value={newMessage}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            marginRight={1}
-            fullWidth
+            sx={{ width: 0.8 }}
           />
-          <Button variant="contained" onClick={handleSendClick}>
+          <Button
+            variant="contained"
+            onClick={handleSendClick}
+            endIcon={<SendIcon />}
+            sx={{ marginLeft: 1 }}
+          >
             Send
           </Button>
         </Box>

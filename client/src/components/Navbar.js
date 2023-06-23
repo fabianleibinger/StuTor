@@ -10,8 +10,10 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  Badge
 } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { useAppContext } from "../context/ChatProvider";
 import newRequest from "../utils/newRequest";
 
 const RootAppBar = styled(AppBar)(({ theme }) => ({
@@ -51,6 +53,7 @@ const AvatarIconButton = styled(IconButton)(({ theme }) => ({
 const Navbar = () => {
   const [active, setActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { notification, setNotification } = useAppContext();
   const anchorElRef = useRef(null);
 
   const isActive = () => {
@@ -100,7 +103,16 @@ const Navbar = () => {
         <LinksContainer>
           <StyledLink to="/search-sessions">Search Sessions</StyledLink>
           <StyledLink to="/MyStudySessions">My Study Sessions</StyledLink>
-          <StyledLink to="/my-chats">My Chats</StyledLink>
+          {notification.length === 0 ? (
+            <StyledLink to="/my-chats">My Chats</StyledLink>
+          ) : (
+            <Badge badgeContent={notification.length} color="primary">
+              <StyledLink to="/my-chats" onClick={() => {
+                setNotification([])
+              }}>My Chats</StyledLink>
+            </Badge>
+          )}
+
           {!currentUser?.isSeller && (
             <StyledLink to="/about-us">About Us</StyledLink>
           )}
