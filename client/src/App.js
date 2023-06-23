@@ -1,7 +1,7 @@
 import React from "react";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.js";
 import Navbar from "./components/Navbar.js";
 import Login from "./pages/Login.js";
@@ -10,7 +10,6 @@ import ChatPage from './pages/ChatPage';
 import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
 import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js"
 import UserProfile from "./pages/UserProfile.js"
-import RegisterStripe from "./components/Payment/RegisterStripe.js";
 
 const theme = createTheme({
   palette: {
@@ -28,31 +27,58 @@ function App() {
     return (
       <div style={{ marginTop: "200px" }}>
         <Navbar />
+        <Outlet />
       </div>
     );
   };
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/register",
+          element: <Register />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/my-chats",
+          element: <ChatPage />,
+        },
+        {
+          path: "/userProfile",
+          element: <UserProfile />,
+        },
+        {
+          path: "/MyStudySessions",
+          element: <MyStudySessions />,
+        },
+        { 
+          path: "/StudysessionDetailsPage/:studySessionId",
+          element: <StudysessionDetailsPage />,
+        }
+      ],
+    },
+  ]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
-          <Layout />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/setUpStripe" element={<RegisterStripe />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/my-chats" element={<ChatPage />} />
-            <Route path="/userProfile" element={<UserProfile />} />
-            <Route path="/MyStudySessions" element={<MyStudySessions />} />
-            <Route path="/StudysessionDetailsPage/:studySessionId" element={<StudysessionDetailsPage />} />
-          </Routes>
-        </BrowserRouter>
+        <RouterProvider router={router}>
+          <Outlet />
+        </RouterProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
 }
 
 export default App;
-
