@@ -98,4 +98,13 @@ io.on("connection", (socket) => {
       socket.in(userId).emit("message recieved", newMessageReceived);
     });
   });
+
+  socket.on("typing", (chat) => {
+    socket.in(chat).emit("typing");
+  });
+
+  socket.on("stop typing", (chat) => {
+    socket.in(chat).emit("stop typing");
+  });
+
 });

@@ -14,15 +14,26 @@ const ENDPOINT = "localhost:3001";
 var socket, selectedChatCompare;
 
 const ChatBox = () => {
-  const { selectedChat, messages, setMessages, newMessage, setNewMessage } =
-    useAppContext();
+  const {
+    selectedChat,
+    messages,
+    setMessages,
+    newMessage,
+    setNewMessage,
+    typing,
+    setTyping,
+    isTyping,
+    setIsTyping,
+  } = useAppContext();
   const [socketConnected, setSocketConnected] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", getCurrentUser());
-    socket.on("connection", () => setSocketConnected(true));
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
   }, []);
 
   useEffect(() => {
@@ -68,10 +79,26 @@ const ChatBox = () => {
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
+    if (!socketConnected) return;
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
   const handleSendClick = async () => {
     await sendMessage.mutateAsync();
+    socket.emit("stop typing", selectedChat._id);
     setNewMessage("");
   };
 
@@ -151,7 +178,7 @@ const ChatBox = () => {
           }}
         >
           <TextField
-            label="Message"
+            label={isTyping ? "Typing..." : "Message"}
             value={newMessage}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}

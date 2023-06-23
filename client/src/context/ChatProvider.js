@@ -6,8 +6,9 @@ const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState();
   const [newMessage, setNewMessage] = useState();
   const [messages, setMessages] = useState([]);
-  const [notification, setNotification] = useState([]);
-  const [chats, setChats] = useState();
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [notification, setNotification] = useState();
 
   return (
     <ChatContext.Provider
@@ -18,10 +19,12 @@ const ChatProvider = ({ children }) => {
         setNewMessage,
         messages,
         setMessages,
+        typing,
+        setTyping,
+        isTyping,
+        setIsTyping,
         notification,
         setNotification,
-        chats,
-        setChats,
       }}
     >
       {children}
