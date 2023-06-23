@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 import CreateStudySessionForm from '../Forms/CreateStudySessionForm';
+import { minHeight } from '@mui/system';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -16,6 +17,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
   '& .MuiDialogActions-root': {
     padding: theme.spacing(1)
+  },
+  '& .MuiPaper-root': {
+    maxWidth: '600px',
+    minWidth: '45vw',
+    minHeight: '50vh',
+    maxHeight: '55vh'
   }
 }));
 
@@ -64,12 +71,16 @@ export default function AddStudySessionDialog({ children }) {
         variant="contained"
         onClick={handleClickOpen}
         sx={{
-          backgroundColor: 'white',
-          color: 'primary.main',
-          m: 'auto'
+          background: '#1c4bb0',
+          border: '1px solid #999999',
+          borderRadius: '1000px',
+          padding: '15px 30px',
+          color: '#eeeeee',
+          display: 'inline-block',
+          textAlign: 'center'
         }}
       >
-        Add new Study Session
+        + Add new Study Session
       </Button>
       <BootstrapDialog
         onClose={handleClose}
@@ -80,7 +91,12 @@ export default function AddStudySessionDialog({ children }) {
           Add new Study Session
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <CreateStudySessionForm handleClose={handleClose} />
+          <CreateStudySessionForm
+            handleClose={handleClose}
+            oldStudySession={null}
+            usage="CREATE"
+            course={null}
+          />
         </DialogContent>
       </BootstrapDialog>
     </div>

@@ -9,94 +9,142 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import { Delete } from '@mui/icons-material/';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import studySessionCardStyles from './StudySessionCardStyles';
+import PricePerHourCircle from './PricePerHourCircle';
+import ActionButton from './ActionButton';
 
-import Scrollbars from 'react-scrollbars-custom';
 import { styled } from '@mui/system';
 //api
-import { getCourse } from '../../api/Course';
 
 // context
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-
-const handleChangeDate = ({ studySession }) => {
-  const createdAt = new Date(studySession.createdAt);
-  const timeAgo = formatDistanceToNow(createdAt, { addSuffix: true });
-  const titleText = `Created ${timeAgo}`;
-  return titleText;
-};
+import { Box } from '@mui/material';
 
 const ScrollableCardContent = styled(CardContent)({
   maxHeight: '20vh',
   overflow: 'auto'
 });
 
-export default function StudySessionCard({ studySession, onDelete }) {
+export default function StudySessionCard({
+  tutorFirstName,
+  tutorLastName,
+  studySession,
+  onDelete,
+  role,
+  onItemClick,
+  details,
+  addStudySessionComponent
+}) {
   const handleDeleteClick = () => {
     onDelete(studySession._id);
   };
 
-  /*const { isLoading, error, data: relatedCourse } = useQuery(
-    `getCourse_${studySession._id}`,
-    () => getCourse(studySession.course)
-  );
-
-  if (isLoading) return 'Loading...';
-  if (error) return 'An error has occurred: ' + error.message;*/
-
-  const relatedCourse = studySession.course;
-
   return (
     <Card sx={studySessionCardStyles} raised>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: blue[500] }} aria-label="recipe">
-            PP
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings" onClick={handleDeleteClick}>
-            <Delete />
-          </IconButton>
-        }
-        title={
-          relatedCourse && relatedCourse.name
-            ? relatedCourse.name
-            : 'Loading...'
-        }
-        //subheader={handleChangeDate({ studySession })}
-      />
+      <Box
+        display="flex"
+        alignItems="center"
+        sx={{
+          ml: 1,
+          mt: 1,
+          alignItems: 'left',
+          textAlign: 'left',
+          flexDirection: 'row'
+        }}
+      >
+        <Avatar sx={{ width: 64, height: 64 }} aria-label="recipe">
+          PP
+        </Avatar>
+        <Typography
+          variant="h8"
+          component="div"
+          sx={{ ml: 2, display: 'flex', alignItems: 'center' }}
+        >
+          {tutorFirstName} <br /> {tutorLastName}
+        </Typography>
+      </Box>
 
       <ScrollableCardContent>
-        <Typography sx={{ mb: 5 }}>
-          <strong>Description: </strong> {studySession.description}
-        </Typography>
-        <Typography>
-          <strong>University: </strong> {studySession.university}
-        </Typography>
-        <Typography>
-          <strong>Costs (€): </strong> {studySession.pricePerHourEuro}
-        </Typography>
-        <Typography>
-          <strong>Languages: </strong>
-          {studySession.languages.join(', ')}
-        </Typography>
+        {details && studySession ? (
+          <Box
+            onClick={onItemClick}
+            sx={{
+              '&:hover': {
+                color: 'gray',
+                cursor: 'pointer'
+              },
+              alignItems: 'left',
+              textAlign: 'left'
+            }}
+          >
+            <Typography fontWeight="bold">
+              {studySession.course.name}
+            </Typography>
+            <Typography sx={{ mb: 2 }}>
+              Prof. {studySession.course.professor}
+            </Typography>
+            <Typography sx={{ mb: 2, wordWrap: 'break-word' }}>
+              <strong>Description: </strong>
+              <br />{' '}
+              {studySession.description.length > 100
+                ? studySession.description.slice(0, 100) + '...'
+                : studySession.description}
+            </Typography>
+            <Typography>
+              <strong>Languages: </strong> <br />
+              {studySession.languages.join(', ')}
+            </Typography>
+          </Box>
+        ) : (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
+            sx={{ mt: 3 }}
+          >
+            {addStudySessionComponent}
+          </Box>
+        )}
       </ScrollableCardContent>
       <CardActions
         sx={{
           mt: 'auto'
         }}
       >
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            mr: 5
+          }}
+        >
+          {studySession && (
+            <PricePerHourCircle price={studySession.pricePerHourEuro} />
+          )}
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            marginTop: 'auto',
+            gap: '10px'
+          }}
+        >
+          {details && (
+            <>
+              {role === 'TUTOR' && (
+                <ActionButton
+                  text="Delete"
+                  onClickListener={handleDeleteClick}
+                />
+              )}
+              <ActionButton text="Details" onClickListener={onItemClick} />
+            </>
+          )}
+        </Box>
       </CardActions>
     </Card>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import UpdateStudySessionForm from '../Forms/UpdateStudySessionForm';
+import CreateStudySessionForm from '../Forms/CreateStudySessionForm';
 
 import {
   Dialog,
@@ -20,12 +21,13 @@ export default function UpdateStudySessionDialog({
         {selectedStudySession.course.name || 'Loading...'}
       </DialogTitle>
       <DialogContent>
-        <UpdateStudySessionForm
-          studySession={selectedStudySession}
-          onClose={onUpdateDialogClose}
+        <CreateStudySessionForm
+          oldStudySession={selectedStudySession}
+          handleClose={onUpdateDialogClose}
+          usage="UPDATE"
         />
       </DialogContent>
-      <DialogActions>{/* Dialog actions here */}</DialogActions>}
+      <DialogActions>{/* Dialog actions here */}</DialogActions>
     </Dialog>
   );
 }

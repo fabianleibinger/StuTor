@@ -3,11 +3,8 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { Delete } from '@mui/icons-material/';
-import { styled } from '@mui/system';
 
 import studySessionCardStyles from './StudySessionCardStyles';
 
@@ -25,8 +22,8 @@ export default function AddStudySessionCard({ children }) {
       />
       <CardContent
         sx={{
-          maxHeight: '20vh',
-          overflow: 'auto'
+          overflow: 'auto',
+          mt: 3
         }}
       >
         <Box textAlign="center">{children}</Box>

@@ -104,10 +104,11 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
   }
 };
 
-export const updateStudysession = async (studysessionId, body) => {
+export const updateStudysession = async newStudySession => {
+  console.log('body', newStudySession);
   const response = await axios.put(
-    `${STUDYSESSION_URL}/${studysessionId}`,
-    body
+    `${STUDYSESSION_URL}/${newStudySession._id}`,
+    newStudySession
   );
   return response.data;
 };

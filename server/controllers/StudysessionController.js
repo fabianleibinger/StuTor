@@ -116,7 +116,9 @@ export const getStudysessionsTutoredBy = async (req, res) => {
     }
     const studysessions = await Studysession.find({
       tutoredBy: userId
-    }).populate('course');
+    })
+      .populate('course')
+      .populate('tutoredBy');
     try {
       if (studysessions.length === 0) {
         res.status(404).send('No studysessions found!');
@@ -193,7 +195,7 @@ export const updateStudysession = async (req, res) => {
     const userId = new ObjectId(req.body.tutoredBy);
     const user = await User.findById(userId);
     if (!course || !user) {
-      res.status(404).send('Object reference not found!');
+      res.status(404).send('Course reference not found!');
       return;
     }
     // Update studysession.

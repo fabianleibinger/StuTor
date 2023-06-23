@@ -16,7 +16,7 @@ const StudentMyStudySessions = () => {
   const queryClient = useQueryClient();
 
   // fetch data
-  const { isLoading, error, data } = useQuery(['StudentStudysessions'], () =>
+  const { isLoading, error, data } = useQuery(['StudentMyStudysessions'], () =>
     getChatsOfUser(userId)
   );
 
