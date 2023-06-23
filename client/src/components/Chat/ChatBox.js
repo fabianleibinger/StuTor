@@ -24,6 +24,8 @@ const ChatBox = () => {
     setTyping,
     isTyping,
     setIsTyping,
+    notification,
+    setNotification,
   } = useAppContext();
   const [socketConnected, setSocketConnected] = useState(false);
   const queryClient = useQueryClient();
@@ -42,7 +44,9 @@ const ChatBox = () => {
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
-        // TODO: Notification.
+        if (!notification.includes(newMessageReceived)) {
+          setNotification([...notification, newMessageReceived]);
+        }
       } else {
         setMessages([...messages, newMessageReceived]);
       }
