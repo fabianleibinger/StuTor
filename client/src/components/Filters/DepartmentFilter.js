@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { MenuItem, Select, IconButton } from '@mui/material';
+import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 
 const DepartmentFilter = forwardRef(({ handleDepartmentChange }, ref) => {
@@ -22,20 +22,24 @@ const DepartmentFilter = forwardRef(({ handleDepartmentChange }, ref) => {
 
   return (
     <div>
-      <Select
-        ref={ref}
-        onChange={selectedDepartment}
-        displayEmpty
-        value={department}
-        renderValue={selected => selected || 'Department'}
-      >
-        <MenuItem value="" disabled>
-          <em>Department</em>
-        </MenuItem>
-        <MenuItem value={'Informatics'}>Informatics</MenuItem>
-        <MenuItem value={'Physics'}>Physics</MenuItem>
-        <MenuItem value={'Other'}>Other</MenuItem>
-      </Select>
+      <FormControl sx={{ minWidth: '140px', maxWidth: 'sm' }}>
+        <InputLabel sx={{ color: 'black' }}> Department </InputLabel>
+        <Select
+          ref={ref}
+          onChange={selectedDepartment}
+          displayEmpty
+          value={department}
+          renderValue={selected => selected}
+          sx={{ height: '40px' }}
+        >
+          <MenuItem value="" disabled>
+            <em>Department</em>
+          </MenuItem>
+          <MenuItem value={'Informatics'}>Informatics</MenuItem>
+          <MenuItem value={'Physics'}>Physics</MenuItem>
+          <MenuItem value={'Other'}>Other</MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 });

@@ -6,7 +6,6 @@ import LanguageFilter from '../components/Filters/LanguageFilter';
 import LanguageSelection from '../components/Filters/LanguageSelection';
 
 import { Box, Button, Grid, Typography } from '@mui/material';
-import ClearIcon from '@mui/icons-material/Clear';
 import { styled } from '@mui/system';
 
 import { useState } from 'react';
@@ -15,8 +14,6 @@ import { useQuery } from 'react-query';
 import { getStudysessionFiltered } from '../api/StudySession';
 import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
 import useDebounce from '../hooks/useDebounce';
-import { left } from '@popperjs/core';
-import { Clear } from '@mui/icons-material';
 
 const ScrollableContainer = styled('div')({
   maxHeight: '70vh',
@@ -24,6 +21,7 @@ const ScrollableContainer = styled('div')({
 });
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
+  const userRole = 'STUDENT';
   // error is not thrown just loading???
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -45,6 +43,12 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
               <StudySessionCard
                 studySession={studySession}
                 onDelete={() => {}}
+                tutorFirstName={studySession.tutoredBy.firstname}
+                tutorLastName={studySession.tutoredBy.lastname}
+                role={userRole}
+                onItemClick={() => {}}
+                details={true}
+                addStudySessionComponent={null}
               />
             </Grid>
           ))}
@@ -82,6 +86,20 @@ export default function StudySessionSearch() {
     }
   };
 
+  const clearLanguages = () => {
+    handleLanguageChange([]);
+    if (languageSelectRef.current) {
+      languageSelectRef.current.clearSelection();
+    }
+  };
+
+  const clearDepartment = () => {
+    handleDepartmentChange('');
+    if (departmentSelectRef.current) {
+      departmentSelectRef.current.clearSelection();
+    }
+  };
+
   const handleLanguageChange = value => {
     setSelectedLanguages(value);
   };
@@ -90,14 +108,15 @@ export default function StudySessionSearch() {
     setSelectedDepartment(value);
   };
 
+  const queryKey = {
+    searchTerm: debouncedSearchTerm,
+    maxPrice: maxPrice,
+    languages: selectedLanguages,
+    department: selectedDepartment
+  };
+
   const { data, error, isLoading } = useQuery(
-    [
-      'StudySessionSearch',
-      debouncedSearchTerm,
-      maxPrice,
-      selectedLanguages,
-      selectedDepartment
-    ],
+    ['StudySessionSearch', queryKey],
     () =>
       getStudysessionFiltered(debouncedSearchTerm, {
         maxPrice: maxPrice,
@@ -165,7 +184,7 @@ export default function StudySessionSearch() {
             display: 'flex',
             gap: '3px',
             maxHeight: '60px',
-            mt: 2
+            mt: 1
           }}
         >
           <Box
@@ -185,7 +204,7 @@ export default function StudySessionSearch() {
             />
           </Box>
           <Box>
-            <ClearButton variant="outlined" onClick={clearMaxPrice}>
+            <ClearButton variant="outlined" onClick={clearLanguages}>
               Clear
             </ClearButton>
             <LanguageFilter
@@ -194,7 +213,7 @@ export default function StudySessionSearch() {
             />
           </Box>
           <Box>
-            <ClearButton variant="outlined" onClick={clearMaxPrice}>
+            <ClearButton variant="outlined" onClick={clearDepartment}>
               Clear
             </ClearButton>
             <DepartmentFilter
@@ -202,9 +221,6 @@ export default function StudySessionSearch() {
               ref={departmentSelectRef}
             />
           </Box>
-          <Button variant="outlined" onClick={clearFilters}>
-            Clear Filters
-          </Button>
         </Box>
         <Box
           p={2}

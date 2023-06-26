@@ -166,24 +166,48 @@ export const getStudysessionsOfStudent = async (req, res) => {
 export const getStudysessionsFiltered = async (req, res) => {
   try {
     const searchString = req.query.searchTerm;
-    const tutoredByIds = req.query.tutoredByIds;
-    const pricePerHour = req.query.pricePerHour;
+    const maxPrice = req.query.maxPrice;
+    const languages = req.query.languages;
+    const languageArray = languages.split(',');
     const department = req.query.department;
 
-    const studysessions = await Studysession.find({
-      $or: [
-        { name: { $regex: searchString, $options: 'i' } },
-        { external_identifier: { $regex: searchString, $options: 'i' } }
-      ]
-    });
+    let query = Studysession.find()
+      .populate('course')
+      .populate('tutoredBy');
 
-    if (courses.length === 0) {
-      res.status(404).send('No courses found!');
+    if (maxPrice !== '') {
+      query = query.where('pricePerHourEuro').lte(maxPrice);
+    }
+    if (languages.length > 0) {
+      query = query.where('languages').in(languageArray);
+    }
+
+    const studysessions = await query.exec();
+
+    const filteredSessions = studysessions.filter(
+      session =>
+        (session.course.name
+          .toLowerCase()
+          .includes(searchString.toLowerCase()) ||
+          session.course.external_identifier
+            .toLowerCase()
+            .includes(searchString.toLowerCase()) ||
+          session.tutoredBy.firstname
+            .toLowerCase()
+            .includes(searchString.toLowerCase()) ||
+          session.tutoredBy.lastname
+            .toLowerCase()
+            .includes(searchString.toLowerCase())) &&
+        (session.course.department === department || department === '')
+    );
+
+    if (filteredSessions.length === 0) {
+      res.status(404).send('No StudySession found!');
     } else {
-      res.status(200).send(courses);
+      res.status(200).send(filteredSessions);
     }
   } catch (err) {
-    res.status(500).send('Failed to retrieve courses!');
+    res.status(500).send('Failed to retrieve Studysession!');
   }
 };
 

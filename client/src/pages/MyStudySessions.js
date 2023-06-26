@@ -16,17 +16,19 @@ import {
   getStudysessionsTutoredByUser,
   deleteStudysession
 } from '../api/StudySession';
+import { getChatsOfUser } from '../api/Chat';
 
 const MyStudySessions = () => {
   const queryClient = useQueryClient();
   // use a real user
-  const tutorId = '6468f36705853e6071dfec63';
+  const userId = '6468f36705853e6071dfec63';
   const tutorFirstName = 'Herbert';
   const tutorLastName = 'theHerber';
-  const [role, setRole] = useState('STUDENT');
+  const [role, setRole] = useState('TUTOR');
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStudySession, setSelectedStudySession] = useState(null);
+  const [chats, setChats] = useState([]);
 
   const handleRoleSwitchClick = role => {
     // update role in the user
@@ -41,14 +43,30 @@ const MyStudySessions = () => {
   });
 
   // fetch data
-  const { isLoading, error, data } = useQuery(['studySessions'], () =>
-    getStudysessionsTutoredByUser(tutorId)
+  // fetch data
+  const { isLoading, error, data } = useQuery(
+    role === 'TUTOR' ? ['studySessions'] : ['StudentMyStudysessions'],
+    () => {
+      if (role === 'TUTOR') {
+        return getStudysessionsTutoredByUser(userId);
+      } else {
+        return getChatsOfUser(userId);
+      }
+    }
   );
 
   if (isLoading) return 'Loading...';
   if (error) return 'An error has occurred: ' + error.message;
-  const studySessions = data;
-
+  const studySessions =
+    role === 'TUTOR'
+      ? data
+      : Array.from(
+          new Set(
+            data
+              .map(chat => chat.studysession)
+              .filter(session => session !== null)
+          )
+        );
   // I actually dk for what this is
   const handleDeleteStudySession = async studySessionId => {
     await deleteStudySessionMutation.mutateAsync(studySessionId);
@@ -121,7 +139,7 @@ const MyStudySessions = () => {
       >
         <Grid
           container
-          spacing={2}
+          spacing={1}
           sx={{ height: '100%', alignItems: 'top-left' }}
         >
           {studySessions &&
@@ -131,6 +149,7 @@ const MyStudySessions = () => {
                 xs={12}
                 sm={6}
                 md={4}
+                lg={3}
                 key={studySession._id}
                 sx={{ alignItems: 'center' }}
               >
@@ -147,7 +166,7 @@ const MyStudySessions = () => {
               </Grid>
             ))}
           {role === 'TUTOR' && (
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
               <StudySessionCard
                 studySession={null}
                 onDelete={() => {}}

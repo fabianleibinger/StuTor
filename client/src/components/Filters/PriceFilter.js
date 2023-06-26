@@ -28,8 +28,18 @@ const PriceFilter = forwardRef(({ handleMaxPriceChange }, ref) => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: '120px', maxWidth: 'sm' }}>
-        <InputLabel sx={{ color: 'black' }}> Max Price </InputLabel>
+      <FormControl
+        sx={{
+          minWidth: '120px',
+          maxWidth: 'sm',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <InputLabel sx={{ color: 'black', textAlign: 'center' }}>
+          Max Price
+        </InputLabel>
 
         <Select
           ref={ref}
@@ -37,6 +47,12 @@ const PriceFilter = forwardRef(({ handleMaxPriceChange }, ref) => {
           displayEmpty
           value={maxPrice}
           renderValue={selected => selected}
+          sx={{
+            alignItems: 'center',
+            height: '35px',
+            width: '120px',
+            p: '3px'
+          }}
         >
           <MenuItem value="" disabled>
             Max Price

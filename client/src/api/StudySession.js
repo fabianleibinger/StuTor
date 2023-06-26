@@ -30,6 +30,27 @@ export const getStudysessionsForCourse = async courseId => {
 };
 
 export const getStudysessionFiltered = async (searchTerm, filters) => {
+  const { maxPrice, languages, department } = filters;
+  let url = `${STUDYSESSION_URL}/search?searchTerm=${searchTerm}`;
+
+  // Add the optional parameters if they have non-empty values
+  url += `&maxPrice=${maxPrice}`;
+  url += `&languages=${languages}`;
+  url += `&department=${department}`;
+
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.log('Response Status:', error.response.status);
+      console.log('Response Data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+export const getStudysessionFiltered1 = async (searchTerm, filters) => {
   try {
     // get all courses with the name or external identifier
     const courses = await getCoursesFilteredBySearchString(searchTerm);

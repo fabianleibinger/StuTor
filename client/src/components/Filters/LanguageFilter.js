@@ -1,17 +1,15 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
 import {
-  Box,
   FormGroup,
   FormControl,
-  InputLabel,
   FormControlLabel,
   Checkbox,
-  Button,
   MenuItem,
+  InputLabel,
   Select,
-  Stack,
-  IconButton
+  IconButton,
+  Stack
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -76,7 +74,8 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
 
   return (
     <div>
-      <FormControl sx={{ width: '200px' }}>
+      <FormControl sx={{ width: '180px' }}>
+        <InputLabel sx={{ color: 'black' }}> Languages</InputLabel>
         <Select
           open={menuOpen}
           onClose={handleMenuClose}
@@ -84,7 +83,25 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
           value={selectedItems}
           multiple
           displayEmpty
-          renderValue={() => 'Languages'}
+          renderValue={() => {
+            if (selectedItems.length > 0) {
+              return (
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <CheckIcon sx={{ color: 'green' }} />
+                  {selectedItems.length} selected
+                </Stack>
+              );
+            }
+          }}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 200,
+                width: 250
+              }
+            }
+          }}
+          sx={{ height: '40px' }}
         >
           <FormGroup>
             {Object.keys(LanguagesEnum).map(key => (
@@ -101,16 +118,6 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
                 />
               </MenuItem>
             ))}
-            <MenuItem>
-              <IconButton
-                onClick={handleMenuClose}
-                size="small"
-                aria-label="confirm"
-                color="primary"
-              >
-                <CheckIcon /> Confirm
-              </IconButton>
-            </MenuItem>
           </FormGroup>
         </Select>
       </FormControl>
