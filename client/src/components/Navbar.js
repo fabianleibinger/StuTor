@@ -13,7 +13,7 @@ import {
   Badge
 } from "@mui/material";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { useAppContext } from "../context/ChatProvider";
+import { useChatContext } from "../context/ChatProvider";
 import newRequest from "../utils/newRequest";
 
 const RootAppBar = styled(AppBar)(({ theme }) => ({
@@ -53,7 +53,7 @@ const AvatarIconButton = styled(IconButton)(({ theme }) => ({
 const Navbar = () => {
   const [active, setActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { notification, setNotification } = useAppContext();
+  const { notification, setNotification } = useChatContext();
   const anchorElRef = useRef(null);
 
   const isActive = () => {

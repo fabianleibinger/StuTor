@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useAppContext } from "../../context/ChatProvider";
+import { useChatContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   getMessagesOfChat,
@@ -8,10 +8,10 @@ import {
 import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import getCurrentUser from "../../utils/getCurrentUser";
-import io from "socket.io-client";
+import socket from "../../utils/Socket";
+import { useSocketContext } from "../../context/SocketContext";
 
-const ENDPOINT = "localhost:3001";
-var socket, selectedChatCompare;
+var selectedChatCompare;
 
 const ChatBox = () => {
   const {
@@ -26,14 +26,11 @@ const ChatBox = () => {
     setIsTyping,
     notification,
     setNotification,
-  } = useAppContext();
-  const [socketConnected, setSocketConnected] = useState(false);
+  } = useChatContext();
+  const { socketConnected } = useSocketContext();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("setup", getCurrentUser());
-    socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
   }, []);

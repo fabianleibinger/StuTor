@@ -12,11 +12,11 @@ import {
   Avatar,
   ListItemText,
 } from "@mui/material";
-import { useAppContext } from "../../context/ChatProvider";
+import { useChatContext } from "../../context/ChatProvider";
 import getCurrentUser from "../../utils/getCurrentUser";
 
 const MyChats = () => {
-  const { selectedChat, setSelectedChat, isTyping } = useAppContext();
+  const { selectedChat, setSelectedChat, isTyping } = useChatContext();
 
   const { isLoading, error, data } = useQuery(["chatsOfUser"], () =>
     getChatsOfUser(getCurrentUser()._id)

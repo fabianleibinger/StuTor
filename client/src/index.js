@@ -1,12 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import '@mui/material/styles';
-import { ChatProvider } from './context/ChatProvider';
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import "@mui/material/styles";
+import { ChatProvider } from "./context/ChatProvider";
+import { SocketProvider } from "./context/SocketContext";
 
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Socket } from "./utils/Socket";
 
 const queryClient = new QueryClient();
 
@@ -15,12 +16,14 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ChatProvider>
-        <App />
+        <SocketProvider>
+          <Socket />
+          <App />
+        </SocketProvider>
       </ChatProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
