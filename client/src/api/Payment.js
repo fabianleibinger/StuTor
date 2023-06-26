@@ -5,33 +5,25 @@ const PAYMENT_URL = `${BASE_URL}/payment`
 
 
 export const createAccountCall = async (userId) => {
-  try {
-  //const response = await axios.post(`${PAYMENT_URL}/onboardUser`)
-  //return response.data
-  //const userId = "6468f36705853e6071dfec63"
-  //body is probably not defined correctly
-  fetch(`${PAYMENT_URL}/account`, {
-    method: 'POST',
-    mode: 'no-cors', // 'cors' by default
-    body: {
-      user: userId
-    },
-  })
-  .then(function(response) {
-    console.log("onBoardUser response", response)
-    return response.data;
-  });
-  } catch (error) {
-    console.log(error)
-  }
+  
+  const response = await axios.post(`${PAYMENT_URL}/createAccount/${userId}`)
+  return response.data.url
 }
 
 export const getPaymentInfo = async (userId) => {
   try {
+  console.log("in get payment info api")
     const response = await axios.get(`${PAYMENT_URL}/account/${userId}`)
+    console.log("response", response)
+    
     return response.data
   } catch (error) {
-    console.log(error)
+    if (error.response.status == 400) {
+      console.log("User has no payment account!")
+      return []
+    }
+    console.log("in catch error")
+    throw error
   }
 }
 

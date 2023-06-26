@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import newRequest from "../utils/newRequest";
+import RegisterStripe from "../components/Payment/RegisterStripe";
 
 const UserProfile = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -125,6 +126,7 @@ const UserProfile = () => {
           </Button>
         </form>
       </Container>
+      <RegisterStripe />
     </div>
   );
 };

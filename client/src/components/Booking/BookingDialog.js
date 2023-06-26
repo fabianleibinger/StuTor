@@ -11,7 +11,6 @@ import { useQueryClient } from "react-query";
 import { useMutation } from "react-query";
 import { createBooking as createBookingCall } from "../../api/Booking.js";
 import { createPayment as createPaymentCall } from "../../api/Payment.js";
-import { createAccountCall } from "../../api/Payment.js";
 import { useNavigate } from 'react-router-dom';
 
 const BookingDialog = ({
