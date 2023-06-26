@@ -81,30 +81,34 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
 
-  socket.on("setup", (userData) => {
-    socket.join(userData?._id);
-    console.log(userData?._id + " connected");
+  socket.on("setup", (userId) => {
+    socket.join(userId);
+    console.log(userId + " connected");
     socket.emit("connected");
   });
 
-  socket.on("join chat", (chat) => {
-    socket.join(chat);
-    console.log("User joined chat " + chat);
+  socket.on("join chat", (chatId) => {
+    socket.join(chatId);
+    console.log("User joined chat " + chatId);
   });
 
   socket.on("new message", (newMessageReceived) => {
     newMessageReceived.chat.users.forEach((userId) => {
       if (userId == newMessageReceived.sender._id) return;
-      socket.in(userId).emit("message recieved", newMessageReceived);
+      socket.in(userId).emit("message received", newMessageReceived);
     });
   });
 
   socket.on("typing", (chat) => {
-    socket.in(chat).emit("typing");
+    chat.users.forEach((user) => {
+      socket.in(user._id).emit("typing");
+    });
   });
 
   socket.on("stop typing", (chat) => {
-    socket.in(chat).emit("stop typing");
+    chat.users.forEach((user) => {
+      socket.in(user._id).emit("stop typing");
+    });
   });
 
 });

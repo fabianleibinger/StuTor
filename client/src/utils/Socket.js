@@ -10,7 +10,7 @@ export const Socket = () => {
   const { setSocketConnected } = useSocketContext();
 
   useEffect(() => {
-    socket.emit("setup", getCurrentUser());
+    socket.emit("setup", getCurrentUser()._id);
     socket.on("connected", () => setSocketConnected(true));
   }, []);
 };

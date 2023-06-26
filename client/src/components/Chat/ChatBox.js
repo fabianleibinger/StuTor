@@ -36,7 +36,8 @@ const ChatBox = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("message recieved", (newMessageReceived) => {
+    socket.on("message received", (newMessageReceived) => {
+      queryClient.invalidateQueries("chatsOfUser");
       if (
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageReceived.chat._id
@@ -56,9 +57,9 @@ const ChatBox = () => {
     {
       enabled: Boolean(selectedChat?._id),
       onSuccess: (data) => {
-        socket.emit("join chat", selectedChat._id);
-        selectedChatCompare = selectedChat;
         setMessages(data);
+        selectedChatCompare = selectedChat;
+        socket.emit("join chat", selectedChat._id);
       },
     }
   );
@@ -83,7 +84,7 @@ const ChatBox = () => {
     if (!socketConnected) return;
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", selectedChat._id);
+      socket.emit("typing", selectedChat);
     }
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
@@ -91,7 +92,7 @@ const ChatBox = () => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
+        socket.emit("stop typing", selectedChat);
         setTyping(false);
       }
     }, timerLength);
@@ -99,7 +100,7 @@ const ChatBox = () => {
 
   const handleSendClick = async () => {
     await sendMessage.mutateAsync();
-    socket.emit("stop typing", selectedChat._id);
+    socket.emit("stop typing", selectedChat);
     setNewMessage("");
   };
 
