@@ -71,7 +71,8 @@ export const getAccount = async (req, res) => {
 }
 
 export const deleteAccount = async (req, res) => {
-  const user = req.body.user;
+  console.log("in delete account")
+  const user = req.body.userId;
   const existingPayment = await Payment.findOne({ user: user });
   if (existingPayment) {
     try {

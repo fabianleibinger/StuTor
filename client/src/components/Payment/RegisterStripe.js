@@ -1,4 +1,4 @@
-import { createAccountCall, getPaymentInfo } from "../../api/Payment.js";
+import { createAccountCall, getPaymentInfo, deleteAccountCall } from "../../api/Payment.js";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Button } from "@mui/material";
 import { ConnectingAirportsOutlined } from "@mui/icons-material";
@@ -26,6 +26,16 @@ const RegisterStripe = () => {
           console.log("use Mutation", error);
         },
       });
+
+      const deleteAccount = useMutation(() => deleteAccountCall(currentUser._id), {
+        onSuccess: (url) => {
+
+            queryClient.invalidateQueries("payment");
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+        });
       //console.log(paymentInfo)
       console.log(isLoading)
     if (isLoading) return "Loading..."
@@ -47,17 +57,25 @@ const RegisterStripe = () => {
         }
       };
 
-      // Redirect to Stripe checkout
+      const handleDeleteStripeAccount = async () => {
+        try {
+          await deleteAccount.mutateAsync();
+          console.log("in handle delete tripe account")
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      // Redirect to Stripe oboarding
   const handleRedirect = (url) => {
     //const path = new URL(url).pathname
     console.log("url", url)
     window.location.replace(url);
     //navigate(path);
   };
-// add this again: registerStripeIsPossible && 
    return (
     <>
-    {(
+    {registerStripeIsPossible && (
         <Button
         variant="contained"
         color="secondary"
@@ -66,6 +84,16 @@ const RegisterStripe = () => {
         Set up Stripe payment
       </Button>
     )}
+    {!registerStripeIsPossible && (
+        <Button
+        variant="contained"
+        color="primary"
+        onClick={handleDeleteStripeAccount}
+      >
+        Delete Stripe account
+      </Button>
+    )}
+
     </>
     
    );
