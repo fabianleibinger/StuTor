@@ -47,13 +47,9 @@ const ChatBox = () => {
     socket.on("message received", (newMessageReceived) => {
       queryClient.invalidateQueries("chatsOfUser");
       if (
-        !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageReceived.chat._id
+        selectedChatCompare &&
+        selectedChatCompare._id === newMessageReceived.chat._id
       ) {
-        if (!notification.includes(newMessageReceived)) {
-          setNotification([...notification, newMessageReceived]);
-        }
-      } else {
         setMessages([...messages, newMessageReceived]);
       }
     });
