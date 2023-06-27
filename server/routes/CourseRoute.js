@@ -6,7 +6,7 @@ import {
   getCoursesOfUniversity,
   getCoursesFilteredBySearchString,
   updateCourse,
-  deleteCourse
+  deleteCourse,
 } from "../controllers/CourseController.js";
 
 const router = express.Router();
