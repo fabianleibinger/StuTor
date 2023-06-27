@@ -35,11 +35,13 @@ export const createBooking = async (req, res) => {
 
 export const getBooking = async (req, res) => {
     try {
-        const bookingId = new ObjectId(req.params.id);
+        const bookingId = new ObjectId(req.params.bookingId);
+        console.log(bookingId)
         const booking = await Booking.findById(bookingId);
+        console.log(booking)
         try {
             if (!booking) {
-                res.status(404).send('Object not found!');
+                res.status(404).send('Booking not found!');
             } else {
                 res.status(200).send(booking);
             }
@@ -169,9 +171,26 @@ export const updateBooking = async (req, res) => {
     }
 };
 
+export const confirmBooking = async (req, res) => {
+    try {
+        const bookingId = new ObjectId(req.params.bookingId);
+        const booking = await Booking.findByIdAndUpdate(bookingId,
+            {
+                isConfirmed: true,
+            });
+        if (!booking) {
+            res.status(404).send('Booking not found!');
+        } else {
+            res.status(200).send('Booking confirmed!');
+        }
+    } catch (err) {
+        res.status(500).send('Failed to confirm booking!');
+    }  
+};
+
 export const deleteBooking = async (req, res) => {
     try {
-        const bookingId = new ObjectId(req.params.id);
+        const bookingId = new ObjectId(req.params.bookingId);
         try {
             const booking = await Booking.findByIdAndDelete(bookingId);
             if (!booking) {

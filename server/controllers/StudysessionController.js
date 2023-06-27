@@ -1,8 +1,10 @@
+import Chat from '../models/Chat.js';
 import Course from '../models/Course.js';
+import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
 import UserStudysession from '../models/UserStudysession.js';
-import { ObjectId } from 'mongodb';
+import { ObjectId, ReturnDocument } from 'mongodb';
 
 export const createStudysession = async (req, res) => {
   try {
@@ -68,10 +70,24 @@ export const getStudysession = async (req, res) => {
     const studysessionId = new ObjectId(req.params.studysessionId);
     const studysession = await Studysession.findById(studysessionId);
     try {
-      if (!studysession) {
-        res.status(404).send('Studysession not found!');
-      } else {
-        res.status(200).send(studysession);
+      const studysessionId = new ObjectId(req.params.studysessionId);
+      const studysession = await Studysession.findById(studysessionId)
+        .populate('course')
+        .populate({
+          path: 'course',
+          populate: {
+            path: 'university'
+          }
+        })
+        .populate('tutoredBy');
+      try {
+        if (!studysession) {
+          res.status(404).send('Studysession not found!');
+        } else {
+          res.status(200).send(studysession);
+        }
+      } catch (err) {
+        res.status(500).send('Failed to retrieve studysession!');
       }
     } catch (err) {
       res.status(500).send('Failed to retrieve studysession!');
@@ -219,7 +235,7 @@ export const updateStudysession = async (req, res) => {
     const userId = new ObjectId(req.body.tutoredBy);
     const user = await User.findById(userId);
     if (!course || !user) {
-      res.status(404).send('Course reference not found!');
+      res.status(404).send('Object reference not found!');
       return;
     }
     // Update studysession.
@@ -255,6 +271,75 @@ export const updateStudysession = async (req, res) => {
   }
 };
 
+export const getAverageRating = async (req, res) => {
+  try {
+    const studysessionId = new ObjectId(req.params.studysessionId);
+    console.log('studysessionId', studysessionId);
+
+    let reviews = await Review.find().populate({
+      path: 'booking',
+      match: { studysession: studysessionId },
+      populate: {
+        path: 'studysession',
+        model: 'Studysession'
+      }
+    });
+
+    reviews = reviews.filter(review => review.booking !== null);
+    if (reviews.length === 0) {
+      res.status(404).send('No ratings found!');
+    } else {
+      const averageRating =
+        reviews.reduce((acc, review) => acc + review.rating, 0) /
+        reviews.length;
+      res.status(200).send(averageRating.toString());
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).send('Bad request!');
+  }
+};
+
+export const getReviewsOfStudysession = async (req, res) => {
+  try {
+    // Check if studysession exists.
+    const studysessionId = new ObjectId(req.params.studysessionId);
+    try {
+      const studysession = await Studysession.findByIdAndDelete(studysessionId);
+      // Delete all student associations of this studysession.
+      await UserStudysession.deleteMany({ studysession: studysessionId });
+      // Delete chats of this studysession.
+      await Chat.deleteMany({ studysession: studysessionId });
+      if (!studysession) {
+        res.status(404).send('Studysession not found!');
+      } else {
+        res.status(200).send('Studysession deleted!');
+      }
+    } catch (err) {
+      res.status(500).send('Failed to delete studysession!');
+    }
+    try {
+      const reviews = await Review.find().populate({
+        path: 'booking',
+        match: { studysession: studysessionId },
+        populate: {
+          path: 'studysession',
+          model: 'Studysession'
+        }
+      });
+      const filteredReviews = reviews.filter(review => review.booking !== null);
+      res.status(200).send(filteredReviews);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('Failed to retrieve reviews!');
+      return;
+    }
+  } catch (err) {
+    console.log('err', err);
+    res.status(400).send('Bad request!');
+  }
+};
+
 export const deleteStudysession = async (req, res) => {
   try {
     const studysessionId = new ObjectId(req.params.studysessionId);
@@ -262,6 +347,8 @@ export const deleteStudysession = async (req, res) => {
       const studysession = await Studysession.findByIdAndDelete(studysessionId);
       // Delete all student associations of this studysession.
       await UserStudysession.deleteMany({ studysession: studysessionId });
+      // Delete chats of this studysession.
+      await Chat.deleteMany({ studysession: studysessionId });
       if (!studysession) {
         res.status(404).send('Studysession not found!');
       } else {

@@ -1,18 +1,18 @@
-import express from 'express';
+import express from "express";
 import {
   createUniversity,
   getUniversities,
   getUniversity,
   deleteUniversity,
-  updateUniversity
-} from '../controllers/UniversityController.js';
+  updateUniversity,
+} from "../controllers/UniversityController.js";
 
 const router = express.Router();
 
-router.post('/', createUniversity);
-router.get('/', getUniversities);
-router.get('/byId/:universityId', getUniversity);
-router.put('/:universityId', updateUniversity);
-router.delete('/:universityId', deleteUniversity);
+router.post("/", createUniversity);
+router.get("/", getUniversities);
+router.get("/byId/:universityId", getUniversity);
+router.put("/:universityId", updateUniversity);
+router.delete("/:universityId", deleteUniversity);
 
 export default router;

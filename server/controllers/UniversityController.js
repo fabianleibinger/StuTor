@@ -21,7 +21,7 @@ export const createUniversity = async (req, res) => {
             res.status(500).send('Failed to create university!');
         }
     } catch (err) {
-        res.status(400).send('Bad request!');
+        res.status(400).send('Bad request in createUniversity');
     }
 };
 
@@ -52,7 +52,7 @@ export const getUniversity = async (req, res) => {
             res.status(500).send('Failed to retrieve university!');
         }
     } catch (err) {
-        res.status(400).send('Bad request!');
+        res.status(400).send('Bad request in getUniversity!');
     }
 };
 
