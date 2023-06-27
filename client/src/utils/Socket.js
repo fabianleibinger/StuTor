@@ -19,9 +19,10 @@ export const Socket = () => {
 
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
-      if (!selectedChat || selectedChat._id !== newMessageReceived.chat._id) {
-        if (!notification.includes(newMessageReceived)) {
-          setNotification([...notification, newMessageReceived]);
+      const chatId = newMessageReceived.chat._id;
+      if (!selectedChat || selectedChat._id !== chatId) {
+        if (!notification.includes(chatId)) {
+          setNotification([...notification, chatId]);
         }
       }
     });
