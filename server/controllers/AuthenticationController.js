@@ -25,7 +25,7 @@ export const register = async (req, res) => {
     await newUser.save();
     res.status(201).send("User has been created.");
   } catch (err) {
-    res.status(500).send('Failed to register user.');
+    res.status(500).send("Failed to register user.");
   }
 };
 
@@ -34,14 +34,14 @@ export const login = async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
 
     if (!user) {
-      res.status(404).send("User not found!");  
-      return
+      res.status(404).send("User not found!");
+      return;
     }
 
     const isCorrect = bcrypt.compareSync(req.body.password, user.password);
     if (!isCorrect) {
-      res.status(400).send("Wrong password or username!");  
-      return
+      res.status(400).send("Wrong password or username!");
+      return;
     }
 
     const token = jwt.sign(
@@ -60,7 +60,7 @@ export const login = async (req, res) => {
       .status(200)
       .send(info);
   } catch (err) {
-    res.status(500).send('Failed to register user.');
+    res.status(500).send("Failed to login user.");
   }
 };
 
@@ -72,4 +72,26 @@ export const logout = async (req, res) => {
     })
     .status(200)
     .send("User has been logged out.");
+};
+
+export const checkPassword = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+
+    if (!user) {
+      res.status(404).send(false);
+      return;
+    }
+
+    const isCorrect = bcrypt.compareSync(req.body.oldPassword, user.password);
+    if (!isCorrect) {
+      res.status(200).send(false);
+      return;
+    }
+    res.status(200).send(true);
+    return;
+  } catch (err) {
+    res.status(500).send(false);
+    return;
+  }
 };

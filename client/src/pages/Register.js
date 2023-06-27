@@ -14,12 +14,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
+import { searchUniversities } from "../utils/searchUniversities";
 
 const Register = () => {
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [profilePicUrl, setProfilePicUrl] = useState("");
   const [allUniversities, setAllUniversities] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     username: "",
@@ -32,8 +35,19 @@ const Register = () => {
     role: "STUDENT",
   });
 
-  const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    const fetchAllUniversities = async () => {
+      try {
+        const response = await newRequest.get("/university");
+        setAllUniversities(response.data);
+        setSearchResults(response.data.map((university) => university.name));
+      } catch (error) {
+        console.log("Failed to get universities!");
+        console.log(error);
+      }
+    };
+    fetchAllUniversities();
+  }, []);
 
   const handleChange = (e) => {
     setUser((prev) => {
@@ -62,47 +76,8 @@ const Register = () => {
     });
   };
 
-  useEffect(() => {
-    const fetchAllUniversities = async () => {
-      try {
-        const response = await newRequest.get("/university");
-        setAllUniversities(response.data);
-        setSearchResults(response.data.map((university) => university.name));
-      } catch (error) {
-        console.log("Failed to get universities!");
-        console.log(error);
-      }
-    };
-    fetchAllUniversities();
-  }, []);
-
   const handleUniversityChange = (e, value) => {
-    const query = value || "";
-
-    let filteredUniversities = allUniversities;
-    if (query && query !== "") {
-      filteredUniversities = allUniversities.filter((university) =>
-        university.name.toLowerCase().includes(query.toLowerCase())
-      );
-    }
-    setSearchResults(filteredUniversities.map((university) => university.name));
-
-    const selectedUniversity = allUniversities.find(
-      (university) => university.name === query
-    );
-    if (selectedUniversity) {
-      console.log(selectedUniversity._id);
-      setUser((prev) => ({
-        ...prev,
-        university: selectedUniversity._id,
-      }));
-      setSearchResults([]);
-    } else {
-      setUser((prev) => ({
-        ...prev,
-        university: "",
-      }));
-    }
+    searchUniversities(value, allUniversities, setSearchResults, setUser, true);
   };
 
   const handleSubmit = async (e) => {
