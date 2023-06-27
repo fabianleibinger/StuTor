@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
@@ -16,6 +16,7 @@ var selectedChatCompare;
 const ChatBox = () => {
   const {
     selectedChat,
+    setSelectedChat,
     messages,
     setMessages,
     newMessage,
@@ -33,6 +34,13 @@ const ChatBox = () => {
   useEffect(() => {
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+
+    return () => {
+      socket.off("typing");
+      socket.off("stop typing");
+      // Page is not visible, reset selectedChat to null
+      setSelectedChat(null);
+    };
   }, []);
 
   useEffect(() => {
@@ -49,6 +57,10 @@ const ChatBox = () => {
         setMessages([...messages, newMessageReceived]);
       }
     });
+
+    return () => {
+      socket.off("message received");
+    };
   });
 
   const { data } = useQuery(
