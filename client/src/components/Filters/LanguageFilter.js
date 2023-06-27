@@ -74,8 +74,26 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
 
   return (
     <div>
-      <FormControl sx={{ width: '180px' }}>
-        <InputLabel sx={{ color: 'black' }}> Languages</InputLabel>
+      <FormControl
+        sx={{
+          minWidth: '120px',
+          maxWidth: 'sm',
+          height: '35px'
+        }}
+        size="small"
+      >
+        <InputLabel
+          sx={{
+            color: 'black',
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center' // Add this line
+          }}
+          size="small"
+        >
+          {' '}
+          Languages
+        </InputLabel>
         <Select
           open={menuOpen}
           onClose={handleMenuClose}
@@ -101,7 +119,12 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
               }
             }
           }}
-          sx={{ height: '40px' }}
+          sx={{
+            alignItems: 'center',
+            height: '100%',
+            width: '180px'
+          }}
+          size="small"
         >
           <FormGroup>
             {Object.keys(LanguagesEnum).map(key => (

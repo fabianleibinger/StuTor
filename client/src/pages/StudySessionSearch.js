@@ -1,9 +1,7 @@
 import React, { useRef } from 'react';
 import StudySessionSearchbar from '../components/Searchbars/StudySessionSearchbar';
-import PriceFilter from '../components/Filters/PriceFilter';
-import DepartmentFilter from '../components/Filters/DepartmentFilter';
 import LanguageFilter from '../components/Filters/LanguageFilter';
-import LanguageSelection from '../components/Filters/LanguageSelection';
+import StandardFilter from '../components/Filters/StandardFilter';
 
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
@@ -39,7 +37,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
       <ScrollableContainer>
         <Grid container spacing={2}>
           {data.map(studySession => (
-            <Grid item xs={12} sm={6} md={4} key={studySession._id}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={studySession._id}>
               <StudySessionCard
                 studySession={studySession}
                 onDelete={() => {}}
@@ -67,6 +65,7 @@ export default function StudySessionSearch() {
 
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [selectedRating, setSelectedRating] = useState(0);
 
   const debouncedSearchTerm = useDebounce(search, 200);
 
@@ -74,6 +73,7 @@ export default function StudySessionSearch() {
     setSearch(e.target.value);
   };
 
+  // handle Max Price lilter
   const handleMaxPriceChange = value => {
     setMaxPrice(value);
     setShowClearButton(Boolean(value));
@@ -86,11 +86,21 @@ export default function StudySessionSearch() {
     }
   };
 
+  // handle language filter
+  const handleLanguageChange = value => {
+    setSelectedLanguages(value);
+  };
+
   const clearLanguages = () => {
     handleLanguageChange([]);
     if (languageSelectRef.current) {
       languageSelectRef.current.clearSelection();
     }
+  };
+
+  // handle department filter
+  const handleDepartmentChange = value => {
+    setSelectedDepartment(value);
   };
 
   const clearDepartment = () => {
@@ -100,12 +110,15 @@ export default function StudySessionSearch() {
     }
   };
 
-  const handleLanguageChange = value => {
-    setSelectedLanguages(value);
+  const handleRatingChange = value => {
+    setSelectedRating(value);
   };
 
-  const handleDepartmentChange = value => {
-    setSelectedDepartment(value);
+  const clearRating = () => {
+    handleRatingChange('');
+    if (ratingSelectRef.current) {
+      ratingSelectRef.current.clearSelection();
+    }
   };
 
   const queryKey = {
@@ -121,18 +134,21 @@ export default function StudySessionSearch() {
       getStudysessionFiltered(debouncedSearchTerm, {
         maxPrice: maxPrice,
         languages: selectedLanguages,
-        department: selectedDepartment
+        department: selectedDepartment,
+        rating: selectedRating
       })
   );
 
   const maxPriceSelectRef = useRef(null);
   const languageSelectRef = useRef(null);
   const departmentSelectRef = useRef(null);
+  const ratingSelectRef = useRef(null);
 
   const clearFilters = () => {
     setMaxPrice('');
     setSelectedLanguages([]);
     setSelectedDepartment('');
+    setSelectedRating(0);
 
     // Reset the Select components to their initial state
     // Clear the value of the Select components
@@ -144,6 +160,9 @@ export default function StudySessionSearch() {
     }
     if (departmentSelectRef.current) {
       departmentSelectRef.current.clearSelection();
+    }
+    if (ratingSelectRef.current) {
+      ratingSelectRef.current.clearSelection();
     }
   };
 
@@ -198,8 +217,14 @@ export default function StudySessionSearch() {
             <ClearButton variant="outlined" onClick={clearMaxPrice}>
               Clear
             </ClearButton>
-            <PriceFilter
-              handleMaxPriceChange={handleMaxPriceChange}
+            <StandardFilter
+              handleValueChange={handleMaxPriceChange}
+              label={'Max Price'}
+              items={{
+                '10€': 10,
+                '20€': 20,
+                '30€': 30
+              }}
               ref={maxPriceSelectRef}
             />
           </Box>
@@ -216,9 +241,26 @@ export default function StudySessionSearch() {
             <ClearButton variant="outlined" onClick={clearDepartment}>
               Clear
             </ClearButton>
-            <DepartmentFilter
-              handleDepartmentChange={handleDepartmentChange}
+            <StandardFilter
+              handleValueChange={handleDepartmentChange}
+              label={'Department'}
+              items={{
+                Informatics: 'Informatics',
+                Physics: 'Physics',
+                Other: 'Other'
+              }}
               ref={departmentSelectRef}
+            />
+          </Box>
+          <Box>
+            <ClearButton variant="outlined" onClick={clearRating}>
+              Clear
+            </ClearButton>
+            <StandardFilter
+              handleValueChange={handleRatingChange}
+              label={'Rating'}
+              items={{ '2 Stars': 2, '3 Stars': 3, '4 Stars': 4 }}
+              ref={ratingSelectRef}
             />
           </Box>
         </Box>

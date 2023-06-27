@@ -30,13 +30,14 @@ export const getStudysessionsForCourse = async courseId => {
 };
 
 export const getStudysessionFiltered = async (searchTerm, filters) => {
-  const { maxPrice, languages, department } = filters;
+  const { maxPrice, languages, department, rating } = filters;
   let url = `${STUDYSESSION_URL}/search?searchTerm=${searchTerm}`;
 
-  // Add the optional parameters if they have non-empty values
+  // optional parameters
   url += `&maxPrice=${maxPrice}`;
   url += `&languages=${languages}`;
   url += `&department=${department}`;
+  url += `&rating=${rating}`;
 
   try {
     const response = await axios.get(url);
