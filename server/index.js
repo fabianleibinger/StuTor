@@ -40,6 +40,17 @@ app.use(express.json());
 // Http logger
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);
+  const originalSend = res.send;
+  let responseSent = false;
+  res.send = function () {
+    if (!responseSent) {
+      responseSent = true;
+      console.log(
+        `Response for ${req.method} ${req.url}: ${res.statusCode}, response body: ${arguments[0]}`
+      );
+    }
+    originalSend.apply(res, arguments);
+  };
   next();
 });
 app.use(cookieParser());
@@ -57,13 +68,6 @@ app.use("/api/auth", authRoute);
 app.use("/api/userAchievement", userachievementRoute);
 app.use("/api/userStudysession", userStudysessionRoute);
 app.use("/api/payment", paymentRoute);
-
-// For generating error messages & codes
-// app.use((err, req, res, next) => {
-//   const errorStatus = err.status || 500;
-//   const errorMessage = err.message || "Something went wrong!";
-//   return res.status(errorStatus).send(errorMessage);
-// });
 
 const port = 3001;
 const server = app.listen(port, () => {

@@ -1,45 +1,14 @@
 import React, { useEffect } from "react";
-import { styled } from "@mui/system";
+import { Container, Typography, Grid, CardContent } from "@mui/material";
 import {
-  Container,
-  Typography,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-} from "@mui/material";
-
-const RootContainer = styled("div")({
-  paddingTop: (theme) => theme.spacing(8),
-  paddingBottom: (theme) => theme.spacing(8),
-});
-
-const Title = styled(Typography)({
-  marginBottom: (theme) => theme.spacing(4),
-});
-
-const CardContainer = styled(Card)({
-  height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: (theme) => theme.spacing(3),
-});
-
-const CardTitle = styled(Typography)({
-  marginBottom: (theme) => theme.spacing(2),
-});
-
-const CardButton = styled(Button)({
-  marginTop: (theme) => theme.spacing(2),
-});
+  RootContainer,
+  Title,
+  CardContainer,
+  CardTitle,
+  CardButton,
+} from "../styles";
 
 function Home() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -48,8 +17,15 @@ function Home() {
     <RootContainer>
       <Container maxWidth="md">
         <Title variant="h2" component="h1">
-          Welcome to STUTOR
+          Find Tutors for your courses or help others to study efficiently!
         </Title>
+        <Typography variant="body1" component="p">
+          StuTor is a tutoring platform to help students with their exam
+          preparation and course studies, by providing them with trustworthy and
+          reliable student tutors who have excelled in the same course at the
+          same university. StuTor also allows student tutors to contribute in a
+          much easier, compensated fashion.
+        </Typography>
 
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6}>

@@ -1,60 +1,32 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { styled } from "@mui/system";
+import { Typography, Avatar, Menu, MenuItem, Badge } from "@mui/material";
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-  Avatar,
-  Menu,
-  MenuItem,
-  Badge
-} from "@mui/material";
+  RootAppBar,
+  RootToolbar,
+  LogoContainer,
+  LinksContainer,
+  StyledLink,
+  AvatarIconButton,
+  SignInButton,
+  JoinButton,
+  UserFullName,
+} from "../styles";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import SearchIcon from "@mui/icons-material/Search";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { useChatContext } from "../context/ChatProvider";
 import newRequest from "../utils/newRequest";
-
-const RootAppBar = styled(AppBar)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
-}));
-
-const RootToolbar = styled(Toolbar)({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-});
-
-const LogoContainer = styled(Link)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  textDecoration: "none",
-  color: "inherit",
-}));
-
-const LinksContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-}));
-
-const StyledLink = styled(Link)(({ theme }) => ({
-  marginLeft: theme.spacing(2),
-  textDecoration: "none",
-  color: "inherit",
-}));
-
-const AvatarIconButton = styled(IconButton)(({ theme }) => ({
-  marginLeft: theme.spacing(1),
-  marginRight: theme.spacing(1),
-}));
+import { UserContext } from "../context/UserContext";
 
 const Navbar = () => {
+  const { setUser, user } = useContext(UserContext);
   const [active, setActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { notification, setNotification } = useChatContext();
   const anchorElRef = useRef(null);
+  const navigate = useNavigate();
 
   const isActive = () => {
     window.scrollY > 0 ? setActive(true) : setActive(false);
@@ -67,13 +39,11 @@ const Navbar = () => {
     };
   }, []);
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  const navigate = useNavigate();
-
   const handleLogout = async () => {
     try {
       await newRequest.post("/auth/logout");
-      localStorage.setItem("currentUser", null);
+      setUser(null);
+      localStorage.removeItem("user"); // Remove user data from localStorage
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -101,22 +71,33 @@ const Navbar = () => {
 
         {/* ---------- LINKS ----------*/}
         <LinksContainer>
-          <StyledLink to="/search-sessions">Search Sessions</StyledLink>
-          <StyledLink to="/MyStudySessions">My Study Sessions</StyledLink>
+          <StyledLink to="/search-sessions">
+            <SearchIcon />
+            Search Sessions
+          </StyledLink>
+          <StyledLink to="/MyStudySessions">
+            <CalendarMonthIcon />
+            My Study Sessions
+          </StyledLink>
+
           {notification.length === 0 ? (
-            <StyledLink to="/my-chats">My Chats</StyledLink>
+            <StyledLink to="/my-chats">
+              {" "}
+              <ChatBubbleIcon />
+              My Chats
+            </StyledLink>
           ) : (
             <Badge badgeContent={notification.length} color="primary">
-              <StyledLink to="/my-chats">My Chats</StyledLink>
+              <StyledLink to="/my-chats">
+                {" "}
+                <ChatBubbleIcon />
+                My Chats
+              </StyledLink>
             </Badge>
           )}
 
-          {!currentUser?.isSeller && (
-            <StyledLink to="/about-us">About Us</StyledLink>
-          )}
-
           {/* ---------- USER ----------*/}
-          {currentUser ? (
+          {user ? (
             <>
               <AvatarIconButton
                 ref={anchorElRef}
@@ -124,10 +105,8 @@ const Navbar = () => {
                 aria-controls="profile-menu"
                 aria-haspopup="true"
               >
-                <Avatar
-                  src={currentUser.picture || "/img/noavatar.jpg"}
-                  alt=""
-                />
+                <Avatar src={user.picture || "/img/noavatar.jpg"} alt="" />
+                <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
               </AvatarIconButton>
 
               {/* ---------- DROP DOWN MENU ----------*/}
@@ -145,29 +124,12 @@ const Navbar = () => {
                   horizontal: "right",
                 }}
               >
-                {/* {currentUser.isTutor && (
-                  <>
-                    <MenuItem onClick={handleMenuClose} component={Link} to="/mygigs">
-                      Gigs
-                    </MenuItem>
-                    <MenuItem onClick={handleMenuClose} component={Link} to="/add">
-                      Add New Gig
-                    </MenuItem>
-                  </>
-                )} */}
                 <MenuItem
                   onClick={handleMenuClose}
                   component={Link}
                   to="/userProfile"
                 >
                   User Profile
-                </MenuItem>
-                <MenuItem
-                  onClick={handleMenuClose}
-                  component={Link}
-                  to="/messages"
-                >
-                  Messages
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ExitToAppIcon fontSize="small" />
@@ -177,11 +139,11 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <StyledLink to="/login">Sign in</StyledLink>
+              <StyledLink to="/login">
+                <SignInButton>Sign In</SignInButton>
+              </StyledLink>
               <StyledLink to="/register">
-                <Button variant="contained" color="primary">
-                  Join
-                </Button>
+                <JoinButton>Join Us</JoinButton>
               </StyledLink>
             </>
           )}
