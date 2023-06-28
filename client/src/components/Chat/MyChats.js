@@ -1,7 +1,7 @@
 import React from "react";
 import { getChatsOfUser } from "../../api/Chat";
 import { useQuery } from "react-query";
-import { Box, Skeleton, Alert, List, Badge, Divider } from "@mui/material";
+import { Box, Skeleton, Alert, List, Divider } from "@mui/material";
 import { useChatContext } from "../../context/ChatProvider";
 import getCurrentUser from "../../utils/getCurrentUser";
 import ChatListItem from "./ChatListItem";
@@ -72,20 +72,20 @@ const MyChats = () => {
           {data.map((chat, index) => (
             <React.Fragment key={chat._id}>
               {notification.includes(chat._id) ? (
-                <Badge badgeContent={""} color="primary">
-                  <ChatListItem
-                    chat={chat}
-                    selectedChat={selectedChat}
-                    setSelectedChat={setSelectedChat}
-                    isTyping={isTyping}
-                  />
-                </Badge>
+                <ChatListItem
+                  chat={chat}
+                  selectedChat={selectedChat}
+                  setSelectedChat={setSelectedChat}
+                  isTyping={isTyping}
+                  unread={true}
+                />
               ) : (
                 <ChatListItem
                   chat={chat}
                   selectedChat={selectedChat}
                   setSelectedChat={setSelectedChat}
                   isTyping={isTyping}
+                  unread={false}
                 />
               )}
               <Divider />

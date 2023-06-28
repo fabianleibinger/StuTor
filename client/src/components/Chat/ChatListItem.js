@@ -6,15 +6,22 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
+import { useChatContext } from "../../context/ChatProvider";
 
-const ChatListItem = ({ chat, selectedChat, setSelectedChat, isTyping }) => {
+const ChatListItem = ({ chat, selectedChat, setSelectedChat, isTyping, unread }) => {
+
+  const { notification, setNotification } = useChatContext();
+
   return (
     <ListItemButton
       alignItems="flex-start"
-      onClick={() => setSelectedChat(chat)}
+      onClick={() => {
+        setSelectedChat(chat);
+        setNotification(notification.filter(notification => !notification.includes(chat._id)));
+      }}
       sx={{
         backgroundColor:
-          selectedChat?._id === chat._id ? "lightgrey" : "inherit",
+          selectedChat?._id === chat._id ? "lightgrey" : (unread ? "grey" : "inherit"),
       }}
     >
       <ListItemAvatar>

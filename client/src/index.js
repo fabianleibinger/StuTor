@@ -7,7 +7,7 @@ import { ChatProvider } from "./context/ChatProvider";
 import { SocketProvider } from "./context/SocketContext";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Socket } from "./utils/Socket";
+import { Socket } from "./Socket";
 
 const queryClient = new QueryClient();
 

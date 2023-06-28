@@ -107,9 +107,7 @@ const Navbar = () => {
             <StyledLink to="/my-chats">My Chats</StyledLink>
           ) : (
             <Badge badgeContent={notification.length} color="primary">
-              <StyledLink to="/my-chats" onClick={() => {
-                setNotification([])
-              }}>My Chats</StyledLink>
+              <StyledLink to="/my-chats">My Chats</StyledLink>
             </Badge>
           )}
 

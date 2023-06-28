@@ -8,7 +8,7 @@ import {
 import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import getCurrentUser from "../../utils/getCurrentUser";
-import socket from "../../utils/Socket";
+import socket from "../../Socket";
 import { useSocketContext } from "../../context/SocketContext";
 
 var selectedChatCompare;
