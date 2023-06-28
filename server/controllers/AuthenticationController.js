@@ -9,7 +9,6 @@ export const register = async (req, res) => {
       res.status(409).send("Username is already taken");
       return;
     }
-
     // Check of Duplicate email
     if (await User.findOne({ email: req.body.email })) {
       res.status(409).send("Email is already taken");

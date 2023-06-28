@@ -105,6 +105,7 @@ const UserProfile = () => {
   const handlePasswordChange = async (e) => {
     // Check if new password === new password repeat,
     if (newPassword !== newPasswordRepeat) {
+      setSucessMessage("");
       setErrorMessage("New password and repeat password does not match!");
       return;
     }
@@ -126,6 +127,7 @@ const UserProfile = () => {
 
     // if not, throw error message.
     if (!isOldPasswordCorrect) {
+      setSucessMessage("");
       setErrorMessage("Incorrect Old Password!");
       return;
     }
@@ -221,7 +223,11 @@ const UserProfile = () => {
     } catch (err) {
       console.log(err);
       setSucessMessage("");
-      setErrorMessage("An error occurred while updating the profile.");
+      if (err.response.status === 409) {
+        setErrorMessage("Username or email is already taken");
+      } else {
+        setErrorMessage("An error occurred while updating the profile.");
+      }
     }
   };
 
