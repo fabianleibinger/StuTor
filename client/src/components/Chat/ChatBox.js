@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useAppContext } from "../../context/ChatProvider";
+import React, { useEffect, useRef } from "react";
+import { useChatContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   getMessagesOfChat,
@@ -8,14 +8,15 @@ import {
 import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import getCurrentUser from "../../utils/getCurrentUser";
-import io from "socket.io-client";
+import socket from "../../Socket";
+import { useSocketContext } from "../../context/SocketContext";
 
-const ENDPOINT = "localhost:3001";
-var socket, selectedChatCompare;
+var selectedChatCompare;
 
 const ChatBox = () => {
   const {
     selectedChat,
+    setSelectedChat,
     messages,
     setMessages,
     newMessage,
@@ -26,31 +27,36 @@ const ChatBox = () => {
     setIsTyping,
     notification,
     setNotification,
-  } = useAppContext();
-  const [socketConnected, setSocketConnected] = useState(false);
+  } = useChatContext();
+  const { socketConnected } = useSocketContext();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("setup", getCurrentUser());
-    socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+
+    return () => {
+      socket.off("typing");
+      socket.off("stop typing");
+      // Page is not visible, reset selectedChat to null
+      setSelectedChat(null);
+    };
   }, []);
 
   useEffect(() => {
-    socket.on("message recieved", (newMessageReceived) => {
+    socket.on("message received", (newMessageReceived) => {
+      queryClient.invalidateQueries("chatsOfUser");
       if (
-        !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageReceived.chat._id
+        selectedChatCompare &&
+        selectedChatCompare._id === newMessageReceived.chat._id
       ) {
-        if (!notification.includes(newMessageReceived)) {
-          setNotification([...notification, newMessageReceived]);
-        }
-      } else {
         setMessages([...messages, newMessageReceived]);
       }
     });
+
+    return () => {
+      socket.off("message received");
+    };
   });
 
   const { data } = useQuery(
@@ -59,9 +65,9 @@ const ChatBox = () => {
     {
       enabled: Boolean(selectedChat?._id),
       onSuccess: (data) => {
-        socket.emit("join chat", selectedChat._id);
-        selectedChatCompare = selectedChat;
         setMessages(data);
+        selectedChatCompare = selectedChat;
+        socket.emit("join chat", selectedChat._id);
       },
     }
   );
@@ -86,7 +92,7 @@ const ChatBox = () => {
     if (!socketConnected) return;
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", selectedChat._id);
+      socket.emit("typing", selectedChat);
     }
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
@@ -94,7 +100,7 @@ const ChatBox = () => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
+        socket.emit("stop typing", selectedChat);
         setTyping(false);
       }
     }, timerLength);
@@ -102,7 +108,7 @@ const ChatBox = () => {
 
   const handleSendClick = async () => {
     await sendMessage.mutateAsync();
-    socket.emit("stop typing", selectedChat._id);
+    socket.emit("stop typing", selectedChat);
     setNewMessage("");
   };
 

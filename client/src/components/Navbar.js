@@ -16,7 +16,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SearchIcon from "@mui/icons-material/Search";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import { useAppContext } from "../context/ChatProvider";
+import { useChatContext } from "../context/ChatProvider";
 import newRequest from "../utils/newRequest";
 import { UserContext } from "../context/UserContext";
 
@@ -24,7 +24,7 @@ const Navbar = () => {
   const { setUser, user } = useContext(UserContext);
   const [active, setActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { notification, setNotification } = useAppContext();
+  const { notification, setNotification } = useChatContext();
   const anchorElRef = useRef(null);
   const navigate = useNavigate();
 
@@ -88,12 +88,9 @@ const Navbar = () => {
             </StyledLink>
           ) : (
             <Badge badgeContent={notification.length} color="primary">
-              <StyledLink
-                to="/my-chats"
-                onClick={() => {
-                  setNotification([]);
-                }}
-              >
+              <StyledLink to="/my-chats">
+                {" "}
+                <ChatBubbleIcon />
                 My Chats
               </StyledLink>
             </Badge>
