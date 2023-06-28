@@ -42,7 +42,7 @@ function Login() {
     <FormContainer onSubmit={handleSubmit}>
       <LoginTitle>Sign in</LoginTitle>
       <LoginTextField
-        label="Username"
+        label="Username or Email"
         name="username"
         type="text"
         placeholder="jasonwen"
