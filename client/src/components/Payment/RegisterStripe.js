@@ -7,6 +7,7 @@ const RegisterStripe = () => {
     const queryClient = useQueryClient();
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let registerStripeIsPossible = false
+    let updateAccount = false
     const {
         isLoading: isLoading,
         error: error,
@@ -29,7 +30,7 @@ const RegisterStripe = () => {
 
       const deleteAccount = useMutation(() => deleteAccountCall(currentUser._id), {
         onSuccess: (url) => {
-
+            registerStripeIsPossible = true
             queryClient.invalidateQueries("payment");
         },
         onError: (error) => {
@@ -45,7 +46,11 @@ const RegisterStripe = () => {
     }
     if (data.length == 0) registerStripeIsPossible = true
     //console.log("paymentInfo", paymentInfo)
-    if (data.chargesEnabled == false) return "You didn't set your stripe account up correctly!"
+    console.log(data)
+    console.log(data.charges_enabled)
+    if (data.charges_enabled == false) {
+        updateAccount = true
+    }
     //if (paymentInfo) return "You already have a stripe account!"
 
       const handleStripeAccount = async () => {
@@ -73,6 +78,7 @@ const RegisterStripe = () => {
     window.location.replace(url);
     //navigate(path);
   };
+  console.log("before return")
    return (
     <>
     {registerStripeIsPossible && (
@@ -84,7 +90,7 @@ const RegisterStripe = () => {
         Set up Stripe payment
       </Button>
     )}
-    {!registerStripeIsPossible && (
+    {!registerStripeIsPossible && !updateAccount &&(
         <Button
         variant="contained"
         color="primary"
@@ -92,6 +98,15 @@ const RegisterStripe = () => {
       >
         Delete Stripe account
       </Button>
+    )}
+    {updateAccount && (
+        <Button
+        variant="contained"
+        color="primary"
+        onClick={handleStripeAccount}
+        >
+        Update Stripe account
+        </Button>
     )}
 
     </>
