@@ -26,7 +26,7 @@ export const createAccount = async (req, res) => {
 
   const accountLink = await stripe.accountLinks.create({
     account: payment.customerId,
-    refresh_url: 'https://example.com/reauth',
+    refresh_url: 'http://localhost:3001/api/payment/updateAccount',
     return_url: 'http://localhost:3000/userProfile',
     type: 'account_onboarding',
   });
@@ -42,6 +42,34 @@ export const createAccount = async (req, res) => {
     console.log("user already has payment")
     res.status(400).send("User already has a payment account!")
   }
+}
+
+export const updateAccount = async (req, res) => {
+  console.log("in update account")
+  const user = req.params.userId;
+  try {
+  const existingPayment = await Payment.findOne({ user: user });
+  const exstingStripeAccount = await stripe.accounts.retrieve(
+    existingPayment.customerId
+  );
+  } catch (err) {
+    res.status(400).send("User has no payment account!")
+  }
+  if (existingPayment && exstingStripeAccount.charges_enabled == false) {
+    try {
+    const accountLink = await stripe.accountLinks.create({
+      account: existingPayment.customerId,
+      refresh_url: 'http://localhost:3001/api/payment/updateAccount',
+      return_url: 'http://localhost:3000/userProfile',
+      type: 'account_onboarding',
+    });
+    console.log("accountLink:", accountLink)
+    console.log("accountLink.url:", accountLink.url)
+    res.status(200).send({url: accountLink.url, userId: user, accountId: existingPayment.id});
+    } catch (err) {
+      res.status(500).send("Failed to update account!")
+    }
+}
 }
 
 export const getAccount = async (req, res) => {
