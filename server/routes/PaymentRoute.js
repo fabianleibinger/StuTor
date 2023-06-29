@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/createAccount/:userId", createAccount)
 router.get("/account/:userId", getAccount)
 router.post("/createPayment", createPayment)
-router.delete("/deleteAccount", deleteAccount)
+router.delete("/deleteAccount/:userId", deleteAccount)
 router.put('/updateAccount/:userId', updateAccount)
 
 export default router;

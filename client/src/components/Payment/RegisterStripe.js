@@ -119,7 +119,7 @@ const RegisterStripe = () => {
         Delete Stripe account
       </Button>
     )}
-    {updateAccount && (
+    {updateAccountIsPossible && (
         <>
         <Alert severity="warning">Currently you can not receive payments over your stripe account - update it!</Alert>
         <Button

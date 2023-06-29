@@ -30,14 +30,10 @@ export const getPaymentInfo = async (userId) => {
 export const createPayment = async (userId, price) => {
   //console.log("in create payment api")
   try {
-    console.log("here")
     const response = await axios.post(`${PAYMENT_URL}/createPayment`, {
       user: userId,
       price: price
     })
-    console.log("URL in API", response.data.url)
-    console.log("Response", response)
-    console.log("test")
     return response.data.url
   } catch (err) {
     console.log(err)
@@ -50,7 +46,7 @@ export const updateAccountCall = async (userId) => {
 }
 
 export const deleteAccountCall = async (userId) => {
-  const response = await axios.delete(`${PAYMENT_URL}/deleteAccount`, userId)
+  const response = await axios.delete(`${PAYMENT_URL}/deleteAccount/${userId}`)
   return response.data
 }
 

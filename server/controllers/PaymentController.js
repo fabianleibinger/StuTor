@@ -6,11 +6,7 @@ const stripe = new Stripe('sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUK
 const session = new Session();
 
 export const createAccount = async (req, res) => {
-  console.log("in create account")
   const user = req.params.userId;
-  console.log("req.body", req.body)
-  //const user = "6468f36705853e6071dfec63"
-  console.log("user", user)
   const existingPayment = await Payment.findOne({ user: user });
   if (!existingPayment) {
   try {
@@ -30,16 +26,11 @@ export const createAccount = async (req, res) => {
     return_url: 'http://localhost:3000/userProfile',
     type: 'account_onboarding',
   });
-  console.log("accountLink:", accountLink)
-  console.log("accountLink.url:", accountLink.url)
   res.status(200).send({url: accountLink.url, userId: user, accountId: account.id});
 } catch (err) {
-  console.log("in catch error")
-  console.log(err)
   res.status(500).send(err);
 }
   } else {
-    console.log("user already has payment")
     res.status(400).send("User already has a payment account!")
   }
 }
@@ -54,23 +45,18 @@ export const updateAccount = async (req, res) => {
   );
   if (existingPayment && existingStripeAccount.charges_enabled == false) {
     try {
-      console.log("customer id", existingStripeAccount.customerId)
     const accountLink = await stripe.accountLinks.create({
       account: existingPayment.customerId,
       refresh_url: 'http://localhost:3000/userProfile',
       return_url: 'http://localhost:3000/userProfile',
       type: 'account_onboarding',
     });
-    console.log("accountLink:", accountLink)
-    console.log("accountLink.url:", accountLink.url)
     res.status(200).send({url: accountLink.url, userId: user, accountId: existingPayment.id});
     } catch (err) {
-      console.log(err)
       res.status(500).send("Failed to update account!")
     }
 }
 } catch (err) {
-  console.log(err)
   res.status(400).send("User has no payment account!")
 }
 }
@@ -102,8 +88,7 @@ export const getAccount = async (req, res) => {
 }
 
 export const deleteAccount = async (req, res) => {
-  console.log("in delete account")
-  const user = req.body.userId;
+  const user = req.params.userId;
   const existingPayment = await Payment.findOne({ user: user });
   if (existingPayment) {
     try {
@@ -124,15 +109,14 @@ export const createPayment = async (req, res) => {
     name: 'test',
   });
   const productId = product.id
+  const amount = req.body.price
   const price = await stripe.prices.create({
-    unit_amount: 2000,
+    unit_amount: amount,
     currency: 'eur',
     product: productId,
   });
   const user = req.body.user;
-  console.log("user", user)
   const existingAccount = await Payment.findOne({ user: user });
-  console.log("existingAccount", existingAccount)
 
   const stripeAccount = await stripe.accounts.retrieve(
     existingAccount.customerId
@@ -157,14 +141,11 @@ export const createPayment = async (req, res) => {
         success_url: 'https://example.com/success',
         cancel_url: 'https://example.com/cancel',
       });
-      console.log(session);
       res.status(200).send(session);
     } catch (err) {
-      console.log(err)
       res.status(400).send(err)
     }
   } else {
-    console.log("no account")
     res.status(400).send("User has no payment account or it is not set up correctly!")
   }
 }
