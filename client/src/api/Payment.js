@@ -44,6 +44,11 @@ export const createPayment = async (userId, price) => {
   }
 }
 
+export const updateAccountCall = async (userId) => {
+  const response = await axios.put(`${PAYMENT_URL}/updateAccount/${userId}`)
+  return response.data.url
+}
+
 export const deleteAccountCall = async (userId) => {
   const response = await axios.delete(`${PAYMENT_URL}/deleteAccount`, userId)
   return response.data

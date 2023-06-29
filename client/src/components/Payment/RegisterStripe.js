@@ -1,13 +1,12 @@
-import { createAccountCall, getPaymentInfo, deleteAccountCall } from "../../api/Payment.js";
+import { createAccountCall, getPaymentInfo, deleteAccountCall, updateAccountCall } from "../../api/Payment.js";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Button } from "@mui/material";
-import { ConnectingAirportsOutlined } from "@mui/icons-material";
+import { Button, Alert } from "@mui/material";
 
 const RegisterStripe = () => {
     const queryClient = useQueryClient();
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     let registerStripeIsPossible = false
-    let updateAccount = false
+    let updateAccountIsPossible = false
     const {
         isLoading: isLoading,
         error: error,
@@ -27,6 +26,18 @@ const RegisterStripe = () => {
           console.log("use Mutation", error);
         },
       });
+
+      const updateAccount = useMutation(() => updateAccountCall(currentUser._id), {
+        onSuccess: (url) => {
+            console.log("in update account mutation and url is", url)
+            handleRedirect(url);
+            queryClient.invalidateQueries("payment");
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+        });
+
 
       const deleteAccount = useMutation(() => deleteAccountCall(currentUser._id), {
         onSuccess: (url) => {
@@ -49,7 +60,7 @@ const RegisterStripe = () => {
     console.log(data)
     console.log(data.charges_enabled)
     if (data.charges_enabled == false) {
-        updateAccount = true
+        updateAccountIsPossible = true
     }
     //if (paymentInfo) return "You already have a stripe account!"
 
@@ -61,6 +72,15 @@ const RegisterStripe = () => {
           console.log(error);
         }
       };
+
+      const handleUpdateStripeAccount = async () => {
+        try {
+            await updateAccount.mutateAsync();
+            console.log("in handle update stripe account")
+        } catch (error) {
+            console.log(error);
+        }
+        };
 
       const handleDeleteStripeAccount = async () => {
         try {
@@ -90,7 +110,7 @@ const RegisterStripe = () => {
         Set up Stripe payment
       </Button>
     )}
-    {!registerStripeIsPossible && !updateAccount &&(
+    {!registerStripeIsPossible && !updateAccountIsPossible &&(
         <Button
         variant="contained"
         color="primary"
@@ -100,13 +120,16 @@ const RegisterStripe = () => {
       </Button>
     )}
     {updateAccount && (
+        <>
+        <Alert severity="warning">Currently you can not receive payments over your stripe account - update it!</Alert>
         <Button
         variant="contained"
         color="primary"
-        onClick={handleStripeAccount}
+        onClick={handleUpdateStripeAccount}
         >
         Update Stripe account
         </Button>
+        </>
     )}
 
     </>
