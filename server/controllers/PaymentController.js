@@ -58,7 +58,7 @@ export const updateAccount = async (req, res) => {
   if (existingPayment && exstingStripeAccount.charges_enabled == false) {
     try {
     const accountLink = await stripe.accountLinks.create({
-      account: existingPayment.customerId,
+      account: existingStripeAccount.customerId,
       refresh_url: 'http://localhost:3001/api/payment/updateAccount',
       return_url: 'http://localhost:3000/userProfile',
       type: 'account_onboarding',
