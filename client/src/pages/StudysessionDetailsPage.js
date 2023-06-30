@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Grid, Button, Box, Typography, Avatar } from "@mui/material";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import BookingDialog from "../components/Booking/BookingDialog.js";
 import { getStudySessionbyId, getStudysessions } from "../api/StudySession.js";
 import BookingHistoryDialog from "../components/Booking/BookingHistoryDialog.js";
@@ -8,10 +8,26 @@ import StudysessionRating from "../components/Booking/Studysessionrating.js";
 import "./styles.css";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
+import { useChatContext } from "../context/ChatProvider.js";
+import { accessChat } from "../api/Chat.js";
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
   const { user } = useContext(UserContext); // Access user state from UserContext
+  const [studysession, setStudysession] = useState(false);
+  const { selectedChat, setSelectedChat } = useChatContext();
+
+  useEffect(() => {
+
+    return () => {
+      // Page is not visible, reset selectedChat to null
+      setSelectedChat(null);
+    };
+  }, []);
+
+  useEffect(() => {
+    accessChat.mutate();
+  }, [studysession]);
 
   // states and functions for booking dialog
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -31,10 +47,26 @@ const StudysessionDetailsPage = () => {
     setHistoryDialogOpen(false);
   };
 
-  const userId = user ? user._id : null; // TODO: Check if currentUser is null
   const { isLoading, error, data } = useQuery(
     ["studysession", studySessionId],
-    () => getStudySessionbyId(studySessionId)
+    () => getStudySessionbyId(studySessionId),
+    {
+      onSuccess: (data) => {
+        setStudysession(data);
+      }
+    }
+  );
+
+  const accessChat = useMutation(() => accessChat(studysession.users, studySessionId),
+    {
+      enabled: Boolean(studysession),
+      onSuccess: (data) => {
+        setSelectedChat(data);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
   );
 
   if (isLoading) return "Loading Studysession...";
@@ -50,21 +82,21 @@ const StudysessionDetailsPage = () => {
         }}
       >
         <Avatar
-          src={data.tutoredBy.picture}
+          src={studysession.tutoredBy.picture}
           alt=""
           sx={{ width: 90, height: 90 }}
         />
         <Typography variant="h5" sx={{ marginBottom: "0.5rem" }}>
-          {data.course.name}
+          {studysession.course.name}
         </Typography>
         <Typography variant="subtitle1" sx={{ marginBottom: "0.5rem" }}>
-          {data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
+          {studysession.tutoredBy.firstname + " " + studysession.tutoredBy.lastname}
         </Typography>
         <Typography variant="subtitle2" sx={{ marginBottom: "0.5rem" }}>
-          {data.course.university.name}
+          {studysession.course.university.name}
         </Typography>
         <StudysessionRating studySessionId={studySessionId} />
-        <Typography variant="body1">{data.description}</Typography>
+        <Typography variant="body1">{studysession.description}</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <Button
@@ -89,15 +121,15 @@ const StudysessionDetailsPage = () => {
         <BookingHistoryDialog
           open={historyDialogOpen}
           onClose={handleHistoryCloseDialog}
-          userId={userId}
+          userId={user._id}
           studySessionId={studySessionId}
         />
 
         <BookingDialog
           open={dialogOpen}
           onClose={handleCloseDialog}
-          priceEuro={data.pricePerHourEuro}
-          createdBy={userId}
+          priceEuro={studysession.pricePerHourEuro}
+          createdBy={user._id}
           studysession={studySessionId}
         />
       </Box>
