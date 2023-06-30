@@ -35,27 +35,9 @@ const BookingDialog = ({
 
   // Redirect to Stripe checkout
   const handleRedirect = (url) => {
-    //const path = new URL(url).pathname
     window.location.replace(url);
-    //navigate(path);
   };
 
-  const createBooking = useMutation(
-    () => createBookingCall(studysession, hours, priceEuro, createdBy),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["bookings", studysession]);
-        onClose();
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-    }
-  );
-
-  console.log("studysession", studysession)
-
-  // TODO: replace customerId with currentUser._id
   const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession, hours), {
     onSuccess: (url) => {
       handleRedirect(url);
@@ -74,19 +56,6 @@ const BookingDialog = ({
     // Calculate total amount
     const amount = parseFloat(value) * priceEuro;
     setTotalAmount(amount);
-  };
-
-  const handleBookingConfirm = async () => {
-    try {
-      await createBooking.mutateAsync(
-        studysession,
-        hours,
-        priceEuro,
-        createdBy
-      );
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const handlePayment = async () => {
@@ -113,18 +82,12 @@ const BookingDialog = ({
           Total amount: ${totalAmount.toFixed(2)}
         </Typography>
         <Button
-          variant="contained"
-          color="primary"
-          onClick={handleBookingConfirm}
-        >
-          Confirm Booking
-        </Button>
-        <Button
+        disabled={hours < 1}
           variant="contained"
           color="secondary"
           onClick={handlePayment}
         >
-          Set up Stripe payment
+          Proceed to Payment
         </Button>
         {showAlert && (
           <Alert severity="error">
