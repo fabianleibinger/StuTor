@@ -135,7 +135,7 @@ const ChatBox = () => {
 
   const stackSx = {
     width: 0.94,
-    height: 1,
+    height: 0.96,
     padding: 2,
   };
 
