@@ -1,6 +1,10 @@
 import Stripe from 'stripe';
 import Session from 'express-session';
 import Payment from '../models/Payment.js';
+import Studysession from '../models/Studysession.js';
+import User from '../models/User.js';
+import Booking from '../models/Booking.js';
+import { ObjectId } from 'mongodb';
 
 const stripe = new Stripe('sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01');
 const session = new Session();
@@ -105,21 +109,41 @@ export const deleteAccount = async (req, res) => {
 }
 
 export const createPayment = async (req, res) => {
+  // Check if studysession and user exist.
+  const studysessionId = new ObjectId(req.body.studysession);
+  const studysession = await Studysession.findById(studysessionId);
+  const studentId = new ObjectId(req.body.studentId);
+  const student = await User.findById(studentId);
+  const tutorId = new ObjectId(studysession.tutoredBy);
+  const tutor = await User.findById(tutorId);
+  let amount = req.body.price
+  if (!studysession || !student) {
+      res.status(404).send('Object reference not found!');
+      return;
+  }
+  // Create booking.
+  const newBooking = new Booking({
+      studysession: studysessionId,
+      hours: req.body.hours,
+      priceEuro: amount,
+      createdAt: Date.now(),
+      createdBy: studentId,
+  });
+
+  const savedBooking = await newBooking.save();
+
   const product = await stripe.products.create({
     name: 'test',
   });
   const productId = product.id
-  let amount = req.body.price
   amount = amount * 100
   const fee = amount * 0.1
-  const studysession = req.body.studysession
   const price = await stripe.prices.create({
     unit_amount: amount,
     currency: 'eur',
     product: productId,
   });
-  const user = req.body.user;
-  const existingAccount = await Payment.findOne({ user: user });
+  const existingAccount = await Payment.findOne({ user: tutorId });
 
   const stripeAccount = await stripe.accounts.retrieve(
     existingAccount.customerId
@@ -141,14 +165,10 @@ export const createPayment = async (req, res) => {
             destination: existingAccount.customerId,
           },
         },
-        success_url: `http://localhost:3000/StudysessionDetailsPage/${studysession}`,
-        cancel_url: `http://localhost:3000/StudysessionDetailsPage/${studysession}`,
+        success_url: `http://localhost:3000/StudysessionDetailsPage/${studysessionId}`,
+        cancel_url: `http://localhost:3000/StudysessionDetailsPage/${studysessionId}`,
       });
-      if (session.payment_status == "paid") {
-        res.status(200).send(session);
-      } else {
-        res.status(400).send("Payment failed!")
-      }
+      res.status(200).send(session);
     } catch (err) {
       console.log(err)
       res.status(400).send(err)

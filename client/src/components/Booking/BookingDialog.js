@@ -50,8 +50,10 @@ const BookingDialog = ({
     }
   );
 
+  console.log("studysession", studysession)
+
   // TODO: replace customerId with currentUser._id
-  const createPayment = useMutation(() => createPaymentCall(customerId, totalAmount, studysession), {
+  const createPayment = useMutation(() => createPaymentCall(customerId, totalAmount, studysession, hours), {
     onSuccess: (url) => {
       handleRedirect(url);
       queryClient.invalidateQueries("payment");
