@@ -109,7 +109,9 @@ export const createPayment = async (req, res) => {
     name: 'test',
   });
   const productId = product.id
-  const amount = req.body.price
+  let amount = req.body.price
+  amount = amount * 100
+  const studysession = req.body.studysession
   const price = await stripe.prices.create({
     unit_amount: amount,
     currency: 'eur',
@@ -138,11 +140,12 @@ export const createPayment = async (req, res) => {
             destination: existingAccount.customerId,
           },
         },
-        success_url: 'https://example.com/success',
-        cancel_url: 'https://example.com/cancel',
+        success_url: `http://localhost:3000/StudysessionDetailsPage/${studysession}`,
+        cancel_url: `http://localhost:3000/StudysessionDetailsPage/${studysession}`,
       });
       res.status(200).send(session);
     } catch (err) {
+      console.log(err)
       res.status(400).send(err)
     }
   } else {
