@@ -10,6 +10,7 @@ import ChatPage from './pages/ChatPage';
 import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js"
 import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js"
 import UserProfile from "./pages/UserProfile.js"
+import SuccessPage from "./pages/SuccessPage.js"
 
 const theme = createTheme({
   palette: {
@@ -64,6 +65,10 @@ function App() {
         { 
           path: "/StudysessionDetailsPage/:studySessionId",
           element: <StudysessionDetailsPage />,
+        },
+        {
+          path: "/success/:bookingId",
+          element: <SuccessPage />,
         }
       ],
     },

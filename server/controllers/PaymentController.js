@@ -7,7 +7,6 @@ import Booking from '../models/Booking.js';
 import { ObjectId } from 'mongodb';
 
 const stripe = new Stripe('sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01');
-const session = new Session();
 
 export const createAccount = async (req, res) => {
   const user = req.params.userId;
@@ -121,16 +120,8 @@ export const createPayment = async (req, res) => {
       res.status(404).send('Object reference not found!');
       return;
   }
-  // Create booking.
-  const newBooking = new Booking({
-      studysession: studysessionId,
-      hours: req.body.hours,
-      priceEuro: amount,
-      createdAt: Date.now(),
-      createdBy: studentId,
-  });
 
-  const savedBooking = await newBooking.save();
+  
 
   const product = await stripe.products.create({
     name: 'test',
@@ -151,6 +142,16 @@ export const createPayment = async (req, res) => {
  
   if (existingAccount && stripeAccount.charges_enabled == true) {
     try {
+        // Create booking.
+  const newBooking = new Booking({
+    studysession: studysessionId,
+    hours: req.body.hours,
+    priceEuro: amount,
+    createdAt: Date.now(),
+    createdBy: studentId,
+});
+const savedBooking = await newBooking.save();
+const bookingId = savedBooking._id
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         line_items: [
@@ -165,9 +166,12 @@ export const createPayment = async (req, res) => {
             destination: existingAccount.customerId,
           },
         },
-        success_url: `http://localhost:3000/StudysessionDetailsPage/${studysessionId}`,
-        cancel_url: `http://localhost:3000/StudysessionDetailsPage/${studysessionId}`,
+        success_url: `http://localhost:3000/success/${bookingId}`,
+        cancel_url: `http://localhost:3000/success/${bookingId}`,
       });
+      await Booking.findByIdAndUpdate(bookingId, { paymentSession: session.id });
+      console.log(bookingId)
+      
       res.status(200).send(session);
     } catch (err) {
       console.log(err)
