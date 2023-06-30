@@ -20,8 +20,6 @@ const SuccessPage = () => {
         navigate('/');
       };
 
-   // if (error) return "An error has occurred!";
-
     return (
         <div>
             <Box sx={{ backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '8px' }}>

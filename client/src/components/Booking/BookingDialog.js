@@ -6,6 +6,7 @@ import {
   TextField,
   Button,
   Typography,
+  Alert,
 } from "@mui/material";
 import { useQueryClient } from "react-query";
 import { useMutation } from "react-query";
@@ -22,11 +23,13 @@ const BookingDialog = ({
 }) => {
   const [hours, setHours] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
   const queryClient = useQueryClient();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  console.log("currentUser", currentUser)
 
   // hardcoded for now (tutorId for stripe payment)
-  const customerId = "6468f36705853e6071dfec63";
+  const customerId = studysession.tutoredBy;
 
   const navigate = useNavigate();
 
@@ -53,12 +56,13 @@ const BookingDialog = ({
   console.log("studysession", studysession)
 
   // TODO: replace customerId with currentUser._id
-  const createPayment = useMutation(() => createPaymentCall(customerId, totalAmount, studysession, hours), {
+  const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession, hours), {
     onSuccess: (url) => {
       handleRedirect(url);
       queryClient.invalidateQueries("payment");
     },
     onError: (error) => {
+      setShowAlert(true);
       console.log(error);
     },
   });
@@ -122,6 +126,13 @@ const BookingDialog = ({
         >
           Set up Stripe payment
         </Button>
+        {showAlert && (
+          <Alert severity="error">
+            There was an error processing the payment. 
+            Probably your tutor didn't set up his Stripe account yet. 
+            Please contact him/her and otherwise the customer support.
+          </Alert>
+        )}
       </DialogContent>
     </Dialog>
   );

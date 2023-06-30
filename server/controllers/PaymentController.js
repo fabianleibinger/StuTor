@@ -109,14 +109,19 @@ export const deleteAccount = async (req, res) => {
 
 export const createPayment = async (req, res) => {
   // Check if studysession and user exist.
+  console.log(req.body)
   const studysessionId = new ObjectId(req.body.studysession);
   const studysession = await Studysession.findById(studysessionId);
   const studentId = new ObjectId(req.body.studentId);
   const student = await User.findById(studentId);
+  console.log("studensId", studentId)
+  console.log("student", student)
   const tutorId = new ObjectId(studysession.tutoredBy);
   const tutor = await User.findById(tutorId);
+  console.log("tutor", tutor)
   let amount = req.body.price
   if (!studysession || !student) {
+    console.log("studysession", studysession)
       res.status(404).send('Object reference not found!');
       return;
   }
@@ -134,11 +139,18 @@ export const createPayment = async (req, res) => {
     currency: 'eur',
     product: productId,
   });
+  console.log("price", price)
+  try {
   const existingAccount = await Payment.findOne({ user: tutorId });
+  console.log("existingAccount", existingAccount)
 
   const stripeAccount = await stripe.accounts.retrieve(
     existingAccount.customerId
   );
+  } catch (err) {
+    res.status(400).send("Tutor doesn't have a payment account!")
+    return;
+  }
  
   if (existingAccount && stripeAccount.charges_enabled == true) {
     try {
