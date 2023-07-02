@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Grid, Button, Box, Typography, Avatar } from "@mui/material";
 import { useQuery, useMutation } from "react-query";
 import BookingDialog from "../components/Booking/BookingDialog.js";
@@ -56,14 +56,10 @@ const StudysessionDetailsPage = () => {
     }
   );
 
-  const accessChat = useMutation(() => {
-    const userIds = [studysession.tutoredBy._id, user._id];
-    accessChatCall(userIds, studySessionId);
-  },
+  const accessChat = useMutation(() => accessChatCall([studysession.tutoredBy._id, user._id], studySessionId),
     {
       onSuccess: (data) => {
         setSelectedChat(data);
-        console.log(selectedChat);
       },
       onError: (error) => {
         console.log(error);

@@ -8,7 +8,6 @@ export const accessChat = async (users, studysessionId) => {
         "studysessionId": studysessionId
     };
     const response = await axios.post(`${CHAT_URL}/${users[0]}`, body);
-    console.log(response.data);
     return response.data;
 }
 
