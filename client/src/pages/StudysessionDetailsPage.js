@@ -63,7 +63,7 @@ const StudysessionDetailsPage = () => {
     {
       onSuccess: (data) => {
         setSelectedChat(data);
-        console.log(data);
+        console.log(selectedChat);
       },
       onError: (error) => {
         console.log(error);
@@ -72,9 +72,16 @@ const StudysessionDetailsPage = () => {
   );
 
   useEffect(() => {
-    if (studysession) {
-      accessChat.mutate();
+    const getChat = async () => {
+      if (studysession) {
+        try {
+          await accessChat.mutateAsync();
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
+    getChat();
   }, [studysession]);
 
   if (isLoading) return "Loading Studysession...";
