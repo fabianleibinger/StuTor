@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { Grid, Button, Box, Typography, Avatar } from "@mui/material";
 import { useQuery, useMutation } from "react-query";
 import BookingDialog from "../components/Booking/BookingDialog.js";
@@ -9,7 +9,8 @@ import "./styles.css";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
 import { useChatContext } from "../context/ChatProvider.js";
-import { accessChat } from "../api/Chat.js";
+import { accessChat as accessChatCall } from "../api/Chat.js";
+import ChatBox from '../components/Chat/ChatBox';
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
@@ -18,16 +19,11 @@ const StudysessionDetailsPage = () => {
   const { selectedChat, setSelectedChat } = useChatContext();
 
   useEffect(() => {
-
     return () => {
       // Page is not visible, reset selectedChat to null
       setSelectedChat(null);
     };
   }, []);
-
-  useEffect(() => {
-    accessChat.mutate();
-  }, [studysession]);
 
   // states and functions for booking dialog
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -53,15 +49,6 @@ const StudysessionDetailsPage = () => {
     {
       onSuccess: (data) => {
         setStudysession(data);
-      }
-    }
-  );
-
-  const accessChat = useMutation(() => accessChat(studysession.users, studySessionId),
-    {
-      enabled: Boolean(studysession),
-      onSuccess: (data) => {
-        setSelectedChat(data);
       },
       onError: (error) => {
         console.log(error);
@@ -69,71 +56,113 @@ const StudysessionDetailsPage = () => {
     }
   );
 
+  const accessChat = useMutation(() => {
+    const userIds = [studysession.tutoredBy._id, user._id];
+    accessChatCall(userIds, studySessionId);
+  },
+    {
+      onSuccess: (data) => {
+        setSelectedChat(data);
+        console.log(data);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (studysession) {
+      accessChat.mutate();
+    }
+  }, [studysession]);
+
   if (isLoading) return "Loading Studysession...";
   if (error) return "An error has occurred!";
 
   return (
-    <div>
-      <Box
-        sx={{
-          backgroundColor: "#f5f5f5",
-          padding: "1rem",
-          borderRadius: "8px",
-        }}
-      >
-        <Avatar
-          src={studysession.tutoredBy.picture}
-          alt=""
-          sx={{ width: 90, height: 90 }}
-        />
-        <Typography variant="h5" sx={{ marginBottom: "0.5rem" }}>
-          {studysession.course.name}
-        </Typography>
-        <Typography variant="subtitle1" sx={{ marginBottom: "0.5rem" }}>
-          {studysession.tutoredBy.firstname + " " + studysession.tutoredBy.lastname}
-        </Typography>
-        <Typography variant="subtitle2" sx={{ marginBottom: "0.5rem" }}>
-          {studysession.course.university.name}
-        </Typography>
-        <StudysessionRating studySessionId={studySessionId} />
-        <Typography variant="body1">{studysession.description}</Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleHistoryOpenDialog}
-            >
-              View bookings
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpenDialog}
-            >
-              Book now
-            </Button>
-          </Grid>
-        </Grid>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        width: '96vw',
+        height: '92vh',
+        mx: 'auto',
+        marginTop: '4vh',
+        marginBottom: '3vh',
+      }}
+    >
+      <Box width={0.49} height={1}>
+        <div>
+          <Box
+            sx={{
+              backgroundColor: "#f5f5f5",
+              padding: "1rem",
+              borderRadius: "8px",
+            }}
+          >
+            <Avatar
+              src={studysession.tutoredBy.picture}
+              alt=""
+              sx={{ width: 90, height: 90 }}
+            />
+            <Typography variant="h5" sx={{ marginBottom: "0.5rem" }}>
+              {studysession.course.name}
+            </Typography>
+            <Typography variant="subtitle1" sx={{ marginBottom: "0.5rem" }}>
+              {studysession.tutoredBy.firstname + " " + studysession.tutoredBy.lastname}
+            </Typography>
+            <Typography variant="subtitle2" sx={{ marginBottom: "0.5rem" }}>
+              {studysession.course.university.name}
+            </Typography>
+            <StudysessionRating studySessionId={studySessionId} />
+            <Typography variant="body1">{studysession.description}</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleHistoryOpenDialog}
+                >
+                  View bookings
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpenDialog}
+                >
+                  Book now
+                </Button>
+              </Grid>
+            </Grid>
 
-        <BookingHistoryDialog
-          open={historyDialogOpen}
-          onClose={handleHistoryCloseDialog}
-          userId={user._id}
-          studySessionId={studySessionId}
-        />
+            <BookingHistoryDialog
+              open={historyDialogOpen}
+              onClose={handleHistoryCloseDialog}
+              userId={user._id}
+              studySessionId={studySessionId}
+            />
 
-        <BookingDialog
-          open={dialogOpen}
-          onClose={handleCloseDialog}
-          priceEuro={studysession.pricePerHourEuro}
-          createdBy={user._id}
-          studysession={studySessionId}
-        />
+            <BookingDialog
+              open={dialogOpen}
+              onClose={handleCloseDialog}
+              priceEuro={studysession.pricePerHourEuro}
+              createdBy={user._id}
+              studysession={studySessionId}
+            />
+          </Box>
+        </div>
       </Box>
-    </div>
+      <Box width={0.49} height={1}>
+        {<ChatBox />}
+      </Box>
+    </Box >
   );
 };
 
