@@ -30,6 +30,7 @@ const ScrollableCardContent = styled(CardContent)({
 export default function StudySessionCard({
   tutorFirstName,
   tutorLastName,
+  tutorPicture,
   studySession,
   onDelete,
   role,
@@ -46,24 +47,19 @@ export default function StudySessionCard({
       <Box
         display="flex"
         alignItems="center"
+        flexDirection="column"
         sx={{
           ml: 1,
           mt: 1,
-          alignItems: 'left',
-          textAlign: 'left',
-          flexDirection: 'row'
+          alignItems: 'center',
+          textAlign: 'center'
         }}
       >
-        <Avatar sx={{ width: 64, height: 64 }} aria-label="recipe">
-          PP
-        </Avatar>
-        <Typography
-          variant="h8"
-          component="div"
-          sx={{ ml: 2, display: 'flex', alignItems: 'center' }}
-        >
-          {tutorFirstName} <br /> {tutorLastName}
-        </Typography>
+        <Avatar
+          src={tutorPicture || '/img/noavatar.jpg'}
+          sx={{ width: 64, height: 64 }}
+          aria-label="recipe"
+        />
       </Box>
 
       <ScrollableCardContent>
@@ -75,26 +71,22 @@ export default function StudySessionCard({
                 color: 'gray',
                 cursor: 'pointer'
               },
-              alignItems: 'left',
-              textAlign: 'left'
+              alignItems: 'center',
+              textAlign: 'center'
             }}
           >
-            <Typography fontWeight="bold">
+            <Typography fontWeight="bold" sx={{ wordWrap: 'break-word' }}>
               {studySession.course.name}
             </Typography>
-            <Typography sx={{ mb: 2 }}>
-              Prof. {studySession.course.professor}
+            <Typography>
+              {tutorFirstName} {tutorLastName}
             </Typography>
-            <Typography sx={{ mb: 2, wordWrap: 'break-word' }}>
-              <strong>Description: </strong>
+            <Typography>{studySession.pricePerHourEuro} €/h</Typography>
+            <Typography sx={{ m: 1, wordWrap: 'break-word' }}>
               <br />{' '}
               {studySession.description.length > 100
                 ? studySession.description.slice(0, 100) + '...'
                 : studySession.description}
-            </Typography>
-            <Typography>
-              <strong>Languages: </strong> <br />
-              {studySession.languages.join(', ')}
             </Typography>
           </Box>
         ) : (
@@ -111,37 +103,34 @@ export default function StudySessionCard({
       </ScrollableCardContent>
       <CardActions
         sx={{
-          mt: 'auto'
+          mt: 'auto',
+          justifyContent: 'center'
         }}
       >
         <Box
+          id="ActionButtonswrapper"
           sx={{
             display: 'flex',
-            alignItems: 'center',
-            mr: 5
-          }}
-        >
-          {studySession && (
-            <PricePerHourCircle price={studySession.pricePerHourEuro} />
-          )}
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
+            width: 1,
+            justifyContent: 'space-between',
             marginTop: 'auto',
             gap: '10px'
           }}
         >
           {details && (
             <>
-              {role === 'TUTOR' && (
-                <ActionButton
-                  text="Delete"
-                  onClickListener={handleDeleteClick}
-                />
+              {role === 'TUTOR' ? (
+                <>
+                  <ActionButton text="Bookings" />
+                  <ActionButton text="Update" onClickListener={onItemClick} />
+                  <ActionButton
+                    text="Delete"
+                    onClickListener={handleDeleteClick}
+                  />
+                </>
+              ) : (
+                <ActionButton text="Details" />
               )}
-              <ActionButton text="Details" onClickListener={onItemClick} />
             </>
           )}
         </Box>

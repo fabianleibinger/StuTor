@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+import { UserContext } from '../../context/UserContext';
 
 import { Button, Box, TextField, TextareaAutosize, Grid } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -12,6 +13,7 @@ import { createStudysession, updateStudysession } from '../../api/StudySession';
 const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
   const queryClient = useQueryClient();
 
+  const { setUser, user } = useContext(UserContext);
   const [course, setCourse] = useState('');
   const [pricePerHourEuro, setPricePerHourEuro] = useState('');
   const [languages, setLanguages] = useState([]);
@@ -37,7 +39,7 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
     setPostError('');
     setEmptyFields([]);
     handleClose();
-    queryClient.invalidateQueries('studySessions');
+    queryClient.invalidateQueries('myStudySessions');
   };
 
   const createMutation = useMutation(createStudysession, {
@@ -80,7 +82,7 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
     if (usage === 'CREATE') {
       const newStudySession = {
         course: String(course._id),
-        tutoredBy: '6468f36705853e6071dfec63',
+        tutoredBy: user._id,
         description: description,
         pricePerHourEuro: String(pricePerHourEuro),
         languages: languages
@@ -90,7 +92,7 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
       const newStudySession = {
         _id: oldStudySession._id,
         course: String(oldStudySession.course._id),
-        tutoredBy: String(oldStudySession.tutoredBy),
+        tutoredBy: String(oldStudySession.tutoredBy._id),
         description: description,
         pricePerHourEuro: String(pricePerHourEuro),
         languages: languages
@@ -115,8 +117,12 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
 
   return (
     <form className="create" onSubmit={handleSubmit}>
-      <Stack spacing={2}>
-        <Stack direction="column" spacing={2}>
+      <Stack id="formStack" spacing={2} sx={{ alignItems: 'center', width: 1 }}>
+        <Stack
+          direction="column"
+          spacing={2}
+          sx={{ width: 1, alignItems: 'center' }}
+        >
           <CourseSearch
             onSelectCourse={handleSelectCourse}
             onDeleteCourse={handleDeleteCourse}
@@ -124,57 +130,49 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
             usage={usage}
             required
           />
-          <Grid container direction="row" spacing={2}>
-            <Grid item xs={5}>
-              <Grid container direction="column" spacing={2}>
-                <Grid item id="PricePerHourGrid" style={{ paddingLeft: '0px' }}>
-                  <TextField
-                    variant="outlined"
-                    autoFocus
-                    margin="dense"
-                    id="pricePerHourEuro"
-                    label="Price per Hour"
-                    type="Number"
-                    fullWidth
-                    required
-                    onChange={e => setPricePerHourEuro(e.target.value)}
-                    value={pricePerHourEuro}
-                    sx={{ mt: 0 }}
-                  />
-                </Grid>
-                <Grid item style={{ paddingLeft: '0px' }}>
-                  <LanguageSelection
-                    handleLanguageChange={handleSelectedLanguages}
-                    initialSelection={
-                      oldStudySession !== null ? oldStudySession.languages : []
-                    }
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={5}>
-              <TextareaAutosize
-                minRows={3}
-                placeholder="Description *"
-                aria-label="description *"
-                required
-                onChange={e => setDescription(e.target.value)}
-                value={description}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  padding: '8px',
-                  resize: 'vertical',
-                  marginRight: '30px'
-                }}
-              />
-            </Grid>
-          </Grid>
+          <TextField
+            variant="outlined"
+            autoFocus
+            margin="dense"
+            id="pricePerHourEuro"
+            label="Price per Hour"
+            type="Number"
+            fullWidth
+            required
+            onChange={e => setPricePerHourEuro(e.target.value)}
+            value={pricePerHourEuro}
+            sx={{ mt: 0, width: 0.6 }}
+          />
+          <LanguageSelection
+            handleLanguageChange={handleSelectedLanguages}
+            initialSelection={
+              oldStudySession !== null ? oldStudySession.languages : []
+            }
+          />
+
+          <TextField
+            variant="outlined"
+            autoFocus
+            margin="dense"
+            id="description"
+            label="Description"
+            fullWidth
+            required
+            multiline
+            rows={3}
+            onChange={e => setDescription(e.target.value)}
+            value={description}
+            sx={{
+              mt: 0,
+              width: '60%',
+              resize: 'vertical',
+              marginRight: '30px'
+            }}
+          />
           <Box sx={{ mt: 10 }}>
             {usage === 'CREATE' ? (
-              <Button type="submit" variant="contained">
-                Add Study Session
+              <Button type="submit" variant="contained" size="large">
+                Publish
               </Button>
             ) : (
               <Button type="submit" variant="contained">

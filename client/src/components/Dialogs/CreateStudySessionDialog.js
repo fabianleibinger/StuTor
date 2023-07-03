@@ -1,15 +1,18 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
+import {
+  Button,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography
+} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 import CreateStudySessionForm from '../Forms/CreateStudySessionForm';
-import { minHeight } from '@mui/system';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -22,7 +25,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     maxWidth: '600px',
     minWidth: '45vw',
     minHeight: '50vh',
-    maxHeight: '55vh'
+    maxHeight: '65vh'
   }
 }));
 
@@ -30,8 +33,10 @@ function BootstrapDialogTitle(props) {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 1, mr: 10, p: 2 }} {...other}>
-      {children}
+    <DialogTitle sx={{ m: 1, p: 2, textAlign: 'center' }} {...other}>
+      <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
+        {children}
+      </Typography>
       {onClose ? (
         <IconButton
           aria-label="close"
@@ -66,19 +71,14 @@ export default function AddStudySessionDialog({ children }) {
   };
 
   return (
-    <div>
+    <Box>
       <Button
         variant="contained"
         onClick={handleClickOpen}
         sx={{
-          background: '#1c4bb0',
-          border: '1px solid #999999',
-          borderRadius: '1000px',
-          padding: '15px 30px',
-          color: '#eeeeee',
-          display: 'inline-block',
           textAlign: 'center'
         }}
+        size="large"
       >
         + Add new Study Session
       </Button>
@@ -91,14 +91,33 @@ export default function AddStudySessionDialog({ children }) {
           Add new Study Session
         </BootstrapDialogTitle>
         <DialogContent dividers>
+          <Typography sx={{ textAlign: 'center', pb: 3 }} variant="h5">
+            Create a new study session that you want ot offer for other
+            students.
+          </Typography>
           <CreateStudySessionForm
             handleClose={handleClose}
             oldStudySession={null}
             usage="CREATE"
             course={null}
           />
+          <Box id="cancelCreationButtonBox" sx={{ textAlign: 'center', mt: 3 }}>
+            <Button
+              id="cancelCreationButton"
+              variant="contained"
+              size="large"
+              sx={{
+                margin: '0 auto',
+                backgroundColor: 'lightgray',
+                color: 'black',
+                width: '175px'
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
         </DialogContent>
       </BootstrapDialog>
-    </div>
+    </Box>
   );
 }

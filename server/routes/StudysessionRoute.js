@@ -21,6 +21,7 @@ router.get('/byId/:studysessionId', getStudysession);
 router.get('/forCourse/:courseId', getStudysessionsForCourse);
 router.get('/tutoredBy/:userId', getStudysessionsTutoredBy);
 router.get('/ofStudent/:userId', getStudysessionsOfStudent);
+router.get('/search', getStudysessionsFiltered);
 router.put('/:studysessionId', updateStudysession);
 router.delete('/:studysessionId', deleteStudysession);
 router.get('/averageRating/:studysessionId', getAverageRating);

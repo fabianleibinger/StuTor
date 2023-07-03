@@ -39,6 +39,8 @@ function SearchResult({ isLoading, data, error, onSelectCourse }) {
                 color: 'gray',
                 cursor: 'pointer'
               },
+              pt: 2,
+              pr: 3,
               fontWeight: 'bold',
               fontSize: '20px'
             }}
@@ -104,7 +106,7 @@ export default function CourseSearch({
   };
 
   return (
-    <div>
+    <Box id="CoursSearchBox" sx={{ width: 0.6 }}>
       <TextField
         value={selectedCourse !== null ? selectedCourse.name : search}
         onChange={handleInputChange}
@@ -127,7 +129,7 @@ export default function CourseSearch({
         autoFocus
         margin="dense"
         id="course"
-        label="Course Search *"
+        label="Course *"
         type="Search"
         fullWidth
       />
@@ -155,6 +157,6 @@ export default function CourseSearch({
           />
         </Box>
       </Popover>
-    </div>
+    </Box>
   );
 }

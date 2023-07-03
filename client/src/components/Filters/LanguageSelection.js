@@ -68,8 +68,8 @@ export default function LanguageSelection({
   };
 
   return (
-    <div>
-      <FormControl sx={{ width: '200px' }}>
+    <Box sx={{ width: 0.6 }}>
+      <FormControl sx={{ width: 1 }}>
         <InputLabel> Languages *</InputLabel>
         <Select
           open={menuOpen}
@@ -117,6 +117,6 @@ export default function LanguageSelection({
           </FormGroup>
         </Select>
       </FormControl>
-    </div>
+    </Box>
   );
 }

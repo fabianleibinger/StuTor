@@ -1,6 +1,5 @@
 import React from 'react';
 
-import UpdateStudySessionForm from '../Forms/UpdateStudySessionForm';
 import CreateStudySessionForm from '../Forms/CreateStudySessionForm';
 
 import {

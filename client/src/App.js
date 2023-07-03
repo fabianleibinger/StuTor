@@ -1,5 +1,3 @@
-import './App.css';
-
 import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
@@ -35,7 +33,7 @@ function App() {
 
   const Layout = () => {
     return (
-      <div style={{ marginTop: '200px' }}>
+      <div style={{ marginTop: '100px' }}>
         <Navbar />
         <Outlet />
       </div>
@@ -54,6 +52,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/userProfile" element={<UserProfile />} />
               <Route path="/MyStudySessions" element={<MyStudySessions />} />
+              <Route path="/search-sessions" element={<StudySessionSearch />} />
               <Route path="/my-chats" element={<ChatPage />} />
               <Route
                 path="/StudysessionDetailsPage/:studySessionId"

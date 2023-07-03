@@ -16,7 +16,9 @@ export default function PricePerHourCircle({ price }) {
         margin: '0 auto'
       }}
     >
-      <Typography variant="h6">{price} €/h</Typography>
+      <Typography sx={{ textAlign: 'center' }} variant="h6">
+        {price} €/h
+      </Typography>
     </Box>
   );
 }

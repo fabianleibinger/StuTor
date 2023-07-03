@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
+import { ThemeContext } from '@emotion/react';
 
 const tutorButtonStyles = {
   borderRight: 'none',
@@ -11,14 +12,9 @@ const tutorButtonStyles = {
   height: '40px'
 };
 
-const studentButtonStyles = {
-  borderRight: 'none',
-  borderTopRightRadius: '45%',
-  borderBottomRightRadius: '45%',
-  borderTopLeftRadius: '0%',
-  borderBottomLeftRadius: '0%',
-  width: '110px',
-  height: '40px'
+const switchButtonStyles = {
+  height: 1,
+  background: ThemeContext.background
 };
 
 export default function SwitchRoleButton({ role, handleRoleSwitchClick }) {
@@ -28,34 +24,22 @@ export default function SwitchRoleButton({ role, handleRoleSwitchClick }) {
         <>
           <Button
             variant="contained"
-            sx={tutorButtonStyles}
-            onClick={() => handleRoleSwitchClick('TUTOR')}
-          >
-            Tutor
-          </Button>
-          <Button
-            variant="outlined"
-            sx={studentButtonStyles}
+            sx={switchButtonStyles}
+            size="large"
             onClick={() => handleRoleSwitchClick('STUDENT')}
           >
-            Student
+            SWITCH TO STUDENT VIEW
           </Button>
         </>
       ) : (
         <>
           <Button
-            variant="outlined"
-            sx={tutorButtonStyles}
+            variant="contained"
+            sx={switchButtonStyles}
+            size="large"
             onClick={() => handleRoleSwitchClick('TUTOR')}
           >
-            Tutor
-          </Button>
-          <Button
-            variant="contained"
-            sx={studentButtonStyles}
-            onClick={() => handleRoleSwitchClick('STUDENT')}
-          >
-            Student
+            SWITCH TO TUTOR VIEW
           </Button>
         </>
       )}

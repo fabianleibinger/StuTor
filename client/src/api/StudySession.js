@@ -48,11 +48,27 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
 
   try {
     const response = await axios.get(url);
+    if (rating !== 0 && rating !== '') {
+      const studysessions = await Promise.all(
+        response.data.map(async session => {
+          const sessionRating = await getAverageRating(session._id);
+          return {
+            session,
+            rating: sessionRating
+          };
+        })
+      );
+
+      const filteredSessions = studysessions.filter(
+        session => session.rating > rating
+      );
+      const filteredData = filteredSessions.map(session => session.session);
+      return filteredData;
+    }
     return response.data;
   } catch (error) {
     if (error.response) {
       console.log('Response Status:', error.response.status);
-      console.log('Response Data:', error.response.data);
     }
     throw error;
   }

@@ -111,6 +111,7 @@ export default function StudySessionSearch() {
   };
 
   const handleRatingChange = value => {
+    console.log(value);
     setSelectedRating(value);
   };
 
@@ -125,7 +126,8 @@ export default function StudySessionSearch() {
     searchTerm: debouncedSearchTerm,
     maxPrice: maxPrice,
     languages: selectedLanguages,
-    department: selectedDepartment
+    department: selectedDepartment,
+    rating: selectedRating
   };
 
   const { data, error, isLoading } = useQuery(
@@ -136,7 +138,10 @@ export default function StudySessionSearch() {
         languages: selectedLanguages,
         department: selectedDepartment,
         rating: selectedRating
-      })
+      }),
+    {
+      retry: false
+    }
   );
 
   const maxPriceSelectRef = useRef(null);
@@ -179,106 +184,106 @@ export default function StudySessionSearch() {
   }));
 
   return (
-    <Box sx={{ mt: 10, display: 'flex', justifyContent: 'center' }}>
+    <Box
+      id="studySearchPageBox"
+      sx={{
+        width: '90vw',
+        height: '90vh',
+        minheight: 1,
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'right',
+        pb: 1,
+        pl: 1,
+        pr: 1
+      }}
+    >
+      <Box id="searchBarBox" sx={{ maxHeight: '10', width: '100%' }}>
+        <StudySessionSearchbar
+          handleSearchInputChange={handleSearchInputChange}
+        />
+      </Box>
       <Box
+        id="filterBox"
         sx={{
-          width: '75%',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'right',
-          pt: 0,
-          pb: 0,
-          pl: 1,
-          pr: 1
+          gap: '3px',
+          maxHeight: '60px',
+          mt: 1
         }}
       >
-        <Box sx={{ maxHeight: '10', width: '100%' }}>
-          <StudySessionSearchbar
-            handleSearchInputChange={handleSearchInputChange}
-          />
-        </Box>
         <Box
-          id="filterBox"
+          id="PriceFilterBox"
           sx={{
             display: 'flex',
-            gap: '3px',
-            maxHeight: '60px',
-            mt: 1
+            flexDirection: 'column',
+            alignItems: 'flex-end'
           }}
         >
-          <Box
-            id="PriceFilterBox"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end'
+          <ClearButton variant="outlined" onClick={clearMaxPrice}>
+            Clear
+          </ClearButton>
+          <StandardFilter
+            handleValueChange={handleMaxPriceChange}
+            label={'Max Price'}
+            items={{
+              '10€': 10,
+              '20€': 20,
+              '30€': 30
             }}
-          >
-            <ClearButton variant="outlined" onClick={clearMaxPrice}>
-              Clear
-            </ClearButton>
-            <StandardFilter
-              handleValueChange={handleMaxPriceChange}
-              label={'Max Price'}
-              items={{
-                '10€': 10,
-                '20€': 20,
-                '30€': 30
-              }}
-              ref={maxPriceSelectRef}
-            />
-          </Box>
-          <Box>
-            <ClearButton variant="outlined" onClick={clearLanguages}>
-              Clear
-            </ClearButton>
-            <LanguageFilter
-              handleLanguageChange={handleLanguageChange}
-              ref={languageSelectRef}
-            />
-          </Box>
-          <Box>
-            <ClearButton variant="outlined" onClick={clearDepartment}>
-              Clear
-            </ClearButton>
-            <StandardFilter
-              handleValueChange={handleDepartmentChange}
-              label={'Department'}
-              items={{
-                Informatics: 'Informatics',
-                Physics: 'Physics',
-                Other: 'Other'
-              }}
-              ref={departmentSelectRef}
-            />
-          </Box>
-          <Box>
-            <ClearButton variant="outlined" onClick={clearRating}>
-              Clear
-            </ClearButton>
-            <StandardFilter
-              handleValueChange={handleRatingChange}
-              label={'Rating'}
-              items={{ '2 Stars': 2, '3 Stars': 3, '4 Stars': 4 }}
-              ref={ratingSelectRef}
-            />
-          </Box>
-        </Box>
-        <Box
-          p={2}
-          sx={{
-            width: '100%',
-            mt: 4,
-            maxHeight: '70vh',
-            alignItems: 'stretch'
-          }}
-        >
-          <StudySessionsSearchResult
-            isLoading={isLoading}
-            data={data}
-            error={error}
+            ref={maxPriceSelectRef}
           />
         </Box>
+        <Box>
+          <ClearButton variant="outlined" onClick={clearLanguages}>
+            Clear
+          </ClearButton>
+          <LanguageFilter
+            handleLanguageChange={handleLanguageChange}
+            ref={languageSelectRef}
+          />
+        </Box>
+        <Box>
+          <ClearButton variant="outlined" onClick={clearDepartment}>
+            Clear
+          </ClearButton>
+          <StandardFilter
+            handleValueChange={handleDepartmentChange}
+            label={'Department'}
+            items={{
+              Informatics: 'Informatics',
+              Physics: 'Physics',
+              Other: 'Other'
+            }}
+            ref={departmentSelectRef}
+          />
+        </Box>
+        <Box>
+          <ClearButton variant="outlined" onClick={clearRating}>
+            Clear
+          </ClearButton>
+          <StandardFilter
+            handleValueChange={handleRatingChange}
+            label={'Rating'}
+            items={{ '2 Stars': 2, '3 Stars': 3, '4 Stars': 4 }}
+            ref={ratingSelectRef}
+          />
+        </Box>
+      </Box>
+      <Box
+        p={2}
+        sx={{
+          width: '100%',
+          mt: 4,
+          maxHeight: '70vh',
+          alignItems: 'stretch'
+        }}
+      >
+        <StudySessionsSearchResult
+          isLoading={isLoading}
+          data={data}
+          error={error}
+        />
       </Box>
     </Box>
   );

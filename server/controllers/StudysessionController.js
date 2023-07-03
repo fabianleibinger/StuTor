@@ -199,7 +199,6 @@ export const getStudysessionsFiltered = async (req, res) => {
     }
 
     const studysessions = await query.exec();
-
     const filteredSessions = studysessions.filter(
       session =>
         (session.course.name
@@ -230,6 +229,7 @@ export const getStudysessionsFiltered = async (req, res) => {
 export const updateStudysession = async (req, res) => {
   try {
     // Check if course and tutor exist.
+
     const courseId = new ObjectId(req.body.course);
     const course = await Course.findById(courseId);
     const userId = new ObjectId(req.body.tutoredBy);
@@ -238,6 +238,7 @@ export const updateStudysession = async (req, res) => {
       res.status(404).send('Object reference not found!');
       return;
     }
+
     // Update studysession.
     const studysessionId = new ObjectId(req.params.studysessionId);
     const updatedStudysession = new Studysession({
@@ -247,12 +248,14 @@ export const updateStudysession = async (req, res) => {
       pricePerHourEuro: req.body.pricePerHourEuro,
       languages: req.body.languages
     });
+
     try {
       const studysession = await Studysession.findByIdAndUpdate(
         studysessionId,
         {
+          course: updateStudysession.course,
           name: updatedStudysession.name,
-          tutoredBy: updatedStudysession.tutoredBy,
+          tutoredBy: updatedStudysession.tutoredBy._id,
           description: updatedStudysession.description,
           pricePerHourEuro: updatedStudysession.pricePerHourEuro,
           languages: updatedStudysession.languages
