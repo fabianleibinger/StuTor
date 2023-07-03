@@ -1,5 +1,5 @@
 import React from "react";
-import { Rating, Button, Skeleton } from "@mui/material";
+import { Rating, Button, Skeleton, Grid } from "@mui/material";
 import { getReviewsAndRatingOfStudysession } from "../../api/StudySession";
 import { useQuery } from "react-query";
 import { useState } from "react";
@@ -43,8 +43,12 @@ const StudysessionRating = ({ studySessionId }) => {
   }
 
   return (
-    <div>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      < Grid container spacing={2}>
+        <Grid item >
       <StarRating rating={rating} isReadOnly={true} />
+      </Grid>
+      <Grid item >
       <Button
         variant="outlined"
         onClick={handleOpenDialog}
@@ -52,6 +56,8 @@ const StudysessionRating = ({ studySessionId }) => {
       >
         {buttonText}
       </Button>
+      </Grid>
+      </Grid>
       <StudysessionReviewDialog
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
