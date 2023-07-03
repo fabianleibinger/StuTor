@@ -1,7 +1,10 @@
+import Stripe from 'stripe';
 import Booking from '../models/Booking.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
 import { ObjectId } from 'mongodb';
+
+const stripe = new Stripe('sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01');
 
 export const createBooking = async (req, res) => {
     try {
@@ -50,6 +53,30 @@ export const getBooking = async (req, res) => {
         }
     } catch (err) {
         res.status(400).send('Bad request!');
+    }
+};
+
+export const setBookingIsPayed = async (req, res) => {
+    try {
+        const bookingId = new ObjectId(req.params.bookingId);
+        const booking = await Booking.findById(bookingId);
+        const session = await stripe.checkout.sessions.retrieve(booking.paymentSession);
+        if (session.payment_status !== 'paid') {
+            await Booking.findByIdAndDelete(bookingId);
+            res.status(400).send('Payment not completed!');
+        }
+        const updatedBooking = await Booking.findByIdAndUpdate(bookingId,
+            {
+                isPayed: true,
+            });
+        if (!booking) {
+            res.status(404).send('Booking not found!');
+        } else if (updatedBooking) {
+            res.status(200).send('Booking is payed!');
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(406).send('Failed to set booking to payed!');
     }
 };
 

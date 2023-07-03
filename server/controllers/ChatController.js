@@ -1,6 +1,5 @@
 import Chat from "../models/Chat.js";
 import Message from "../models/Message.js";
-import Studysession from "../models/Studysession.js";
 import User from "../models/User.js";
 import { ObjectId } from "mongodb";
 

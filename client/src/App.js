@@ -17,6 +17,7 @@ import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js";
 import UserProfile from "./pages/UserProfile.js";
 import { UserContext } from "./context/UserContext";
 import ChatPage from "./pages/ChatPage";
+import SuccessPage from "./pages/SuccessPage.js"
 
 function App() {
   const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ function App() {
                 path="/StudysessionDetailsPage/:studySessionId"
                 element={<StudysessionDetailsPage />}
               />
+              <Route path="/success/:bookingId" element={<SuccessPage />} />
             </Routes>
           </Router>
         </UserContext.Provider>

@@ -17,6 +17,7 @@ import { UserContext } from "../context/UserContext";
 import newRequest from "../utils/newRequest";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import { searchUniversities } from "../utils/searchUniversities";
+import RegisterStripe from "../components/Payment/RegisterStripe";
 
 const UserProfile = () => {
   const { user, setUser } = useContext(UserContext);
@@ -418,6 +419,7 @@ const UserProfile = () => {
             {successMessage}
           </Typography>
         </form>
+        <RegisterStripe />
       </Container>
     </div>
   );

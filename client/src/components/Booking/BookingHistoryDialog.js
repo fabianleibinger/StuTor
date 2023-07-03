@@ -4,15 +4,13 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   List,
   ListItem,
   ListItemText,
 } from "@mui/material";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { confirmBooking as confirmBookingCall } from "../../api/Booking.js";
+import { confirmBooking as confirmBookingCall, getBookingsCreatedByUser } from "../../api/Booking.js";
 import ReviewDialog from "./ReviewDialog.js";
-import { getBookingsOfStudysessionCreatedByUser } from "../../api/Booking.js";
 
 const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
