@@ -1,10 +1,11 @@
 import { createAccountCall, getPaymentInfo, deleteAccountCall, updateAccountCall } from "../../api/Payment.js";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Button, Alert } from "@mui/material";
+import getCurrentUser from "../../utils/getCurrentUser.js";
 
 const RegisterStripe = () => {
     const queryClient = useQueryClient();
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = getCurrentUser();
     let registerStripeIsPossible = false
     let updateAccountIsPossible = false
     const {
