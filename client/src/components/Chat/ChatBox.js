@@ -5,7 +5,7 @@ import {
   getMessagesOfChat,
   sendMessage as sendMessageCall,
 } from "../../api/Message";
-import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
+import { Stack, Box, Chip, TextField, Button, Avatar, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import getCurrentUser from "../../utils/getCurrentUser";
 import socket from "../../Socket";
@@ -134,8 +134,8 @@ const ChatBox = () => {
   };
 
   const stackSx = {
-    width: 0.95,
-    height: 0.88,
+    width: 0.94,
+    height: 0.96,
     padding: 2,
   };
 
@@ -145,8 +145,11 @@ const ChatBox = () => {
         <Box ref={chatboxRef} overflow={"auto"} height={0.88}>
           <Stack direction="column" spacing={2} sx={stackSx}>
             {data ? (
-              messages.map((message, index) => (
-                <Stack
+              messages.map((message, index) => {
+                const createdAt = new Date(message.createdAt);
+                const timeString = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return (<Stack
                   key={index}
                   direction="row"
                   justifyContent={
@@ -155,25 +158,33 @@ const ChatBox = () => {
                       : "flex-start"
                   }
                 >
-                  {getCurrentUser()._id !== message.sender._id ? (
-                    <Avatar
-                      src={message.sender.profilePicture}
-                      sx={{ marginRight: 1 }}
+                  <Stack direction="row" alignItems="center" justifyContent={
+                    getCurrentUser()._id === message.sender._id
+                      ? "flex-end"
+                      : "flex-start"
+                  } sx={{ maxWidth: 0.7 }}>
+                    {getCurrentUser()._id !== message.sender._id ? (
+                      <Avatar
+                        src={message.sender.profilePicture}
+                        sx={{ marginRight: 1 }}
+                      />
+                    ) : null}
+                    <Chip
+                      label={message.content}
+                      sx={{
+                        height: "auto",
+                        padding: 0.75,
+                        "& .MuiChip-label": {
+                          display: "block",
+                          whiteSpace: "normal",
+                        },
+                      }}
                     />
-                  ) : null}
-                  <Chip
-                    label={message.content}
-                    sx={{
-                      height: "auto",
-                      padding: 0.75,
-                      "& .MuiChip-label": {
-                        display: "block",
-                        whiteSpace: "normal",
-                      },
-                    }}
-                  />
+                  </Stack>
+                  <Typography variant="caption" color="textSecondary" sx={{ padding: 0.75 }}>{timeString}</Typography>
                 </Stack>
-              ))
+                );
+              })
             ) : (
               <Chip label="Start a conversation!" />
             )}
@@ -192,7 +203,7 @@ const ChatBox = () => {
             value={newMessage}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            sx={{ width: 0.8 }}
+            sx={{ width: 1 }}
           />
           <Button
             variant="contained"

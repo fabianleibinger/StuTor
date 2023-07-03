@@ -252,19 +252,10 @@ export const getReviewsOfStudysession = async (req, res) => {
   try {
     // Check if studysession exists.
     const studysessionId = new ObjectId(req.params.studysessionId);
-    try {
-      const studysession = await Studysession.findByIdAndDelete(studysessionId);
-      // Delete all student associations of this studysession.
-      await UserStudysession.deleteMany({ studysession: studysessionId });
-      // Delete chats of this studysession.
-      await Chat.deleteMany({ studysession: studysessionId });
-      if (!studysession) {
-        res.status(404).send("Studysession not found!");
-      } else {
-        res.status(200).send("Studysession deleted!");
-      }
-    } catch (err) {
-      res.status(500).send("Failed to delete studysession!");
+    const studysession = await Studysession.findById(studysessionId);
+    if (!studysession) {
+      res.status(404).send('Object reference not found!');
+      return;
     }
     try {
       const reviews = await Review.find().populate({
