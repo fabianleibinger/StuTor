@@ -7,6 +7,7 @@ import {
   Button,
   Typography,
   Alert,
+  Box,
 } from "@mui/material";
 import { useQueryClient } from "react-query";
 import { useMutation } from "react-query";
@@ -26,19 +27,13 @@ const BookingDialog = ({
   const [showAlert, setShowAlert] = useState(false);
   const queryClient = useQueryClient();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  console.log("currentUser", currentUser)
-
-  // hardcoded for now (tutorId for stripe payment)
-  const customerId = studysession.tutoredBy;
-
-  const navigate = useNavigate();
 
   // Redirect to Stripe checkout
   const handleRedirect = (url) => {
     window.location.replace(url);
   };
 
-  const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession, hours), {
+  const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession._id, hours), {
     onSuccess: (url) => {
       handleRedirect(url);
       queryClient.invalidateQueries("payment");
@@ -68,8 +63,11 @@ const BookingDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Booking</DialogTitle>
+      <DialogTitle>Book studysession for {studysession.title}</DialogTitle>
       <DialogContent>
+        <Typography variant="subtitle1" color={'grey'}>
+          Here you can book the studysession {studysession.title} which is offered by {studysession.tutoredBy.firstname} for {priceEuro}€ per hour.
+        </Typography>
         <TextField
           label="Number of hours"
           type="number"
@@ -90,11 +88,13 @@ const BookingDialog = ({
           Proceed to Payment
         </Button>
         {showAlert && (
+          < Box paddingTop={2}>
           <Alert severity="error">
             There was an error processing the payment. 
             Probably your tutor didn't set up his Stripe account yet. 
             Please contact him/her and otherwise the customer support.
           </Alert>
+          </Box>
         )}
       </DialogContent>
     </Dialog>

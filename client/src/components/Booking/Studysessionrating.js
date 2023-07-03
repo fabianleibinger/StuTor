@@ -35,7 +35,7 @@ const StudysessionRating = ({ studySessionId }) => {
   if (error) {
     rating = 0;
     reviews = [];
-    buttonText = "No Reviews";
+    buttonText = "No Reviews yet";
   } else {
     rating = data.rating;
     reviews = data.reviews;
