@@ -5,7 +5,7 @@ import {
     useQuery
   } from 'react-query'
 import BookingDialog from '../components/Booking/BookingDialog.js';
-import { getStudySessionbyId, getStudysessions } from '../api/StudySession.js';
+import { getStudySessionbyId } from '../api/StudySession.js';
 import BookingHistoryDialog from '../components/Booking/BookingHistoryDialog.js';
 import StudysessionRating from '../components/Booking/Studysessionrating.js';
 import { useParams } from 'react-router-dom';
@@ -49,24 +49,24 @@ const StudysessionDetailsPage = () => {
       < Grid container spacing={2} padding={2}>
         <Grid item xs={12} sm={6}>
       <Box sx={{ backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '8px', width: '100%' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+      <Typography variant="h3" sx={{ marginBottom: '1rem' }}>{data.course.name}</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
       <Avatar
                   src={data.tutoredBy.picture}
                   alt=""
                   sx={{ width: 120, height: 120 }}
                 />
                 </Box>
-      <Typography variant="h3" sx={{ marginBottom: '1rem' }}>{data.course.name}</Typography>
       < Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-      <Typography variant="subtitle1" >{data.tutoredBy.firstname + " " + data.tutoredBy.lastname}</Typography>
+      <Typography variant="h5" >{data.tutoredBy.firstname + " " + data.tutoredBy.lastname}</Typography>
       <Typography variant="subtitle2" sx={{ marginBottom: '1.5rem' }}>{data.course.university.name}</Typography>
       </Grid>
       <Grid item xs={12} sm={6} alignContent={'center'}>
       <StudysessionRating studySessionId={studySessionId} />
       </Grid>
       </Grid>
-      <Typography variant="h5" sx={{ marginBottom: '0.5rem' }}>Course description</Typography>
+      <Typography variant="h6" sx={{ marginBottom: '0.5rem' }}>Course description</Typography>
       <Typography variant="body1" marginBottom={6}>
   <TextTruncate
     line={20}
@@ -79,13 +79,13 @@ const StudysessionDetailsPage = () => {
 </Typography>
       <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Grid item xs={12} sm={6}>
+        <Grid item marginRight={8}>
           
-      <Button variant="contained" color="primary" onClick={handleHistoryOpenDialog}>
+      <Button variant="contained" color="primary" onClick={handleHistoryOpenDialog} style={{ width: 'auto' }}>
       View bookings
       </Button>
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item marginLeft={8}>
       <Button variant="contained" color="primary" onClick={handleOpenDialog}>
         Book now
       </Button>
