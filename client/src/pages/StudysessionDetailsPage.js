@@ -11,6 +11,7 @@ import { useChatContext } from "../context/ChatProvider.js";
 import { accessChat as accessChatCall } from "../api/Chat.js";
 import ChatBox from '../components/Chat/ChatBox';
 import TextTruncate from 'react-text-truncate';
+import GreenCircleComponent from "../components/Booking/GreenCircle.js";
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
@@ -87,10 +88,27 @@ const StudysessionDetailsPage = () => {
   if (error) return "An error has occurred!";
 
   return (
-    <div style={{marginTop: '1rem'}}>
-      < Grid container spacing={2} padding={2}>
-        <Grid item xs={12} sm={6}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        width: '96vw',
+        height: '92vh',
+        mx: 'auto',
+        marginTop: '4vh',
+        marginBottom: '3vh',
+      }}
+    >
+      <Box width={0.49} height={1}>
+        <div>
       <Box sx={{ backgroundColor: '#f5f5f5', padding: '1rem', borderRadius: '8px', width: '100%' }}>
+        <Box height={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
+    </Box>
       <Typography variant="h3" sx={{ marginBottom: '1rem' }}>{data.course.name}</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
       <Avatar
@@ -150,15 +168,12 @@ const StudysessionDetailsPage = () => {
         studysession={studySessionId}
       />
       </Box> 
-      </Grid>
-      <Grid item xs={12} sm={6}>
-      < Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '1rem'}}>
-        < ChatBox>
-      </ChatBox>
+      </div>
       </Box>
-      </Grid>
-      </Grid>
-      </div> 
+      <Box width={0.49} height={1}>
+        {<ChatBox />}
+      </Box>
+      </Box> 
   );
 };
 
