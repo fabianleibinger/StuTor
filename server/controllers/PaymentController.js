@@ -153,53 +153,46 @@ export const createPayment = async (req, res) => {
     const stripeAccount = await stripe.accounts.retrieve(
       existingAccount.customerId
     );
+
+    if (existingAccount && stripeAccount.charges_enabled == true) {
+        // Create booking.
+        const newBooking = new Booking({
+          studysession: studysessionId,
+          hours: req.body.hours,
+          priceEuro: amount,
+          createdAt: Date.now(),
+          createdBy: studentId,
+        });
+        const savedBooking = await newBooking.save();
+        const bookingId = savedBooking._id;
+        const session = await stripe.checkout.sessions.create({
+          mode: "payment",
+          line_items: [
+            {
+              price: price.id,
+              quantity: 1,
+            },
+          ],
+          payment_intent_data: {
+            application_fee_amount: fee,
+            transfer_data: {
+              destination: existingAccount.customerId,
+            },
+          },
+          success_url: `http://localhost:3000/success/${bookingId}`,
+          cancel_url: `http://localhost:3000/success/${bookingId}`,
+        });
+        await Booking.findByIdAndUpdate(bookingId, {
+          paymentSession: session.id,
+        });
+        console.log(bookingId);
+  
+        res.status(200).send(session);
+      } else {
+        res.status(400).send("User has no payment account!");
+      }
   } catch (err) {
     res.status(400).send("Tutor doesn't have a payment account!");
     return;
-  }
-
-  if (existingAccount && stripeAccount.charges_enabled == true) {
-    try {
-      // Create booking.
-      const newBooking = new Booking({
-        studysession: studysessionId,
-        hours: req.body.hours,
-        priceEuro: amount,
-        createdAt: Date.now(),
-        createdBy: studentId,
-      });
-      const savedBooking = await newBooking.save();
-      const bookingId = savedBooking._id;
-      const session = await stripe.checkout.sessions.create({
-        mode: "payment",
-        line_items: [
-          {
-            price: price.id,
-            quantity: 1,
-          },
-        ],
-        payment_intent_data: {
-          application_fee_amount: fee,
-          transfer_data: {
-            destination: existingAccount.customerId,
-          },
-        },
-        success_url: `http://localhost:3000/success/${bookingId}`,
-        cancel_url: `http://localhost:3000/success/${bookingId}`,
-      });
-      await Booking.findByIdAndUpdate(bookingId, {
-        paymentSession: session.id,
-      });
-      console.log(bookingId);
-
-      res.status(200).send(session);
-    } catch (err) {
-      console.log(err);
-      res.status(400).send(err);
-    }
-  } else {
-    res
-      .status(400)
-      .send("User has no payment account or it is not set up correctly!");
   }
 };

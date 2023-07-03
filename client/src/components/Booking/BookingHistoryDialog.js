@@ -9,7 +9,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { confirmBooking as confirmBookingCall, getBookingsCreatedByUser } from "../../api/Booking.js";
+import { confirmBooking as confirmBookingCall, getBookingsOfStudysessionCreatedByUser } from "../../api/Booking.js";
 import ReviewDialog from "./ReviewDialog.js";
 
 const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
@@ -64,11 +64,13 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
             <List>
               {bookings.map((booking) => (
                 <ListItem key={booking._id}>
+                  {booking.isPayed && (
                   <ListItemText
                     primary={booking.hours}
                     secondary={booking.createdAt}
-                  />
-                  {!booking.isConfirmed && (
+                  />)}
+                  
+                  {booking.isPayed && !booking.isConfirmed && (
                     <Button
                       variant="contained"
                       color="primary"
@@ -93,6 +95,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                     </Button>
                   )}
                 </ListItem>
+                
               ))}
             </List>
           )}

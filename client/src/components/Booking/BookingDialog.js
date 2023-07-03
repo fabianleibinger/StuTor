@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useQueryClient, useMutation } from "react-query";
 import { createPayment as createPaymentCall } from "../../api/Payment.js";
+import getCurrentUser from "../../utils/getCurrentUser.js";
 
 const BookingDialog = ({
   open,
@@ -23,7 +24,7 @@ const BookingDialog = ({
   const [totalAmount, setTotalAmount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const queryClient = useQueryClient();
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const currentUser = getCurrentUser();
 
   // Redirect to Stripe checkout
   const handleRedirect = (url) => {
