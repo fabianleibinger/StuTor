@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Rating,
 } from "@mui/material";
 import StarRating from "./StarRating.js";
 

@@ -9,11 +9,8 @@ import {
   Alert,
   Box,
 } from "@mui/material";
-import { useQueryClient } from "react-query";
-import { useMutation } from "react-query";
-import { createBooking as createBookingCall } from "../../api/Booking.js";
+import { useQueryClient, useMutation } from "react-query";
 import { createPayment as createPaymentCall } from "../../api/Payment.js";
-import { useNavigate } from 'react-router-dom';
 
 const BookingDialog = ({
   open,
@@ -63,10 +60,11 @@ const BookingDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Book studysession for {studysession.title}</DialogTitle>
+      <DialogTitle>Book studysession for {studysession.course.name}</DialogTitle>
       <DialogContent>
         <Typography variant="subtitle1" color={'grey'}>
-          Here you can book the studysession {studysession.title} which is offered by {studysession.tutoredBy.firstname} for {priceEuro}€ per hour.
+          Here you can book the studysession offered by {studysession.tutoredBy.firstname} for {priceEuro}€ per hour. 
+          Please enter the number of hours that you agreed on with your tutor!
         </Typography>
         <TextField
           label="Number of hours"
