@@ -113,6 +113,26 @@ export const updateUser = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.userId);
     const updatedUser = { ...req.body };
+
+    // Check if the updated email is already taken by another user
+    const existingEmailUser = await User.findOne({
+      email: updatedUser.email,
+      _id: { $ne: userId }, // Exclude the current user from the check
+    });
+    if (existingEmailUser) {
+      res.status(409).send("Email is already taken by another user!");
+      return;
+    }
+    // Check if the updated username is already taken by another user
+    const existingUsernameUser = await User.findOne({
+      username: updatedUser.username,
+      _id: { $ne: userId }, // Exclude the current user from the check
+    });
+    if (existingUsernameUser) {
+      res.status(409).send("Username is already taken by another user!");
+      return;
+    }
+
     const user = await User.findOneAndUpdate({ _id: userId }, updatedUser, {
       new: true,
     });
