@@ -1,22 +1,19 @@
 import React from "react";
 import { getChatsOfUser } from "../../api/Chat";
 import { useQuery } from "react-query";
-import {
-  Box,
-  Skeleton,
-  Alert,
-  List,
-  Divider,
-  ListItemButton,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-} from "@mui/material";
-import { useAppContext } from "../../context/ChatProvider";
+import { Box, Skeleton, Alert, List, Divider } from "@mui/material";
+import { useChatContext } from "../../context/ChatProvider";
 import getCurrentUser from "../../utils/getCurrentUser";
+import ChatListItem from "./ChatListItem";
 
 const MyChats = () => {
-  const { selectedChat, setSelectedChat, isTyping } = useAppContext();
+  const {
+    selectedChat,
+    setSelectedChat,
+    isTyping,
+    notification,
+    setNotification,
+  } = useChatContext();
 
   const { isLoading, error, data } = useQuery(["chatsOfUser"], () =>
     getChatsOfUser(getCurrentUser()._id)
@@ -33,7 +30,7 @@ const MyChats = () => {
     height: 1,
   };
 
-  const loading_skeleton = (
+  const LoadingSkeleton = (
     <Skeleton
       variant="rounded"
       sx={{ flexGrow: 1, width: 1, marginBottom: "3vh" }}
@@ -43,14 +40,14 @@ const MyChats = () => {
   if (isLoading)
     return (
       <Box sx={boxSx}>
-        {loading_skeleton}
-        {loading_skeleton}
-        {loading_skeleton}
-        {loading_skeleton}
-        {loading_skeleton}
-        {loading_skeleton}
-        {loading_skeleton}
-        {loading_skeleton}
+        {LoadingSkeleton}
+        {LoadingSkeleton}
+        {LoadingSkeleton}
+        {LoadingSkeleton}
+        {LoadingSkeleton}
+        {LoadingSkeleton}
+        {LoadingSkeleton}
+        {LoadingSkeleton}
       </Box>
     );
 
@@ -73,38 +70,25 @@ const MyChats = () => {
           }}
         >
           {data.map((chat, index) => (
-            <React.Fragment key={chat.id}>
-              <ListItemButton
-                alignItems="flex-start"
-                onClick={() => setSelectedChat(chat)}
-                sx={{
-                  backgroundColor:
-                    selectedChat?._id === chat._id ? "lightgrey" : "inherit",
-                }}
-              >
-                <ListItemAvatar>
-                  <Avatar src={chat.users[0].picture} />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    chat.users[0].firstname +
-                    " " +
-                    chat.users[0].lastname +
-                    " - " +
-                    chat.studysession.course.name
-                  }
-                  secondary={
-                    isTyping ? "Typing..." : chat.latest_message?.content
-                  }
-                  sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    maxWidth: "100%",
-                  }}
+            <React.Fragment key={chat._id}>
+              {notification.includes(chat._id) ? (
+                <ChatListItem
+                  chat={chat}
+                  selectedChat={selectedChat}
+                  setSelectedChat={setSelectedChat}
+                  isTyping={isTyping}
+                  unread={true}
                 />
-              </ListItemButton>
-              {index < data.length - 1 && <Divider />}
+              ) : (
+                <ChatListItem
+                  chat={chat}
+                  selectedChat={selectedChat}
+                  setSelectedChat={setSelectedChat}
+                  isTyping={isTyping}
+                  unread={false}
+                />
+              )}
+              <Divider />
             </React.Fragment>
           ))}
         </List>
