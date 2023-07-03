@@ -419,8 +419,8 @@ const UserProfile = () => {
             {successMessage}
           </Typography>
         </form>
+        <RegisterStripe />
       </Container>
-      <RegisterStripe />
     </div>
   );
 };
