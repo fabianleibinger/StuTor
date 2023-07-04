@@ -1,19 +1,12 @@
 import * as React from 'react';
-import { useQuery } from 'react-query';
 
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
+import { Avatar, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { blue } from '@mui/material/colors';
-import { Delete } from '@mui/icons-material/';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import studySessionCardStyles from './StudySessionCardStyles';
-import PricePerHourCircle from './PricePerHourCircle';
 import ActionButton from './ActionButton';
 
 import { styled } from '@mui/system';
@@ -81,7 +74,9 @@ export default function StudySessionCard({
             <Typography>
               {tutorFirstName} {tutorLastName}
             </Typography>
-            <Typography>{studySession.pricePerHourEuro} €/h</Typography>
+            <Typography fontWeight="bold" sx={{ mt: 1 }}>
+              {studySession.pricePerHourEuro} €/h
+            </Typography>
             <Typography sx={{ m: 1, wordWrap: 'break-word' }}>
               <br />{' '}
               {studySession.description.length > 100
@@ -113,6 +108,7 @@ export default function StudySessionCard({
             display: 'flex',
             width: 1,
             justifyContent: 'space-between',
+            alignItems: 'center',
             marginTop: 'auto',
             gap: '10px'
           }}
@@ -129,7 +125,14 @@ export default function StudySessionCard({
                   />
                 </>
               ) : (
-                <ActionButton text="Details" />
+                <Box
+                  id="StudentStudySessionButtonBox"
+                  sx={{ width: 1, textAlign: 'center' }}
+                >
+                  <Button variant="contained" size="large">
+                    Details
+                  </Button>
+                </Box>
               )}
             </>
           )}

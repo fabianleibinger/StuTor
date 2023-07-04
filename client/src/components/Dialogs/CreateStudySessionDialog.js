@@ -112,6 +112,7 @@ export default function AddStudySessionDialog({ children }) {
                 color: 'black',
                 width: '175px'
               }}
+              onClick={() => handleClose()}
             >
               Cancel
             </Button>

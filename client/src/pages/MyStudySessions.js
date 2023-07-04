@@ -97,6 +97,10 @@ const MyStudySessions = () => {
     setIdToDelete(id);
   };
 
+  const onConfirmationDialogClose = () => {
+    setOpenConfirmDialog(false);
+  };
+
   const handleDeleteStudySession = async studySessionId => {
     setOpenConfirmDialog(false);
     await deleteStudySessionMutation.mutateAsync(studySessionId, {
@@ -190,7 +194,7 @@ const MyStudySessions = () => {
       >
         <Grid
           container
-          spacing={1}
+          spacing={0}
           sx={{ height: '100%', alignItems: 'top-left' }}
         >
           {studySessions &&
@@ -208,7 +212,6 @@ const MyStudySessions = () => {
                   studySession={studySession}
                   onDelete={() => {
                     handleDeleteConfirmationNeeded(studySession._id);
-                    console.log(openConfirmDialog);
                   }}
                   tutorFirstName={tutorFirstName}
                   tutorLastName={tutorLastName}

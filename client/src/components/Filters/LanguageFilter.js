@@ -76,20 +76,21 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
     <div>
       <FormControl
         sx={{
-          minWidth: '120px',
-          maxWidth: 'sm',
-          height: '35px'
+          minWidth: '10vw',
+          maxWidth: 'md',
+          height: '45px',
+          alignItems: 'center'
         }}
         size="small"
       >
         <InputLabel
           sx={{
-            color: 'black',
-            textAlign: 'center',
-            display: 'flex',
-            alignItems: 'center' // Add this line
+            color: 'gray',
+            background: '#FFF',
+            fontSize: '16px',
+            mt: -0.1,
+            pl: 1
           }}
-          size="small"
         >
           {' '}
           Languages
@@ -115,14 +116,14 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
             PaperProps: {
               style: {
                 maxHeight: 200,
-                width: 250
+                width: 1
               }
             }
           }}
           sx={{
             alignItems: 'center',
             height: '100%',
-            width: '180px'
+            width: 1
           }}
           size="small"
         >

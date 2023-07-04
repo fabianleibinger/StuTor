@@ -24,11 +24,11 @@ export default function ConfirmationDialog({ open, onCancel, onConfirmation }) {
     <div>
       <Dialog
         open={open}
-        onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        onBackdropClick={handleCancel}
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" variant="h4">
           {'Delete Study Session'}
         </DialogTitle>
         <DialogContent>
@@ -37,8 +37,15 @@ export default function ConfirmationDialog({ open, onCancel, onConfirmation }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleConfirmation}>Confirm</Button>
-          <Button onClick={handleCancel} autoFocus variant="contained">
+          <Button onClick={handleConfirmation} size="large">
+            Confirm
+          </Button>
+          <Button
+            onClick={handleCancel}
+            autoFocus
+            variant="contained"
+            size="large"
+          >
             Cancel
           </Button>
         </DialogActions>

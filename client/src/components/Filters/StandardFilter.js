@@ -24,18 +24,21 @@ const StandardFilter = forwardRef(
       <div>
         <FormControl
           sx={{
-            minWidth: '100px',
-            maxWidth: 'sm',
-            height: '35px'
+            minWidth: '10vw',
+            height: '45px',
+            alignItems: 'center'
           }}
-          size="small"
+          size="large"
         >
           <InputLabel
             sx={{
-              color: 'black',
+              color: 'gray',
               textAlign: 'center',
               display: 'flex',
-              alignItems: 'center' // Add this line
+              alignItems: 'center',
+              background: '#FFF',
+              mt: -0.1,
+              pl: 1
             }}
             size="small"
           >
@@ -50,9 +53,9 @@ const StandardFilter = forwardRef(
             sx={{
               alignItems: 'center',
               height: '100%',
-              width: '140px'
+              width: 1
             }}
-            size="small"
+            size="large"
           >
             <MenuItem value="" disabled>
               <em>{label}</em>

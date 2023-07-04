@@ -39,8 +39,8 @@ function SearchResult({ isLoading, data, error, onSelectCourse }) {
                 color: 'gray',
                 cursor: 'pointer'
               },
-              pt: 2,
               pr: 3,
+              pt: 2,
               fontWeight: 'bold',
               fontSize: '20px'
             }}

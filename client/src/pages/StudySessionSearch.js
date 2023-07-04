@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import StudySessionSearchbar from '../components/Searchbars/StudySessionSearchbar';
 import LanguageFilter from '../components/Filters/LanguageFilter';
 import StandardFilter from '../components/Filters/StandardFilter';
+import ClearFilterButton from '../components/Filters/ClearFilterButton';
+import { FilterContainer } from '../styles';
 
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
@@ -34,7 +36,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
   }
   if (data) {
     return (
-      <ScrollableContainer>
+      <ScrollableContainer sx={{ pl: 1 }}>
         <Grid container spacing={2}>
           {data.map(studySession => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={studySession._id}>
@@ -43,6 +45,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
                 onDelete={() => {}}
                 tutorFirstName={studySession.tutoredBy.firstname}
                 tutorLastName={studySession.tutoredBy.lastname}
+                tutorPicture={studySession.tutoredBy.picture}
                 role={userRole}
                 onItemClick={() => {}}
                 details={true}
@@ -187,7 +190,7 @@ export default function StudySessionSearch() {
     <Box
       id="studySearchPageBox"
       sx={{
-        width: '90vw',
+        width: '80vw',
         height: '90vh',
         minheight: 1,
         justifyContent: 'center',
@@ -212,17 +215,8 @@ export default function StudySessionSearch() {
           mt: 1
         }}
       >
-        <Box
-          id="PriceFilterBox"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end'
-          }}
-        >
-          <ClearButton variant="outlined" onClick={clearMaxPrice}>
-            Clear
-          </ClearButton>
+        <FilterContainer>
+          <ClearFilterButton handleClick={clearMaxPrice} />
           <StandardFilter
             handleValueChange={handleMaxPriceChange}
             label={'Max Price'}
@@ -233,20 +227,16 @@ export default function StudySessionSearch() {
             }}
             ref={maxPriceSelectRef}
           />
-        </Box>
-        <Box>
-          <ClearButton variant="outlined" onClick={clearLanguages}>
-            Clear
-          </ClearButton>
+        </FilterContainer>
+        <FilterContainer>
+          <ClearFilterButton handleClick={clearLanguages} />
           <LanguageFilter
             handleLanguageChange={handleLanguageChange}
             ref={languageSelectRef}
           />
-        </Box>
-        <Box>
-          <ClearButton variant="outlined" onClick={clearDepartment}>
-            Clear
-          </ClearButton>
+        </FilterContainer>
+        <FilterContainer>
+          <ClearFilterButton handleClick={clearDepartment} />
           <StandardFilter
             handleValueChange={handleDepartmentChange}
             label={'Department'}
@@ -257,21 +247,18 @@ export default function StudySessionSearch() {
             }}
             ref={departmentSelectRef}
           />
-        </Box>
-        <Box>
-          <ClearButton variant="outlined" onClick={clearRating}>
-            Clear
-          </ClearButton>
+        </FilterContainer>
+        <FilterContainer>
+          <ClearFilterButton handleClick={clearRating} />
           <StandardFilter
             handleValueChange={handleRatingChange}
             label={'Rating'}
             items={{ '2 Stars': 2, '3 Stars': 3, '4 Stars': 4 }}
             ref={ratingSelectRef}
           />
-        </Box>
+        </FilterContainer>
       </Box>
       <Box
-        p={2}
         sx={{
           width: '100%',
           mt: 4,

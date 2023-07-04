@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { UserContext } from '../../context/UserContext';
 
-import { Button, Box, TextField, TextareaAutosize, Grid } from '@mui/material';
+import { Button, Box, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 
 // import other components
@@ -117,19 +117,26 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
 
   return (
     <form className="create" onSubmit={handleSubmit}>
-      <Stack id="formStack" spacing={2} sx={{ alignItems: 'center', width: 1 }}>
+      <Stack
+        id="formStack"
+        spacing={2}
+        sx={{ alignItems: 'center', width: 1, mt: 3 }}
+      >
         <Stack
           direction="column"
           spacing={2}
           sx={{ width: 1, alignItems: 'center' }}
         >
-          <CourseSearch
-            onSelectCourse={handleSelectCourse}
-            onDeleteCourse={handleDeleteCourse}
-            course={oldStudySession !== null ? oldStudySession.course : null}
-            usage={usage}
-            required
-          />
+          {usage === 'CREATE' && (
+            <CourseSearch
+              onSelectCourse={handleSelectCourse}
+              onDeleteCourse={handleDeleteCourse}
+              course={oldStudySession !== null ? oldStudySession.course : null}
+              usage={usage}
+              required
+            />
+          )}
+
           <TextField
             variant="outlined"
             autoFocus
@@ -170,15 +177,9 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
             }}
           />
           <Box sx={{ mt: 10 }}>
-            {usage === 'CREATE' ? (
-              <Button type="submit" variant="contained" size="large">
-                Publish
-              </Button>
-            ) : (
-              <Button type="submit" variant="contained">
-                Update Study Session
-              </Button>
-            )}
+            <Button type="submit" variant="contained" size="large">
+              Publish
+            </Button>
           </Box>
         </Stack>
       </Stack>

@@ -1,12 +1,13 @@
 import React from 'react';
 
 import CreateStudySessionForm from '../Forms/CreateStudySessionForm';
+import { BootstrapDialog } from '../../styles';
 
 import {
-  Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Button
 } from '@mui/material';
 
 export default function UpdateStudySessionDialog({
@@ -15,8 +16,8 @@ export default function UpdateStudySessionDialog({
   selectedStudySession
 }) {
   return (
-    <Dialog open={openDialog} onClose={onUpdateDialogClose}>
-      <DialogTitle>
+    <BootstrapDialog open={openDialog} onClose={onUpdateDialogClose}>
+      <DialogTitle sx={{ textAlign: 'center' }} variant="h4">
         {selectedStudySession.course.name || 'Loading...'}
       </DialogTitle>
       <DialogContent>
@@ -26,7 +27,21 @@ export default function UpdateStudySessionDialog({
           usage="UPDATE"
         />
       </DialogContent>
+      <Button
+        id="cancelCreationButton"
+        variant="contained"
+        size="large"
+        sx={{
+          margin: '0 auto',
+          backgroundColor: 'lightgray',
+          color: 'black',
+          width: '175px'
+        }}
+        onClick={() => onUpdateDialogClose()}
+      >
+        Cancel
+      </Button>
       <DialogActions>{/* Dialog actions here */}</DialogActions>
-    </Dialog>
+    </BootstrapDialog>
   );
 }
