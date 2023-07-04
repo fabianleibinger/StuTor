@@ -59,7 +59,7 @@ const Navbar = () => {
   };
 
   return (
-    <RootAppBar position="fixed">
+    <RootAppBar position="static">
       <RootToolbar>
         {/* ---------- LOGO ----------*/}
         <LogoContainer to="/">
@@ -105,7 +105,7 @@ const Navbar = () => {
                 aria-controls="profile-menu"
                 aria-haspopup="true"
               >
-                <Avatar src={user.picture || "/img/noavatar.jpg"} alt="" />
+                <Avatar src={user.picture} alt="" />
                 <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
               </AvatarIconButton>
 

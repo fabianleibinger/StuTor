@@ -92,130 +92,128 @@ const StudysessionDetailsPage = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        alignItems: "stretch",
-        alignContent: "stretch",
-        width: "96vw",
-        height: "92vh",
-        mx: "auto",
-        marginTop: "4vh",
-        marginBottom: "3vh",
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        width: '97vw',
+        height: '90vh',
+        mx: 'auto',
+        marginTop: '2vh',
+        marginBottom: '1vh',
       }}
     >
       <Box width={0.49} height={1}>
-        <div>
+        <Box
+          sx={{
+            padding: 2,
+            width: 0.94,
+            height: 0.98,
+            backgroundColor: "#f5f5f5",
+            borderRadius: "8px",
+          }}
+        >
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
+          </Box>
+          <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
+            {data.course.name}
+          </Typography>
           <Box
             sx={{
-              backgroundColor: "#f5f5f5",
-              padding: "1rem",
-              borderRadius: "8px",
-              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
             }}
           >
-            <Box
-              height={1}
-              sx={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
-            </Box>
-            <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
-              {data.course.name}
-            </Typography>
+            <Avatar
+              src={data.tutoredBy.picture}
+              alt=""
+              sx={{ width: 120, height: 120 }}
+            />
+          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h5">
+                {data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
+              </Typography>
+              <Typography variant="subtitle2" sx={{ marginBottom: "1.5rem" }}>
+                {data.course.university.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} alignContent={"center"}>
+              <StudysessionRating studySessionId={studySessionId} />
+            </Grid>
+          </Grid>
+          <Typography variant="h6" sx={{ marginBottom: "0.5rem" }}>
+            Course description
+          </Typography>
+          <Typography variant="body1" marginBottom={6}>
+            <TextTruncate
+              line={20}
+              truncateText="..."
+              text={data.description}
+              textTruncateChild={
+                <Button onClick={() => setExpanded(true)}>Read More</Button>
+              }
+              expanded={expanded}
+              onTruncate={() => setExpanded(false)}
+            />
+          </Typography>
+          <Grid
+            container
+            spacing={2}
+            sx={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}
+          >
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: "1rem",
               }}
             >
-              <Avatar
-                src={data.tutoredBy.picture}
-                alt=""
-                sx={{ width: 120, height: 120 }}
-              />
+              <Grid item marginRight={8}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleHistoryOpenDialog}
+                  style={{ width: "auto" }}
+                >
+                  View bookings
+                </Button>
+              </Grid>
+              <Grid item marginLeft={8}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpenDialog}
+                >
+                  Book now
+                </Button>
+              </Grid>
             </Box>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="h5">
-                  {data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
-                </Typography>
-                <Typography variant="subtitle2" sx={{ marginBottom: "1.5rem" }}>
-                  {data.course.university.name}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6} alignContent={"center"}>
-                <StudysessionRating studySessionId={studySessionId} />
-              </Grid>
-            </Grid>
-            <Typography variant="h6" sx={{ marginBottom: "0.5rem" }}>
-              Course description
-            </Typography>
-            <Typography variant="body1" marginBottom={6}>
-              <TextTruncate
-                line={20}
-                truncateText="..."
-                text={data.description}
-                textTruncateChild={
-                  <Button onClick={() => setExpanded(true)}>Read More</Button>
-                }
-                expanded={expanded}
-                onTruncate={() => setExpanded(false)}
-              />
-            </Typography>
-            <Grid
-              container
-              spacing={2}
-              sx={{ display: "flex", justifyContent: "center", gap: "0.5rem" }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Grid item marginRight={8}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleHistoryOpenDialog}
-                    style={{ width: "auto" }}
-                  >
-                    View bookings
-                  </Button>
-                </Grid>
-                <Grid item marginLeft={8}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleOpenDialog}
-                  >
-                    Book now
-                  </Button>
-                </Grid>
-              </Box>
-            </Grid>
+          </Grid>
 
-            <BookingHistoryDialog
-              open={historyDialogOpen}
-              onClose={handleHistoryCloseDialog}
-              userId={user._id}
-              studySessionId={studySessionId}
-            />
+          <BookingHistoryDialog
+            open={historyDialogOpen}
+            onClose={handleHistoryCloseDialog}
+            userId={user._id}
+            studySessionId={studySessionId}
+          />
 
-            <BookingDialog
-              open={dialogOpen}
-              onClose={handleCloseDialog}
-              priceEuro={data.pricePerHourEuro}
-              createdBy={user._id}
-              studysession={data}
-            />
-          </Box>
-        </div>
+          <BookingDialog
+            open={dialogOpen}
+            onClose={handleCloseDialog}
+            priceEuro={data.pricePerHourEuro}
+            createdBy={user._id}
+            studysession={data}
+          />
+        </Box>
       </Box>
       <Box width={0.49} height={1}>
         {<ChatBox />}
