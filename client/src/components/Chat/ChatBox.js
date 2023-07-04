@@ -139,7 +139,7 @@ const ChatBox = () => {
     padding: 2,
   };
 
-  if (selectedChat)
+  if (selectedChat) {
     return (
       <Box sx={boxSx}>
         <Box ref={chatboxRef} overflow={"auto"} height={0.88}>
@@ -216,14 +216,14 @@ const ChatBox = () => {
         </Box>
       </Box>
     );
-
-  return (
-    <Box sx={boxSx}>
-      <Stack direction="column" spacing={2} sx={stackSx}>
-        <Chip label="Select a chat to start messaging!" />
-      </Stack>
-    </Box>
-  );
+  } else {
+    return (
+      <Box sx={boxSx}>
+        <Stack direction="column" spacing={2} sx={stackSx}>
+        </Stack>
+      </Box>
+    );
+  }
 };
 
 export default ChatBox;
