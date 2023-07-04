@@ -1,76 +1,198 @@
-import Stripe from 'stripe';
-import Session from 'express-session';
+import Stripe from "stripe";
+import Session from "express-session";
+import Payment from "../models/Payment.js";
+import Studysession from "../models/Studysession.js";
+import User from "../models/User.js";
+import Booking from "../models/Booking.js";
+import { ObjectId } from "mongodb";
 
-const stripe = new Stripe('sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01');
-const session = new Session();
+const stripe = new Stripe(
+  "sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01"
+);
 
-export const onboardUser = async (req, res) => {
+export const createAccount = async (req, res) => {
+  const user = req.params.userId;
+  const existingPayment = await Payment.findOne({ user: user });
+  if (!existingPayment) {
     try {
-        console.log("onboardUser")
-        //console.log(req.session)
-        //console.log(Stripe)
+      const customer = await stripe.accounts.create({
+        type: "standard",
+      });
+      console.log("customerId:", customer.id);
+      const payment = new Payment({
+        user: user,
+        customerId: customer.id,
+      });
+      const account = await payment.save();
 
-        const account = await stripe.accounts.create({
-          type: 'standard',
-        });
-        console.log("Nach account")
-        console.log(account.id)
-    
-        // Store the ID of the new Standard connected account.
-        try {
-            //req.sessionID is undefined -> why?
-            req.session.accountID = account.id;
-        } catch (err) {
-            console.log(err)
-        }
-        //console.log("req.session.accountID: ", req.session.accountID)
-    
-        const origin = `${req.headers.origin}`;
-        console.log("origin: ", origin)
-        const accountLink = await stripe.accountLinks.create({
-          type: "account_onboarding",
-          account: account.id,
-          refresh_url: `${origin}/api/payment/onboardUserRefresh`,
-          return_url: `${origin}/success.html`,
-        });
-        console.log("accountLink: ", accountLink)
-        console.log("This is the accountLink:", accountLink)
-        
-        //const body = await res.json()
-        //window.location.href = body.url
-        //res.header("Access-Control-Allow-Origin", "*");
-        res.redirect(303, accountLink.url);
-        console.log("after redirect")
-        //res.redirect('https://www.google.com/search?q=google&rlz=1C5CHFA_enDE970DE970&oq=google&aqs=chrome.0.0i67i131i355i433i650j46i67i131i199i433i465i650j0i131i433i512j0i67i131i433i650l2j0i67i650l2j69i60.1018j0j7&sourceid=chrome&ie=UTF-8');
-      } catch (err) {
-        res.status(500).send({
-          error: err.message,
-        });
-      }
-    };
+      const accountLink = await stripe.accountLinks.create({
+        account: payment.customerId,
+        refresh_url: "http://localhost:3000/userProfile",
+        return_url: "http://localhost:3000/userProfile",
+        type: "account_onboarding",
+      });
+      res
+        .status(200)
+        .send({ url: accountLink.url, userId: user, accountId: account.id });
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  } else {
+    res.status(400).send("User already has a payment account!");
+  }
+};
 
-export const onboardUserRefresh = async (req, res) => {
-    console.log("refresh", req.session)
-    if (!req.session.accountID) {
-        res.redirect("/");
-        return;
-      }
-    
+export const updateAccount = async (req, res) => {
+  console.log("in update account");
+  const user = req.params.userId;
+  try {
+    const existingPayment = await Payment.findOne({ user: user });
+    const existingStripeAccount = await stripe.accounts.retrieve(
+      existingPayment.customerId
+    );
+    if (existingPayment && existingStripeAccount.charges_enabled == false) {
       try {
-        const { accountID } = req.session;
-        const origin = `${req.secure ? "https://" : "http://"}${req.headers.host}`;
-    
         const accountLink = await stripe.accountLinks.create({
+          account: existingPayment.customerId,
+          refresh_url: "http://localhost:3000/userProfile",
+          return_url: "http://localhost:3000/userProfile",
           type: "account_onboarding",
-          account: accountID,
-          refresh_url: `${origin}/api/payment/onboardUserRefresh`,
-          return_url: `${origin}/success.html`,
         });
-    
-        res.redirect(303, accountLink.url);
+        res
+          .status(200)
+          .send({
+            url: accountLink.url,
+            userId: user,
+            accountId: existingPayment.id,
+          });
       } catch (err) {
-        res.status(500).send({
-          error: err.message,
-        });
+        res.status(500).send("Failed to update account!");
       }
-    };
+    }
+  } catch (err) {
+    res.status(400).send("User has no payment account!");
+  }
+};
+
+export const getAccount = async (req, res) => {
+  try {
+    const user = req.params.userId;
+    const existingPayment = await Payment.findOne({ user: user });
+    if (existingPayment) {
+      try {
+        const account = await stripe.accounts.retrieve(
+          existingPayment.customerId
+        );
+        res.status(200).send({
+          userId: existingPayment.user,
+          accountId: existingPayment.id,
+          charges_enabled: account.charges_enabled,
+          details_submitted: account.details_submitted,
+        });
+      } catch (err) {
+        res.status(500).send(err);
+      }
+    } else {
+      res.status(400).send("User has no payment account!");
+    }
+  } catch (err) {
+    res.status(500).send("Failed to get account!");
+  }
+};
+
+export const deleteAccount = async (req, res) => {
+  const user = req.params.userId;
+  const existingPayment = await Payment.findOne({ user: user });
+  if (existingPayment) {
+    try {
+      const deleted = await stripe.accounts.del(existingPayment.customerId);
+      await Payment.findByIdAndDelete(existingPayment.id);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  } else {
+    res.status(400).send("User has no payment account!");
+  }
+};
+
+export const createPayment = async (req, res) => {
+  // Check if studysession and user exist.
+  console.log(req.body);
+  const studysessionId = new ObjectId(req.body.studysession);
+  const studysession = await Studysession.findById(studysessionId);
+  const studentId = new ObjectId(req.body.studentId);
+  const student = await User.findById(studentId);
+  console.log("studensId", studentId);
+  console.log("student", student);
+  const tutorId = new ObjectId(studysession.tutoredBy);
+  const tutor = await User.findById(tutorId);
+  console.log("tutor", tutor);
+  let amount = req.body.price;
+  if (!studysession || !student) {
+    console.log("studysession", studysession);
+    res.status(404).send("Object reference not found!");
+    return;
+  }
+
+  const product = await stripe.products.create({
+    name: "test",
+  });
+  const productId = product.id;
+  amount = amount * 100;
+  const fee = amount * 0.1;
+  const price = await stripe.prices.create({
+    unit_amount: amount,
+    currency: "eur",
+    product: productId,
+  });
+  console.log("price", price);
+  try {
+    const existingAccount = await Payment.findOne({ user: tutorId });
+    console.log("existingAccount", existingAccount);
+
+    const stripeAccount = await stripe.accounts.retrieve(
+      existingAccount.customerId
+    );
+
+    if (existingAccount && stripeAccount.charges_enabled == true) {
+        // Create booking.
+        const newBooking = new Booking({
+          studysession: studysessionId,
+          hours: req.body.hours,
+          priceEuro: amount,
+          createdAt: Date.now(),
+          createdBy: studentId,
+        });
+        const savedBooking = await newBooking.save();
+        const bookingId = savedBooking._id;
+        const session = await stripe.checkout.sessions.create({
+          mode: "payment",
+          line_items: [
+            {
+              price: price.id,
+              quantity: 1,
+            },
+          ],
+          payment_intent_data: {
+            application_fee_amount: fee,
+            transfer_data: {
+              destination: existingAccount.customerId,
+            },
+          },
+          success_url: `http://localhost:3000/success/${bookingId}`,
+          cancel_url: `http://localhost:3000/success/${bookingId}`,
+        });
+        await Booking.findByIdAndUpdate(bookingId, {
+          paymentSession: session.id,
+        });
+        console.log(bookingId);
+  
+        res.status(200).send(session);
+      } else {
+        res.status(400).send("User has no payment account!");
+      }
+  } catch (err) {
+    res.status(400).send("Tutor doesn't have a payment account!");
+    return;
+  }
+};

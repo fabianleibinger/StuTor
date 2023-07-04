@@ -34,6 +34,15 @@ const BookingSchema = new Schema({
         required: false,
         default: false,
     },
+    isPayed: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    paymentSession: {
+        type: String,
+        required: false,
+    },
 });
 
 const Booking = mongoose.model('Booking', BookingSchema);
