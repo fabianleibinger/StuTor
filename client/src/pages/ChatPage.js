@@ -15,8 +15,8 @@ const ChatPage = () => {
                 width: '96vw',
                 height: '92vh',
                 mx: 'auto',
-                marginTop: '4vh',
-                marginBottom: '3vh',
+                marginTop: '1vh',
+                marginBottom: '1vh',
             }}
         >
             <Box width={0.49} height={1}>

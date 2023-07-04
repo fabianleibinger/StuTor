@@ -18,6 +18,7 @@ import UserProfile from "./pages/UserProfile.js";
 import { UserContext } from "./context/UserContext";
 import ChatPage from "./pages/ChatPage";
 import SuccessPage from "./pages/SuccessPage.js"
+import { Stack } from "@mui/system";
 
 function App() {
   const queryClient = new QueryClient();
@@ -32,10 +33,9 @@ function App() {
 
   const Layout = () => {
     return (
-      <div style={{ marginTop: "200px" }}>
-        <Navbar />
-        <Outlet />
-      </div>
+        <Navbar>
+          <Outlet />
+        </Navbar>
     );
   };
 
