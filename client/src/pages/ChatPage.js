@@ -12,10 +12,10 @@ const ChatPage = () => {
                 justifyContent: 'space-between',
                 alignItems: 'stretch',
                 alignContent: 'stretch',
-                width: '96vw',
-                height: '92vh',
+                width: '97vw',
+                height: '90vh',
                 mx: 'auto',
-                marginTop: '1vh',
+                marginTop: '2vh',
                 marginBottom: '1vh',
             }}
         >
