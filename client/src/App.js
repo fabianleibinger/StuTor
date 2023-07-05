@@ -15,7 +15,7 @@ import { UserContext } from "./context/UserContext";
 import ChatPage from "./pages/ChatPage";
 import SuccessPage from "./pages/SuccessPage.js";
 import ViewBookingsPage from "./pages/ViewBookingsPage.js";
-import { Stack, styled } from "@mui/system";
+import { Stack } from "@mui/system";
 
 function App() {
   const queryClient = new QueryClient();
