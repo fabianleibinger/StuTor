@@ -174,7 +174,16 @@ export const getBookingsOfTutor = async (req, res) => {
             return;
         }
         const studysessionIds = studysessions.map(session => session._id);
-        const bookings = await Booking.find({ studysession: { $in: studysessionIds } });
+        const bookings = await Booking.find({ studysession: { $in: studysessionIds } })
+        .populate('studysession')
+        .populate({
+            path: 'studysession', 
+            populate: {
+                path: 'course',
+                model: 'Course'
+            } 
+          })
+        .populate('createdBy');
         try {
             if (bookings.length === 0) {
                 res.status(404).send('No bookings found!');

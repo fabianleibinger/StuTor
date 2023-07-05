@@ -1,4 +1,4 @@
-import CollapsibleTable from "../components/ViewBookings/CollapsibleTable";
+import BookingTable from "../components/ViewBookings/BookingTable";
 import React from "react";
 import { useQuery } from "react-query";
 import { getBookingsOfTutor } from "../api/Booking";
@@ -20,12 +20,14 @@ const ViewBookingsPage = () => {
     return (
         <div>
             <h1>View Bookings</h1>
-            <CollapsibleTable />
+            <BookingTable>
+                bookings={bookings}
+            </BookingTable>
             {bookings.map((booking) => (
                 <div key={booking._id}>
                     <p>Booking ID: {booking._id}</p>
-                    <p>Study Session ID: {booking.studysession}</p>
-                    <p>Created By: {booking.createdBy}</p>
+                    <p>Study Session ID: {booking.studysession.course.name}</p>
+                    <p>Created By: {booking.createdBy.firstname} {booking.createdBy.lastname}</p>
                     <p>Hours: {booking.hours}</p>
                     <p>Is Payed: {booking.isPayed}</p>
                     <p>Is Confirmed: {booking.isConfirmed}</p>
