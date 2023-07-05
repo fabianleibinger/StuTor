@@ -17,6 +17,7 @@ import { Avatar, Button } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Rating from "@mui/material/Rating";
 
 export default function BookingTable(data) {
   console.log("data in table", data)
@@ -105,7 +106,9 @@ function Row(props) {
             <CancelIcon style={{ color: 'red' }}/>
         )}
         </TableCell>
-        <TableCell>{row.reviewGiven}</TableCell>
+        <TableCell>
+            <Rating name="read-only" value={row.rating} readOnly />
+          </TableCell>
         <TableCell><Button>Contact customer support</Button></TableCell>
       </TableRow>
       <TableRow>
@@ -124,8 +127,15 @@ function Row(props) {
                 </TableHead>
                 <TableBody>
                   <TableRow key={row._id}>
-                      <TableCell>{row.rating}</TableCell>
-                      <TableCell align="right">{row.feedback}</TableCell>
+                      <TableCell>
+                        <Rating name="read-only" value={row.rating} readOnly />
+                        </TableCell>
+                      <TableCell>
+                        {row.feedback == undefined && (
+                            <span>No feedback given</span>)}
+                        {row.feedback && (
+                            <span>{row.feedback}</span>)}
+                        </TableCell>
                     </TableRow>
                 </TableBody>
               </Table>
