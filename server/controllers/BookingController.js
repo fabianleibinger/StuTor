@@ -29,6 +29,7 @@ export const createBooking = async (req, res) => {
             const savedBooking = await newBooking.save();
             res.status(201).send(savedBooking);
         } catch (err) {
+            console.log(err);
             res.status(500).send('Failed to create booking!');
         }
     } catch (err) {
@@ -157,6 +158,37 @@ export const getBookingsOfStudysessionCreatedByUser = async (req, res) => {
         res.status(400).send('Bad request!');
     }
 };
+
+export const getBookingsOfTutor = async (req, res) => {
+    try {
+        // Check if user exists.
+        const userId = new ObjectId(req.params.userId);
+        const user = await User.findById(userId);
+        if (!user) {
+            res.status(404).send('Object reference not found!');
+            return;
+        }
+        const studysessions = await Studysession.find({ tutoredBy: userId });
+        if (studysessions.length === 0) {
+            res.status(404).send('No studysessions found!');
+            return;
+        }
+        const studysessionIds = studysessions.map(session => session._id);
+        const bookings = await Booking.find({ studysession: { $in: studysessionIds } });
+        try {
+            if (bookings.length === 0) {
+                res.status(404).send('No bookings found!');
+            } else {
+                res.status(200).send(bookings);
+            }
+        } catch (err) {
+            res.status(500).send('Failed to retrieve bookings!');
+        }
+    } catch (err) {
+        res.status(400).send('Bad request!');
+    }
+};
+
 
 export const updateBooking = async (req, res) => {
     try {
