@@ -188,7 +188,7 @@ const Navbar = () => {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleDialogClose}>Let's Go!</Button>
+              <Button onClick={handleDialogClose}>Let's get studying!</Button>
             </DialogActions>
           </Dialog>
 
