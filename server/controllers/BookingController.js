@@ -3,6 +3,7 @@ import Booking from '../models/Booking.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
 import { ObjectId } from 'mongodb';
+import Review from '../models/Review.js';
 
 const stripe = new Stripe('sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01');
 
@@ -184,16 +185,27 @@ export const getBookingsOfTutor = async (req, res) => {
             } 
           })
         .populate('createdBy');
+
+        console.log("bookings", bookings)
+
+        // Find the booking ids
+        const bookingIds = bookings.map(booking => booking._id);
+
+        // Find the reviews corresponding to the booking ids
+        const reviews = await Review.find({ booking: { $in: bookingIds } });
+        console.log(reviews)
+        console.log("response", {bookings, reviews})
         try {
             if (bookings.length === 0) {
                 res.status(404).send('No bookings found!');
             } else {
-                res.status(200).send(bookings);
+                res.status(200).send({bookings, reviews});
             }
         } catch (err) {
             res.status(500).send('Failed to retrieve bookings!');
         }
     } catch (err) {
+        console.log(err);
         res.status(400).send('Bad request!');
     }
 };

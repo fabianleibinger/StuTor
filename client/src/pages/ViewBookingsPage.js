@@ -9,21 +9,21 @@ const ViewBookingsPage = () => {
     //const userId = user._id;
     const userId = "6468f36705853e6071dfec63"
 
-    const { isLoading, error, data: bookings } = useQuery(["tutorBookings"], () => getBookingsOfTutor(userId));
+    const { isLoading, error, data } = useQuery(["tutorBookings"], () => getBookingsOfTutor(userId));
 
     if (isLoading) return "Loading...";
     if (error) return "An error has occurred: " + error.message;
     console.log(error)
     console.log(isLoading)
-    console.log(bookings);
+    console.log(data.bookings);
 
     return (
         <div>
             <h1>View Bookings</h1>
             <BookingTable>
-                bookings={bookings}
+                data={data}
             </BookingTable>
-            {bookings.map((booking) => (
+            {data.bookings.map((booking) => (
                 <div key={booking._id}>
                     <p>Booking ID: {booking._id}</p>
                     <p>Study Session ID: {booking.studysession.course.name}</p>
