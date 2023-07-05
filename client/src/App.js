@@ -51,7 +51,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/userProfile" element={<UserProfile />} />
               <Route path="/MyStudySessions" element={<MyStudySessions />} />
-              <Route path="/my-chats" element={<ChatPage />} />
+              <Route path="/myChats" element={<ChatPage />} />
               <Route
                 path="/StudysessionDetailsPage/:studySessionId"
                 element={<StudysessionDetailsPage />}

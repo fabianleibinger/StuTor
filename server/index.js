@@ -41,7 +41,7 @@ app.use(express.json());
 // Http logger
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request for ${req.url}`);
-  const originalSend = res.send;
+  /*const originalSend = res.send;
   let responseSent = false;
   res.send = function () {
     if (!responseSent) {
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
     }
     originalSend.apply(res, arguments);
   };
-  next();
+  next();*/
 });
 app.use(cookieParser());
 

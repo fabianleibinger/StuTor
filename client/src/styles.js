@@ -127,6 +127,16 @@ export const JoinButton = styled(Button)(({ theme }) => ({
   fontSize: "16px",
   width: "100px",
 }));
+export const AboutUsButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.secondary.contrastText,
+  textTransform: "none",
+  fontSize: "16px",
+  width: "100px",
+  border: "1px solid #FFFFFF",
+  marginLeft: theme.spacing(3.5),
+  fontWeight: "normal",
+}));
 
 // -------------------------- Bars --------------------------
 export const RootAppBar = styled(AppBar)(({ theme }) => ({
