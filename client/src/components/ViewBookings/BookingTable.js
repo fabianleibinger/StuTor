@@ -18,8 +18,13 @@ import Grid from '@mui/material/Grid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function BookingTable(bookings) {
-    console.log("bookings in table", bookings.children[1])
+export default function BookingTable(data) {
+  console.log("data in table", data)
+    const bookings = data.children[1].bookings;
+    console.log("bookings in table", bookings)
+    const reviews = data.children[1].reviews;
+    const bookingsWithReviews = bookings.map((booking) => matchData(booking, reviews));
+    console.log("bookings with reviews", bookingsWithReviews)
     return (
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="collapsible table">
@@ -35,7 +40,7 @@ export default function BookingTable(bookings) {
             </TableRow>
             </TableHead>
             <TableBody>
-            {bookings.children[1].map((booking) => (
+            {bookingsWithReviews.map((booking) => (
                 <Row key={booking._id} row={booking} />
             ))}
             </TableBody>
@@ -49,6 +54,18 @@ const formatDate = (dateString) => {
   const formattedDate = date.toLocaleDateString('en-GB');
   return formattedDate;
 };
+
+const matchData = (booking, reviews) => {
+    const review = reviews.find((review) => review.booking === booking._id);
+    let newBooking = booking;
+    if (review) {
+        newBooking.rating = review.rating;
+        newBooking.feedback = review.feedback;
+        return newBooking;
+    } else {
+        return booking;
+    }
+}
 
 function Row(props) {
   const { row } = props;
@@ -90,6 +107,31 @@ function Row(props) {
         </TableCell>
         <TableCell>{row.reviewGiven}</TableCell>
         <TableCell><Button>Contact customer support</Button></TableCell>
+      </TableRow>
+      <TableRow>
+      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                History
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Rating</TableCell>
+                    <TableCell>Feedback</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow key={row._id}>
+                      <TableCell>{row.rating}</TableCell>
+                      <TableCell align="right">{row.feedback}</TableCell>
+                    </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+      </TableCell>
       </TableRow>
     </React.Fragment>
   );
