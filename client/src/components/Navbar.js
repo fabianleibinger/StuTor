@@ -173,6 +173,7 @@ const Navbar = () => {
           >
             <DialogTitle>{"The StuTor Mission Statement"}</DialogTitle>
             <DialogContent>
+              <img src={process.env.PUBLIC_URL + "/img/StuTor_Logo.png"} alt="Mission Statement" style={{ maxWidth: "550px", maxHeight: "550px" }} />
               <DialogContentText id="alert-dialog-slide-description">
                 "At StuTor, our mission is to foster a culture of collaboration and academic excellence among students by providing a platform where they can connect, support, and inspire each other in their educational journeys. We believe that teamwork truly makes the dream work, and through our app, we aim to bring together students who can mutually benefit from their diverse knowledge and experiences.
               </DialogContentText>
