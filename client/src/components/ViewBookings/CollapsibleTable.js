@@ -133,11 +133,11 @@ export default function CollapsibleTable() {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Student</TableCell>
+            <TableCell align="right">Booking date</TableCell>
+            <TableCell align="right">Is confirmed by student</TableCell>
+            <TableCell align="right">Rating</TableCell>
+            <TableCell align="right">Need help?</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
