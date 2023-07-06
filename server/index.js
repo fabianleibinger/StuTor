@@ -37,23 +37,6 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
-
-// Http logger
-app.use((req, res, next) => {
-  console.log(`Received ${req.method} request for ${req.url}`);
-  /*const originalSend = res.send;
-  let responseSent = false;
-  res.send = function () {
-    if (!responseSent) {
-      responseSent = true;
-      console.log(
-        `Response for ${req.method} ${req.url}: ${res.statusCode}, response body: ${arguments[0]}`
-      );
-    }
-    originalSend.apply(res, arguments);
-  };
-  next();*/
-});
 app.use(cookieParser());
 
 app.use("/api/achievement", achievementRoute);
@@ -69,6 +52,23 @@ app.use("/api/auth", authRoute);
 app.use("/api/userAchievement", userachievementRoute);
 app.use("/api/userStudysession", userStudysessionRoute);
 app.use("/api/payment", paymentRoute);
+
+// Http logger
+// app.use((req, res, next) => {
+//   console.log(`Received ${req.method} request for ${req.url}`);
+//   /*const originalSend = res.send;
+//   let responseSent = false;
+//   res.send = function () {
+//     if (!responseSent) {
+//       responseSent = true;
+//       console.log(
+//         `Response for ${req.method} ${req.url}: ${res.statusCode}, response body: ${arguments[0]}`
+//       );
+//     }
+//     originalSend.apply(res, arguments);
+//   };
+//   next();*/
+// });
 
 const port = 3001;
 const server = app.listen(port, () => {
