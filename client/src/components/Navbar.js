@@ -201,7 +201,7 @@ const Navbar = () => {
                 aria-controls="profile-menu"
                 aria-haspopup="true"
               >
-                <Avatar src={user.picture} alt="" />
+                <Avatar src={user.picture || ""} alt="" />
                 <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
               </AvatarIconButton>
 
