@@ -24,7 +24,7 @@ const StandardFilter = forwardRef(
       <div>
         <FormControl
           sx={{
-            minWidth: '10vw',
+            minWidth: '11vw',
             height: '45px',
             alignItems: 'center'
           }}

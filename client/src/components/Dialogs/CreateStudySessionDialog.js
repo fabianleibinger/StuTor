@@ -60,7 +60,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired
 };
 
-export default function AddStudySessionDialog({ children }) {
+export default function CreateStudySessionDialog({role}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -69,18 +69,19 @@ export default function AddStudySessionDialog({ children }) {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <Box>
       <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        sx={{
-          textAlign: 'center'
-        }}
-        size="large"
-      >
-        + Add new Study Session
+      variant="contained"
+      onClick={handleClickOpen}
+      sx={{
+        textAlign: 'center',
+        visibility: role === "TUTOR" ? 'visible' : 'hidden',
+        pointerEvents: role === "TUTOR" ? 'auto' : 'none',
+      }}
+      size="large"
+      > 
+      + Add new Study Session
       </Button>
       <BootstrapDialog
         onClose={handleClose}

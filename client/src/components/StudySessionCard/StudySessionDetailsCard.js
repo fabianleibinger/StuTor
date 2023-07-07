@@ -6,7 +6,6 @@ import CardActions from '@mui/material/CardActions';
 import { Avatar, Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-import studySessionCardStyles from './StudySessionCardStyles';
 import ActionButton from './ActionButton';
 
 import { styled } from '@mui/system';
@@ -16,7 +15,7 @@ import { styled } from '@mui/system';
 import { Box } from '@mui/material';
 
 const ScrollableCardContent = styled(CardContent)({
-  maxHeight: '20vh',
+  maxHeight: '30vh',
   overflow: 'auto'
 });
 
@@ -29,14 +28,27 @@ export default function StudySessionCard({
   role,
   onItemClick,
   details,
-  addStudySessionComponent
+  addStudySessionComponent,
+  backgroundColor
 }) {
   const handleDeleteClick = () => {
     onDelete(studySession._id);
   };
 
   return (
-    <Card sx={studySessionCardStyles} raised>
+    <Card sx={{
+      maxWidth: 345,
+      minHeight: '350px',
+      mr: '15px',
+      mt: 2,
+      mb: 2,
+      pt: 1,
+      pb: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      borderRadius: '12px',
+      background: backgroundColor
+      }} raised>
       <Box
         display="flex"
         alignItems="center"
@@ -50,7 +62,7 @@ export default function StudySessionCard({
       >
         <Avatar
           src={tutorPicture || '/img/noavatar.jpg'}
-          sx={{ width: 64, height: 64 }}
+          sx={{ width: 68, height: 68 }}
           aria-label="recipe"
         />
       </Box>
@@ -65,10 +77,16 @@ export default function StudySessionCard({
                 cursor: 'pointer'
               },
               alignItems: 'center',
-              textAlign: 'center'
+              textAlign: 'center',
             }}
           >
-            <Typography fontWeight="bold" sx={{ wordWrap: 'break-word' }}>
+            <Typography fontWeight="bold" sx={{ 
+              wordWrap: 'break-word', 
+              display: '-webkit-box',
+              'webkitBoxOrient': 'vertical',
+              'webkitLineClamp': 2, minHeight: '2.6rem', lineHeight: "1.1rem",
+              justifyContent: 'center'
+              }}>
               {studySession.course.name}
             </Typography>
             <Typography>
@@ -77,10 +95,9 @@ export default function StudySessionCard({
             <Typography fontWeight="bold" sx={{ mt: 1 }}>
               {studySession.pricePerHourEuro} €/h
             </Typography>
-            <Typography sx={{ m: 1, wordWrap: 'break-word' }}>
-              <br />{' '}
-              {studySession.description.length > 100
-                ? studySession.description.slice(0, 100) + '...'
+            <Typography sx={{ ml: 1, pt: 1, mr: 1, wordWrap: 'break-word', verticalAlign: 'center' }}>
+              {studySession.description.length > 75
+                ? studySession.description.slice(0, 75) + '...'
                 : studySession.description}
             </Typography>
           </Box>
@@ -99,6 +116,7 @@ export default function StudySessionCard({
       <CardActions
         sx={{
           mt: 'auto',
+          pt: 0.5,
           justifyContent: 'center'
         }}
       >
@@ -109,7 +127,6 @@ export default function StudySessionCard({
             width: 1,
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginTop: 'auto',
             gap: '10px'
           }}
         >

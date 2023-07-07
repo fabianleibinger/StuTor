@@ -25,7 +25,6 @@ export const createStudysession = async (req, res) => {
     const user = await User.findById(userId);
     if (!course || !user) {
       if (!course) {
-        console.log(courseId);
         console.log('Course not found');
       } else {
         console.log('User not found');

@@ -21,6 +21,8 @@ const ScrollableContainer = styled('div')({
 });
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
+  const colors = ["#0fab3c", "#98f5ff", "#ee6363", "#ffa500", "	#eeaeee", "#1e90ff"];
+  
   const userRole = 'STUDENT';
   // error is not thrown just loading???
   if (error) {
@@ -38,7 +40,10 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
     return (
       <ScrollableContainer sx={{ pl: 1 }}>
         <Grid container spacing={2}>
-          {data.map(studySession => (
+          {data.map((studySession, index) => {
+            const colorIndex = index % colors.length;
+            const backgroundColor = colors[colorIndex];
+            return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={studySession._id}>
               <StudySessionCard
                 studySession={studySession}
@@ -50,9 +55,12 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
                 onItemClick={() => {}}
                 details={true}
                 addStudySessionComponent={null}
+                backgroundColor={backgroundColor}
               />
             </Grid>
-          ))}
+            );
+            }
+          )}
         </Grid>
       </ScrollableContainer>
     );
@@ -190,13 +198,14 @@ export default function StudySessionSearch() {
     <Box
       id="studySearchPageBox"
       sx={{
-        width: '80vw',
+        width: '90vw',
         height: '90vh',
         minheight: 1,
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'right',
         pb: 1,
+        pt: 2,
         pl: 1,
         pr: 1
       }}

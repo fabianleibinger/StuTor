@@ -18,17 +18,17 @@ import {
   deleteStudysession
 } from '../api/StudySession';
 import { getChatsOfUser } from '../api/Chat';
+import { updateUser } from "../api/User";
+
 import ConfirmationDialog from '../components/Dialogs/ConfirmationDialog';
 
 const MyStudySessions = () => {
   const queryClient = useQueryClient();
 
-  const { setUser, user } = useContext(UserContext);
-  const [role, setRole] = useState('TUTOR');
+  const { user, setUser } = useContext(UserContext);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStudySession, setSelectedStudySession] = useState(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [idToDelete, setIdToDelete] = useState('');
 
   const userId = user._id;
@@ -38,25 +38,20 @@ const MyStudySessions = () => {
 
   let studySessions = [];
 
-  const handleRoleSwitchClick = role => {
-    // update role in the user missing
-    setRole(role);
-    queryClient.invalidateQueries('myStudySessions');
-  };
-
   // use mutation to update data
   const deleteStudySessionMutation = useMutation(deleteStudysession, {});
+  const switchRoleMutation = useMutation(updateUser, {});
 
   const queryKey = {
-    role: role,
-    user: userId
+    role: user.role,
+    user: user._id
   };
 
   // fetch data
   const { isLoading, error, data } = useQuery(
     ['myStudySessions', queryKey],
     () => {
-      if (role === 'TUTOR') {
+      if (user.role === 'TUTOR') {
         return getStudysessionsTutoredByUser(userId);
       } else {
         return getChatsOfUser(userId);
@@ -77,18 +72,16 @@ const MyStudySessions = () => {
     }
   } else {
     studySessions =
-      role === 'TUTOR'
+      user.role === 'TUTOR'
         ? data || []
         : Array.from(
             new Set(
               (data || [])
                 .map(chat => chat.studysession)
-                .filter(session => session !== null)
+                .filter(session => session !== null && session !== undefined)
             )
           );
-    if (role === 'STUDENT' && studySessions === []) {
-      return 'Your StudySessions are listed here as soon as you are chatting with a Tutor.';
-    }
+    console.log("ROOOOOOOOOOOOOOLLLLLLING: ", user.role);
   }
 
   // first confirm deletion the delete it
@@ -111,6 +104,19 @@ const MyStudySessions = () => {
     });
   };
 
+  const handleRoleSwitchClick = async (role) => {
+    const newUser = {"_id": user._id, "username": user.username, "firstname": user.firstname, "lastname": user.lastname,
+    "email": user.email, "picture": user.picture, "role": role, "university": user.university
+  }
+    console.log("Switch Role for user", newUser);
+    await switchRoleMutation.mutateAsync(newUser, {
+      onSuccess: () => {
+        setUser(newUser);
+        queryClient.invalidateQueries('myStudySessions');
+      }
+    });
+  }
+
   // clicking on the StudySession
   const handleStudySessionClick = studySession => {
     setSelectedStudySession(studySession);
@@ -123,11 +129,21 @@ const MyStudySessions = () => {
     setSelectedStudySession(null);
   };
   return (
-    <Box id="MyStudySessionWrapper" sx={{ position: 'sticky' }}>
+    <Box id="MyStudySessionWrapper" sx={{ 
+      width: '90vw',
+      height: '90vh',
+      minheight: 1,
+      justifyContent: 'center',
+      flexDirection: 'column',
+      alignItems: 'right',
+      pb: 1,
+      pt: 2,
+      pl: 1,
+      pr: 1 
+      }}>
       <Box
         id="MyStudySessionHeader"
         sx={{
-          width: '90vw',
           padding: '10px',
           borderRadius: '8px',
           display: 'flex',
@@ -142,7 +158,7 @@ const MyStudySessions = () => {
           }}
         >
           <SwitchRoleButton
-            role={role}
+            role={user.role}
             handleRoleSwitchClick={handleRoleSwitchClick}
           />
         </Box>
@@ -164,7 +180,7 @@ const MyStudySessions = () => {
             justifyContent: 'space-end'
           }}
         >
-          <CreateStudySessionDialog key={'AddDialog'} />
+          <CreateStudySessionDialog key={'AddDialog'} role={user.role} />
         </Box>
       </Box>
 
@@ -185,7 +201,6 @@ const MyStudySessions = () => {
           display: 'flex',
           alignItems: 'top-left',
           margin: '10px',
-          mt: 15,
           border: '1px solid lightgray',
           borderRadius: '8px',
           padding: '10px',
@@ -193,37 +208,51 @@ const MyStudySessions = () => {
         }}
       >
         <Grid
-          container
-          spacing={0}
-          sx={{ height: '100%', alignItems: 'top-left' }}
-        >
-          {studySessions &&
-            studySessions.map(studySession => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                key={studySession._id}
-                sx={{ alignItems: 'left' }}
-              >
-                <StudySessionCard
-                  studySession={studySession}
-                  onDelete={() => {
-                    handleDeleteConfirmationNeeded(studySession._id);
-                  }}
-                  tutorFirstName={tutorFirstName}
-                  tutorLastName={tutorLastName}
-                  tutorPicture={tutorPicture}
-                  role={role}
-                  onItemClick={() => handleStudySessionClick(studySession)}
-                  details={true}
-                  addStudySessionComponent={null}
-                />
-              </Grid>
-            ))}
-        </Grid>
+  container
+  spacing={0}
+  sx={{ height: '100%', alignItems: 'top-left' }}
+>
+  {studySessions.length > 0 ? (
+    studySessions.map((studySession) => (
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={3}
+        key={studySession._id}
+        sx={{ alignItems: 'left' }}
+      >
+        <StudySessionCard
+          studySession={studySession}
+          onDelete={() => {
+            handleDeleteConfirmationNeeded(studySession._id);
+          }}
+          tutorFirstName={tutorFirstName}
+          tutorLastName={tutorLastName}
+          tutorPicture={tutorPicture}
+          role={user.role}
+          onItemClick={() => handleStudySessionClick(studySession)}
+          details={true}
+          addStudySessionComponent={null}
+          backgroundColor={'#a9b0ab'}
+        />
+      </Grid>
+    ))
+  ) : (user.role === "TUTOR" ? 
+  (
+    <Typography>
+      Create your first Study Session
+    </Typography>
+  ) :
+  (
+    <Typography>
+      Your StudySessions are listed here as soon as you are chatting with a Tutor.
+    </Typography>
+  )
+)}
+</Grid>
+
       </Box>
       {selectedStudySession !== null && (
         <UpdateStudySessionDialog

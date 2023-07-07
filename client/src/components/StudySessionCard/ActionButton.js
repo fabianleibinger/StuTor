@@ -8,7 +8,7 @@ export default function ActionButton({ text, onClickListener }) {
         background: '#f3f3f3',
         border: '1px solid #999999',
         borderRadius: '100px',
-        padding: '10px 20px',
+        padding: '10px 3px',
         color: '#6fa8dc',
         display: 'inline-block',
         textAlign: 'center',
