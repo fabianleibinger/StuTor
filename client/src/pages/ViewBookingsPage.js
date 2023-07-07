@@ -3,6 +3,8 @@ import React from "react";
 import { useQuery } from "react-query";
 import { getBookingsOfTutor } from "../api/Booking";
 import getCurrentUser from "../utils/getCurrentUser";
+import { Box } from "@mui/system";
+import { Typography } from "@mui/material";
 
 const ViewBookingsPage = () => {
     //const user = getCurrentUser();
@@ -18,22 +20,27 @@ const ViewBookingsPage = () => {
     console.log(data.bookings);
 
     return (
-        <div>
-            <h1>View Bookings</h1>
+        <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        width: '97vw',
+        mx: 'auto',
+        marginTop: '2vh',
+        marginBottom: '1vh',
+      }}
+    >
+        <Typography variant="h4" component="h4" gutterBottom>
+            Check out your bookings!
+        </Typography>
             <BookingTable>
                 data={data}
             </BookingTable>
-            {data.bookings.map((booking) => (
-                <div key={booking._id}>
-                    <p>Booking ID: {booking._id}</p>
-                    <p>Study Session ID: {booking.studysession.course.name}</p>
-                    <p>Created By: {booking.createdBy.firstname} {booking.createdBy.lastname}</p>
-                    <p>Hours: {booking.hours}</p>
-                    <p>Is Payed: {booking.isPayed}</p>
-                    <p>Is Confirmed: {booking.isConfirmed}</p>
-                    </div>
-            ))}
-        </div>
+        </Box>
     );
 
 };

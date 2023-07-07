@@ -72,6 +72,19 @@ function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
 
+  const feedbackstyles = {
+    container: {
+      backgroundColor: '#f5f5f5',
+      padding: '16px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    rating: {
+      marginBottom: '8px',
+    },
+  };
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -114,31 +127,25 @@ function Row(props) {
       <TableRow>
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
+            <Box sx={{ margin: 1}}>
               <Typography variant="h6" gutterBottom component="div">
-                History
+                Check out the feedback of your student
               </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Rating</TableCell>
-                    <TableCell>Feedback</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow key={row._id}>
-                      <TableCell>
-                        <Rating name="read-only" value={row.rating} readOnly />
-                        </TableCell>
-                      <TableCell>
-                        {row.feedback == undefined && (
-                            <span>No feedback given</span>)}
-                        {row.feedback && (
-                            <span>{row.feedback}</span>)}
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-              </Table>
+                  <Box sx={ {backgroundColor: '#D3D3D3', borderRadius: '8px', padding: '16px'}}>
+                    <Rating
+                      name="read-only"
+                      value={row.rating}
+                      readOnly
+                      style={feedbackstyles.rating} />
+                    <Typography variant="body1">
+                      {row.feedback !== undefined && (
+                        row.feedback)}
+                    </Typography>
+                    <Typography variant="body1" color={'gray'}>
+                    {row.feedback === undefined && (
+                        "No feedback yet. Check back later!")}
+                    </Typography>
+                  </Box>
             </Box>
           </Collapse>
       </TableCell>
