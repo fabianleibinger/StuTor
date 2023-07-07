@@ -16,10 +16,14 @@ function Home() {
   return (
     <RootContainer>
       <Container maxWidth="md">
-        <Title variant="h2" component="h1">
+        <Typography variant="h4" component="h1" sx={{ paddingTop: "40px" }}>
           Find Tutors for your courses or help others to study efficiently!
-        </Title>
-        <Typography variant="body1" component="p">
+        </Typography>
+        <Typography
+          variant="body1"
+          component="p"
+          sx={{ paddingBottom: "40px" }}
+        >
           StuTor is a tutoring platform to help students with their exam
           preparation and course studies, by providing them with trustworthy and
           reliable student tutors who have excelled in the same course at the

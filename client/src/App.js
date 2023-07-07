@@ -6,10 +6,11 @@ import {
   Outlet,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { theme } from "./styles";
+import { theme, AppContainer, Content } from "./styles";
 import { ThemeProvider } from "@mui/material";
 import Home from "./pages/Home.js";
 import Navbar from "./components/Navbar.js";
+import Footer from "./components/Footer.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
 import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js";
@@ -17,8 +18,8 @@ import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js";
 import UserProfile from "./pages/UserProfile.js";
 import { UserContext } from "./context/UserContext";
 import ChatPage from "./pages/ChatPage";
-import SuccessPage from "./pages/SuccessPage.js"
-import { Stack } from "@mui/system";
+import SuccessPage from "./pages/SuccessPage.js";
+import { styled } from "@mui/system";
 
 function App() {
   const queryClient = new QueryClient();
@@ -31,33 +32,33 @@ function App() {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
-  const Layout = () => {
-    return (
-        <Navbar>
-          <Outlet />
-        </Navbar>
-    );
-  };
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <UserContext.Provider value={{ user, setUser }}>
           <Router>
-            <Layout />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/userProfile" element={<UserProfile />} />
-              <Route path="/MyStudySessions" element={<MyStudySessions />} />
-              <Route path="/myChats" element={<ChatPage />} />
-              <Route
-                path="/StudysessionDetailsPage/:studySessionId"
-                element={<StudysessionDetailsPage />}
-              />
-              <Route path="/success/:bookingId" element={<SuccessPage />} />
-            </Routes>
+            <AppContainer>
+              <Navbar />
+              <Content>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/userProfile" element={<UserProfile />} />
+                  <Route
+                    path="/MyStudySessions"
+                    element={<MyStudySessions />}
+                  />
+                  <Route path="/myChats" element={<ChatPage />} />
+                  <Route
+                    path="/StudysessionDetailsPage/:studySessionId"
+                    element={<StudysessionDetailsPage />}
+                  />
+                  <Route path="/success/:bookingId" element={<SuccessPage />} />
+                </Routes>
+              </Content>
+              <Footer />
+            </AppContainer>
           </Router>
         </UserContext.Provider>
       </ThemeProvider>
