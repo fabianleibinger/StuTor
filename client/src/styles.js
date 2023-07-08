@@ -15,6 +15,7 @@ import {
   StepIcon,
   Container,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 import { createTheme } from "@mui/material";
 
@@ -29,7 +30,7 @@ export const theme = createTheme({
       hoverText: "#FFFFFF",
     },
     secondary: {
-      main: "#5cbfaf",
+      main: "#1dbf73",
       contrastText: "#FFFFFF",
     },
   },
@@ -78,7 +79,7 @@ export const LoginFormContainer = styled("form")(({ theme }) => ({
     marginBottom: theme.spacing(2),
     width: "100%",
   },
-  "& > *:nth-child(2)": {
+  "& > *:nth-of-type(3)": {
     marginTop: theme.spacing(5), // Adjust the value as needed
   },
 }));
@@ -100,6 +101,16 @@ export const FormContainer = styled("form")(({ theme }) => ({
   // Stretch all items to fill the available vertical space
   flexGrow: 1,
 }));
+
+export const ProfileFormContainer = styled("div")({
+  /* Add your styles here */
+  maxWidth: "800px",
+  margin: "0 auto",
+  padding: "5rem",
+  borderRadius: "20px",
+  boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+  marginBottom: "3rem", // Add the margin bottom for spacing
+});
 
 // -------------------------- Titles --------------------------
 export const Title = styled(Typography)({
@@ -166,20 +177,28 @@ export const AboutUsButton = styled(Button)(({ theme }) => ({
   textTransform: "none",
   fontSize: "16px",
   width: "100px",
-  border: "1px solid #FFFFFF",
+  border: "2px solid #FFFFFF",
   marginLeft: theme.spacing(3.5),
   fontWeight: "normal",
+  "&:hover": {
+    backgroundColor: theme.palette.secondary.main, // Change background color on hover
+    borderColor: theme.palette.primary.main,
+    cursor: "pointer", // Change cursor on hover
+  },
 }));
 
 // -------------------------- Bars --------------------------
 export const RootAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
+  height: "80px",
 }));
 export const RootToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  paddingTop: "0.8rem",
+  paddingBottom: "1rem",
 });
 
 // -------------------------- Links --------------------------
@@ -189,6 +208,15 @@ export const StyledLink = styled(Link)(({ theme }) => ({
   color: "inherit",
   display: "flex",
   alignItems: "center",
+  // transition: "color 0.3s", // Add transition effect
+  // "&:hover": {
+  //   color: theme.palette.primary.main, // Change color on hover
+  //   backgroundColor: theme.palette.primary.hoverText, // Add background color on hover
+  //   borderRadius: "20px", // Adjust border-radius as needed
+  //   // boxShadow: theme.shadows[2], // Add box shadow on hover
+  //   // padding: "12px 16px", // Increase padding
+  //   fontSize: "1.2rem", // Increase font size
+  // },
 }));
 
 // -------------------------- Textfields --------------------------
@@ -201,7 +229,7 @@ export const LoginTextField = styled(TextField)(({ theme }) => ({
 export const UserFullName = styled("div")(({ theme }) => ({
   marginLeft: "0.5rem",
   color: "white",
-  fontSize: "16px",
+  fontSize: "1.2rem",
 }));
 export const ErrorMessage = styled(Typography)(({ theme }) => ({
   color: "red",
@@ -360,5 +388,10 @@ export const AppContainer = styled("div")`
 export const Content = styled("div")(({ theme }) => ({
   flexGrow: 1,
   marginBottom: theme.spacing(40), // Add a large margin-bottom value here
-  marginTop: theme.spacing(20), // Add a large margin-bottom value here
+  // marginTop: theme.spacing(20), // Add a large margin-bottom value here
 }));
+
+export const StyledSearchIcon = styled(SearchIcon)({
+  color: "black",
+  marginLeft: "20px",
+});

@@ -12,7 +12,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide
+  Slide,
 } from "@mui/material";
 import {
   RootAppBar,
@@ -24,7 +24,7 @@ import {
   SignInButton,
   JoinButton,
   UserFullName,
-  AboutUsButton
+  AboutUsButton,
 } from "../styles";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SearchIcon from "@mui/icons-material/Search";
@@ -101,7 +101,7 @@ const Navbar = () => {
       <RootToolbar>
         {/* ---------- LOGO ----------*/}
         <LogoContainer to="/">
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="div" sx={{ fontSize: "2rem" }}>
             STUTOR
           </Typography>
           <span className="dot">.</span>
@@ -111,34 +111,35 @@ const Navbar = () => {
         <LinksContainer>
           <StyledLink to="/search-sessions">
             <SearchIcon />
-            Search Sessions
+            <Typography sx={{ fontSize: "1.2rem" }}>Search Sessions</Typography>
           </StyledLink>
           <StyledLink to="/MyStudySessions">
             <CalendarMonthIcon />
-            My Study Sessions
+            <Typography sx={{ fontSize: "1.2rem" }}>
+              {" "}
+              My Study Sessions
+            </Typography>
           </StyledLink>
           {notification.length === 0 ? (
             <StyledLink to="/myChats">
-              {" "}
               <ChatBubbleIcon />
-              My Chats
+              <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
             </StyledLink>
           ) : (
             <Badge badgeContent={notification.length} color="primary">
               <StyledLink to="/myChats">
-                {" "}
                 <ChatBubbleIcon />
-                My Chats
+                <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
               </StyledLink>
             </Badge>
           )}
-
           {/* ---------- ABOUT US ----------*/}
           <AboutUsButton
             ref={aboutUsRef}
             onClick={handleAboutUsOpen}
             aria-controls="about-us-menu"
-            aria-haspopup="true">
+            aria-haspopup="true"
+          >
             About Us
           </AboutUsButton>
           <Menu
@@ -155,11 +156,7 @@ const Navbar = () => {
               horizontal: "center",
             }}
           >
-            <MenuItem
-              onClick={handleDialog}
-            >
-              Our Mission Statement
-            </MenuItem>
+            <MenuItem onClick={handleDialog}>Our Mission Statement</MenuItem>
             <MenuItem onClick={handleAboutUsClose}>
               Contact Customer Support
             </MenuItem>
@@ -173,18 +170,44 @@ const Navbar = () => {
           >
             <DialogTitle>{"The StuTor Mission Statement"}</DialogTitle>
             <DialogContent>
-              <img src={process.env.PUBLIC_URL + "/img/StuTor_Logo.png"} alt="Mission Statement" style={{ maxWidth: "550px", maxHeight: "550px" }} />
+              <img
+                src={process.env.PUBLIC_URL + "/img/StuTor_Logo.png"}
+                alt="Mission Statement"
+                style={{ maxWidth: "550px", maxHeight: "550px" }}
+              />
               <DialogContentText id="alert-dialog-slide-description">
-                "At StuTor, our mission is to foster a culture of collaboration and academic excellence among students by providing a platform where they can connect, support, and inspire each other in their educational journeys. We believe that teamwork truly makes the dream work, and through our app, we aim to bring together students who can mutually benefit from their diverse knowledge and experiences.
+                "At StuTor, our mission is to foster a culture of collaboration
+                and academic excellence among students by providing a platform
+                where they can connect, support, and inspire each other in their
+                educational journeys. We believe that teamwork truly makes the
+                dream work, and through our app, we aim to bring together
+                students who can mutually benefit from their diverse knowledge
+                and experiences.
               </DialogContentText>
               <DialogContentText id="alert-dialog-slide-description">
-                Our primary goal is to help students excel in their studies by enabling them to find the perfect tutor from their own university or become a tutor themselves. We understand the importance of personalized learning and the positive impact it can have on educational outcomes. By facilitating these connections, we strive to create a dynamic and inclusive learning community where students can access high-quality academic assistance, exchange ideas, and build lasting relationships.
+                Our primary goal is to help students excel in their studies by
+                enabling them to find the perfect tutor from their own
+                university or become a tutor themselves. We understand the
+                importance of personalized learning and the positive impact it
+                can have on educational outcomes. By facilitating these
+                connections, we strive to create a dynamic and inclusive
+                learning community where students can access high-quality
+                academic assistance, exchange ideas, and build lasting
+                relationships.
               </DialogContentText>
               <DialogContentText id="alert-dialog-slide-description">
-                Through our app, we aim to revolutionize the way students approach their exams, transforming them into confident, empowered learners. We are committed to providing a safe, trustworthy, and supportive environment for students to collaborate, share knowledge, and unlock their full potential.
+                Through our app, we aim to revolutionize the way students
+                approach their exams, transforming them into confident,
+                empowered learners. We are committed to providing a safe,
+                trustworthy, and supportive environment for students to
+                collaborate, share knowledge, and unlock their full potential.
               </DialogContentText>
               <DialogContentText id="alert-dialog-slide-description">
-                At StuTor, we are passionate about empowering students to reach new heights academically and create a brighter future for themselves. Together, let's embark on this exciting journey of learning, growth, and achievement. Join us today, and let's get studying!"
+                At StuTor, we are passionate about empowering students to reach
+                new heights academically and create a brighter future for
+                themselves. Together, let's embark on this exciting journey of
+                learning, growth, and achievement. Join us today, and let's get
+                studying!"
               </DialogContentText>
             </DialogContent>
             <DialogActions>
