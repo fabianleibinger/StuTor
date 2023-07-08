@@ -32,17 +32,21 @@ const BookingDialog = ({
     window.location.replace(url);
   };
 
-  const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession._id, hours), {
-    onSuccess: (url) => {
-      socket.emit("new booking", studysession, currentUser._id);
-      handleRedirect(url);
-      queryClient.invalidateQueries("payment");
-    },
-    onError: (error) => {
-      setShowAlert(true);
-      console.log(error);
-    },
-  });
+  const createPayment = useMutation(
+    () =>
+      createPaymentCall(currentUser._id, totalAmount, studysession._id, hours),
+    {
+      onSuccess: (url) => {
+        socket.emit("new booking", studysession, currentUser._id);
+        handleRedirect(url);
+        queryClient.invalidateQueries("payment");
+      },
+      onError: (error) => {
+        setShowAlert(true);
+        console.log(error);
+      },
+    }
+  );
 
   const handleHoursChange = (event) => {
     const { value } = event.target;
@@ -63,11 +67,14 @@ const BookingDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Book studysession for {studysession.course.name}</DialogTitle>
+      <DialogTitle>
+        Book studysession for {studysession.course.name}
+      </DialogTitle>
       <DialogContent>
-        <Typography variant="subtitle1" color={'grey'}>
-          Here you can book the studysession offered by {studysession.tutoredBy.firstname} for {priceEuro}€ per hour. 
-          Please enter the number of hours that you agreed on with your tutor!
+        <Typography variant="subtitle1" color={"grey"}>
+          Here you can book the studysession offered by{" "}
+          {studysession.tutoredBy.firstname} for {priceEuro}€ per hour. Please
+          enter the number of hours that you agreed on with your tutor!
         </Typography>
         <TextField
           label="Number of hours"
@@ -81,7 +88,7 @@ const BookingDialog = ({
           Total amount: ${totalAmount.toFixed(2)}
         </Typography>
         <Button
-        disabled={hours < 1}
+          disabled={hours < 1}
           variant="contained"
           color="secondary"
           onClick={handlePayment}
@@ -89,12 +96,12 @@ const BookingDialog = ({
           Proceed to Payment
         </Button>
         {showAlert && (
-          < Box paddingTop={2}>
-          <Alert severity="error">
-            There was an error processing the payment. 
-            Probably your tutor didn't set up his Stripe account yet. 
-            Please contact him/her and otherwise the customer support.
-          </Alert>
+          <Box paddingTop={2}>
+            <Alert severity="error">
+              There was an error processing the payment. Probably your tutor
+              didn't set up his Stripe account yet. Please contact him/her and
+              otherwise the customer support.
+            </Alert>
           </Box>
         )}
       </DialogContent>
