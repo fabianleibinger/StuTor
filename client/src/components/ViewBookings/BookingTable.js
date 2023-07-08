@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, Tab } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -35,6 +35,7 @@ export default function BookingTable(data) {
                 <TableCell>Studysession</TableCell>
                 <TableCell>Student</TableCell>
                 <TableCell>Booking date</TableCell>
+                <TableCell>Number of hours</TableCell>
                 <TableCell>Is confirmed by student</TableCell>
                 <TableCell>Rating</TableCell>
                 <TableCell>Need help?</TableCell>
@@ -42,7 +43,9 @@ export default function BookingTable(data) {
             </TableHead>
             <TableBody>
             {bookingsWithReviews.map((booking) => (
+              booking.isPayed && (
                 <Row key={booking._id} row={booking} />
+              )
             ))}
             </TableBody>
         </Table>
@@ -111,6 +114,7 @@ function Row(props) {
             </Grid>
             </TableCell>
         <TableCell>{formatDate(row.createdAt)}</TableCell>
+        <TableCell>{row.hours}</TableCell>
         <TableCell>
             {row.isConfirmed && (
             <CheckCircleIcon style={{ color: 'green' }}/>
