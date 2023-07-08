@@ -5,19 +5,44 @@ import { getBookingsOfTutor } from "../api/Booking";
 import getCurrentUser from "../utils/getCurrentUser";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
+import { LoadingIndicator } from "../components/General/LoadingIndicator";
+import { ErrorIndicator } from "../components/General/ErrorIndicator";
 
 const ViewBookingsPage = () => {
-    //const user = getCurrentUser();
-    //const userId = user._id;
-    const userId = "6468f36705853e6071dfec63"
+    const user = getCurrentUser();
+    const userId = user._id;
 
-    const { isLoading, error, data } = useQuery(["tutorBookings"], () => getBookingsOfTutor(userId));
+    const { isLoading, error, data } = useQuery(["tutorBookings"], () => getBookingsOfTutor(userId), {
+        retry: 2,
+    });
 
-    if (isLoading) return "Loading...";
-    if (error) return "An error has occurred: " + error.message;
-    console.log(error)
-    console.log(isLoading)
-    console.log(data.bookings);
+    const CenteredErrorGif = () => {
+        return (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+          >
+            <div>
+            <Typography variant="h4" component="h4" gutterBottom>
+                You don't have any bookings yet! 
+            </Typography>
+            <iframe src="https://giphy.com/embed/ltIFdjNAasOwVvKhvx" width="480" height="480" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>
+            </div>
+          </Box>
+
+        );
+      };
+
+    if (isLoading) return <LoadingIndicator/>;
+    if (error) {
+        if (error.response.status === 404) {
+            return <CenteredErrorGif/>;
+        } else {
+        return <ErrorIndicator/>;
+        }
+    }
 
     return (
         <Box
