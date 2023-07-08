@@ -6,10 +6,6 @@ import {
   FooterItem,
   FooterBottom,
   FooterLeft,
-  FooterRight,
-  SocialIcons,
-  LanguageLink,
-  CurrencyLink,
 } from "../styles";
 
 function Footer() {
@@ -90,24 +86,6 @@ function Footer() {
             <h2>STUTOR</h2>
             <span>© STUTOR International Ltd. 2023</span>
           </FooterLeft>
-          <FooterRight>
-            <SocialIcons>
-              <img src="/img/twitter.png" alt="" />
-              <img src="/img/facebook.png" alt="" />
-              <img src="/img/linkedin.png" alt="" />
-              <img src="/img/pinterest.png" alt="" />
-              <img src="/img/instagram.png" alt="" />
-            </SocialIcons>
-            <LanguageLink>
-              <img src="/img/language.png" alt="" />
-              <span>English</span>
-            </LanguageLink>
-            <CurrencyLink>
-              <img src="/img/coin.png" alt="" />
-              <span>EUR</span>
-            </CurrencyLink>
-            <img src="/img/accessibility.png" alt="" />
-          </FooterRight>
         </FooterBottom>
       </FooterContent>
     </FooterContainer>

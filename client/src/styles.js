@@ -499,5 +499,10 @@ export const AppContainer = styled("div")`
 export const Content = styled("div")(({ theme }) => ({
   flexGrow: 1,
   marginBottom: theme.spacing(40), // Add a large margin-bottom value here
-  marginTop: theme.spacing(20), // Add a large margin-bottom value here
+  // marginTop: theme.spacing(20), // Add a large margin-bottom value here
 }));
+
+export const StyledSearchIcon = styled(SearchIcon)({
+  color: "black",
+  marginLeft: "20px",
+});
