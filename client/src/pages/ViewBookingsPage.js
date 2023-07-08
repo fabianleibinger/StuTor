@@ -6,6 +6,7 @@ import getCurrentUser from "../utils/getCurrentUser";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import { LoadingIndicator } from "../components/General/LoadingIndicator";
+import { ErrorIndicator } from "../components/General/ErrorIndicator";
 
 const ViewBookingsPage = () => {
     const user = getCurrentUser();
@@ -39,7 +40,7 @@ const ViewBookingsPage = () => {
         if (error.response.status === 404) {
             return <CenteredErrorGif/>;
         } else {
-        return "An error has occurred: " + error.message;
+        return <ErrorIndicator/>;
         }
     }
 
