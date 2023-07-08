@@ -2,8 +2,12 @@ import axios from 'axios';
 const BASE_URL = '/api';
 const CHAT_URL = `${BASE_URL}/chat`;
 
-export const accessChat = async (userId, body) => {
-    const response = await axios.post(`${CHAT_URL}/${userId}`, body);
+export const accessChat = async (users, studysessionId) => {
+    const body = {
+        "userId": users[1],
+        "studysessionId": studysessionId
+    };
+    const response = await axios.post(`${CHAT_URL}/${users[0]}`, body);
     return response.data;
 }
 

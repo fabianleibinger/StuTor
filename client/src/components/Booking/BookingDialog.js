@@ -6,11 +6,12 @@ import {
   TextField,
   Button,
   Typography,
+  Alert,
+  Box,
 } from "@mui/material";
-import { useQueryClient } from "react-query";
-import { useMutation } from "react-query";
-import { createBooking as createBookingCall } from "../../api/Booking.js";
-import { createAccountCall } from "../../api/Payment.js";
+import { useQueryClient, useMutation } from "react-query";
+import { createPayment as createPaymentCall } from "../../api/Payment.js";
+import getCurrentUser from "../../utils/getCurrentUser.js";
 
 const BookingDialog = ({
   open,
@@ -21,26 +22,22 @@ const BookingDialog = ({
 }) => {
   const [hours, setHours] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
   const queryClient = useQueryClient();
+  const currentUser = getCurrentUser();
 
-  const createBooking = useMutation(
-    () => createBookingCall(studysession, hours, priceEuro, createdBy),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["bookings", studysession]);
-        onClose();
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-    }
-  );
+  // Redirect to Stripe checkout
+  const handleRedirect = (url) => {
+    window.location.replace(url);
+  };
 
-  const createAccount = useMutation((data) => createAccountCall(data), {
-    onSuccess: () => {
+  const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession._id, hours), {
+    onSuccess: (url) => {
+      handleRedirect(url);
       queryClient.invalidateQueries("payment");
     },
     onError: (error) => {
+      setShowAlert(true);
       console.log(error);
     },
   });
@@ -54,22 +51,9 @@ const BookingDialog = ({
     setTotalAmount(amount);
   };
 
-  const handleBookingConfirm = async () => {
+  const handlePayment = async () => {
     try {
-      await createBooking.mutateAsync(
-        studysession,
-        hours,
-        priceEuro,
-        createdBy
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleStripeAccount = async () => {
-    try {
-      await createAccount.mutateAsync();
+      await createPayment.mutateAsync();
     } catch (error) {
       console.log(error);
     }
@@ -77,8 +61,12 @@ const BookingDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Booking</DialogTitle>
+      <DialogTitle>Book studysession for {studysession.course.name}</DialogTitle>
       <DialogContent>
+        <Typography variant="subtitle1" color={'grey'}>
+          Here you can book the studysession offered by {studysession.tutoredBy.firstname} for {priceEuro}€ per hour. 
+          Please enter the number of hours that you agreed on with your tutor!
+        </Typography>
         <TextField
           label="Number of hours"
           type="number"
@@ -91,19 +79,22 @@ const BookingDialog = ({
           Total amount: ${totalAmount.toFixed(2)}
         </Typography>
         <Button
-          variant="contained"
-          color="primary"
-          onClick={handleBookingConfirm}
-        >
-          Confirm Booking
-        </Button>
-        <Button
+        disabled={hours < 1}
           variant="contained"
           color="secondary"
-          onClick={handleStripeAccount}
+          onClick={handlePayment}
         >
-          Set up Stripe payment
+          Proceed to Payment
         </Button>
+        {showAlert && (
+          < Box paddingTop={2}>
+          <Alert severity="error">
+            There was an error processing the payment. 
+            Probably your tutor didn't set up his Stripe account yet. 
+            Please contact him/her and otherwise the customer support.
+          </Alert>
+          </Box>
+        )}
       </DialogContent>
     </Dialog>
   );

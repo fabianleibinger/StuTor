@@ -22,8 +22,32 @@ export const confirmBooking = async (bookingId) => {
   return response.data
 }
 
+export const setBookingIsPayed = async (bookingId) => {
+  try {
+    const response = await axios.put(`${BOOKING_URL}/payBooking/${bookingId}`)
+    return "You succesfully booked a study session!"
+  } catch (error) {
+    if (error.response.status == 400) {
+      console.log("Booking has already been payed!")
+      return "You didn't pay correctly! Try to book again and make sure you checkout via stripe."
+    } else if (error.response.status == 404) {
+      console.log("Booking not found!")
+      return "Something went wrong! Try again."
+    } else {
+      return "Error! You didn't pay correctly. Please contact customer support."
+    }
+  }
+}
+
 export const getBookingsOfStudysession = async (studySessionId) => {
   const response = await axios.get(`${BOOKING_URL}/ofStudysession/${studySessionId}`)
+  return response.data
+}
+
+export const getBookingsOfTutor = async (userId) => {
+  const response = await axios.get(`${BOOKING_URL}/bookingsOfTutor/${userId}`)
+  console.log("response", response)
+  console.log("response.data", response.data)
   return response.data
 }
 

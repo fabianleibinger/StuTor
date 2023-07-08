@@ -7,7 +7,9 @@ import {
     getBookingsOfStudysessionCreatedByUser,
     updateBooking, 
     deleteBooking,
-    confirmBooking 
+    confirmBooking, 
+    setBookingIsPayed,
+    getBookingsOfTutor
 } from '../controllers/BookingController.js';
 
 const router = express.Router();
@@ -20,5 +22,8 @@ router.get('/ofStudysession/:studysessionId/createdBy/:userId/', getBookingsOfSt
 router.put('/:bookingId', updateBooking);
 router.delete('/:bookingId', deleteBooking);
 router.put('/confirmBooking/:bookingId', confirmBooking);
+router.put('/payBooking/:bookingId', setBookingIsPayed);
+router.get('/bookingsOfTutor/:userId', getBookingsOfTutor);
+router.post('/createBooking', createBooking);
 
 export default router;

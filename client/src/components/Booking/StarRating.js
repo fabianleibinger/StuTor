@@ -10,6 +10,7 @@ const StarRating = ({ rating, isReadOnly }) => {
       precision={0.5} // Set the precision to half stars if desired
       readOnly={isReadOnly} // Make the rating read-only
       emptyIcon={<StarBorderIcon fontSize="inherit" />}
+      sx={{ fontSize: "1.8rem" }}
     />
   );
 };
