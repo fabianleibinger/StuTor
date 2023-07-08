@@ -13,15 +13,6 @@ function ProjectCard({ card }) {
     setIsHovered(false);
   };
 
-  //   "_id": "64a2a30fe9455e85c93f7324",
-  // "course": "64744a0eee6d5f6b120ddac2",
-  // "tutoredBy": "6468f36705853e6071dfec63",
-  // "description": "this is a very nice course",
-  // "pricePerHourEuro": 27,
-  // "languages": [
-  //     "Portuguese"
-  // ],
-
   return (
     <div
       className={`projectCard ${isHovered ? "hovered" : ""}`}
