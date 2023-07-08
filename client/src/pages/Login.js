@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import newRequest from "../utils/newRequest";
 import { UserContext } from "../context/UserContext";
 import {
-  FormContainer,
+  LoginFormContainer,
   LoginTitle,
   LoginTextField,
   SubmitButton,
@@ -39,7 +39,7 @@ function Login() {
   };
 
   return (
-    <FormContainer onSubmit={handleSubmit}>
+    <LoginFormContainer onSubmit={handleSubmit}>
       <LoginTitle>Sign in</LoginTitle>
       <LoginTextField
         label="Username or Email"
@@ -60,7 +60,7 @@ function Login() {
         Log In
       </SubmitButton>
       {error && <ErrorMessage>{error}</ErrorMessage>}
-    </FormContainer>
+    </LoginFormContainer>
   );
 }
 
