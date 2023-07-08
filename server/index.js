@@ -115,4 +115,8 @@ io.on("connection", (socket) => {
       socket.in(user._id).emit("stop typing");
     });
   });
+
+  socket.on("new booking", (studysession) => {
+    socket.in(studysession.tutoredBy).emit("booking received", studysession);
+  });
 });

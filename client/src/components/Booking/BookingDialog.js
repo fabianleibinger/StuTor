@@ -33,6 +33,7 @@ const BookingDialog = ({
 
   const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession._id, hours), {
     onSuccess: (url) => {
+      socket.emit("new booking", studysession);
       handleRedirect(url);
       queryClient.invalidateQueries("payment");
     },

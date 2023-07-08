@@ -19,12 +19,14 @@ import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { useChatContext } from "../context/ChatProvider";
 import newRequest from "../utils/newRequest";
 import { UserContext } from "../context/UserContext";
+import { useBookingContext } from "../context/BookingProvider";
 
 const Navbar = () => {
   const { setUser, user } = useContext(UserContext);
   const [active, setActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { notification, setNotification } = useChatContext();
+  const { bookingNotification, setBookingNotification } = useBookingContext();
   const anchorElRef = useRef(null);
   const navigate = useNavigate();
 
@@ -56,6 +58,11 @@ const Navbar = () => {
 
   const handleMenuClose = () => {
     setMenuOpen(false);
+  };
+
+  const handleMenuCloseBookings = () => {
+    setMenuOpen(false);
+    setBookingNotification([]);
   };
 
   return (
@@ -131,13 +138,29 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
-                <MenuItem
-                  onClick={handleMenuClose}
-                  component={Link}
-                  to="/viewBookings"
-                >
-                  View Bookings
-                </MenuItem>
+                {bookingNotification.length === 0 ? (
+                  <MenuItem
+                    onClick={handleMenuCloseBookings}
+                    component={Link}
+                    to="/viewBookings"
+                  >
+                    View Bookings
+                  </MenuItem>
+                ) : (
+                  <Badge
+                    badgeContent={bookingNotification.length}
+                    color="primary"
+                  >
+                    <MenuItem
+                      onClick={handleMenuCloseBookings}
+                      component={Link}
+                      to="/viewBookings"
+                    >
+                      View Bookings
+                    </MenuItem>
+                  </Badge>
+                )}
+
                 <MenuItem onClick={handleLogout}>
                   <ExitToAppIcon fontSize="small" />
                   Logout
