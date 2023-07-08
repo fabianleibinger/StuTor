@@ -10,6 +10,7 @@ import { ChatProvider } from "./context/ChatProvider";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Socket } from "./Socket";
+import { BookingProvider } from "./context/BookingProvider";
 
 const queryClient = new QueryClient();
 
@@ -19,10 +20,12 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <UserContextProvider>
         <ChatProvider>
-          <SocketProvider>
-            <Socket />
-            <App />
-          </SocketProvider>
+          <BookingProvider>
+            <SocketProvider>
+              <Socket />
+              <App />
+            </SocketProvider>
+          </BookingProvider>
         </ChatProvider>
       </UserContextProvider>
     </QueryClientProvider>
