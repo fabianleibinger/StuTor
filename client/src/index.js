@@ -3,10 +3,13 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "@mui/material/styles";
+
+import { SocketProvider } from "./context/SocketContext";
 import { UserContextProvider } from "./context/UserContext";
 import { ChatProvider } from "./context/ChatProvider";
 
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Socket } from "./Socket";
 
 const queryClient = new QueryClient();
 
@@ -16,7 +19,10 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <UserContextProvider>
         <ChatProvider>
-          <App />
+          <SocketProvider>
+            <Socket />
+            <App />
+          </SocketProvider>
         </ChatProvider>
       </UserContextProvider>
     </QueryClientProvider>

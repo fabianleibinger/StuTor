@@ -9,7 +9,6 @@ export const register = async (req, res) => {
       res.status(409).send("Username is already taken");
       return;
     }
-
     // Check of Duplicate email
     if (await User.findOne({ email: req.body.email })) {
       res.status(409).send("Email is already taken");
@@ -31,7 +30,10 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    // Find the user by username or email
+    const user = await User.findOne({
+      $or: [{ username: req.body.username }, { email: req.body.username }],
+    });
 
     if (!user) {
       res.status(404).send("User not found!");

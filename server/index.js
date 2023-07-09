@@ -32,29 +32,11 @@ const connect = async () => {
   }
 };
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-// Increase the maximum payload size limit to 50MB (or adjust according to your needs)
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+// Increase the maximum payload size limit to 50MB
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
-// Http logger
-app.use((req, res, next) => {
-  console.log(`Received ${req.method} request for ${req.url}`);
-  const originalSend = res.send;
-  let responseSent = false;
-  res.send = function() {
-    if (!responseSent) {
-      responseSent = true;
-      console.log(
-        `Response for ${req.method} ${req.url}: ${
-          res.statusCode
-        }, response body: ${arguments[0]}`
-      );
-    }
-    originalSend.apply(res, arguments);
-  };
-  next();
-});
 app.use(cookieParser());
 
 app.use('/api/achievement', achievementRoute);
@@ -70,6 +52,23 @@ app.use('/api/auth', authRoute);
 app.use('/api/userAchievement', userachievementRoute);
 app.use('/api/userStudysession', userStudysessionRoute);
 app.use('/api/payment', paymentRoute);
+
+// Http logger
+// app.use((req, res, next) => {
+//   console.log(`Received ${req.method} request for ${req.url}`);
+//   /*const originalSend = res.send;
+//   let responseSent = false;
+//   res.send = function () {
+//     if (!responseSent) {
+//       responseSent = true;
+//       console.log(
+//         `Response for ${req.method} ${req.url}: ${res.statusCode}, response body: ${arguments[0]}`
+//       );
+//     }
+//     originalSend.apply(res, arguments);
+//   };
+//   next();*/
+// });
 
 const port = 3001;
 const server = app.listen(port, () => {
@@ -87,29 +86,33 @@ const io = new Server(server, {
 io.on('connection', socket => {
   console.log('Connected to socket.io');
 
-  socket.on('setup', userData => {
-    socket.join(userData._id);
-    console.log(userData._id + ' connected');
-    socket.emit('connected');
+  socket.on("setup", (userId) => {
+    socket.join(userId);
+    console.log(userId + " connected");
+    socket.emit("connected");
   });
 
-  socket.on('join chat', chat => {
-    socket.join(chat);
-    console.log('User joined chat ' + chat);
+  socket.on("join chat", (chatId) => {
+    socket.join(chatId);
+    console.log("User joined chat " + chatId);
   });
 
   socket.on('new message', newMessageReceived => {
     newMessageReceived.chat.users.forEach(userId => {
       if (userId == newMessageReceived.sender._id) return;
-      socket.in(userId).emit('message recieved', newMessageReceived);
+      socket.in(userId).emit("message received", newMessageReceived);
     });
   });
 
-  socket.on('typing', chat => {
-    socket.in(chat).emit('typing');
+  socket.on("typing", (chat) => {
+    chat.users.forEach((user) => {
+      socket.in(user._id).emit("typing");
+    });
   });
 
-  socket.on('stop typing', chat => {
-    socket.in(chat).emit('stop typing');
+  socket.on("stop typing", (chat) => {
+    chat.users.forEach((user) => {
+      socket.in(user._id).emit("stop typing");
+    });
   });
 });

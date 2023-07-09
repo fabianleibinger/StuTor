@@ -1,21 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useAppContext } from "../../context/ChatProvider";
+import React, { useEffect, useRef } from "react";
+import { useChatContext } from "../../context/ChatProvider";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   getMessagesOfChat,
   sendMessage as sendMessageCall,
 } from "../../api/Message";
-import { Stack, Box, Chip, TextField, Button, Avatar } from "@mui/material";
+import { Stack, Box, Chip, TextField, Button, Avatar, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import getCurrentUser from "../../utils/getCurrentUser";
-import io from "socket.io-client";
+import socket from "../../Socket";
+import { useSocketContext } from "../../context/SocketContext";
 
-const ENDPOINT = "localhost:3001";
-var socket, selectedChatCompare;
+var selectedChatCompare;
 
 const ChatBox = () => {
   const {
     selectedChat,
+    setSelectedChat,
     messages,
     setMessages,
     newMessage,
@@ -26,31 +27,36 @@ const ChatBox = () => {
     setIsTyping,
     notification,
     setNotification,
-  } = useAppContext();
-  const [socketConnected, setSocketConnected] = useState(false);
+  } = useChatContext();
+  const { socketConnected } = useSocketContext();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("setup", getCurrentUser());
-    socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+
+    return () => {
+      socket.off("typing");
+      socket.off("stop typing");
+      // Page is not visible, reset selectedChat to null
+      setSelectedChat(null);
+    };
   }, []);
 
   useEffect(() => {
-    socket.on("message recieved", (newMessageReceived) => {
+    socket.on("message received", (newMessageReceived) => {
+      queryClient.invalidateQueries("chatsOfUser");
       if (
-        !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageReceived.chat._id
+        selectedChatCompare &&
+        selectedChatCompare._id === newMessageReceived.chat._id
       ) {
-        if (!notification.includes(newMessageReceived)) {
-          setNotification([...notification, newMessageReceived]);
-        }
-      } else {
         setMessages([...messages, newMessageReceived]);
       }
     });
+
+    return () => {
+      socket.off("message received");
+    };
   });
 
   const { data } = useQuery(
@@ -59,9 +65,9 @@ const ChatBox = () => {
     {
       enabled: Boolean(selectedChat?._id),
       onSuccess: (data) => {
-        socket.emit("join chat", selectedChat._id);
-        selectedChatCompare = selectedChat;
         setMessages(data);
+        selectedChatCompare = selectedChat;
+        socket.emit("join chat", selectedChat._id);
       },
     }
   );
@@ -86,7 +92,7 @@ const ChatBox = () => {
     if (!socketConnected) return;
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", selectedChat._id);
+      socket.emit("typing", selectedChat);
     }
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
@@ -94,7 +100,7 @@ const ChatBox = () => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
+        socket.emit("stop typing", selectedChat);
         setTyping(false);
       }
     }, timerLength);
@@ -102,7 +108,7 @@ const ChatBox = () => {
 
   const handleSendClick = async () => {
     await sendMessage.mutateAsync();
-    socket.emit("stop typing", selectedChat._id);
+    socket.emit("stop typing", selectedChat);
     setNewMessage("");
   };
 
@@ -128,19 +134,22 @@ const ChatBox = () => {
   };
 
   const stackSx = {
-    width: 0.95,
-    height: 0.88,
+    width: 0.94,
+    height: 0.96,
     padding: 2,
   };
 
-  if (selectedChat)
+  if (selectedChat) {
     return (
       <Box sx={boxSx}>
         <Box ref={chatboxRef} overflow={"auto"} height={0.88}>
           <Stack direction="column" spacing={2} sx={stackSx}>
             {data ? (
-              messages.map((message, index) => (
-                <Stack
+              messages.map((message, index) => {
+                const createdAt = new Date(message.createdAt);
+                const timeString = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return (<Stack
                   key={index}
                   direction="row"
                   justifyContent={
@@ -149,25 +158,33 @@ const ChatBox = () => {
                       : "flex-start"
                   }
                 >
-                  {getCurrentUser()._id !== message.sender._id ? (
-                    <Avatar
-                      src={message.sender.profilePicture}
-                      sx={{ marginRight: 1 }}
+                  <Stack direction="row" alignItems="center" justifyContent={
+                    getCurrentUser()._id === message.sender._id
+                      ? "flex-end"
+                      : "flex-start"
+                  } sx={{ maxWidth: 0.7 }}>
+                    {getCurrentUser()._id !== message.sender._id ? (
+                      <Avatar
+                        src={message.sender.profilePicture}
+                        sx={{ marginRight: 1 }}
+                      />
+                    ) : null}
+                    <Chip
+                      label={message.content}
+                      sx={{
+                        height: "auto",
+                        padding: 0.75,
+                        "& .MuiChip-label": {
+                          display: "block",
+                          whiteSpace: "normal",
+                        },
+                      }}
                     />
-                  ) : null}
-                  <Chip
-                    label={message.content}
-                    sx={{
-                      height: "auto",
-                      padding: 0.75,
-                      "& .MuiChip-label": {
-                        display: "block",
-                        whiteSpace: "normal",
-                      },
-                    }}
-                  />
+                  </Stack>
+                  <Typography variant="caption" color="textSecondary" sx={{ padding: 0.75 }}>{timeString}</Typography>
                 </Stack>
-              ))
+                );
+              })
             ) : (
               <Chip label="Start a conversation!" />
             )}
@@ -186,7 +203,7 @@ const ChatBox = () => {
             value={newMessage}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            sx={{ width: 0.8 }}
+            sx={{ width: 1 }}
           />
           <Button
             variant="contained"
@@ -199,14 +216,14 @@ const ChatBox = () => {
         </Box>
       </Box>
     );
-
-  return (
-    <Box sx={boxSx}>
-      <Stack direction="column" spacing={2} sx={stackSx}>
-        <Chip label="Select a chat to start messaging!" />
-      </Stack>
-    </Box>
-  );
+  } else {
+    return (
+      <Box sx={boxSx}>
+        <Stack direction="column" spacing={2} sx={stackSx}>
+        </Stack>
+      </Box>
+    );
+  }
 };
 
 export default ChatBox;

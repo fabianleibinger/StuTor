@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
-import Switch from "@mui/material/Switch";
-import {
-  Container,
-  Typography,
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  TextField,
-  FormControlLabel,
-} from "@mui/material";
+import { Typography, Input, Step, StepLabel, Stepper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
 import { searchUniversities } from "../utils/searchUniversities";
+import {
+  FormContainer,
+  LoginTitle,
+  LoginTextField,
+  SubmitButton,
+  ErrorMessage,
+  ProfilePicInputLabel,
+  theme,
+  ProgressContainer,
+  stepContentContainer,
+} from "../styles";
+import studentLogo from "../img/student_logo.png";
+import tutorLogo from "../img/tutor_logo.png";
 
 const Register = () => {
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [profilePicUrl, setProfilePicUrl] = useState("");
   const [allUniversities, setAllUniversities] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedUniversity, setSelectedUniversity] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
+  const [activeStep, setActiveStep] = useState(0);
+
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
@@ -32,7 +39,7 @@ const Register = () => {
     firstname: "",
     picture: "",
     university: "",
-    role: "STUDENT",
+    role: "",
   });
 
   useEffect(() => {
@@ -66,18 +73,32 @@ const Register = () => {
     reader.readAsDataURL(selectedFile);
   };
 
-  const handleTutorChange = (e) => {
+  const handleRoleChange = (role) => {
+    setSelectedRole(role);
     setUser((prev) => {
-      let role = "STUDENT";
-      if (e.target.checked) {
-        role = "TUTOR";
-      }
       return { ...prev, role: role };
     });
   };
 
+  const handleNext = () => {
+    setActiveStep((prevStep) => prevStep + 1);
+    setErrorMessage("");
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevStep) => prevStep - 1);
+    setErrorMessage("");
+  };
+
   const handleUniversityChange = (e, value) => {
-    searchUniversities(value, allUniversities, setSearchResults, setUser, true);
+    searchUniversities(
+      value,
+      allUniversities,
+      setSearchResults,
+      setUser,
+      true,
+      setSelectedUniversity
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -134,17 +155,209 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <Container>
-        <form onSubmit={handleSubmit}>
+    <FormContainer onSubmit={activeStep === 4 ? handleSubmit : undefined}>
+      {/* ------------------- REGISTER TITLE ------------------- */}
+      <LoginTitle>Register</LoginTitle>
+
+      {/* ------------------- PROGRESS BAR ------------------- */}
+      <ProgressContainer activeStep={activeStep} alternativeLabel>
+        <Step key="Step 1" completed={activeStep > 0}>
+          <StepLabel>Step 1</StepLabel>
+        </Step>
+        <Step key="Step 2" completed={activeStep > 1}>
+          <StepLabel>Step 2</StepLabel>
+        </Step>
+        <Step key="Step 3" completed={activeStep > 2}>
+          <StepLabel>Step 3</StepLabel>
+        </Step>
+        <Step key="Step 4" completed={activeStep > 3}>
+          <StepLabel>Step 4</StepLabel>
+        </Step>
+        <Step key="Step 5" completed={activeStep > 4}>
+          <StepLabel>Step 5</StepLabel>
+        </Step>
+      </ProgressContainer>
+
+      {/* ------------------- STEP 1: TUTOR ACCOUNT ------------------- */}
+      {activeStep === 0 && (
+        <div style={stepContentContainer}>
           {/* ------------------- HEADING ------------------- */}
-          <Typography variant="h4" align="center" gutterBottom>
-            Create a new account
+          <Typography
+            variant="h5"
+            align="center"
+            sx={{ marginBottom: "70px", marginTop: "50px" }}
+          >
+            Which Role Do You Want to be Today? ...
           </Typography>
 
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "50px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              onClick={() => handleRoleChange("STUDENT")}
+              style={{
+                border: `8px solid ${
+                  selectedRole === "STUDENT"
+                    ? theme.palette.primary.main
+                    : "gray"
+                }`,
+                padding: "10px",
+                borderRadius: "30px",
+                cursor: "pointer",
+                position: "relative",
+              }}
+            >
+              <img
+                src={studentLogo}
+                alt="Student Logo"
+                style={{ width: "300px", height: "300px" }}
+              />
+              <Typography
+                variant="h5"
+                align="center"
+                sx={{
+                  position: "absolute",
+                  bottom: "-50px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  fontWeight: selectedRole === "STUDENT" ? "bold" : "normal",
+                }}
+              >
+                Student
+              </Typography>
+            </div>
+            <div
+              onClick={() => handleRoleChange("TUTOR")}
+              style={{
+                border: `8px solid ${
+                  selectedRole === "TUTOR" ? theme.palette.primary.main : "gray"
+                }`,
+                padding: "10px",
+                borderRadius: "30px",
+                cursor: "pointer",
+                position: "relative",
+              }}
+            >
+              <img
+                src={tutorLogo}
+                alt="Tutor Logo"
+                style={{ width: "300px", height: "300px" }}
+              />
+              <Typography
+                variant="h5"
+                align="center"
+                sx={{
+                  position: "absolute",
+                  bottom: "-50px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  fontWeight: selectedRole === "TUTOR" ? "bold" : "normal",
+                }}
+              >
+                Tutor
+              </Typography>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ------------------- STEP 2: SELECT UNIVERSITY ------------------- */}
+      {activeStep === 1 && (
+        <div style={stepContentContainer}>
+          {/* ------------------- HEADING ------------------- */}
+          <Typography
+            variant="h5"
+            align="center"
+            sx={{ marginBottom: "70px", marginTop: "50px" }}
+          >
+            Please Select Your University ...
+          </Typography>
+
+          <Autocomplete
+            options={searchResults}
+            onInputChange={handleUniversityChange}
+            onFocus={handleUniversityChange}
+            renderInput={(params) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <LoginTextField
+                  {...params}
+                  // label="University*"
+                  name="university"
+                  type="text"
+                  placeholder={`${
+                    user.university ? selectedUniversity.name : "Universities*"
+                  }`}
+                  inputProps={{
+                    ...params.inputProps,
+                    style: { width: "80%", marginTop: "10px" },
+                  }}
+                />
+              </div>
+            )}
+          />
+        </div>
+      )}
+
+      {/* ------------------- STEP 3: SELECT PROFILE PIC ------------------- */}
+      {activeStep === 2 && (
+        <div style={stepContentContainer}>
+          {/* ------------------- HEADING ------------------- */}
+          <Typography
+            variant="h5"
+            align="center"
+            sx={{ marginBottom: "70px", marginTop: "50px" }}
+          >
+            Please Upload a Profile Picture ...
+          </Typography>
+
+          <ProfilePicInputLabel htmlFor="profile-pic">
+            Profile Picture
+          </ProfilePicInputLabel>
+          <Input
+            id="profile-pic"
+            type="file"
+            onChange={handleProfilePicChange}
+            style={{ width: "80%" }}
+          />
+
+          {profilePicFile && (
+            <div>
+              <Typography variant="subtitle1">
+                Selected Profile Picture:
+              </Typography>
+              <img
+                src={URL.createObjectURL(profilePicFile)}
+                alt="Profile Picture"
+                style={{
+                  maxWidth: "40%",
+                  height: "auto",
+                  marginTop: "10px",
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ------------------- STEP 4: SELECT PAYMENT METHODS ------------------- */}
+      {activeStep === 3 && (
+        <div style={stepContentContainer}>
+          {/* ------------------- PAYPAL ------------------- */}
+          PAYPAL
+        </div>
+      )}
+
+      {/* ------------------- STEP 5: TEXTFIELDS AND SELECTIONS ------------------- */}
+      {activeStep === 4 && (
+        <div style={{ textAlign: "center" }}>
           {/* ------------------- USERNAME ------------------- */}
-          <TextField
-            fullWidth
+          <LoginTextField
             label="Username*"
             name="username"
             type="text"
@@ -153,8 +366,7 @@ const Register = () => {
           />
 
           {/* ------------------- FIRSTNAME ------------------- */}
-          <TextField
-            fullWidth
+          <LoginTextField
             label="Firstname*"
             name="firstname"
             type="text"
@@ -163,8 +375,7 @@ const Register = () => {
           />
 
           {/* ------------------- LASTNAME ------------------- */}
-          <TextField
-            fullWidth
+          <LoginTextField
             label="Lastname*"
             name="lastname"
             type="text"
@@ -173,8 +384,7 @@ const Register = () => {
           />
 
           {/* ------------------- EMAIL ------------------- */}
-          <TextField
-            fullWidth
+          <LoginTextField
             label="Email*"
             name="email"
             type="email"
@@ -183,73 +393,63 @@ const Register = () => {
           />
 
           {/* ------------------- PASSWORD ------------------- */}
-          <TextField
-            fullWidth
+          <LoginTextField
             label="Password*"
             name="password"
             type="password"
             onChange={handleChange}
           />
 
-          {/* ------------------- PROFILE PIC ------------------- */}
-          <FormControl fullWidth>
-            <InputLabel htmlFor="profile-pic">Profile Picture</InputLabel>
-            <Input
-              id="profile-pic"
-              type="file"
-              onChange={handleProfilePicChange}
-            />
-          </FormControl>
-
-          {/* ------------------- UNIVERSITIY ------------------- */}
-          <Autocomplete
-            fullWidth
-            options={searchResults}
-            onInputChange={handleUniversityChange}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="University*"
-                name="university"
-                type="text"
-                placeholder="Technische Universität München (TUM)"
-              />
-            )}
-          />
-
-          {/* ------------------- TUTOR ACCOUNT ------------------- */}
-          <FormControl fullWidth>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={user.role === "TUTOR"}
-                  onChange={handleTutorChange}
-                  color="primary"
-                />
-              }
-              label="Activate a tutor account"
-              labelPlacement="start"
-            />
-          </FormControl>
-
-          {/* ------------------- MANDATORY MESSAGE ------------------- */}
+          {/* ------------------- MANDATORY MESSAGES ------------------- */}
           <Typography align="center" color="textSecondary">
             (All * fields are mandatory)
           </Typography>
+        </div>
+      )}
+      {/* ------------------- NEXT AND BACK BUTTONS ------------------- */}
+      {[0, 1, 2, 3, 4].includes(activeStep) && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "0px",
+          }}
+        >
+          {/* BACK BUTTON */}
+          <SubmitButton
+            variant="outlined"
+            color="primary"
+            onClick={handleBack}
+            style={{ width: "200px", marginRight: "300px" }}
+            disabled={activeStep === 0}
+          >
+            Back
+          </SubmitButton>
 
-          {errorMessage && (
-            <Typography variant="body2" align="center" color="error">
-              {errorMessage}
-            </Typography>
-          )}
+          {/* NEXT BUTTON */}
+          <SubmitButton
+            variant="contained"
+            color="primary"
+            disabled={
+              !selectedRole ||
+              (activeStep === 0 && selectedRole === "") ||
+              (activeStep === 1 && user.university === "")
+            }
+            onClick={activeStep === 4 ? handleSubmit : handleNext}
+            style={{ width: "200px" }}
+          >
+            {activeStep === 4 ? "Register" : "Next"}
+          </SubmitButton>
+        </div>
+      )}
 
-          {/* ------------------- SIGN UP BUTTON ------------------- */}
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Register
-          </Button>
-        </form>
-      </Container>
-    </div>
+      {/* ------------------- ERROR MESSAGES (shown on all steps) ------------------- */}
+      {errorMessage && (
+        <ErrorMessage variant="body2" align="center" color="error">
+          {errorMessage}
+        </ErrorMessage>
+      )}
+    </FormContainer>
   );
 };
 

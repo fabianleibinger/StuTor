@@ -3,22 +3,22 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Outlet
-} from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { theme } from './styles';
-import { ThemeProvider } from '@mui/material';
-import Home from './pages/Home.js';
-import Navbar from './components/Navbar.js';
-import Login from './pages/Login.js';
-import Register from './pages/Register.js';
-import MyStudySessions from './pages/MyStudySessions';
-import StudySessionSearch from './pages/StudySessionSearch';
-import StudysessionDetailsPage from './pages/StudysessionDetailsPage.js';
-
-import UserProfile from './pages/UserProfile.js';
-import { UserContext } from './context/UserContext';
-import ChatPage from './pages/ChatPage';
+  Outlet,
+} from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { theme } from "./styles";
+import { ThemeProvider } from "@mui/material";
+import Home from "./pages/Home.js";
+import Navbar from "./components/Navbar.js";
+import Login from "./pages/Login.js";
+import Register from "./pages/Register.js";
+import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js";
+import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js";
+import UserProfile from "./pages/UserProfile.js";
+import { UserContext } from "./context/UserContext";
+import ChatPage from "./pages/ChatPage";
+import SuccessPage from "./pages/SuccessPage.js"
+import { Stack } from "@mui/system";
 
 function App() {
   const queryClient = new QueryClient();
@@ -33,10 +33,9 @@ function App() {
 
   const Layout = () => {
     return (
-      <div style={{ marginTop: '100px' }}>
-        <Navbar />
-        <Outlet />
-      </div>
+        <Navbar>
+          <Outlet />
+        </Navbar>
     );
   };
 
@@ -52,12 +51,13 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/userProfile" element={<UserProfile />} />
               <Route path="/MyStudySessions" element={<MyStudySessions />} />
-              <Route path="/search-sessions" element={<StudySessionSearch />} />
-              <Route path="/my-chats" element={<ChatPage />} />
+              <Route path="/myChats" element={<ChatPage />} />
+              <Route path="/SearchSessions" element={<StudySessionSearch />} />
               <Route
                 path="/StudysessionDetailsPage/:studySessionId"
                 element={<StudysessionDetailsPage />}
               />
+              <Route path="/success/:bookingId" element={<SuccessPage />} />
             </Routes>
           </Router>
         </UserContext.Provider>

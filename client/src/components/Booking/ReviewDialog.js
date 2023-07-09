@@ -19,7 +19,6 @@ const ReviewDialog = ({
   studysessionId,
 }) => {
   const [review, setReview] = useState("");
-  const [error, setError] = useState("");
   const queryClient = useQueryClient();
   const [rating, setRating] = useState(0);
 

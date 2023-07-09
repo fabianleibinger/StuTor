@@ -32,8 +32,8 @@ const ChatProvider = ({ children }) => {
   );
 };
 
-const useAppContext = () => {
+const useChatContext = () => {
   return useContext(ChatContext);
 };
 
-export { ChatProvider, useAppContext };
+export { ChatProvider, useChatContext };
