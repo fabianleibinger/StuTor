@@ -178,7 +178,7 @@ const Navbar = () => {
             <DialogTitle>{"The StuTor Mission Statement"}</DialogTitle>
             <DialogContent>
               <img
-                src={process.env.PUBLIC_URL + "/img/StuTor_Logo.png"}
+                src={require("../img/StuTor_Logo.png")}
                 alt="Mission Statement"
                 style={{ maxWidth: "550px", maxHeight: "550px" }}
               />
