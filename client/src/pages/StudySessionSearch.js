@@ -195,7 +195,10 @@ export default function StudySessionSearch() {
   }));
 
   return (
-    <Box id="pageWrapper">
+    <Box id="pageWrapper" sx={{
+      display: 'flex',
+      justifyContent: 'center'
+    }}>
     <Box
       id="studySearchPageBox"
       sx={{

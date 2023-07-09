@@ -130,7 +130,8 @@ const MyStudySessions = () => {
   };
   return (
     <Box id="MyStudySessionWrapperPageWrapper" sx={{
-      alignItems: "center"
+      display: 'flex',
+      justifyContent: 'center'
     }}>
       <Box id="MyStudySessionWrapper" sx={{ 
         width: '90vw',
