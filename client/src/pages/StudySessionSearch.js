@@ -195,6 +195,7 @@ export default function StudySessionSearch() {
   }));
 
   return (
+    <Box id="pageWrapper">
     <Box
       id="studySearchPageBox"
       sx={{
@@ -281,6 +282,7 @@ export default function StudySessionSearch() {
           error={error}
         />
       </Box>
+    </Box>
     </Box>
   );
 }

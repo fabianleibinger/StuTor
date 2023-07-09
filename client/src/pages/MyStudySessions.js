@@ -129,138 +129,142 @@ const MyStudySessions = () => {
     setSelectedStudySession(null);
   };
   return (
-    <Box id="MyStudySessionWrapper" sx={{ 
-      width: '90vw',
-      height: '90vh',
-      minheight: 1,
-      justifyContent: 'center',
-      flexDirection: 'column',
-      alignItems: 'right',
-      pb: 1,
-      pt: 2,
-      pl: 1,
-      pr: 1 
-      }}>
-      <Box
-        id="MyStudySessionHeader"
-        sx={{
-          padding: '10px',
-          borderRadius: '8px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
-      >
+    <Box id="MyStudySessionWrapperPageWrapper" sx={{
+      alignItems: "center"
+    }}>
+      <Box id="MyStudySessionWrapper" sx={{ 
+        width: '90vw',
+        height: '90vh',
+        minheight: 1,
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'right',
+        pb: 1,
+        pt: 2,
+        pl: 1,
+        pr: 1 
+        }}>
         <Box
+          id="MyStudySessionHeader"
           sx={{
+            padding: '10px',
+            borderRadius: '8px',
             display: 'flex',
-            justifyContent: 'space-end'
+            justifyContent: 'space-between',
+            alignItems: 'center'
           }}
         >
-          <SwitchRoleButton
-            role={user.role}
-            handleRoleSwitchClick={handleRoleSwitchClick}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-end'
+            }}
+          >
+            <SwitchRoleButton
+              role={user.role}
+              handleRoleSwitchClick={handleRoleSwitchClick}
+            />
+          </Box>
+          <Typography
+            variant="h4"
+            sx={{
+              padding: 2,
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              textAlign: 'center'
+            }}
+          >
+            My StudySessions
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-end'
+            }}
+          >
+            <CreateStudySessionDialog key={'AddDialog'} role={user.role} />
+          </Box>
+        </Box>
+
+        {openConfirmDialog && (
+          <ConfirmationDialog
+            open={openConfirmDialog}
+            onCancel={() => setOpenConfirmDialog(false)}
+            onConfirmation={() => handleDeleteStudySession(idToDelete)}
           />
-        </Box>
-        <Typography
-          variant="h4"
-          sx={{
-            padding: 2,
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            textAlign: 'center'
-          }}
-        >
-          My StudySessions
-        </Typography>
+        )}
+
         <Box
+          id="MyStudySessionContainer"
           sx={{
+            //height: 'calc(90vh - 100px)',
+            maxHeight: '80vh',
+            overflow: 'auto',
             display: 'flex',
-            justifyContent: 'space-end'
+            alignItems: 'top-left',
+            margin: '10px',
+            border: '1px solid lightgray',
+            borderRadius: '8px',
+            padding: '10px',
+            scrollMarginTop: '64px'
           }}
         >
-          <CreateStudySessionDialog key={'AddDialog'} role={user.role} />
-        </Box>
-      </Box>
-
-      {openConfirmDialog && (
-        <ConfirmationDialog
-          open={openConfirmDialog}
-          onCancel={() => setOpenConfirmDialog(false)}
-          onConfirmation={() => handleDeleteStudySession(idToDelete)}
-        />
-      )}
-
-      <Box
-        id="MyStudySessionContainer"
-        sx={{
-          //height: 'calc(90vh - 100px)',
-          maxHeight: '80vh',
-          overflow: 'auto',
-          display: 'flex',
-          alignItems: 'top-left',
-          margin: '10px',
-          border: '1px solid lightgray',
-          borderRadius: '8px',
-          padding: '10px',
-          scrollMarginTop: '64px'
-        }}
-      >
+          <Grid
+    container
+    spacing={0}
+    sx={{ height: '100%', alignItems: 'top-left' }}
+  >
+    {studySessions.length > 0 ? (
+      studySessions.map((studySession) => (
         <Grid
-  container
-  spacing={0}
-  sx={{ height: '100%', alignItems: 'top-left' }}
->
-  {studySessions.length > 0 ? (
-    studySessions.map((studySession) => (
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        md={4}
-        lg={3}
-        key={studySession._id}
-        sx={{ alignItems: 'left' }}
-      >
-        <StudySessionCard
-          studySession={studySession}
-          onDelete={() => {
-            handleDeleteConfirmationNeeded(studySession._id);
-          }}
-          tutorFirstName={tutorFirstName}
-          tutorLastName={tutorLastName}
-          tutorPicture={tutorPicture}
-          role={user.role}
-          onItemClick={() => handleStudySessionClick(studySession)}
-          details={true}
-          addStudySessionComponent={null}
-          backgroundColor={'#a9b0ab'}
-        />
-      </Grid>
-    ))
-  ) : (user.role === "TUTOR" ? 
-  (
-    <Typography>
-      Create your first Study Session
-    </Typography>
-  ) :
-  (
-    <Typography>
-      Your StudySessions are listed here as soon as you are chatting with a Tutor.
-    </Typography>
-  )
-)}
-</Grid>
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          key={studySession._id}
+          sx={{ alignItems: 'left' }}
+        >
+          <StudySessionCard
+            studySession={studySession}
+            onDelete={() => {
+              handleDeleteConfirmationNeeded(studySession._id);
+            }}
+            tutorFirstName={tutorFirstName}
+            tutorLastName={tutorLastName}
+            tutorPicture={tutorPicture}
+            role={user.role}
+            onItemClick={() => handleStudySessionClick(studySession)}
+            details={true}
+            addStudySessionComponent={null}
+            backgroundColor={'#a9b0ab'}
+          />
+        </Grid>
+      ))
+    ) : (user.role === "TUTOR" ? 
+    (
+      <Typography>
+        Create your first Study Session
+      </Typography>
+    ) :
+    (
+      <Typography>
+        Your StudySessions are listed here as soon as you are chatting with a Tutor.
+      </Typography>
+    )
+  )}
+  </Grid>
 
+        </Box>
+        {selectedStudySession !== null && (
+          <UpdateStudySessionDialog
+            openDialog={openDialog}
+            onUpdateDialogClose={onUpdateDialogClose}
+            selectedStudySession={selectedStudySession}
+          />
+        )}
       </Box>
-      {selectedStudySession !== null && (
-        <UpdateStudySessionDialog
-          openDialog={openDialog}
-          onUpdateDialogClose={onUpdateDialogClose}
-          selectedStudySession={selectedStudySession}
-        />
-      )}
     </Box>
   );
 };

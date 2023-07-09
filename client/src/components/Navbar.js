@@ -109,7 +109,7 @@ const Navbar = () => {
 
         {/* ---------- LINKS ----------*/}
         <LinksContainer>
-          <StyledLink to="/search-sessions">
+          <StyledLink to="/SearchSessions">
             <SearchIcon />
             Search Sessions
           </StyledLink>
