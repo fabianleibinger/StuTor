@@ -19,6 +19,7 @@ import UserProfile from "./pages/UserProfile.js";
 import { UserContext } from "./context/UserContext";
 import ChatPage from "./pages/ChatPage";
 import SuccessPage from "./pages/SuccessPage.js"
+import ViewBookingsPage from "./pages/ViewBookingsPage.js"
 import { Stack } from "@mui/system";
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
                 element={<StudysessionDetailsPage />}
               />
               <Route path="/success/:bookingId" element={<SuccessPage />} />
+              <Route path="/viewBookings" element={<ViewBookingsPage />} />
             </Routes>
           </Router>
         </UserContext.Provider>

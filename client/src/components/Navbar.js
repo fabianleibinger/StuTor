@@ -227,6 +227,13 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
+                <MenuItem
+                  onClick={handleMenuClose}
+                  component={Link}
+                  to="/viewBookings"
+                >
+                  View Bookings
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ExitToAppIcon fontSize="small" />
                   Logout

@@ -44,6 +44,13 @@ export const getBookingsOfStudysession = async (studySessionId) => {
   return response.data
 }
 
+export const getBookingsOfTutor = async (userId) => {
+  const response = await axios.get(`${BOOKING_URL}/bookingsOfTutor/${userId}`)
+  console.log("response", response)
+  console.log("response.data", response.data)
+  return response.data
+}
+
 export const getBookingsCreatedByUser = async (userId) => {
   const response = await axios.get(`${BOOKING_URL}/createdBy/${userId}`)
   return response.data
