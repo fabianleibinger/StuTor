@@ -34,7 +34,7 @@ import {
 import { useChatContext } from "../../context/ChatProvider";
 import newRequest from "../../utils/newRequest";
 import { UserContext } from "../../context/UserContext";
-import { useBookingContext } from "../context/BookingProvider";
+import { useBookingContext } from "../../context/BookingProvider";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
