@@ -47,6 +47,7 @@ const Navbar = () => {
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { notification, setNotification } = useChatContext();
+  const { bookingNotification, setBookingNotification } = useBookingContext();
   const anchorElRef = useRef(null);
   const aboutUsRef = useRef(null);
   const navigate = useNavigate();
