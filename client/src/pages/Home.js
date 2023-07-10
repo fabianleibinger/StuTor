@@ -5,7 +5,7 @@ import TrustedBy from "../components/TrustedBy/TrustedBy";
 import Features from "../components/Features/Features";
 import Slide from "../components/Slide/Slide";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
-import { projects } from "../components/ProjectCard/data";
+import studySessions from "../components/ProjectCard/studySessions";
 
 function Home() {
   return (
@@ -18,8 +18,8 @@ function Home() {
 
       {/* ------------------------- Example Tutoring Sessions -------------------------*/}
       <Slide slidesToShow={4} arrowsScroll={4}>
-        {projects.map((card) => (
-          <ProjectCard key={card.id} card={card} />
+        {studySessions.map((card) => (
+          <ProjectCard key={card._id} card={card} />
         ))}
       </Slide>
     </div>
