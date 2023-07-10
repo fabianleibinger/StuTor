@@ -1,9 +1,14 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import getCurrentUser from "../utils/getCurrentUser";
 
 export const UserContext = createContext();
 
-export const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+const UserContextProvider = ({ children }) => {
+  const [user, setUser] = useState(getCurrentUser());
+
+  useEffect(() => {
+    setUser(getCurrentUser());
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -11,3 +16,9 @@ export const UserContextProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
+
+const useUserContext = () => {
+  return useContext(UserContext);
+};
+
+export { UserContextProvider, useUserContext };
