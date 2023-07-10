@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import SearchIcon from "@mui/icons-material/Search";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import {
   Typography,
   Avatar,
@@ -24,17 +28,13 @@ import {
   JoinButton,
   UserFullName,
   AboutUsButton,
+  theme,
   StyledBadge,
-} from "../styles";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import SearchIcon from "@mui/icons-material/Search";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import { useChatContext } from "../context/ChatProvider";
-import newRequest from "../utils/newRequest";
-import { UserContext } from "../context/UserContext";
-import { useBookingContext } from "../context/BookingProvider";
-import { theme } from "../styles.js";
+} from "../../styles";
+import { useChatContext } from "../../context/ChatProvider";
+import newRequest from "../../utils/newRequest";
+import { UserContext } from "../../context/UserContext";
+import { useBookingContext } from "../../context/BookingProvider";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -109,7 +109,7 @@ const Navbar = () => {
       <RootToolbar>
         {/* ---------- LOGO ----------*/}
         <LogoContainer to="/">
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="div" sx={{ fontSize: "2rem" }}>
             STUTOR
           </Typography>
           <span className="dot">.</span>
@@ -119,28 +119,28 @@ const Navbar = () => {
         <LinksContainer>
           <StyledLink to="/search-sessions">
             <SearchIcon />
-            Search Sessions
+            <Typography sx={{ fontSize: "1.2rem" }}>Search Sessions</Typography>
           </StyledLink>
           <StyledLink to="/MyStudySessions">
             <CalendarMonthIcon />
-            My Study Sessions
+            <Typography sx={{ fontSize: "1.2rem" }}>
+              {" "}
+              My Study Sessions
+            </Typography>
           </StyledLink>
           {notification.length === 0 ? (
             <StyledLink to="/myChats">
-              {" "}
               <ChatBubbleIcon />
-              My Chats
+              <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
             </StyledLink>
           ) : (
             <StyledBadge badgeContent={notification.length}>
               <StyledLink to="/myChats">
-                {" "}
                 <ChatBubbleIcon />
-                My Chats
+                <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
               </StyledLink>
             </StyledBadge>
           )}
-
           {/* ---------- ABOUT US ----------*/}
           <AboutUsButton
             ref={aboutUsRef}
@@ -179,7 +179,7 @@ const Navbar = () => {
             <DialogTitle>{"The StuTor Mission Statement"}</DialogTitle>
             <DialogContent>
               <img
-                src={require("../img/StuTor_Logo.png")}
+                src="https://res.cloudinary.com/daefab1lj/image/upload/v1688829580/anhz4srs4pgrwr5woyav.png"
                 alt="Mission Statement"
                 style={{ maxWidth: "550px", maxHeight: "550px" }}
               />
@@ -273,7 +273,9 @@ const Navbar = () => {
                     onClick={handleMenuCloseBookings}
                     component={Link}
                     to="/viewBookings"
-                    style={{ backgroundColor: theme.palette.primary.notification }}
+                    style={{
+                      backgroundColor: theme.palette.primary.notification,
+                    }}
                   >
                     View Bookings
                   </MenuItem>
