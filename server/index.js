@@ -33,27 +33,25 @@ const connect = async () => {
 };
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-// Increase the maximum payload size limit to 50MB
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api/achievement", achievementRoute);
+app.use("/api/booking", bookingRoute);
+app.use("/api/chat", chatRoute);
+app.use("/api/course", courseRoute);
+app.use("/api/message", messageRoute);
+app.use("/api/review", reviewRoute);
+app.use("/api/studysession", studysessionRoute);
+app.use("/api/university", universityRoute);
+app.use("/api/user", userRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/userAchievement", userachievementRoute);
+app.use("/api/userStudysession", userStudysessionRoute);
+app.use("/api/payment", paymentRoute);
 
-app.use('/api/achievement', achievementRoute);
-app.use('/api/booking', bookingRoute);
-app.use('/api/chat', chatRoute);
-app.use('/api/course', courseRoute);
-app.use('/api/message', messageRoute);
-app.use('/api/review', reviewRoute);
-app.use('/api/studysession', studysessionRoute);
-app.use('/api/university', universityRoute);
-app.use('/api/user', userRoute);
-app.use('/api/auth', authRoute);
-app.use('/api/userAchievement', userachievementRoute);
-app.use('/api/userStudysession', userStudysessionRoute);
-app.use('/api/payment', paymentRoute);
-
-// Http logger
+// // Http logger
 // app.use((req, res, next) => {
 //   console.log(`Received ${req.method} request for ${req.url}`);
 //   /*const originalSend = res.send;
@@ -73,7 +71,9 @@ app.use('/api/payment', paymentRoute);
 const port = 3001;
 const server = app.listen(port, () => {
   connect();
-  console.log('Backend server running on port ' + port);
+  console.log(
+    "*********** Backend server running on port " + port + "***********"
+  );
 });
 
 const io = new Server(server, {
@@ -83,8 +83,8 @@ const io = new Server(server, {
   }
 });
 
-io.on('connection', socket => {
-  console.log('Connected to socket.io');
+io.on("connection", (socket) => {
+  console.log("*********** Connected to socket.io ***********");
 
   socket.on("setup", (userId) => {
     socket.join(userId);
@@ -114,5 +114,11 @@ io.on('connection', socket => {
     chat.users.forEach((user) => {
       socket.in(user._id).emit("stop typing");
     });
+  });
+
+  socket.on("new booking", (studysession) => {
+    socket
+      .in(studysession.tutoredBy._id)
+      .emit("booking received", studysession);
   });
 });

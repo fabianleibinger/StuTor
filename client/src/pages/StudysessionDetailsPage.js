@@ -12,6 +12,9 @@ import ChatBox from "../components/Chat/ChatBox";
 import TextTruncate from "react-text-truncate";
 import GreenCircleComponent from "../components/Booking/GreenCircle.js";
 import getCurrentUser from "../utils/getCurrentUser.js";
+import { LoadingIndicator } from "../components/General/LoadingIndicator.js";
+import { ErrorIndicator } from "../components/General/ErrorIndicator.js";
+import LanguageIcon from '@mui/icons-material/Language';
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
@@ -86,8 +89,8 @@ const StudysessionDetailsPage = () => {
     getChat();
   }, [studysession]);
 
-  if (isLoading) return "Loading Studysession for you...";
-  if (error) return "Oh noooo! An error has occurred!";
+  if (isLoading) return <LoadingIndicator/>
+  if (error) return <ErrorIndicator/>
 
   return (
     <Box
@@ -148,6 +151,28 @@ const StudysessionDetailsPage = () => {
             </Grid>
             <Grid item xs={12} sm={6} alignContent={"center"}>
               <StudysessionRating studySessionId={studySessionId} />
+            </Grid>
+          </Grid>
+          <Grid container direction="row"
+              justifyContent="flex-start"
+              alignItems="center" 
+              spacing={2}
+              marginBottom={"1.5rem"}>
+            <Grid item>
+              <Grid container alignItems="center">
+                <Grid item>
+                  <LanguageIcon sx={{ marginRight: "0.5rem" }} />
+                </Grid>
+                {data.languages.map((language) => (
+                <Grid item>
+                  
+                    <Typography variant="subtitle2" key={language} marginRight={"0.5rem"}>
+                      {language}
+                    </Typography>
+                  
+                </Grid>
+                ))}
+              </Grid>
             </Grid>
           </Grid>
           <Typography variant="h6" sx={{ marginBottom: "0.5rem" }}>

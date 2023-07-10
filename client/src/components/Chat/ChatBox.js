@@ -134,8 +134,8 @@ const ChatBox = () => {
   };
 
   const stackSx = {
-    width: 0.94,
-    height: 0.96,
+    width: 0.92,
+    height: 0.94,
     padding: 2,
   };
 
@@ -165,7 +165,7 @@ const ChatBox = () => {
                   } sx={{ maxWidth: 0.7 }}>
                     {getCurrentUser()._id !== message.sender._id ? (
                       <Avatar
-                        src={message.sender.profilePicture}
+                        src={message.sender.picture}
                         sx={{ marginRight: 1 }}
                       />
                     ) : null}

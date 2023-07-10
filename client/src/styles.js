@@ -1,5 +1,6 @@
 import { styled, Box } from '@mui/system';
 import {
+  Badge,
   Button,
   Card,
   TextField,
@@ -13,8 +14,10 @@ import {
   Step,
   StepLabel,
   StepIcon,
-  Dialog
+  Dialog,
+  Container,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 import { createTheme } from "@mui/material";
 
@@ -22,24 +25,31 @@ import { createTheme } from "@mui/material";
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
-      button: '#FFFFFF',
-      contrastText: '#FFFFFF',
-      hoverBackground: '#1976d2',
-      hoverText: '#FFFFFF'
+      main: "#1976d2",
+      button: "#FFFFFF",
+      contrastText: "#FFFFFF",
+      hoverBackground: "#1976d2",
+      hoverText: "#FFFFFF",
+      notification: "#808080",
+      notificationBadge: "#FFFFFF",
+      text: "#000000",
     },
     secondary: {
-      main: '#5cbfaf',
-      contrastText: '#FFFFFF'
-    }
-  }
+      main: "#1dbf73",
+      contrastText: "#FFFFFF",
+    },
+  },
 });
 
 // -------------------------- Containers --------------------------
-export const RootContainer = styled('div')({
-  paddingTop: theme => theme.spacing(8),
-  paddingBottom: theme => theme.spacing(8)
+export const RootContainer = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  minHeight: "100vh", // Set the minimum height of the container to the full viewport height
+  paddingTop: (theme) => theme.spacing(8),
+  paddingBottom: (theme) => theme.spacing(8),
 });
+
 export const CardContainer = styled(Card)({
   height: '100%',
   display: 'flex',
@@ -69,19 +79,17 @@ export const LoginFormContainer = styled("form")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center", // Center items vertically
   backgroundColor: "#fff",
   borderRadius: "30px",
   boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+  minHeight: "700px",
   minWidth: "500px",
-  minHeight: "600px",
-  padding: theme.spacing(5), // Add padding around all items
-
+  // padding: theme.spacing(5), // Add padding around all items
+  marginTop: "200px",
   "& > *": {
     marginBottom: theme.spacing(2),
-    width: "100%",
   },
-  "& > *:nth-child(2)": {
+  "& > *:nth-of-type(3)": {
     marginTop: theme.spacing(5), // Adjust the value as needed
   },
 }));
@@ -93,9 +101,10 @@ export const FormContainer = styled("form")(({ theme }) => ({
   backgroundColor: "#fff",
   borderRadius: "30px",
   boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
-  width: "800px",
+  maxWidth: "800px",
   height: "1000px",
   padding: theme.spacing(5), // Add padding around all items
+  marginTop: "200px",
 
   "& > *": {
     marginBottom: theme.spacing(2),
@@ -103,6 +112,16 @@ export const FormContainer = styled("form")(({ theme }) => ({
   // Stretch all items to fill the available vertical space
   flexGrow: 1,
 }));
+
+export const ProfileFormContainer = styled("div")({
+  /* Add your styles here */
+  maxWidth: "800px",
+  margin: "0 auto",
+  padding: "5rem",
+  borderRadius: "20px",
+  boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+  marginBottom: "3rem", // Add the margin bottom for spacing
+});
 
 // -------------------------- Titles --------------------------
 export const Title = styled(Typography)({
@@ -112,6 +131,7 @@ export const CardTitle = styled(Typography)({
   marginBottom: theme => theme.spacing(2)
 });
 export const LoginTitle = styled(Typography)(({ theme }) => ({
+  // marginTop: theme.spacing(2), // Add top margin
   marginBottom: theme.spacing(10),
   fontSize: "30px",
   fontWeight: "bold",
@@ -169,29 +189,46 @@ export const AboutUsButton = styled(Button)(({ theme }) => ({
   textTransform: "none",
   fontSize: "16px",
   width: "100px",
-  border: "1px solid #FFFFFF",
+  border: "2px solid #FFFFFF",
   marginLeft: theme.spacing(3.5),
   fontWeight: "normal",
+  "&:hover": {
+    backgroundColor: theme.palette.secondary.main, // Change background color on hover
+    borderColor: theme.palette.primary.main,
+    cursor: "pointer", // Change cursor on hover
+  },
 }));
 
 // -------------------------- Bars --------------------------
 export const RootAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText
+  color: theme.palette.primary.contrastText,
+  height: "80px",
 }));
 export const RootToolbar = styled(Toolbar)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center'
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  paddingTop: "0.8rem",
+  paddingBottom: "1rem",
 });
 
 // -------------------------- Links --------------------------
 export const StyledLink = styled(Link)(({ theme }) => ({
   marginLeft: theme.spacing(2),
-  textDecoration: 'none',
-  color: 'inherit',
-  display: 'flex',
-  alignItems: 'center'
+  textDecoration: "none",
+  color: "inherit",
+  display: "flex",
+  alignItems: "center",
+  // transition: "color 0.3s", // Add transition effect
+  // "&:hover": {
+  //   color: theme.palette.primary.main, // Change color on hover
+  //   backgroundColor: theme.palette.primary.hoverText, // Add background color on hover
+  //   borderRadius: "20px", // Adjust border-radius as needed
+  //   // boxShadow: theme.shadows[2], // Add box shadow on hover
+  //   // padding: "12px 16px", // Increase padding
+  //   fontSize: "1.2rem", // Increase font size
+  // },
 }));
 
 // -------------------------- Textfields --------------------------
@@ -201,10 +238,10 @@ export const LoginTextField = styled(TextField)(({ theme }) => ({
 }));
 
 // -------------------------- Texts --------------------------
-export const UserFullName = styled('div')(({ theme }) => ({
-  marginLeft: '0.5rem',
-  color: 'white',
-  fontSize: '16px'
+export const UserFullName = styled("div")(({ theme }) => ({
+  marginLeft: "0.5rem",
+  color: "white",
+  fontSize: "1.2rem",
 }));
 export const ErrorMessage = styled(Typography)(({ theme }) => ({
   color: 'red',
@@ -287,3 +324,111 @@ export const stepContentContainer = {
   justifyContent: "center",
   // marginBottom: "50px", // Adjust this margin based on your preference
 };
+
+export const FooterContainer = styled("div")(({ theme }) => ({
+  backgroundColor: "#f8f8f8",
+  padding: theme.spacing(4, 0),
+}));
+
+export const FooterContent = styled(Container)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  paddingTop: theme.spacing(4),
+  paddingBottom: theme.spacing(2),
+  width: "100%",
+  maxWidth: "lg",
+}));
+
+export const FooterTop = styled("div")({
+  display: "grid",
+  gridTemplateColumns: "repeat(5, 1fr)",
+  gap: "1rem",
+});
+
+export const FooterItem = styled("div")({
+  "& h2": {
+    fontWeight: "bold",
+    fontSize: "1.2rem",
+    marginBottom: "1rem",
+  },
+  "& span": {
+    display: "block",
+    fontSize: "0.9rem",
+    color: "#666",
+    marginBottom: "0.5rem",
+  },
+});
+
+export const FooterBottom = styled("div")({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: "2rem",
+});
+
+export const FooterLeft = styled("div")({
+  "& h2": {
+    fontWeight: "bold",
+    fontSize: "1.5rem",
+    marginBottom: "1rem",
+  },
+  "& span": {
+    display: "block",
+    fontSize: "0.9rem",
+    color: "#666",
+  },
+});
+
+export const FooterRight = styled("div")({
+  display: "flex",
+  alignItems: "center",
+});
+
+export const SocialIcons = styled("div")({
+  display: "flex",
+  gap: "0.5rem",
+});
+
+export const LanguageLink = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  marginRight: "1rem",
+  "& span": {
+    marginLeft: "0.5rem",
+  },
+});
+
+export const CurrencyLink = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  marginRight: "1rem",
+  "& span": {
+    marginLeft: "0.5rem",
+  },
+});
+
+export const AppContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
+export const Content = styled("div")(({ theme }) => ({
+  flexGrow: 1,
+  marginBottom: theme.spacing(40), // Add a large margin-bottom value here
+  // marginTop: theme.spacing(20), // Add a large margin-bottom value here
+  alignItems: "center",
+  justifyContent: "center", // Center the content vertically
+}));
+
+export const StyledSearchIcon = styled(SearchIcon)({
+  color: "black",
+  marginLeft: "20px",
+});
+
+export const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: theme.palette.primary.notificationBadge,
+    color: theme.palette.primary.text,
+  },
+}));

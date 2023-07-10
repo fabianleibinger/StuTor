@@ -155,301 +155,313 @@ const Register = () => {
   };
 
   return (
-    <FormContainer onSubmit={activeStep === 4 ? handleSubmit : undefined}>
-      {/* ------------------- REGISTER TITLE ------------------- */}
-      <LoginTitle>Register</LoginTitle>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <FormContainer onSubmit={activeStep === 4 ? handleSubmit : undefined}>
+        {/* ------------------- REGISTER TITLE ------------------- */}
+        <LoginTitle>Register</LoginTitle>
 
-      {/* ------------------- PROGRESS BAR ------------------- */}
-      <ProgressContainer activeStep={activeStep} alternativeLabel>
-        <Step key="Step 1" completed={activeStep > 0}>
-          <StepLabel>Step 1</StepLabel>
-        </Step>
-        <Step key="Step 2" completed={activeStep > 1}>
-          <StepLabel>Step 2</StepLabel>
-        </Step>
-        <Step key="Step 3" completed={activeStep > 2}>
-          <StepLabel>Step 3</StepLabel>
-        </Step>
-        <Step key="Step 4" completed={activeStep > 3}>
-          <StepLabel>Step 4</StepLabel>
-        </Step>
-        <Step key="Step 5" completed={activeStep > 4}>
-          <StepLabel>Step 5</StepLabel>
-        </Step>
-      </ProgressContainer>
+        {/* ------------------- PROGRESS BAR ------------------- */}
+        <ProgressContainer activeStep={activeStep} alternativeLabel>
+          <Step key="Step 1" completed={activeStep > 0}>
+            <StepLabel>Step 1</StepLabel>
+          </Step>
+          <Step key="Step 2" completed={activeStep > 1}>
+            <StepLabel>Step 2</StepLabel>
+          </Step>
+          <Step key="Step 3" completed={activeStep > 2}>
+            <StepLabel>Step 3</StepLabel>
+          </Step>
+          <Step key="Step 4" completed={activeStep > 3}>
+            <StepLabel>Step 4</StepLabel>
+          </Step>
+          <Step key="Step 5" completed={activeStep > 4}>
+            <StepLabel>Step 5</StepLabel>
+          </Step>
+        </ProgressContainer>
 
-      {/* ------------------- STEP 1: TUTOR ACCOUNT ------------------- */}
-      {activeStep === 0 && (
-        <div style={stepContentContainer}>
-          {/* ------------------- HEADING ------------------- */}
-          <Typography
-            variant="h5"
-            align="center"
-            sx={{ marginBottom: "70px", marginTop: "50px" }}
-          >
-            Which Role Do You Want to be Today? ...
-          </Typography>
+        {/* ------------------- STEP 1: TUTOR ACCOUNT ------------------- */}
+        {activeStep === 0 && (
+          <div style={stepContentContainer}>
+            {/* ------------------- HEADING ------------------- */}
+            <Typography
+              variant="h5"
+              align="center"
+              sx={{ marginBottom: "70px", marginTop: "50px" }}
+            >
+              Which Role Do You Want to be Today? ...
+            </Typography>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "50px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
             <div
-              onClick={() => handleRoleChange("STUDENT")}
               style={{
-                border: `8px solid ${
-                  selectedRole === "STUDENT"
-                    ? theme.palette.primary.main
-                    : "gray"
-                }`,
-                padding: "10px",
-                borderRadius: "30px",
-                cursor: "pointer",
-                position: "relative",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "50px",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <img
-                src={studentLogo}
-                alt="Student Logo"
-                style={{ width: "300px", height: "300px" }}
-              />
-              <Typography
-                variant="h5"
-                align="center"
-                sx={{
-                  position: "absolute",
-                  bottom: "-50px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  fontWeight: selectedRole === "STUDENT" ? "bold" : "normal",
+              <div
+                onClick={() => handleRoleChange("STUDENT")}
+                style={{
+                  border: `8px solid ${
+                    selectedRole === "STUDENT"
+                      ? theme.palette.primary.main
+                      : "gray"
+                  }`,
+                  padding: "10px",
+                  borderRadius: "30px",
+                  cursor: "pointer",
+                  position: "relative",
                 }}
               >
-                Student
-              </Typography>
-            </div>
-            <div
-              onClick={() => handleRoleChange("TUTOR")}
-              style={{
-                border: `8px solid ${
-                  selectedRole === "TUTOR" ? theme.palette.primary.main : "gray"
-                }`,
-                padding: "10px",
-                borderRadius: "30px",
-                cursor: "pointer",
-                position: "relative",
-              }}
-            >
-              <img
-                src={tutorLogo}
-                alt="Tutor Logo"
-                style={{ width: "300px", height: "300px" }}
-              />
-              <Typography
-                variant="h5"
-                align="center"
-                sx={{
-                  position: "absolute",
-                  bottom: "-50px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  fontWeight: selectedRole === "TUTOR" ? "bold" : "normal",
+                <img
+                  src={studentLogo}
+                  alt="Student Logo"
+                  style={{ width: "300px", height: "300px" }}
+                />
+                <Typography
+                  variant="h5"
+                  align="center"
+                  sx={{
+                    position: "absolute",
+                    bottom: "-50px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    fontWeight: selectedRole === "STUDENT" ? "bold" : "normal",
+                  }}
+                >
+                  Student
+                </Typography>
+              </div>
+              <div
+                onClick={() => handleRoleChange("TUTOR")}
+                style={{
+                  border: `8px solid ${
+                    selectedRole === "TUTOR"
+                      ? theme.palette.primary.main
+                      : "gray"
+                  }`,
+                  padding: "10px",
+                  borderRadius: "30px",
+                  cursor: "pointer",
+                  position: "relative",
                 }}
               >
-                Tutor
-              </Typography>
+                <img
+                  src={tutorLogo}
+                  alt="Tutor Logo"
+                  style={{ width: "300px", height: "300px" }}
+                />
+                <Typography
+                  variant="h5"
+                  align="center"
+                  sx={{
+                    position: "absolute",
+                    bottom: "-50px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    fontWeight: selectedRole === "TUTOR" ? "bold" : "normal",
+                  }}
+                >
+                  Tutor
+                </Typography>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ------------------- STEP 2: SELECT UNIVERSITY ------------------- */}
-      {activeStep === 1 && (
-        <div style={stepContentContainer}>
-          {/* ------------------- HEADING ------------------- */}
-          <Typography
-            variant="h5"
-            align="center"
-            sx={{ marginBottom: "70px", marginTop: "50px" }}
-          >
-            Please Select Your University ...
-          </Typography>
+        {/* ------------------- STEP 2: SELECT UNIVERSITY ------------------- */}
+        {activeStep === 1 && (
+          <div style={stepContentContainer}>
+            {/* ------------------- HEADING ------------------- */}
+            <Typography
+              variant="h5"
+              align="center"
+              sx={{ marginBottom: "70px", marginTop: "50px" }}
+            >
+              Please Select Your University ...
+            </Typography>
 
-          <Autocomplete
-            options={searchResults}
-            onInputChange={handleUniversityChange}
-            onFocus={handleUniversityChange}
-            renderInput={(params) => (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <LoginTextField
-                  {...params}
-                  // label="University*"
-                  name="university"
-                  type="text"
-                  placeholder={`${
-                    user.university ? selectedUniversity.name : "Universities*"
-                  }`}
-                  inputProps={{
-                    ...params.inputProps,
-                    style: { width: "80%", marginTop: "10px" },
+            <Autocomplete
+              options={searchResults}
+              onInputChange={handleUniversityChange}
+              onFocus={handleUniversityChange}
+              renderInput={(params) => (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <LoginTextField
+                    {...params}
+                    // label="University*"
+                    name="university"
+                    type="text"
+                    placeholder={`${
+                      user.university
+                        ? selectedUniversity.name
+                        : "Universities*"
+                    }`}
+                    inputProps={{
+                      ...params.inputProps,
+                      style: { width: "80%", marginTop: "10px" },
+                    }}
+                  />
+                </div>
+              )}
+            />
+          </div>
+        )}
+
+        {/* ------------------- STEP 3: SELECT PROFILE PIC ------------------- */}
+        {activeStep === 2 && (
+          <div style={stepContentContainer}>
+            {/* ------------------- HEADING ------------------- */}
+            <Typography
+              variant="h5"
+              align="center"
+              sx={{ marginBottom: "70px", marginTop: "50px" }}
+            >
+              Please Upload a Profile Picture ...
+            </Typography>
+
+            <ProfilePicInputLabel htmlFor="profile-pic">
+              Profile Picture
+            </ProfilePicInputLabel>
+            <Input
+              id="profile-pic"
+              type="file"
+              onChange={handleProfilePicChange}
+              style={{ width: "80%" }}
+            />
+
+            {profilePicFile && (
+              <div>
+                <Typography variant="subtitle1">
+                  Selected Profile Picture:
+                </Typography>
+                <img
+                  src={URL.createObjectURL(profilePicFile)}
+                  alt="Profile Picture"
+                  style={{
+                    maxWidth: "40%",
+                    height: "auto",
+                    marginTop: "10px",
                   }}
                 />
               </div>
             )}
-          />
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* ------------------- STEP 3: SELECT PROFILE PIC ------------------- */}
-      {activeStep === 2 && (
-        <div style={stepContentContainer}>
-          {/* ------------------- HEADING ------------------- */}
-          <Typography
-            variant="h5"
-            align="center"
-            sx={{ marginBottom: "70px", marginTop: "50px" }}
+        {/* ------------------- STEP 4: SELECT PAYMENT METHODS ------------------- */}
+        {activeStep === 3 && (
+          <div style={stepContentContainer}>
+            {/* ------------------- PAYPAL ------------------- */}
+            PAYPAL
+          </div>
+        )}
+
+        {/* ------------------- STEP 5: TEXTFIELDS AND SELECTIONS ------------------- */}
+        {activeStep === 4 && (
+          <div style={{ textAlign: "center" }}>
+            {/* ------------------- USERNAME ------------------- */}
+            <LoginTextField
+              label="Username*"
+              name="username"
+              type="text"
+              placeholder="username"
+              onChange={handleChange}
+            />
+
+            {/* ------------------- FIRSTNAME ------------------- */}
+            <LoginTextField
+              label="Firstname*"
+              name="firstname"
+              type="text"
+              placeholder="Jason"
+              onChange={handleChange}
+            />
+
+            {/* ------------------- LASTNAME ------------------- */}
+            <LoginTextField
+              label="Lastname*"
+              name="lastname"
+              type="text"
+              placeholder="Wen"
+              onChange={handleChange}
+            />
+
+            {/* ------------------- EMAIL ------------------- */}
+            <LoginTextField
+              label="Email*"
+              name="email"
+              type="email"
+              placeholder="jasonwen@tum.de"
+              onChange={handleChange}
+            />
+
+            {/* ------------------- PASSWORD ------------------- */}
+            <LoginTextField
+              label="Password*"
+              name="password"
+              type="password"
+              onChange={handleChange}
+            />
+
+            {/* ------------------- MANDATORY MESSAGES ------------------- */}
+            <Typography align="center" color="textSecondary">
+              (All * fields are mandatory)
+            </Typography>
+          </div>
+        )}
+        {/* ------------------- NEXT AND BACK BUTTONS ------------------- */}
+        {[0, 1, 2, 3, 4].includes(activeStep) && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "0px",
+            }}
           >
-            Please Upload a Profile Picture ...
-          </Typography>
+            {/* BACK BUTTON */}
+            <SubmitButton
+              variant="outlined"
+              color="primary"
+              onClick={handleBack}
+              style={{ width: "200px", marginRight: "300px" }}
+              disabled={activeStep === 0}
+            >
+              Back
+            </SubmitButton>
 
-          <ProfilePicInputLabel htmlFor="profile-pic">
-            Profile Picture
-          </ProfilePicInputLabel>
-          <Input
-            id="profile-pic"
-            type="file"
-            onChange={handleProfilePicChange}
-            style={{ width: "80%" }}
-          />
+            {/* NEXT BUTTON */}
+            <SubmitButton
+              variant="contained"
+              color="primary"
+              disabled={
+                !selectedRole ||
+                (activeStep === 0 && selectedRole === "") ||
+                (activeStep === 1 && user.university === "")
+              }
+              onClick={activeStep === 4 ? handleSubmit : handleNext}
+              style={{ width: "200px" }}
+            >
+              {activeStep === 4 ? "Register" : "Next"}
+            </SubmitButton>
+          </div>
+        )}
 
-          {profilePicFile && (
-            <div>
-              <Typography variant="subtitle1">
-                Selected Profile Picture:
-              </Typography>
-              <img
-                src={URL.createObjectURL(profilePicFile)}
-                alt="Profile Picture"
-                style={{
-                  maxWidth: "40%",
-                  height: "auto",
-                  marginTop: "10px",
-                }}
-              />
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ------------------- STEP 4: SELECT PAYMENT METHODS ------------------- */}
-      {activeStep === 3 && (
-        <div style={stepContentContainer}>
-          {/* ------------------- PAYPAL ------------------- */}
-          PAYPAL
-        </div>
-      )}
-
-      {/* ------------------- STEP 5: TEXTFIELDS AND SELECTIONS ------------------- */}
-      {activeStep === 4 && (
-        <div style={{ textAlign: "center" }}>
-          {/* ------------------- USERNAME ------------------- */}
-          <LoginTextField
-            label="Username*"
-            name="username"
-            type="text"
-            placeholder="username"
-            onChange={handleChange}
-          />
-
-          {/* ------------------- FIRSTNAME ------------------- */}
-          <LoginTextField
-            label="Firstname*"
-            name="firstname"
-            type="text"
-            placeholder="Jason"
-            onChange={handleChange}
-          />
-
-          {/* ------------------- LASTNAME ------------------- */}
-          <LoginTextField
-            label="Lastname*"
-            name="lastname"
-            type="text"
-            placeholder="Wen"
-            onChange={handleChange}
-          />
-
-          {/* ------------------- EMAIL ------------------- */}
-          <LoginTextField
-            label="Email*"
-            name="email"
-            type="email"
-            placeholder="jasonwen@tum.de"
-            onChange={handleChange}
-          />
-
-          {/* ------------------- PASSWORD ------------------- */}
-          <LoginTextField
-            label="Password*"
-            name="password"
-            type="password"
-            onChange={handleChange}
-          />
-
-          {/* ------------------- MANDATORY MESSAGES ------------------- */}
-          <Typography align="center" color="textSecondary">
-            (All * fields are mandatory)
-          </Typography>
-        </div>
-      )}
-      {/* ------------------- NEXT AND BACK BUTTONS ------------------- */}
-      {[0, 1, 2, 3, 4].includes(activeStep) && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "0px",
-          }}
-        >
-          {/* BACK BUTTON */}
-          <SubmitButton
-            variant="outlined"
-            color="primary"
-            onClick={handleBack}
-            style={{ width: "200px", marginRight: "300px" }}
-            disabled={activeStep === 0}
-          >
-            Back
-          </SubmitButton>
-
-          {/* NEXT BUTTON */}
-          <SubmitButton
-            variant="contained"
-            color="primary"
-            disabled={
-              !selectedRole ||
-              (activeStep === 0 && selectedRole === "") ||
-              (activeStep === 1 && user.university === "")
-            }
-            onClick={activeStep === 4 ? handleSubmit : handleNext}
-            style={{ width: "200px" }}
-          >
-            {activeStep === 4 ? "Register" : "Next"}
-          </SubmitButton>
-        </div>
-      )}
-
-      {/* ------------------- ERROR MESSAGES (shown on all steps) ------------------- */}
-      {errorMessage && (
-        <ErrorMessage variant="body2" align="center" color="error">
-          {errorMessage}
-        </ErrorMessage>
-      )}
-    </FormContainer>
+        {/* ------------------- ERROR MESSAGES (shown on all steps) ------------------- */}
+        {errorMessage && (
+          <ErrorMessage variant="body2" align="center" color="error">
+            {errorMessage}
+          </ErrorMessage>
+        )}
+      </FormContainer>
+    </div>
   );
 };
 

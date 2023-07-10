@@ -1,8 +1,8 @@
-import Chat from '../models/Chat.js';
-import Message from '../models/Message.js';
-import Studysession from '../models/Studysession.js';
-import User from '../models/User.js';
-import { ObjectId } from 'mongodb';
+import Chat from "../models/Chat.js";
+import Message from "../models/Message.js";
+import User from "../models/User.js";
+import Studysession from "../models/Studysession.js";
+import { ObjectId } from "mongodb";
 
 export const accessChat = async (req, res) => {
   try {
