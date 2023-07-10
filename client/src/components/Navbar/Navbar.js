@@ -179,11 +179,7 @@ const Navbar = () => {
             <DialogTitle>{"The StuTor Mission Statement"}</DialogTitle>
             <DialogContent>
               <img
-<<<<<<< HEAD:client/src/components/Navbar.js
-                src={require("../img/StuTor_Logo.png")}
-=======
                 src="https://res.cloudinary.com/daefab1lj/image/upload/v1688829580/anhz4srs4pgrwr5woyav.png"
->>>>>>> 1413c2d127900367ad3c458a030de5ed8fcdc270:client/src/components/Navbar/Navbar.js
                 alt="Mission Statement"
                 style={{ maxWidth: "550px", maxHeight: "550px" }}
               />
@@ -277,13 +273,9 @@ const Navbar = () => {
                     onClick={handleMenuCloseBookings}
                     component={Link}
                     to="/viewBookings"
-<<<<<<< HEAD:client/src/components/Navbar.js
-                    style={{ backgroundColor: theme.palette.primary.notification }}
-=======
                     style={{
                       backgroundColor: theme.palette.primary.notification,
                     }}
->>>>>>> 1413c2d127900367ad3c458a030de5ed8fcdc270:client/src/components/Navbar/Navbar.js
                   >
                     View Bookings
                   </MenuItem>
