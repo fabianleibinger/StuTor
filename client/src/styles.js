@@ -307,3 +307,104 @@ export const StyledBadge = styled(Badge)(({ theme }) => ({
     color: theme.palette.primary.text,
   },
 }));
+
+export const FooterContainer = styled("div")(({ theme }) => ({
+  backgroundColor: "#f8f8f8",
+  padding: theme.spacing(4, 0),
+}));
+
+export const FooterContent = styled(Container)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  paddingTop: theme.spacing(4),
+  paddingBottom: theme.spacing(2),
+  width: "100%",
+  maxWidth: "lg",
+}));
+
+export const FooterTop = styled("div")({
+  display: "grid",
+  gridTemplateColumns: "repeat(5, 1fr)",
+  gap: "1rem",
+});
+
+export const FooterItem = styled("div")({
+  "& h2": {
+    fontWeight: "bold",
+    fontSize: "1.2rem",
+    marginBottom: "1rem",
+  },
+  "& span": {
+    display: "block",
+    fontSize: "0.9rem",
+    color: "#666",
+    marginBottom: "0.5rem",
+  },
+});
+
+export const FooterBottom = styled("div")({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: "2rem",
+});
+
+export const FooterLeft = styled("div")({
+  "& h2": {
+    fontWeight: "bold",
+    fontSize: "1.5rem",
+    marginBottom: "1rem",
+  },
+  "& span": {
+    display: "block",
+    fontSize: "0.9rem",
+    color: "#666",
+  },
+});
+
+export const FooterRight = styled("div")({
+  display: "flex",
+  alignItems: "center",
+});
+
+export const SocialIcons = styled("div")({
+  display: "flex",
+  gap: "0.5rem",
+});
+
+export const LanguageLink = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  marginRight: "1rem",
+  "& span": {
+    marginLeft: "0.5rem",
+  },
+});
+
+export const CurrencyLink = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  marginRight: "1rem",
+  "& span": {
+    marginLeft: "0.5rem",
+  },
+});
+
+export const AppContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
+export const Content = styled("div")(({ theme }) => ({
+  flexGrow: 1,
+  marginBottom: theme.spacing(40), // Add a large margin-bottom value here
+  // marginTop: theme.spacing(20), // Add a large margin-bottom value here
+  alignItems: "center",
+  justifyContent: "center", // Center the content vertically
+}));
+
+export const StyledSearchIcon = styled(SearchIcon)({
+  color: "black",
+  marginLeft: "20px",
+});
