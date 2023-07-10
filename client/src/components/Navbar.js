@@ -5,7 +5,6 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -25,6 +24,7 @@ import {
   JoinButton,
   UserFullName,
   AboutUsButton,
+  StyledBadge,
 } from "../styles";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SearchIcon from "@mui/icons-material/Search";
@@ -132,13 +132,13 @@ const Navbar = () => {
               My Chats
             </StyledLink>
           ) : (
-            <Badge badgeContent={notification.length}>
+            <StyledBadge badgeContent={notification.length}>
               <StyledLink to="/myChats">
                 {" "}
                 <ChatBubbleIcon />
                 My Chats
               </StyledLink>
-            </Badge>
+            </StyledBadge>
           )}
 
           {/* ---------- ABOUT US ----------*/}
@@ -233,7 +233,9 @@ const Navbar = () => {
                 aria-haspopup="true"
               >
                 <Avatar src={user.picture || ""} alt="" />
-                <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
+                <StyledBadge badgeContent={bookingNotification.length}>
+                  <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
+                </StyledBadge>
               </AvatarIconButton>
 
               {/* ---------- DROP DOWN MENU ----------*/}
@@ -267,14 +269,14 @@ const Navbar = () => {
                     View Bookings
                   </MenuItem>
                 ) : (
-                    <MenuItem
-                      onClick={handleMenuCloseBookings}
-                      component={Link}
-                      to="/viewBookings"
-                      style={{ backgroundColor: theme.palette.primary.notification}}
-                    >
-                      View Bookings
-                    </MenuItem>
+                  <MenuItem
+                    onClick={handleMenuCloseBookings}
+                    component={Link}
+                    to="/viewBookings"
+                    style={{ backgroundColor: theme.palette.primary.notification }}
+                  >
+                    View Bookings
+                  </MenuItem>
                 )}
 
                 <MenuItem onClick={handleLogout}>
