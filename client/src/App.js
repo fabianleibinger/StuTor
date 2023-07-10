@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { theme, AppContainer, Content } from "./styles";
 import { ThemeProvider } from "@mui/material";
 import Home from "./pages/Home.js";
-import Navbar from "./components/Navbar.js";
-import Footer from "./components/Footer.js";
+import Navbar from "./components/Navbar/Navbar.js";
+import Footer from "./components/Footer/Footer.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
 import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js";
@@ -19,7 +14,6 @@ import UserProfile from "./pages/UserProfile.js";
 import { UserContext } from "./context/UserContext";
 import ChatPage from "./pages/ChatPage";
 import SuccessPage from "./pages/SuccessPage.js";
-import { styled } from "@mui/system";
 
 function App() {
   const queryClient = new QueryClient();

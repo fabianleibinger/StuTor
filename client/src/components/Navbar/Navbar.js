@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import SearchIcon from "@mui/icons-material/Search";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import {
   Typography,
   Avatar,
@@ -25,14 +29,10 @@ import {
   JoinButton,
   UserFullName,
   AboutUsButton,
-} from "../styles";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import SearchIcon from "@mui/icons-material/Search";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import { useChatContext } from "../context/ChatProvider";
-import newRequest from "../utils/newRequest";
-import { UserContext } from "../context/UserContext";
+} from "../../styles";
+import { useChatContext } from "../../context/ChatProvider";
+import newRequest from "../../utils/newRequest";
+import { UserContext } from "../../context/UserContext";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

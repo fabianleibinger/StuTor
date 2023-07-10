@@ -6,7 +6,7 @@ import {
   FooterItem,
   FooterBottom,
   FooterLeft,
-} from "../styles";
+} from "../../styles";
 
 function Footer() {
   return (

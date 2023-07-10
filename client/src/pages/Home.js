@@ -5,7 +5,7 @@ import TrustedBy from "../components/TrustedBy/TrustedBy";
 import Features from "../components/Features/Features";
 import Slide from "../components/Slide/Slide";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
-import { cards, projects } from "../data";
+import { projects } from "../components/ProjectCard/data";
 
 function Home() {
   return (
