@@ -165,7 +165,7 @@ const ChatBox = () => {
                   } sx={{ maxWidth: 0.7 }}>
                     {getCurrentUser()._id !== message.sender._id ? (
                       <Avatar
-                        src={message.sender.profilePicture}
+                        src={message.sender.picture}
                         sx={{ marginRight: 1 }}
                       />
                     ) : null}

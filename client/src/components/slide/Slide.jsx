@@ -1,14 +1,14 @@
 import React from "react";
 import "./Slide.scss";
-import Slider from "infinite-react-carousel";
+import { Carousel } from "react-responsive-carousel";
 
 const Slide = ({ children, slidesToShow, arrowsScroll }) => {
   return (
     <div className="slide">
       <div className="container">
-        <Slider slidesToShow={slidesToShow} arrowsScroll={arrowsScroll}>
+        <Carousel showArrows={arrowsScroll} showThumbs={false}>
           {children}
-        </Slider>
+        </Carousel>
       </div>
     </div>
   );
