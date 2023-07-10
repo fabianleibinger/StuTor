@@ -71,13 +71,12 @@ export const LoginFormContainer = styled("form")(({ theme }) => ({
   backgroundColor: "#fff",
   borderRadius: "30px",
   boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
-  minWidth: "500px",
   minHeight: "600px",
+  minWidth: "500px",
   padding: theme.spacing(5), // Add padding around all items
-
+  marginTop: "200px",
   "& > *": {
     marginBottom: theme.spacing(2),
-    width: "100%",
   },
   "& > *:nth-of-type(3)": {
     marginTop: theme.spacing(5), // Adjust the value as needed
@@ -91,9 +90,10 @@ export const FormContainer = styled("form")(({ theme }) => ({
   backgroundColor: "#fff",
   borderRadius: "30px",
   boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
-  width: "800px",
+  maxWidth: "800px",
   height: "1000px",
   padding: theme.spacing(5), // Add padding around all items
+  marginTop: "200px",
 
   "& > *": {
     marginBottom: theme.spacing(2),
@@ -389,6 +389,8 @@ export const Content = styled("div")(({ theme }) => ({
   flexGrow: 1,
   marginBottom: theme.spacing(40), // Add a large margin-bottom value here
   // marginTop: theme.spacing(20), // Add a large margin-bottom value here
+  alignItems: "center",
+  justifyContent: "center", // Center the content vertically
 }));
 
 export const StyledSearchIcon = styled(SearchIcon)({
