@@ -408,3 +408,9 @@ export const StyledSearchIcon = styled(SearchIcon)({
   color: "black",
   marginLeft: "20px",
 });
+export const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: theme.palette.primary.notificationBadge,
+    color: theme.palette.primary.text,
+  },
+}));
