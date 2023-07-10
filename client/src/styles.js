@@ -67,11 +67,10 @@ export const LoginFormContainer = styled("form")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "center", // Center items vertically
   backgroundColor: "#fff",
   borderRadius: "30px",
   boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
-  minHeight: "600px",
+  minHeight: "700px",
   minWidth: "500px",
   // padding: theme.spacing(5), // Add padding around all items
   marginTop: "200px",
