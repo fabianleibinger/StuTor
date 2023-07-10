@@ -1,5 +1,6 @@
 import { styled } from "@mui/system";
 import {
+  Badge,
   Button,
   Card,
   TextField,
@@ -26,6 +27,9 @@ export const theme = createTheme({
       contrastText: "#FFFFFF",
       hoverBackground: "#1976d2",
       hoverText: "#FFFFFF",
+      notification: "#808080",
+      notificationBadge: "#FFFFFF",
+      text: "#000000",
     },
     secondary: {
       main: "#5cbfaf",
@@ -263,3 +267,10 @@ export const stepContentContainer = {
   justifyContent: "center",
   // marginBottom: "50px", // Adjust this margin based on your preference
 };
+
+export const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: theme.palette.primary.notificationBadge,
+    color: theme.palette.primary.text,
+  },
+}));

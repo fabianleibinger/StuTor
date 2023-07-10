@@ -22,8 +22,9 @@ root.render(
         <ChatProvider>
           <BookingProvider>
             <SocketProvider>
-              <Socket />
-              <App />
+              <Socket>
+                <App />
+              </Socket>
             </SocketProvider>
           </BookingProvider>
         </ChatProvider>

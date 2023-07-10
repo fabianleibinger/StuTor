@@ -5,7 +5,6 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -25,6 +24,7 @@ import {
   JoinButton,
   UserFullName,
   AboutUsButton,
+  StyledBadge,
 } from "../styles";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SearchIcon from "@mui/icons-material/Search";
@@ -34,6 +34,7 @@ import { useChatContext } from "../context/ChatProvider";
 import newRequest from "../utils/newRequest";
 import { UserContext } from "../context/UserContext";
 import { useBookingContext } from "../context/BookingProvider";
+import { theme } from "../styles.js";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -85,7 +86,7 @@ const Navbar = () => {
     setMenuOpen(false);
     setBookingNotification([]);
   };
-  
+
   const handleAboutUsOpen = () => {
     setAboutUsOpen(true);
   };
@@ -131,13 +132,13 @@ const Navbar = () => {
               My Chats
             </StyledLink>
           ) : (
-            <Badge badgeContent={notification.length} color="primary">
+            <StyledBadge badgeContent={notification.length}>
               <StyledLink to="/myChats">
                 {" "}
                 <ChatBubbleIcon />
                 My Chats
               </StyledLink>
-            </Badge>
+            </StyledBadge>
           )}
 
           {/* ---------- ABOUT US ----------*/}
@@ -232,7 +233,9 @@ const Navbar = () => {
                 aria-haspopup="true"
               >
                 <Avatar src={user.picture || ""} alt="" />
-                <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
+                <StyledBadge badgeContent={bookingNotification.length}>
+                  <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
+                </StyledBadge>
               </AvatarIconButton>
 
               {/* ---------- DROP DOWN MENU ----------*/}
@@ -266,18 +269,14 @@ const Navbar = () => {
                     View Bookings
                   </MenuItem>
                 ) : (
-                  <Badge
-                    badgeContent={bookingNotification.length}
-                    color="primary"
+                  <MenuItem
+                    onClick={handleMenuCloseBookings}
+                    component={Link}
+                    to="/viewBookings"
+                    style={{ backgroundColor: theme.palette.primary.notification }}
                   >
-                    <MenuItem
-                      onClick={handleMenuCloseBookings}
-                      component={Link}
-                      to="/viewBookings"
-                    >
-                      View Bookings
-                    </MenuItem>
-                  </Badge>
+                    View Bookings
+                  </MenuItem>
                 )}
 
                 <MenuItem onClick={handleLogout}>
