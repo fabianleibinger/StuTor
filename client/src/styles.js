@@ -301,13 +301,6 @@ export const stepContentContainer = {
   // marginBottom: "50px", // Adjust this margin based on your preference
 };
 
-export const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    backgroundColor: theme.palette.primary.notificationBadge,
-    color: theme.palette.primary.text,
-  },
-}));
-
 export const FooterContainer = styled("div")(({ theme }) => ({
   backgroundColor: "#f8f8f8",
   padding: theme.spacing(4, 0),
@@ -408,6 +401,7 @@ export const StyledSearchIcon = styled(SearchIcon)({
   color: "black",
   marginLeft: "20px",
 });
+
 export const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: theme.palette.primary.notificationBadge,
