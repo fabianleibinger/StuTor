@@ -79,6 +79,11 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
+  const handleMenuCloseBookings = () => {
+    setMenuOpen(false);
+    setBookingNotification([]);
+  };
+
   const handleAboutUsOpen = () => {
     setAboutUsOpen(true);
   };

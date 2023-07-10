@@ -5,6 +5,7 @@ export const projects = [
     pp: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Web and Mobile Design",
     username: "Anna Bell",
+    courseDescription: "this is a course description.",
   },
   {
     id: 2,
@@ -12,6 +13,7 @@ export const projects = [
     pp: "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Logo Design",
     username: "Morton Green",
+    courseDescription: "this is a course description.",
   },
   {
     id: 3,
@@ -19,6 +21,7 @@ export const projects = [
     pp: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Animated GIFs",
     username: "Emmett Potter",
+    courseDescription: "this is a course description.",
   },
   {
     id: 4,
@@ -26,6 +29,7 @@ export const projects = [
     pp: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Packaging Design",
     username: "Freddie Johnston",
+    courseDescription: "this is a course description.",
   },
   {
     id: 5,
@@ -33,6 +37,7 @@ export const projects = [
     pp: "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Social Media Design",
     username: "Audrey Richards",
+    courseDescription: "this is a course description.",
   },
   {
     id: 6,
@@ -40,6 +45,7 @@ export const projects = [
     pp: "https://images.pexels.com/photos/1036627/pexels-photo-1036627.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Illustration",
     username: "Dalton Hudson",
+    courseDescription: "this is a course description.",
   },
   {
     id: 7,
@@ -47,6 +53,7 @@ export const projects = [
     pp: "https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Book Design",
     username: "Hannah Dougherty",
+    courseDescription: "this is a course description.",
   },
   {
     id: 8,
@@ -54,5 +61,6 @@ export const projects = [
     pp: "https://images.pexels.com/photos/1680175/pexels-photo-1680175.jpeg?auto=compress&cs=tinysrgb&w=1600",
     cat: "Digital Marketing",
     username: "Ward Brewer",
+    courseDescription: "this is a course description.",
   },
 ];
