@@ -37,7 +37,7 @@ export const getStudysessionsForCourse = async courseId => {
 };
 
 export const getStudysessionFiltered = async (searchTerm, filters) => {
-  const { maxPrice, languages, department, rating } = filters;
+  const { maxPrice, languages, department, rating, userId } = filters;
   let url = `${STUDYSESSION_URL}/search?searchTerm=${searchTerm}`;
 
   // optional parameters
@@ -62,10 +62,12 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
       const filteredSessions = studysessions.filter(
         session => session.rating > rating
       );
-      const filteredData = filteredSessions.map(session => session.session);
+      
+      const filteredData = filteredSessions.map(session => session.session)
+          .filter(session => session.tutoredBy._id !== userId);
       return filteredData;
-    }
-    return response.data;
+    } 
+    return response.data.filter(session => session.tutoredBy._id !== userId);
   } catch (error) {
     if (error.response) {
       console.log('Response Status:', error.response.status);

@@ -8,8 +8,9 @@ import { FilterContainer } from '../styles';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useQuery } from 'react-query';
+import { UserContext } from '../context/UserContext';
 
 import { getStudysessionFiltered } from '../api/StudySession';
 import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
@@ -22,9 +23,9 @@ const ScrollableContainer = styled('div')({
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
   const colors = ["#0fab3c", "#98f5ff", "#ee6363", "#ffa500", "	#eeaeee", "#1e90ff"];
-  
-  const userRole = 'STUDENT';
-  // error is not thrown just loading???
+
+  // always student
+  const userRole = "STUDENT"
   if (error) {
     return <div>Error: {error.message}</div>;
     // error.status? => replace a nice string
@@ -77,6 +78,9 @@ export default function StudySessionSearch() {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedRating, setSelectedRating] = useState(0);
+
+  const { user, setUser } = useContext(UserContext);
+
 
   const debouncedSearchTerm = useDebounce(search, 200);
 
@@ -148,7 +152,8 @@ export default function StudySessionSearch() {
         maxPrice: maxPrice,
         languages: selectedLanguages,
         department: selectedDepartment,
-        rating: selectedRating
+        rating: selectedRating,
+        userId: user._id
       }),
     {
       retry: false

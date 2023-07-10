@@ -11,14 +11,16 @@ export default function ActionButton({ text, onClickListener }) {
         padding: '10px 3px',
         color: '#6fa8dc',
         display: 'inline-block',
+        width: 1/3,
         textAlign: 'center',
+        fontSize: "12px",
+        fontWeight: "bold",
         '@media (max-width: 600px)': {
-          padding: '8px 20px',
-          fontSize: '8px'
+          fontSize: '6px'
         },
         '@media (max-width: 400px)': {
           padding: '8px 20px',
-          fontSize: '6px'
+          fontSize: '4px'
         },
         '&:hover': {
           color: 'white',

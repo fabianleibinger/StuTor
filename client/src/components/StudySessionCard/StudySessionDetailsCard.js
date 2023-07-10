@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -31,9 +31,25 @@ export default function StudySessionCard({
   addStudySessionComponent,
   backgroundColor
 }) {
+  const navigate = useNavigate();
+
+  const handleContentClick = () => {
+    if (role === "STUDENT") {
+      navigate(`/StudysessionDetailsPage/${studySession._id}`);
+    }
+  }
+
   const handleDeleteClick = () => {
     onDelete(studySession._id);
   };
+
+  const handleBookingClick = () => {
+
+  }
+
+  const handleDetailsClick = () => {
+
+  }
 
   return (
     <Card sx={{
@@ -70,7 +86,7 @@ export default function StudySessionCard({
       <ScrollableCardContent>
         {details && studySession ? (
           <Box
-            onClick={onItemClick}
+            onClick={handleContentClick}
             sx={{
               '&:hover': {
                 color: 'gray',
