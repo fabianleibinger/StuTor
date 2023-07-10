@@ -73,7 +73,7 @@ export const LoginFormContainer = styled("form")(({ theme }) => ({
   boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
   minHeight: "600px",
   minWidth: "500px",
-  padding: theme.spacing(5), // Add padding around all items
+  // padding: theme.spacing(5), // Add padding around all items
   marginTop: "200px",
   "& > *": {
     marginBottom: theme.spacing(2),
@@ -120,6 +120,7 @@ export const CardTitle = styled(Typography)({
   marginBottom: (theme) => theme.spacing(2),
 });
 export const LoginTitle = styled(Typography)(({ theme }) => ({
+  // marginTop: theme.spacing(2), // Add top margin
   marginBottom: theme.spacing(10),
   fontSize: "30px",
   fontWeight: "bold",
