@@ -3,6 +3,7 @@ import getCurrentUser from "./utils/getCurrentUser";
 import io from "socket.io-client";
 import { useSocketContext } from "./context/SocketContext";
 import { useChatContext } from "./context/ChatProvider";
+import { useBookingContext } from "./context/BookingProvider";
 
 export const ENDPOINT = "localhost:3001";
 const socket = io(ENDPOINT);
@@ -16,6 +17,7 @@ export const Socket = () => {
   }, []);
 
   const { selectedChat, notification, setNotification } = useChatContext();
+  const { bookingNotification, setBookingNotification } = useBookingContext();
 
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
@@ -23,6 +25,12 @@ export const Socket = () => {
       if (!selectedChat || selectedChat._id !== chatId) {
         setNotification([...notification, chatId]);
       }
+    });
+  });
+
+  useEffect(() => {
+    socket.on("booking received", (studysession) => {
+      setBookingNotification([...notification, studysession._id]);
     });
   });
 };
