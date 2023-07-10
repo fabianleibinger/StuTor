@@ -1,32 +1,32 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import { Server } from "socket.io";
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import { Server } from 'socket.io';
 
-import achievementRoute from "./routes/AchievementRoute.js";
-import bookingRoute from "./routes/BookingRoute.js";
-import chatRoute from "./routes/ChatRoute.js";
-import courseRoute from "./routes/CourseRoute.js";
-import messageRoute from "./routes/MessageRoute.js";
-import reviewRoute from "./routes/ReviewRoute.js";
-import studysessionRoute from "./routes/StudysessionRoute.js";
-import universityRoute from "./routes/UniversityRoute.js";
-import userRoute from "./routes/UserRoute.js";
-import authRoute from "./routes/AuthenticationRoute.js";
-import userachievementRoute from "./routes/UserAchievementRoute.js";
-import userStudysessionRoute from "./routes/UserStudysessionRoute.js";
-import paymentRoute from "./routes/PaymentRoute.js";
+import achievementRoute from './routes/AchievementRoute.js';
+import bookingRoute from './routes/BookingRoute.js';
+import chatRoute from './routes/ChatRoute.js';
+import courseRoute from './routes/CourseRoute.js';
+import messageRoute from './routes/MessageRoute.js';
+import reviewRoute from './routes/ReviewRoute.js';
+import studysessionRoute from './routes/StudysessionRoute.js';
+import universityRoute from './routes/UniversityRoute.js';
+import userRoute from './routes/UserRoute.js';
+import authRoute from './routes/AuthenticationRoute.js';
+import userachievementRoute from './routes/UserAchievementRoute.js';
+import userStudysessionRoute from './routes/UserStudysessionRoute.js';
+import paymentRoute from './routes/PaymentRoute.js';
 
 const app = express();
 dotenv.config();
-mongoose.set("strictQuery", true);
+mongoose.set('strictQuery', true);
 
 const connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO);
-    console.log("*********** CONNECTED TO MONGODB ***********");
+    console.log('*********** CONNECTED TO MONGODB ***********');
   } catch (error) {
     console.log(error);
   }
@@ -79,8 +79,8 @@ const server = app.listen(port, () => {
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
-  },
+    origin: 'http://localhost:3000'
+  }
 });
 
 io.on("connection", (socket) => {
@@ -97,8 +97,8 @@ io.on("connection", (socket) => {
     console.log("User joined chat " + chatId);
   });
 
-  socket.on("new message", (newMessageReceived) => {
-    newMessageReceived.chat.users.forEach((userId) => {
+  socket.on('new message', newMessageReceived => {
+    newMessageReceived.chat.users.forEach(userId => {
       if (userId == newMessageReceived.sender._id) return;
       socket.in(userId).emit("message received", newMessageReceived);
     });

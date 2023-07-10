@@ -8,7 +8,8 @@ import Navbar from "./components/Navbar/Navbar.js";
 import Footer from "./components/Footer/Footer.js";
 import Login from "./pages/Login.js";
 import Register from "./pages/Register.js";
-import MyStudySessions from "./pages/MyStudySessions/MyStudySessions.js";
+import MyStudySessions from "./pages/MyStudySessions.js";
+import StudySessionSearch from "./pages/StudySessionSearch.js";
 import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js";
 import UserProfile from "./pages/UserProfile.js";
 import { UserContext } from "./context/UserContext";
@@ -20,12 +21,12 @@ import { Stack } from "@mui/system";
 function App() {
   const queryClient = new QueryClient();
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
 
   return (
@@ -46,6 +47,7 @@ function App() {
                     element={<MyStudySessions />}
                   />
                   <Route path="/myChats" element={<ChatPage />} />
+                  <Route path="/SearchSessions" element={<StudySessionSearch />} />
                   <Route
                     path="/StudysessionDetailsPage/:studySessionId"
                     element={<StudysessionDetailsPage />}

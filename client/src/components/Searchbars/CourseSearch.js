@@ -7,7 +7,7 @@ import {
   Box
 } from '@mui/material';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 
 import { getCoursesFilteredBySearchString } from '../../api/Course';
@@ -29,29 +29,54 @@ function SearchResult({ isLoading, data, error, onSelectCourse }) {
   }
   if (data) {
     return (
-      <div>
+      <Box>
         {data.map((course, index) => (
-          <div key={`${course.id}-${index}`}>
+          <Box
+            key={`${course.id}-${index}`}
+            onClick={() => onSelectCourse(course)}
+            sx={{
+              '&:hover': {
+                color: 'gray',
+                cursor: 'pointer'
+              },
+              pr: 3,
+              pt: 2,
+              fontWeight: 'bold',
+              fontSize: '20px'
+            }}
+          >
             {course.name}
-            <Button onClick={() => onSelectCourse(course)}>Select</Button>
-          </div>
+          </Box>
         ))}
-      </div>
+      </Box>
     );
   }
 
   return null;
 }
 
-export default function CourseSearch({ onSelectCourse, onDeleteCourse }) {
+export default function CourseSearch({
+  onSelectCourse,
+  onDeleteCourse,
+  course,
+  usage
+}) {
   const [search, setSearch] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const debouncedSearchTerm = useDebounce(search, 200);
 
+  useEffect(() => {
+    if (course !== null) {
+      setSelectedCourse(course);
+    } else {
+      handleClearClick();
+    }
+  }, [course]);
+
   const { data, error, isLoading } = useQuery(
-    ['search', debouncedSearchTerm],
+    ['courseSearch', debouncedSearchTerm],
     () => getCoursesFilteredBySearchString(debouncedSearchTerm)
   );
 
@@ -81,14 +106,14 @@ export default function CourseSearch({ onSelectCourse, onDeleteCourse }) {
   };
 
   return (
-    <div>
+    <Box id="CoursSearchBox" sx={{ width: 0.6 }}>
       <TextField
-        value={selectedCourse != null ? selectedCourse.name : search}
+        value={selectedCourse !== null ? selectedCourse.name : search}
         onChange={handleInputChange}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              {selectedCourse || search ? (
+              {(selectedCourse || search) && usage === 'CREATE' ? (
                 <Button
                   size="small"
                   onClick={handleClearClick}
@@ -104,7 +129,7 @@ export default function CourseSearch({ onSelectCourse, onDeleteCourse }) {
         autoFocus
         margin="dense"
         id="course"
-        label="Course Search *"
+        label="Course *"
         type="Search"
         fullWidth
       />
@@ -132,8 +157,6 @@ export default function CourseSearch({ onSelectCourse, onDeleteCourse }) {
           />
         </Box>
       </Popover>
-
-      {selectedCourse && <div>Selected Course: {selectedCourse.name}</div>}
-    </div>
+    </Box>
   );
 }

@@ -15,8 +15,11 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
-export default function LanguageSelection({ onSelectedLanguage }) {
-  const [selectedItems, setSelectedItems] = useState([]);
+export default function LanguageSelection({
+  handleLanguageChange,
+  initialSelection
+}) {
+  const [selectedItems, setSelectedItems] = useState(initialSelection);
   const [menuOpen, setMenuOpen] = useState(false);
   const LanguagesEnum = {
     English: 'English',
@@ -56,7 +59,7 @@ export default function LanguageSelection({ onSelectedLanguage }) {
 
   const handleMenuClose = () => {
     setMenuOpen(false);
-    onSelectedLanguage(selectedItems);
+    handleLanguageChange(selectedItems);
     console.log(selectedItems);
   };
 
@@ -65,8 +68,8 @@ export default function LanguageSelection({ onSelectedLanguage }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <FormControl sx={{ width: '200px' }}>
+    <Box sx={{ width: 0.6 }}>
+      <FormControl sx={{ width: 1 }}>
         <InputLabel> Languages *</InputLabel>
         <Select
           open={menuOpen}
@@ -74,15 +77,26 @@ export default function LanguageSelection({ onSelectedLanguage }) {
           onOpen={handleMenuOpen}
           value={selectedItems}
           multiple
-          renderValue={selected => (
-            <Stack direction="row" spacing={1}>
-              {selected.map(item => (
-                <Button key={item} onClick={() => handleMenuItemClick(item)}>
-                  {item}
-                </Button>
-              ))}
-            </Stack>
-          )}
+          renderValue={() => {
+            if (selectedItems.length > 0) {
+              return (
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <CheckIcon sx={{ color: 'green' }} />
+                  {selectedItems.length} selected
+                </Stack>
+              );
+            } else {
+              return 'Languages';
+            }
+          }}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 200,
+                width: 250
+              }
+            }
+          }}
         >
           <FormGroup>
             <MenuItem disabled>Languages</MenuItem>
@@ -100,16 +114,6 @@ export default function LanguageSelection({ onSelectedLanguage }) {
                 />
               </MenuItem>
             ))}
-            <MenuItem>
-              <IconButton
-                onClick={handleMenuClose}
-                size="small"
-                aria-label="confirm"
-                color="primary"
-              >
-                <CheckIcon /> Confirm
-              </IconButton>
-            </MenuItem>
           </FormGroup>
         </Select>
       </FormControl>

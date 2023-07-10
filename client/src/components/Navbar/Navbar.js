@@ -117,7 +117,7 @@ const Navbar = () => {
 
         {/* ---------- LINKS ----------*/}
         <LinksContainer>
-          <StyledLink to="/search-sessions">
+          <StyledLink to="/SearchSessions">
             <SearchIcon />
             <Typography sx={{ fontSize: "1.2rem" }}>Search Sessions</Typography>
           </StyledLink>
