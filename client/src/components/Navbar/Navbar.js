@@ -9,7 +9,6 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -30,6 +29,7 @@ import {
   UserFullName,
   AboutUsButton,
   theme,
+  StyledBadge,
 } from "../../styles";
 import { useChatContext } from "../../context/ChatProvider";
 import newRequest from "../../utils/newRequest";
@@ -133,12 +133,12 @@ const Navbar = () => {
               <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
             </StyledLink>
           ) : (
-            <Badge badgeContent={notification.length}>
+            <StyledBadge badgeContent={notification.length}>
               <StyledLink to="/myChats">
                 <ChatBubbleIcon />
                 <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
               </StyledLink>
-            </Badge>
+            </StyledBadge>
           )}
           {/* ---------- ABOUT US ----------*/}
           <AboutUsButton
@@ -232,7 +232,9 @@ const Navbar = () => {
                 aria-haspopup="true"
               >
                 <Avatar src={user.picture || ""} alt="" />
-                <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
+                <StyledBadge badgeContent={bookingNotification.length}>
+                  <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
+                </StyledBadge>
               </AvatarIconButton>
 
               {/* ---------- DROP DOWN MENU ----------*/}

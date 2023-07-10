@@ -1,5 +1,6 @@
 import { styled } from "@mui/system";
 import {
+  Badge,
   Button,
   Card,
   TextField,
@@ -30,6 +31,7 @@ export const theme = createTheme({
       hoverText: "#FFFFFF",
       notification: "#808080",
       notificationBadge: "#FFFFFF",
+      text: "#000000",
     },
     secondary: {
       main: "#1dbf73",
@@ -399,3 +401,9 @@ export const StyledSearchIcon = styled(SearchIcon)({
   color: "black",
   marginLeft: "20px",
 });
+export const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: theme.palette.primary.notificationBadge,
+    color: theme.palette.primary.text,
+  },
+}));
