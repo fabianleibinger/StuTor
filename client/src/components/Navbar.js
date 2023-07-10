@@ -34,6 +34,7 @@ import { useChatContext } from "../context/ChatProvider";
 import newRequest from "../utils/newRequest";
 import { UserContext } from "../context/UserContext";
 import { useBookingContext } from "../context/BookingProvider";
+import { theme } from "../styles.js";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -85,7 +86,7 @@ const Navbar = () => {
     setMenuOpen(false);
     setBookingNotification([]);
   };
-  
+
   const handleAboutUsOpen = () => {
     setAboutUsOpen(true);
   };
@@ -131,7 +132,7 @@ const Navbar = () => {
               My Chats
             </StyledLink>
           ) : (
-            <Badge badgeContent={notification.length} color="primary">
+            <Badge badgeContent={notification.length}>
               <StyledLink to="/myChats">
                 {" "}
                 <ChatBubbleIcon />
@@ -266,18 +267,14 @@ const Navbar = () => {
                     View Bookings
                   </MenuItem>
                 ) : (
-                  <Badge
-                    badgeContent={bookingNotification.length}
-                    color="primary"
-                  >
                     <MenuItem
                       onClick={handleMenuCloseBookings}
                       component={Link}
                       to="/viewBookings"
+                      style={{ backgroundColor: theme.palette.primary.notification}}
                     >
                       View Bookings
                     </MenuItem>
-                  </Badge>
                 )}
 
                 <MenuItem onClick={handleLogout}>
