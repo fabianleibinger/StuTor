@@ -4,13 +4,16 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  List,
-  ListItem,
-  ListItemText,
+  Grid,
+  Typography,
 } from "@mui/material";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { confirmBooking as confirmBookingCall, getBookingsOfStudysessionCreatedByUser } from "../../api/Booking.js";
 import ReviewDialog from "./ReviewDialog.js";
+import { WidthNormal } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import CheckIcon from '@mui/icons-material/Check';
 
 const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
@@ -53,6 +56,14 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     setSelectedBookingId(bookingId);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString('en-GB');
+    return formattedDate;
+  };
+
+  console.log(bookings);
+
   return (
     <>
       <Dialog open={open} onClose={onClose}>
@@ -61,43 +72,45 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
           {isloading && <div>Loading...</div>}
           {error && <div>No bookings found!</div>}
           {!isloading && !error && (
-            <List>
+            <Grid container spacing={4} direction={'column'}>
               {bookings.map((booking) => (
-                <ListItem key={booking._id}>
-                  {booking.isPayed && (
-                  <ListItemText
-                    primary={booking.hours}
-                    secondary={booking.createdAt}
-                  />)}
-                  
+                booking.isPayed && (
+                <Grid container item key={booking._id} direction={'row'} spacing={1}>
+                <Grid item key={booking._id} xs={20}>
+                  <Typography variant="body1">
+                    { booking.hours < 2 ? booking.hours + " hour" : booking.hours + " hours"}
+                  </Typography>
+                  <Typography variant="body2">
+                  booked on {formatDate(booking.createdAt)}
+                  </Typography>
+                  </Grid>
                   {booking.isPayed && !booking.isConfirmed && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleConfirm(booking._id)}
-                    >
-                      Confirm
-                    </Button>
+                    <Grid item key={booking._id} justifyContent={'flex-end'}>
+                      <IconButton
+                        aria-label="confirm booking"
+                        onClick={() => handleConfirm(booking._id)}
+                      >
+                        <CheckIcon />
+                      </IconButton>
+                    </Grid>
                   )}
                   {booking.isConfirmed && !booking.reviewGiven && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleGiveReview(booking._id)}
-                      studySessionId={studySessionId}
-                    >
-                      Give review
-                    </Button>
+                    <Grid item key={booking._id} alignContent={'center'}>
+                      <div>
+                      <IconButton
+                        aria-label="give review"
+                        onClick={() => handleGiveReview(booking._id)}
+                      >
+                        <RateReviewIcon />
+                      </IconButton>
+                      </div>
+                    </Grid>
                   )}
-                  {booking.reviewGiven && (
-                    <Button variant="contained" color="primary">
-                      Show review
-                    </Button>
-                  )}
-                </ListItem>
-                
+                  </Grid>
+                )
               ))}
-            </List>
+            </Grid>
+
           )}
         </DialogContent>
       </Dialog>
