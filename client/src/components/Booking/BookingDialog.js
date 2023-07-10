@@ -12,6 +12,7 @@ import {
 import { useQueryClient, useMutation } from "react-query";
 import { createPayment as createPaymentCall } from "../../api/Payment.js";
 import getCurrentUser from "../../utils/getCurrentUser.js";
+import socket from "../../Socket";
 
 const BookingDialog = ({
   open,
@@ -33,7 +34,7 @@ const BookingDialog = ({
 
   const createPayment = useMutation(() => createPaymentCall(currentUser._id, totalAmount, studysession._id, hours), {
     onSuccess: (url) => {
-      socket.emit("new booking", studysession);
+      socket.emit("new booking", studysession, currentUser._id);
       handleRedirect(url);
       queryClient.invalidateQueries("payment");
     },

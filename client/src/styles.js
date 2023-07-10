@@ -28,6 +28,8 @@ export const theme = createTheme({
       contrastText: "#FFFFFF",
       hoverBackground: "#1976d2",
       hoverText: "#FFFFFF",
+      notification: "#808080",
+      notificationBadge: "#FFFFFF",
     },
     secondary: {
       main: "#1dbf73",

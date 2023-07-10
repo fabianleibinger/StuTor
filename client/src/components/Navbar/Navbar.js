@@ -29,10 +29,12 @@ import {
   JoinButton,
   UserFullName,
   AboutUsButton,
+  theme,
 } from "../../styles";
 import { useChatContext } from "../../context/ChatProvider";
 import newRequest from "../../utils/newRequest";
 import { UserContext } from "../../context/UserContext";
+import { useBookingContext } from "../context/BookingProvider";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -131,7 +133,7 @@ const Navbar = () => {
               <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
             </StyledLink>
           ) : (
-            <Badge badgeContent={notification.length} color="primary">
+            <Badge badgeContent={notification.length}>
               <StyledLink to="/myChats">
                 <ChatBubbleIcon />
                 <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
@@ -255,6 +257,27 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
+                {bookingNotification.length === 0 ? (
+                  <MenuItem
+                    onClick={handleMenuCloseBookings}
+                    component={Link}
+                    to="/viewBookings"
+                  >
+                    View Bookings
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    onClick={handleMenuCloseBookings}
+                    component={Link}
+                    to="/viewBookings"
+                    style={{
+                      backgroundColor: theme.palette.primary.notification,
+                    }}
+                  >
+                    View Bookings
+                  </MenuItem>
+                )}
+
                 <MenuItem onClick={handleLogout}>
                   <ExitToAppIcon fontSize="small" />
                   Logout

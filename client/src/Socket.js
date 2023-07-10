@@ -23,16 +23,22 @@ export const Socket = () => {
     socket.on("message received", (newMessageReceived) => {
       const chatId = newMessageReceived.chat._id;
       if (!selectedChat || selectedChat._id !== chatId) {
-        setNotification([...notification, chatId]);
+        setNotification((prevNotifications) => [...prevNotifications, chatId]);
       }
     });
-  });
 
-  useEffect(() => {
     socket.on("booking received", (studysession) => {
-      setBookingNotification([...notification, studysession._id]);
+      setBookingNotification((prevNotifications) => [
+        ...prevNotifications,
+        studysession._id,
+      ]);
     });
-  });
+
+    return () => {
+      socket.off("message received");
+      socket.off("booking received");
+    };
+  }, []);
 };
 
 export default socket;
