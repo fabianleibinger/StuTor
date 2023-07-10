@@ -9,8 +9,14 @@ import {
   Menu,
   MenuItem,
   Grid,
+  Box,
 } from "@mui/material";
-import { SubmitButton } from "../styles";
+import {
+  SubmitButton,
+  stepContentContainer,
+  FormContainer,
+  ProfileFormContainer,
+} from "../styles";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
@@ -245,58 +251,70 @@ const UserProfile = () => {
   }, [username, firstname, lastname, email, user]);
 
   return (
-    <div>
-      {/* -------------------------- Title --------------------------*/}
-      <Typography variant="h4" align="center" gutterBottom>
-        {user && `${user.firstname} ${user.lastname}`}
-      </Typography>
-      {/* -------------------------- Subtitle -------------------------- */}
-      <Typography variant="subtitle1" align="center" gutterBottom>
-        {currUserUniversityName}
-      </Typography>
-      {/* -------------------------- Profile Picture and Achievements -------------------------- */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
-          {/* -------------------------- Profile Picture -------------------------- */}
-          <FormControl fullWidth sx={{ marginBottom: "1rem" }}>
-            <Avatar
-              src={user?.picture || ""}
-              sx={{ width: 150, height: 150, cursor: "pointer" }}
-              onClick={handleOpenMenu}
-            />
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleCloseMenu}
-            >
-              <MenuItem>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="profile-pic-input"
-                  style={{ display: "none" }}
-                  onChange={handleUpdatePicture}
-                />
-                <label htmlFor="profile-pic-input">
-                  Update Profile Picture
-                </label>
-              </MenuItem>
-              <MenuItem onClick={handleDeletePicture}>
-                Delete Profile Picture
-              </MenuItem>
-            </Menu>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          {/* -------------------------- Achievements and Badges -------------------------- */}
-          {/* TODO: Add your achievements and badges components here */}
-        </Grid>
-      </Grid>
-
+    <div align="center">
       <Container>
+        <FormControl
+          sx={{ marginTop: "10rem", marginBottom: "1rem", textAlign: "center" }}
+        >
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item>
+              {/* -------------------------- Profile Picture --------------------------*/}
+              <Avatar
+                src={user?.picture || ""}
+                sx={{
+                  width: 150,
+                  height: 150,
+                  cursor: "pointer",
+                  margin: "0 auto",
+                }}
+                onClick={handleOpenMenu}
+              />
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+              >
+                <MenuItem>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="profile-pic-input"
+                    style={{ display: "none" }}
+                    onChange={handleUpdatePicture}
+                  />
+                  <label htmlFor="profile-pic-input">
+                    Update Profile Picture
+                  </label>
+                </MenuItem>
+                <MenuItem onClick={handleDeletePicture}>
+                  Delete Profile Picture
+                </MenuItem>
+              </Menu>
+            </Grid>
+            <Grid item>
+              <Box>
+                {/* -------------------------- Title --------------------------*/}
+                <Typography variant="h4" gutterBottom>
+                  {user && `${user.firstname} ${user.lastname}`}
+                </Typography>
+                {/* -------------------------- Subtitle -------------------------- */}
+                <Typography variant="h6" gutterBottom>
+                  {currUserUniversityName}
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </FormControl>
+        {/* -------------------------- Achievements and Badges -------------------------- */}
+        {/* TODO: Add your achievements and badges components here */}
+      </Container>
+      <ProfileFormContainer>
+        <Typography variant="h5" align="center" gutterBottom>
+          User Information
+        </Typography>
         <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ textAlign: "left" }}>
               {/* -------------------------- USERNAME -------------------------- */}
               <TextField
                 fullWidth
@@ -307,7 +325,6 @@ const UserProfile = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 sx={{ marginBottom: "1rem" }}
               />
-
               {/* -------------------------- FIRSTNAME -------------------------- */}
               <TextField
                 fullWidth
@@ -318,7 +335,6 @@ const UserProfile = () => {
                 onChange={(e) => setFirstname(e.target.value)}
                 sx={{ marginBottom: "1rem" }}
               />
-
               {/* -------------------------- LASTNAME -------------------------- */}
               <TextField
                 fullWidth
@@ -329,7 +345,6 @@ const UserProfile = () => {
                 onChange={(e) => setLastname(e.target.value)}
                 sx={{ marginBottom: "1rem" }}
               />
-
               {/* -------------------------- EMAIL -------------------------- */}
               <TextField
                 fullWidth
@@ -340,7 +355,6 @@ const UserProfile = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 sx={{ marginBottom: "1rem" }}
               />
-
               {/* -------------------------- UNIVERSITY -------------------------- */}
               <Autocomplete
                 options={searchResults}
@@ -356,7 +370,6 @@ const UserProfile = () => {
                   />
                 )}
               />
-
               {/* -------------------------- SAVE CHANGES BUTTON -------------------------- */}
               <Button
                 type="submit"
@@ -368,7 +381,7 @@ const UserProfile = () => {
               </Button>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} sx={{ textAlign: "left" }}>
               {/* -------------------------- PASSWORD -------------------------- */}
               <TextField
                 fullWidth
@@ -419,8 +432,19 @@ const UserProfile = () => {
             {successMessage}
           </Typography>
         </form>
+      </ProfileFormContainer>
+      <ProfileFormContainer>
+        <Typography variant="h5" align="center" gutterBottom>
+          Payment Information
+        </Typography>
         <RegisterStripe />
-      </Container>
+      </ProfileFormContainer>
+
+      <ProfileFormContainer>
+        <Typography variant="h5" align="center" gutterBottom>
+          Achievements and Badges
+        </Typography>
+      </ProfileFormContainer>
     </div>
   );
 };

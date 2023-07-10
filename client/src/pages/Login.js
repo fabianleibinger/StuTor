@@ -39,28 +39,36 @@ function Login() {
   };
 
   return (
-    <LoginFormContainer onSubmit={handleSubmit}>
-      <LoginTitle>Sign in</LoginTitle>
-      <LoginTextField
-        label="Username or Email"
-        name="username"
-        type="text"
-        placeholder="jasonwen"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <LoginTextField
-        label="Password"
-        name="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <SubmitButton type="submit" variant="contained" color="primary">
-        Log In
-      </SubmitButton>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-    </LoginFormContainer>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <LoginFormContainer onSubmit={handleSubmit}>
+        <LoginTitle>Sign in</LoginTitle>
+        <LoginTextField
+          label="Username or Email"
+          name="username"
+          type="text"
+          placeholder="jasonwen"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <LoginTextField
+          label="Password"
+          name="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <SubmitButton type="submit" variant="contained" color="primary">
+          Log In
+        </SubmitButton>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+      </LoginFormContainer>
+    </div>
   );
 }
 
