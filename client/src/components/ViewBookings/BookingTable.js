@@ -96,7 +96,7 @@ function Row(props) {
     (bookingId) => acceptBookingCall(bookingId),
     {
       onSuccess: () => {
-        refetch();
+        row.isAcceptedByTutor = true;
         queryClient.invalidateQueries(["bookings", studySessionId]);
       },
       onError: (error) => {
