@@ -12,6 +12,9 @@ import CreateStudySessionDialog from '../components/Dialogs/CreateStudySessionDi
 import UpdateStudySessionDialog from '../components/Dialogs/UpdateStudySessionDialog';
 import SwitchRoleButton from '../components/SwitchRoleButton';
 
+import { LoadingIndicator } from '../components/General/LoadingIndicator';
+import { ErrorIndicator } from '../components/General/ErrorIndicator';
+
 //api
 import {
   getStudysessionsTutoredByUser,
@@ -32,7 +35,7 @@ const MyStudySessions = () => {
   const [idToDelete, setIdToDelete] = useState('');
   const myStudySessionColors = ["#0fab3c", "#98f5ff", "#ee6363", "#ffa500", "	#eeaeee", "#1e90ff"];
 
-  let studySessions = [];
+  const [studySessions, setStudySessions] = useState([]);
 
   // use mutation to update data
   const deleteStudySessionMutation = useMutation(deleteStudysession, {});
@@ -44,7 +47,7 @@ const MyStudySessions = () => {
   };
 
   // fetch data
-  const { isLoading, error, data } = useQuery(
+  useQuery(
     ['myStudySessions', queryKey],
     () => {
       if (user.role === 'TUTOR') {
@@ -56,29 +59,30 @@ const MyStudySessions = () => {
     {
       retry: (failureCount, error) => {
         return error.response?.status !== 404;
-      }
-    }
-  );
-
-  if (error) {
-    if (error.response && error.response.status === 404) {
-      studySessions = [];
-    } else {
-      return 'An error has occurred: ' + error.message;
-    }
-  } else {
-    studySessions =
-      user.role === 'TUTOR'
-        ? data || []
-        : Array.from(
+      },
+      onSuccess: (data) => {
+        if (user.role === "TUTOR") {
+          setStudySessions(data || []);
+        } else {
+          setStudySessions(Array.from(
             new Set(
               (data || [])
                 .map(chat => chat.studysession)
                 .filter(session => session !== null && session !== undefined)
             )
-          );
-    console.log("ROOOOOOOOOOOOOOLLLLLLING: ", user.role);
-  }
+          ).filter(session => session.tutoredBy._id !== user._id))
+        }
+      },
+      onLoading: (isLoading) => {
+        return <LoadingIndicator />
+      },
+      onError: (error) => {
+        if (!(error.response && error.response.status === 404)) {
+          return <ErrorIndicator />
+        }
+      }
+    }
+  );
 
   // first confirm deletion the delete it
   const handleDeleteConfirmationNeeded = id => {
@@ -124,6 +128,7 @@ const MyStudySessions = () => {
     setOpenDialog(false);
     setSelectedStudySession(null);
   };
+
   return (
     <Box id="MyStudySessionWrapperPageWrapper" sx={{
       display: 'flex',

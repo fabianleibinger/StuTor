@@ -1,8 +1,11 @@
 import React from "react";
 import "./SearchBar.scss";
 import { StyledSearchIcon } from "../../styles";
+import StudySessionSearchbar from "../Searchbars/StudySessionSearchbar";
+import { Button } from '@mui/material';
 
-function SearchBar() {
+
+function SearchBar({handleSearchInputChange}) {
   return (
     <div className="featured">
       <div className="container">
@@ -11,13 +14,12 @@ function SearchBar() {
             Find the perfect <span>tutor</span> for your courses now
           </h1>
           <div className="search">
-            <div className="searchInput">
-              <StyledSearchIcon />
-              <input type="text" placeholder='Try "IN2106"' />
-            </div>
+          <StudySessionSearchbar
+            handleSearchInputChange={handleSearchInputChange}
+          />
 
             {/* TO-DO: ADD FUNCTION TO SEARCH BUTTON */}
-            <button>Search</button>
+            {/*<Button sx={{ height: '100%' }}>Search</Button>*/}
           </div>
           <div className="popular">
             <span>Popular:</span>

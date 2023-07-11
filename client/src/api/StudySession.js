@@ -67,8 +67,13 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
     } else {
       resultSessions = response.data
     }
-    return resultSessions.filter(session => session.tutoredBy._id !== user._id &&
-       session.course.university == user.university);
+    if(user) {
+      return resultSessions.filter(session => session.tutoredBy._id !== user._id &&
+        session.course.university == user.university);
+    } else {
+      return resultSessions;
+    }
+    
   } catch (error) {
     if (error.response) {
       console.log('Response Status:', error.response.status);

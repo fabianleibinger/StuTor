@@ -60,9 +60,6 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
       // Handle error
       setPostError(error.message);
     },
-    onMutate: studySession => {
-      console.log('mutation arguments', studySession);
-    }
   });
 
   const handleSubmit = event => {
