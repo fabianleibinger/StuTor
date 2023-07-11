@@ -17,11 +17,16 @@ function Home() {
       <Features />
 
       {/* ------------------------- Example Tutoring Sessions -------------------------*/}
-      <Slide slidesToShow={4} arrowsScroll={4}>
-        {studySessions.map((card) => (
-          <ProjectCard key={card._id} card={card} />
-        ))}
-      </Slide>
+      <div className="section-container">
+        <h1>Quality Tutors From Your School At Your Fingertips</h1>
+        {studySessions && studySessions.length > 0 && (
+          <Slide slidesToShow={4} arrowsScroll={4}>
+            {studySessions.map((card) => (
+              <ProjectCard key={card._id} card={card} />
+            ))}
+          </Slide>
+        )}
+      </div>
     </div>
   );
 }
