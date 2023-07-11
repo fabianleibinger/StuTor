@@ -174,9 +174,15 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
             }}
           />
           <Box sx={{ mt: 10 }}>
+            {usage === "CREATE" ? 
             <Button type="submit" variant="contained" size="large">
               Publish
+            </Button> :
+            <Button type="submit" variant="contained" size="large">
+              Update
             </Button>
+            }
+
           </Box>
         </Stack>
       </Stack>
