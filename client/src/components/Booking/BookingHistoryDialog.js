@@ -30,6 +30,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import RecommendIcon from "@mui/icons-material/Recommend";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import CancelIcon from "@mui/icons-material/Cancel";
+import HelpIcon from '@mui/icons-material/Help';
+import { yellow } from "@mui/material/colors";
 
 const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
@@ -103,7 +105,6 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                       <TableCell>Status</TableCell>
                       <TableCell>Hours</TableCell>
                       <TableCell>Booking date</TableCell>
-                      <TableCell>Accepted by tutor?</TableCell>
                       <TableCell>Action</TableCell>
                     </TableRow>
                   </TableHead>
@@ -118,37 +119,38 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                             }}
                           >
                             <TableCell>
-                              {booking.isPayed && !booking.isConfirmed && (
+                              {booking.isPayed && booking.isAcceptedByTutor && !booking.isConfirmed && (
+                                <Tooltip title="You didn't confirm that all studysession hours are used yet">
                                 <Icon>
-                                  <HourglassEmptyIcon color="warning" />
+                                  <HourglassEmptyIcon sx={{ color: yellow[500] }} />
                                 </Icon>
+                                </Tooltip>
+                              )}
+                              {booking.isPayed && !booking.isAcceptedByTutor && (
+                                <Tooltip title="Your tutor has not accepted your booking yet">
+                                <Icon>
+                                  <HelpIcon color="warning" />
+                                </Icon>
+                                </Tooltip>
                               )}
                               {booking.isConfirmed && booking.reviewGiven && (
+                                <Tooltip title="All done! Ready for the next studysession?">
                                 <Icon>
                                   <RecommendIcon color="success" />
                                 </Icon>
+                                </Tooltip>
                               )}
                               {booking.isConfirmed && !booking.reviewGiven && (
+                                <Tooltip title="Please rate your tutor!">
                                 <Icon>
                                   <CheckIcon color="primary" />
                                 </Icon>
+                                </Tooltip>
                               )}
                             </TableCell>
                             <TableCell>{booking.hours}</TableCell>
                             <TableCell>
                               {formatDate(booking.createdAt)}
-                            </TableCell>
-                            <TableCell>
-                              {booking.isAcceptedByTutor && (
-                                <Icon>
-                                  <CheckIcon color="primary" />
-                                  </Icon>
-                                  )}
-                                  {!booking.isAcceptedByTutor && (
-                                    <Icon>
-                                      <CancelIcon color="error" />
-                                    </Icon>
-                                  )}
                             </TableCell>
                             <TableCell>
                               {booking.isConfirmed && !booking.reviewGiven && (
