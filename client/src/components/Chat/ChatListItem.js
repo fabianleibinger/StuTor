@@ -50,8 +50,8 @@ const ChatListItem = ({
       <ListItemText
         primary={
           chat.users[0]._id === currentUser._id
-            ? `${chat.users[1].firstname} ${chat.users[1].lastname} - ${chat.studysession.courseName}`
-            : `${chat.users[0].firstname} ${chat.users[0].lastname} - ${chat.studysession.courseName}`
+            ? `${chat.users[1].firstname} ${chat.users[1].lastname} - ${chat.studysession?.courseName}`
+            : `${chat.users[0].firstname} ${chat.users[0].lastname} - ${chat.studysession?.courseName}`
         }
         secondary={isTyping ? 'Typing...' : chat.latest_message?.content}
         sx={{
