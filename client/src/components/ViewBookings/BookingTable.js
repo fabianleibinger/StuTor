@@ -18,6 +18,10 @@ import Grid from '@mui/material/Grid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Rating from "@mui/material/Rating";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { acceptBooking as acceptBookingCall } from "../../api/Booking.js";
+import Tooltip from '@mui/material/Tooltip';
+import CheckIcon from '@mui/icons-material/Check';
 
 export default function BookingTable(data) {
   console.log("data in table", data)
@@ -38,7 +42,7 @@ export default function BookingTable(data) {
                 <TableCell>Number of hours</TableCell>
                 <TableCell>Is confirmed by student</TableCell>
                 <TableCell>Rating</TableCell>
-                <TableCell>Need help?</TableCell>
+                <TableCell>Do you want to accept this booking?</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -88,6 +92,28 @@ function Row(props) {
     },
   };
 
+  const acceptBooking = useMutation(
+    (bookingId) => acceptBookingCall(bookingId),
+    {
+      onSuccess: () => {
+        refetch();
+        queryClient.invalidateQueries(["bookings", studySessionId]);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
+
+  const handleAccept = async (bookingId) => {
+    try {
+      await acceptBooking.mutateAsync(bookingId);
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -126,7 +152,19 @@ function Row(props) {
         <TableCell>
             <Rating name="read-only" value={row.rating} readOnly />
           </TableCell>
-        <TableCell><Button>Contact customer support</Button></TableCell>
+        <TableCell>
+          {!row.isAcceptedByTutor && (
+          <Tooltip title="Confirm that you want to teach the booked sessions" >
+                                  <IconButton
+                                    aria-label="accept booking"
+                                    onClick={() => handleAccept(row._id)}
+                                  >
+                                    <CheckIcon />
+                                  </IconButton>
+                                </Tooltip>)}
+                                {row.isAcceptedByTutor && (
+                                  <Typography>You already accepted this booking!</Typography>)}
+                                </TableCell>
       </TableRow>
       <TableRow>
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
