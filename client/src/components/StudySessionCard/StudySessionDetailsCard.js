@@ -31,31 +31,34 @@ export default function StudySessionCard({
   const navigate = useNavigate();
 
   const handleContentClick = () => {
-    if (role === "STUDENT") {
+    if (role === 'STUDENT') {
       navigate(`/StudysessionDetailsPage/${studySession._id}`);
     } else {
       onUpdateClick(studySession);
     }
-  }
+  };
 
   const handleDeleteClick = () => {
     onDelete(studySession._id);
   };
 
   return (
-    <Card sx={{
-      maxWidth: 345,
-      minHeight: '350px',
-      mr: '15px',
-      mt: 2,
-      mb: 2,
-      pt: 1,
-      pb: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: '12px',
-      background: backgroundColor
-      }} raised>
+    <Card
+      sx={{
+        maxWidth: 345,
+        minHeight: '350px',
+        mr: '15px',
+        mt: 2,
+        mb: 2,
+        pt: 1,
+        pb: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: '12px',
+        background: backgroundColor
+      }}
+      raised
+    >
       <Box
         display="flex"
         alignItems="center"
@@ -84,25 +87,39 @@ export default function StudySessionCard({
                 cursor: 'pointer'
               },
               alignItems: 'center',
-              textAlign: 'center',
+              textAlign: 'center'
             }}
           >
-            <Typography fontWeight="bold" sx={{ 
-              wordWrap: 'break-word', 
-              display: '-webkit-box',
-              'webkitBoxOrient': 'vertical',
-              'webkitLineClamp': 2, minHeight: '2.6rem', lineHeight: "1.1rem",
-              justifyContent: 'center'
-              }}>
-              {studySession.course.name}
+            <Typography
+              fontWeight="bold"
+              sx={{
+                wordWrap: 'break-word',
+                display: '-webkit-box',
+                webkitBoxOrient: 'vertical',
+                webkitLineClamp: 2,
+                minHeight: '2.6rem',
+                lineHeight: '1.1rem',
+                justifyContent: 'center'
+              }}
+            >
+              {studySession.courseName}
             </Typography>
             <Typography>
-              {studySession.tutoredBy.firstname} {studySession.tutoredBy.lastname}
+              {studySession.tutoredBy.firstname}{' '}
+              {studySession.tutoredBy.lastname}
             </Typography>
             <Typography fontWeight="bold" sx={{ mt: 1 }}>
               {studySession.pricePerHourEuro} €/h
             </Typography>
-            <Typography sx={{ ml: 1, pt: 1, mr: 1, wordWrap: 'break-word', verticalAlign: 'center' }}>
+            <Typography
+              sx={{
+                ml: 1,
+                pt: 1,
+                mr: 1,
+                wordWrap: 'break-word',
+                verticalAlign: 'center'
+              }}
+            >
               {studySession.description.length > 75
                 ? studySession.description.slice(0, 75) + '...'
                 : studySession.description}
@@ -153,7 +170,11 @@ export default function StudySessionCard({
                   id="StudentStudySessionButtonBox"
                   sx={{ width: 1, textAlign: 'center' }}
                 >
-                  <Button variant="contained" size="large" onClick={handleContentClick}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={handleContentClick}
+                  >
                     Details
                   </Button>
                 </Box>

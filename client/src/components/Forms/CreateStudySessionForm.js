@@ -6,7 +6,6 @@ import { Button, Box, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 
 // import other components
-import CourseSearch from '../Searchbars/CourseSearch';
 import LanguageSelection from '../Filters/LanguageSelection';
 import { createStudysession, updateStudysession } from '../../api/StudySession';
 
@@ -14,8 +13,8 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
   const queryClient = useQueryClient();
 
   const { setUser, user } = useContext(UserContext);
-  const [course, setCourse] = useState('');
   const [courseName, setCourseName] = useState('');
+  const [courseId, setCourseId] = useState('');
   const [pricePerHourEuro, setPricePerHourEuro] = useState('');
   const [languages, setLanguages] = useState([]);
   const [description, setDescription] = useState('');
@@ -24,16 +23,17 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
 
   useEffect(() => {
     if (oldStudySession !== null) {
-      setCourse(oldStudySession.course);
+      setCourseName(oldStudySession.courseName);
+      setCourseId(oldStudySession.courseId);
       setPricePerHourEuro(parseInt(oldStudySession.pricePerHourEuro));
       setLanguages(oldStudySession.languages);
       setDescription(oldStudySession.description);
-      console.log(oldStudySession.course);
     }
   }, [oldStudySession]);
 
   const handleSuccesfullSubmit = () => {
-    setCourse(null);
+    setCourseName('');
+    setCourseId('');
     setPricePerHourEuro('');
     setDescription('');
     setLanguages([]);
@@ -60,17 +60,12 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
     onError: error => {
       // Handle error
       setPostError(error.message);
-    },
+    }
   });
 
   const handleSubmit = event => {
     event.preventDefault();
     setEmptyFields([]);
-
-    if (!course) {
-      setEmptyFields(prevFields => [...prevFields, 'course']);
-      return;
-    }
 
     if (languages.length === 0) {
       setEmptyFields(prevFields => [...prevFields, 'LanguageSelection']);
@@ -79,17 +74,20 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
 
     if (usage === 'CREATE') {
       const newStudySession = {
-        course: String(course._id),
+        courseName: courseName,
+        courseId: courseId,
         tutoredBy: user._id,
         description: description,
         pricePerHourEuro: String(pricePerHourEuro),
         languages: languages
       };
+      console.log('newStudysession: ', newStudySession);
       createMutation.mutate(newStudySession);
     } else {
       const newStudySession = {
         _id: oldStudySession._id,
-        course: String(oldStudySession.course._id),
+        courseName: oldStudySession.courseName,
+        courseId: oldStudySession.courseId,
         tutoredBy: String(oldStudySession.tutoredBy._id),
         description: description,
         pricePerHourEuro: String(pricePerHourEuro),
@@ -97,15 +95,6 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
       };
       updateMutation.mutate(newStudySession);
     }
-  };
-
-  // handle values of Course Search
-  const handleSelectCourse = selectedCourse => {
-    setCourse(selectedCourse);
-  };
-
-  const handleDeleteCourse = () => {
-    setCourse(null);
   };
 
   // handle values of Language Selection
@@ -126,40 +115,35 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
           sx={{ width: 1, alignItems: 'center' }}
         >
           {usage === 'CREATE' && (
-            <CourseSearch
-              onSelectCourse={handleSelectCourse}
-              onDeleteCourse={handleDeleteCourse}
-              course={oldStudySession !== null ? oldStudySession.course : null}
-              usage={usage}
-              required
-            />
+            <>
+              <TextField
+                variant="outlined"
+                autoFocus
+                margin="dense"
+                id="courseName"
+                label="Course Name"
+                type="String"
+                fullWidth
+                required
+                onChange={e => setCourseName(e.target.value)}
+                value={courseName}
+                sx={{ mt: 0, width: 0.6 }}
+              />
+              <TextField
+                variant="outlined"
+                autoFocus
+                margin="dense"
+                id="courseId"
+                label="Course ID"
+                type="String"
+                fullWidth
+                required
+                onChange={e => setCourseId(e.target.value)}
+                value={courseId}
+                sx={{ mt: 0, width: 0.6 }}
+              />
+            </>
           )}
-          <TextField
-            variant="outlined"
-            autoFocus
-            margin="dense"
-            id="courseName"
-            label="Course Name"
-            type="String"
-            fullWidth
-            required
-            onChange={e => setPricePerHourEuro(e.target.value)}
-            value={pricePerHourEuro}
-            sx={{ mt: 0, width: 0.6 }}
-          />
-          <TextField
-            variant="outlined"
-            autoFocus
-            margin="dense"
-            id="courseId"
-            label="Course ID"
-            type="String"
-            fullWidth
-            required
-            onChange={e => setPricePerHourEuro(e.target.value)}
-            value={pricePerHourEuro}
-            sx={{ mt: 0, width: 0.6 }}
-          />
 
           <TextField
             variant="outlined"
@@ -201,15 +185,15 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
             }}
           />
           <Box sx={{ mt: 10 }}>
-            {usage === "CREATE" ? 
-            <Button type="submit" variant="contained" size="large">
-              Publish
-            </Button> :
-            <Button type="submit" variant="contained" size="large">
-              Update
-            </Button>
-            }
-
+            {usage === 'CREATE' ? (
+              <Button type="submit" variant="contained" size="large">
+                Publish
+              </Button>
+            ) : (
+              <Button type="submit" variant="contained" size="large">
+                Update
+              </Button>
+            )}
           </Box>
         </Stack>
       </Stack>
@@ -219,6 +203,7 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
       {createMutation.isError && emptyFields.length == 0 && (
         <div className="error">
           Please check if you already offer a study session for this course{' '}
+          {postError}
         </div>
       )}
       {updateMutation.isError && emptyFields.length == 0 && (

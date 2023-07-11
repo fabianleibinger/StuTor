@@ -62,18 +62,20 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
       const filteredSessions = studysessions.filter(
         session => session.rating > rating
       );
-      
+
       resultSessions = filteredSessions.map(session => session.session);
     } else {
-      resultSessions = response.data
+      resultSessions = response.data;
     }
-    if(user) {
-      return resultSessions.filter(session => session.tutoredBy._id !== user._id &&
-        session.course.university == user.university);
+    if (user) {
+      return resultSessions.filter(
+        session =>
+          session.tutoredBy._id !== user._id &&
+          session.tutoredBy.university == user.university
+      );
     } else {
       return resultSessions;
     }
-    
   } catch (error) {
     if (error.response) {
       console.log('Response Status:', error.response.status);
