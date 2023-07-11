@@ -21,7 +21,7 @@ import {
   deleteStudysession
 } from '../api/StudySession';
 import { getChatsOfUser } from '../api/Chat';
-import { updateUser } from "../api/User";
+import { updateUser } from '../api/User';
 
 import ConfirmationDialog from '../components/Dialogs/ConfirmationDialog';
 
@@ -33,7 +33,14 @@ const MyStudySessions = () => {
   const [selectedStudySession, setSelectedStudySession] = useState(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [idToDelete, setIdToDelete] = useState('');
-  const myStudySessionColors = ["#0fab3c", "#98f5ff", "#ee6363", "#ffa500", "	#eeaeee", "#1e90ff"];
+  const myStudySessionColors = [
+    '#0fab3c',
+    '#98f5ff',
+    '#ee6363',
+    '#ffa500',
+    '#eeaeee',
+    '#1e90ff'
+  ];
 
   const [studySessions, setStudySessions] = useState([]);
 
@@ -60,25 +67,27 @@ const MyStudySessions = () => {
       retry: (failureCount, error) => {
         return error.response?.status !== 404;
       },
-      onSuccess: (data) => {
-        if (user.role === "TUTOR") {
+      onSuccess: data => {
+        if (user.role === 'TUTOR') {
           setStudySessions(data || []);
         } else {
-          setStudySessions(Array.from(
-            new Set(
-              (data || [])
-                .map(chat => chat.studysession)
-                .filter(session => session !== null && session !== undefined)
-            )
-          ).filter(session => session.tutoredBy._id !== user._id))
+          setStudySessions(
+            Array.from(
+              new Set(
+                (data || [])
+                  .map(chat => chat.studysession)
+                  .filter(session => session !== null && session !== undefined)
+              )
+            ).filter(session => session.tutoredBy._id !== user._id)
+          );
         }
       },
-      onLoading: (isLoading) => {
-        return <LoadingIndicator />
+      onLoading: isLoading => {
+        return <LoadingIndicator />;
       },
-      onError: (error) => {
+      onError: error => {
         if (!(error.response && error.response.status === 404)) {
-          return <ErrorIndicator />
+          return <ErrorIndicator />;
         }
       }
     }
@@ -100,22 +109,33 @@ const MyStudySessions = () => {
       // Manually refetch the query after successful deletion
       onSuccess: () => {
         queryClient.invalidateQueries('myStudySessions');
+        setStudySessions(prevState =>
+          prevState.filter(session => session._id !== studySessionId)
+        );
       }
     });
   };
 
-  const handleRoleSwitchClick = async (role) => {
-    const newUser = {"_id": user._id, "username": user.username, "firstname": user.firstname, "lastname": user.lastname,
-    "email": user.email, "picture": user.picture, "role": role, "university": user.university
-  }
-    console.log("Switch Role for user", newUser);
+  const handleRoleSwitchClick = async role => {
+    const newUser = {
+      _id: user._id,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      picture: user.picture,
+      role: role,
+      university: user.university
+    };
+    console.log('Switch Role for user', newUser);
     await switchRoleMutation.mutateAsync(newUser, {
       onSuccess: () => {
         setUser(newUser);
+        setStudySessions([]);
         queryClient.invalidateQueries('myStudySessions');
       }
     });
-  }
+  };
 
   // clicking on the StudySession
   const handleStudySessionUpdateClick = studySession => {
@@ -130,22 +150,28 @@ const MyStudySessions = () => {
   };
 
   return (
-    <Box id="MyStudySessionWrapperPageWrapper" sx={{
-      display: 'flex',
-      justifyContent: 'center'
-    }}>
-      <Box id="MyStudySessionWrapper" sx={{ 
-        width: '90vw',
-        height: '90vh',
-        minheight: 1,
-        justifyContent: 'center',
-        flexDirection: 'column',
-        alignItems: 'right',
-        pb: 1,
-        pt: 2,
-        pl: 1,
-        pr: 1 
-        }}>
+    <Box
+      id="MyStudySessionWrapperPageWrapper"
+      sx={{
+        display: 'flex',
+        justifyContent: 'center'
+      }}
+    >
+      <Box
+        id="MyStudySessionWrapper"
+        sx={{
+          width: '90vw',
+          height: '90vh',
+          minheight: 1,
+          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'right',
+          pb: 1,
+          pt: 2,
+          pl: 1,
+          pr: 1
+        }}
+      >
         <Box
           id="MyStudySessionHeader"
           sx={{
@@ -213,52 +239,49 @@ const MyStudySessions = () => {
           }}
         >
           <Grid
-    container
-    spacing={0}
-    sx={{ height: '100%', alignItems: 'top-left' }}
-  >
-    {studySessions.length > 0 ? (
-      studySessions.map((studySession, index) => {
-        const colorIndex = index % myStudySessionColors.length;
-        const backgroundColor = myStudySessionColors[colorIndex];
-        return (
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          key={studySession._id}
-          sx={{ alignItems: 'left' }}
-        >
-          <StudySessionCard
-            studySession={studySession}
-            onDelete={() => {
-              handleDeleteConfirmationNeeded(studySession._id);
-            }}
-            role={user.role}
-            onUpdateClick={() => handleStudySessionUpdateClick(studySession)}
-            details={true}
-            addStudySessionComponent={null}
-            backgroundColor={backgroundColor}
-          />
-        </Grid>
-      );
-    })
-    ) : (user.role === "TUTOR" ? 
-    (
-      <Typography>
-        Create your first Study Session
-      </Typography>
-    ) :
-    (
-      <Typography>
-        Your StudySessions are listed here as soon as you are chatting with a Tutor.
-      </Typography>
-    )
-  )}
-  </Grid>
-
+            container
+            spacing={0}
+            sx={{ height: '100%', alignItems: 'top-left' }}
+          >
+            {studySessions.length > 0 ? (
+              studySessions.map((studySession, index) => {
+                const colorIndex = index % myStudySessionColors.length;
+                const backgroundColor = myStudySessionColors[colorIndex];
+                return (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    key={studySession._id}
+                    sx={{ alignItems: 'left' }}
+                  >
+                    <StudySessionCard
+                      studySession={studySession}
+                      onDelete={() => {
+                        handleDeleteConfirmationNeeded(studySession._id);
+                      }}
+                      role={user.role}
+                      onUpdateClick={() =>
+                        handleStudySessionUpdateClick(studySession)
+                      }
+                      details={true}
+                      addStudySessionComponent={null}
+                      backgroundColor={backgroundColor}
+                    />
+                  </Grid>
+                );
+              })
+            ) : user.role === 'TUTOR' ? (
+              <Typography>Create your first Study Session</Typography>
+            ) : (
+              <Typography>
+                Your StudySessions are listed here as soon as you are chatting
+                with a Tutor.
+              </Typography>
+            )}
+          </Grid>
         </Box>
         {selectedStudySession !== null && (
           <UpdateStudySessionDialog

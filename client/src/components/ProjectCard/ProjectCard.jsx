@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./ProjectCard.scss";
+import React, { useEffect, useState } from 'react';
+import './ProjectCard.scss';
 
 function ProjectCard({ card }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -14,7 +14,7 @@ function ProjectCard({ card }) {
 
   return (
     <div
-      className={`projectCard ${isHovered ? "hovered" : ""}`}
+      className={`projectCard ${isHovered ? 'hovered' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -34,25 +34,27 @@ function ProjectCard({ card }) {
 
         <div className="texts">
           {/* course name */}
-          <h1 style={{ fontSize: "20px" }}>{card.course.name}</h1>
+          <h1 style={{ fontSize: '20px' }}>{card.courseName}</h1>
 
           {/* tutor name */}
           <h2>
             Tutor:&nbsp;&nbsp;
-            <span style={{ fontStyle: "italic" }}>{card.tutoredBy.username}</span>
+            <span style={{ fontStyle: 'italic' }}>
+              {card.tutoredBy.username}
+            </span>
           </h2>
 
           {/* Price */}
           <h2>
             Price:&nbsp;&nbsp;
-            <span style={{ fontStyle: "italic" }}>{card.pricePerHourEuro}</span>
+            <span style={{ fontStyle: 'italic' }}>{card.pricePerHourEuro}</span>
           </h2>
 
           {/* Languages */}
           <h2>
-            Languages:{" "}
-            <span style={{ fontStyle: "italic" }}>
-              {card.languages.join(", ")}
+            Languages:{' '}
+            <span style={{ fontStyle: 'italic' }}>
+              {card.languages.join(', ')}
             </span>
           </h2>
         </div>

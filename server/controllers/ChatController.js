@@ -1,8 +1,8 @@
-import Chat from "../models/Chat.js";
-import Message from "../models/Message.js";
-import User from "../models/User.js";
-import Studysession from "../models/Studysession.js";
-import { ObjectId } from "mongodb";
+import Chat from '../models/Chat.js';
+import Message from '../models/Message.js';
+import User from '../models/User.js';
+import Studysession from '../models/Studysession.js';
+import { ObjectId } from 'mongodb';
 
 export const accessChat = async (req, res) => {
   try {
@@ -31,10 +31,7 @@ export const accessChat = async (req, res) => {
       path: 'latest_message.sender',
       select: 'username picture'
     });
-    chat = await Studysession.populate(chat, {
-      path: 'studysession.course',
-      select: 'name'
-    });
+
     // Create chat if it doesn't exist.
     if (chat.length > 0) {
       res.status(200).send(chat[0]);
@@ -96,10 +93,6 @@ export const getChatsOfStudysession = async (req, res) => {
       path: 'latest_message.sender',
       select: 'username picture'
     });
-    chats = await Studysession.populate(chats, {
-      path: 'studysession.course',
-      select: 'name'
-    });
     try {
       if (chats.length === 0) {
         res.status(404).send('No chats found!');
@@ -128,10 +121,6 @@ export const getChatsOfUser = async (req, res) => {
     chats = await User.populate(chats, {
       path: 'latest_message.sender',
       select: 'username picture'
-    });
-    chats = await Studysession.populate(chats, {
-      path: 'studysession.course',
-      select: 'name'
     });
     chats = await Studysession.populate(chats, {
       path: 'studysession.tutoredBy',
@@ -175,10 +164,6 @@ export const getChatsOfStudysessionAndUser = async (req, res) => {
     chats = await User.populate(chats, {
       path: 'latest_message.sender',
       select: 'username picture'
-    });
-    chats = await Studysession.populate(chats, {
-      path: 'studysession.course',
-      select: 'name'
     });
     try {
       if (chats.length === 0) {

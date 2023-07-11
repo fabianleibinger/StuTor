@@ -1,5 +1,4 @@
 import Chat from '../models/Chat.js';
-import Course from '../models/Course.js';
 import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
@@ -8,10 +7,10 @@ import { ObjectId, ReturnDocument } from 'mongodb';
 
 export const createStudysession = async (req, res) => {
   try {
-    // Check if studysession from the same tutor exists for the same course.
+    // Check if studysession from the same tutor exists for the same courseId.
     console.log(req.body);
     const existingStudysession = await Studysession.findOne({
-      course: req.body.course,
+      courseId: req.body.courseId,
       tutoredBy: req.body.tutoredBy
     });
     if (existingStudysession) {
@@ -19,22 +18,17 @@ export const createStudysession = async (req, res) => {
       return;
     }
     // Check if course and tutor exist.
-    const courseId = new ObjectId(req.body.course);
-    const course = await Course.findById(courseId);
     const userId = new ObjectId(req.body.tutoredBy);
     const user = await User.findById(userId);
-    if (!course || !user) {
-      if (!course) {
-        console.log('Course not found');
-      } else {
-        console.log('User not found');
-      }
+    if (!user) {
+      console.log('User not found');
       res.status(404).send('Object reference not found!');
       return;
     }
     // Create studysession.
     const newStudysession = new Studysession({
-      course: courseId,
+      courseName: req.body.courseName,
+      courseId: req.body.courseId,
       tutoredBy: userId,
       description: req.body.description,
       pricePerHourEuro: req.body.pricePerHourEuro,
@@ -70,15 +64,9 @@ export const getStudysession = async (req, res) => {
     const studysession = await Studysession.findById(studysessionId);
     try {
       const studysessionId = new ObjectId(req.params.studysessionId);
-      const studysession = await Studysession.findById(studysessionId)
-        .populate('course')
-        .populate({
-          path: 'course',
-          populate: {
-            path: 'university'
-          }
-        })
-        .populate('tutoredBy');
+      const studysession = await Studysession.findById(studysessionId).populate(
+        'tutoredBy'
+      );
       try {
         if (!studysession) {
           res.status(404).send('Studysession not found!');
@@ -99,13 +87,8 @@ export const getStudysession = async (req, res) => {
 export const getStudysessionsForCourse = async (req, res) => {
   try {
     // Check if course exists.
-    const courseId = new ObjectId(req.params.courseId);
-    const course = await Course.findById(courseId);
-    if (!course) {
-      res.status(404).send('Object reference not found!');
-      return;
-    }
-    const studysessions = await Studysession.find({ course: courseId });
+    const courseId = req.params.courseId;
+    const studysessions = await Studysession.find({ courseId: courseId });
     try {
       if (studysessions.length === 0) {
         res.status(404).send('No studysessions found!');
@@ -131,9 +114,7 @@ export const getStudysessionsTutoredBy = async (req, res) => {
     }
     const studysessions = await Studysession.find({
       tutoredBy: userId
-    })
-      .populate('course')
-      .populate('tutoredBy');
+    }).populate('tutoredBy');
     try {
       if (studysessions.length === 0) {
         res.status(404).send('No studysessions found!');
@@ -186,9 +167,7 @@ export const getStudysessionsFiltered = async (req, res) => {
     const languageArray = languages.split(',');
     const department = req.query.department;
 
-    let query = Studysession.find()
-      .populate('course')
-      .populate('tutoredBy');
+    let query = Studysession.find().populate('tutoredBy');
 
     if (maxPrice !== '') {
       query = query.where('pricePerHourEuro').lte(maxPrice);
@@ -200,19 +179,14 @@ export const getStudysessionsFiltered = async (req, res) => {
     const studysessions = await query.exec();
     const filteredSessions = studysessions.filter(
       session =>
-        (session.course.name
+        session.courseName.toLowerCase().includes(searchString.toLowerCase()) ||
+        session.courseId.toLowerCase().includes(searchString.toLowerCase()) ||
+        session.tutoredBy.firstname
           .toLowerCase()
           .includes(searchString.toLowerCase()) ||
-          session.course.external_identifier
-            .toLowerCase()
-            .includes(searchString.toLowerCase()) ||
-          session.tutoredBy.firstname
-            .toLowerCase()
-            .includes(searchString.toLowerCase()) ||
-          session.tutoredBy.lastname
-            .toLowerCase()
-            .includes(searchString.toLowerCase())) &&
-        (session.course.department === department || department === '')
+        session.tutoredBy.lastname
+          .toLowerCase()
+          .includes(searchString.toLowerCase())
     );
 
     if (filteredSessions.length === 0) {
@@ -229,11 +203,9 @@ export const updateStudysession = async (req, res) => {
   try {
     // Check if course and tutor exist.
 
-    const courseId = new ObjectId(req.body.course);
-    const course = await Course.findById(courseId);
     const userId = new ObjectId(req.body.tutoredBy);
     const user = await User.findById(userId);
-    if (!course || !user) {
+    if (!user) {
       res.status(404).send('Object reference not found!');
       return;
     }
@@ -241,7 +213,8 @@ export const updateStudysession = async (req, res) => {
     // Update studysession.
     const studysessionId = new ObjectId(req.params.studysessionId);
     const updatedStudysession = new Studysession({
-      course: courseId,
+      courseName: req.body.courseName,
+      courseId: req.body.courseId,
       tutoredBy: userId,
       description: req.body.description,
       pricePerHourEuro: req.body.pricePerHourEuro,
@@ -252,7 +225,8 @@ export const updateStudysession = async (req, res) => {
       const studysession = await Studysession.findByIdAndUpdate(
         studysessionId,
         {
-          course: updateStudysession.course,
+          courseName: updatedStudysession.courseName,
+          courseId: updateStudysession.courseId,
           name: updatedStudysession.name,
           tutoredBy: updatedStudysession.tutoredBy._id,
           description: updatedStudysession.description,
