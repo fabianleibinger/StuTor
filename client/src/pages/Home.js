@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { useQuery } from 'react-query';
 import "./Home.scss";
 import SearchBar from "../components/SearchBar/SearchBar";
-import TrustedBy from "../components/trustedBy/TrustedBy";
+import TrustedBy from "../components/TrustedBy/TrustedBy";
 import Features from "../components/Features/Features";
-import Slide from "../components/slide/Slide";
-import ProjectCard from "../components/projectCard/ProjectCard";
+
 //import studySessions from "../components/projectCard/studySessions";
 import { getStudysessionFiltered } from "../api/StudySession";
 import { LoadingIndicator } from "../components/General/LoadingIndicator";
@@ -13,6 +12,8 @@ import { ErrorIndicator } from "../components/General/ErrorIndicator";
 
 import useDebounce from '../hooks/useDebounce';
 
+import Slide from "../components/Slide/Slide";
+import ProjectCard from "../components/ProjectCard/ProjectCard";
 
 function Home() {
   const [search, setSearch] = useState("");
@@ -61,11 +62,16 @@ function Home() {
       <Features />
 
       {/* ------------------------- Example Tutoring Sessions -------------------------*/}
-      <Slide slidesToShow={4} arrowsScroll={4}>
-        {studySessions.map((card) => (
-          <ProjectCard key={card._id} card={card} />
-        ))}
-      </Slide>
+      <div className="section-container">
+        <h1>Quality Tutors From Your School At Your Fingertips</h1>
+        {studySessions && studySessions.length > 0 && (
+          <Slide slidesToShow={4} arrowsScroll={4}>
+            {studySessions.map((card) => (
+              <ProjectCard key={card._id} card={card} />
+            ))}
+          </Slide>
+        )}
+      </div>
     </div>
   );
 }

@@ -78,7 +78,7 @@ const BookingDialog = ({
           margin="normal"
         />
         <Typography variant="subtitle1">
-          Total amount: ${totalAmount.toFixed(2)}
+          Total amount: {totalAmount.toFixed(2)}€
         </Typography>
         <Button
         disabled={hours < 1}

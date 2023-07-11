@@ -98,59 +98,14 @@
     //   }
   }
 
-  .explore {
+  .section-container {
     display: flex;
-    justify-content: center;
-    padding: 100px 0px;
-
-    .container {
-      width: 1400px;
-
-      h1{
-        color: #555;
-      }
-
-      .items {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-
-        .item {
-          width: 250px;
-          height: 150px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          cursor: pointer;
-
-          img {
-            width: 50px;
-            height: 50px;
-          }
-
-          .line{
-            width: 50px;
-            height: 2px;
-            background-color: lightgray;
-            transition: all .3s ease;
-          }
-
-          span {
-            font-weight: 300;
-          }
-
-          &:hover{
-            .line{
-              width: 80px;
-              background-color: #1dbf73;
-            }
-          }
-        }
-      }
-    }
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 1400px;
+    /* Set the desired maximum width */
+    margin: 0 auto;
+    /* Center the container horizontally */
+    padding-top: 100px;
   }
 }
