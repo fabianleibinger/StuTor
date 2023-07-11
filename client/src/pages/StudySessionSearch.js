@@ -150,7 +150,7 @@ export default function StudySessionSearch() {
         languages: selectedLanguages,
         department: selectedDepartment,
         rating: selectedRating,
-        userId: user._id
+        user: user
       }),
     {
       retry: false
