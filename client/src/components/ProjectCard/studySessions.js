@@ -4,8 +4,6 @@ export const fetchStudySessions = async () => {
   try {
     const response = await newRequest.get("/studysession");
     const studySessions = response.data;
-
-    console.log("Study Sessions: ", studySessions);
     return studySessions;
   } catch (error) {
     console.log("Error fetching study sessions:", error);

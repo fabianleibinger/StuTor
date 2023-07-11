@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Typography, Input, Step, StepLabel, Stepper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
+import { UserContext } from "../context/UserContext";
 import { searchUniversities } from "../utils/searchUniversities";
 import {
   FormContainer,
@@ -20,6 +21,7 @@ import studentLogo from "../img/student_logo.png";
 import tutorLogo from "../img/tutor_logo.png";
 
 const Register = () => {
+  const { user, setUser } = useContext(UserContext);
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [profilePicUrl, setProfilePicUrl] = useState("");
   const [allUniversities, setAllUniversities] = useState([]);
@@ -31,7 +33,7 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({
+  const [newUser, setNewUser] = useState({
     username: "",
     email: "",
     password: "",
@@ -57,7 +59,7 @@ const Register = () => {
   }, []);
 
   const handleChange = (e) => {
-    setUser((prev) => {
+    setNewUser((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
@@ -75,7 +77,7 @@ const Register = () => {
 
   const handleRoleChange = (role) => {
     setSelectedRole(role);
-    setUser((prev) => {
+    setNewUser((prev) => {
       return { ...prev, role: role };
     });
   };
@@ -95,7 +97,7 @@ const Register = () => {
       value,
       allUniversities,
       setSearchResults,
-      setUser,
+      setNewUser,
       true,
       setSelectedUniversity
     );
@@ -114,13 +116,13 @@ const Register = () => {
     };
 
     for (const field of fields) {
-      if (!user[field]) {
+      if (!newUser[field]) {
         setErrorMessage(`Please Enter a ${fieldNames[field]}`);
         return;
       }
     }
 
-    if (!user.university) {
+    if (!newUser.university) {
       setErrorMessage("Please Select a University");
       return;
     }
@@ -136,22 +138,33 @@ const Register = () => {
     }
 
     try {
-      console.log(user);
+      console.log(newUser);
       await newRequest.post("/auth/register", {
-        ...user,
+        ...newUser,
         picture: profilePicUrl,
       });
-      navigate("/");
+
+      // Log in the newUser
+      const loginRes = await newRequest.post("/auth/login", {
+        username: newUser.username,
+        password: newUser.password,
+      });
+      console.log("logging in with: ", newUser.username, newUser.password);
+      setUser(newUser);
     } catch (err) {
       console.log(err.response.status);
       if (err.response?.status === 409) {
         setErrorMessage("Username or email is already taken");
+        return;
       } else {
         const errorMessage =
           err.response?.data?.message || "An error occurred when registering.";
         setErrorMessage(errorMessage);
+        return;
       }
     }
+
+    navigate("/");
   };
 
   return (
@@ -300,7 +313,7 @@ const Register = () => {
                     name="university"
                     type="text"
                     placeholder={`${
-                      user.university
+                      newUser.university
                         ? selectedUniversity.name
                         : "Universities*"
                     }`}
@@ -444,7 +457,7 @@ const Register = () => {
               disabled={
                 !selectedRole ||
                 (activeStep === 0 && selectedRole === "") ||
-                (activeStep === 1 && user.university === "")
+                (activeStep === 1 && newUser.university === "")
               }
               onClick={activeStep === 4 ? handleSubmit : handleNext}
               style={{ width: "200px" }}
