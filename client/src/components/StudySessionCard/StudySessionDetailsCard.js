@@ -20,13 +20,10 @@ const ScrollableCardContent = styled(CardContent)({
 });
 
 export default function StudySessionCard({
-  tutorFirstName,
-  tutorLastName,
-  tutorPicture,
   studySession,
   onDelete,
   role,
-  onItemClick,
+  onUpdateClick,
   details,
   addStudySessionComponent,
   backgroundColor
@@ -36,20 +33,14 @@ export default function StudySessionCard({
   const handleContentClick = () => {
     if (role === "STUDENT") {
       navigate(`/StudysessionDetailsPage/${studySession._id}`);
+    } else {
+      onUpdateClick(studySession);
     }
   }
 
   const handleDeleteClick = () => {
     onDelete(studySession._id);
   };
-
-  const handleBookingClick = () => {
-
-  }
-
-  const handleDetailsClick = () => {
-
-  }
 
   return (
     <Card sx={{
@@ -77,7 +68,7 @@ export default function StudySessionCard({
         }}
       >
         <Avatar
-          src={tutorPicture || '/img/noavatar.jpg'}
+          src={studySession.tutoredBy.picture || '/img/noavatar.jpg'}
           sx={{ width: 68, height: 68 }}
           aria-label="recipe"
         />
@@ -106,7 +97,7 @@ export default function StudySessionCard({
               {studySession.course.name}
             </Typography>
             <Typography>
-              {tutorFirstName} {tutorLastName}
+              {studySession.tutoredBy.firstname} {studySession.tutoredBy.lastname}
             </Typography>
             <Typography fontWeight="bold" sx={{ mt: 1 }}>
               {studySession.pricePerHourEuro} €/h
@@ -151,7 +142,7 @@ export default function StudySessionCard({
               {role === 'TUTOR' ? (
                 <>
                   <ActionButton text="Bookings" />
-                  <ActionButton text="Update" onClickListener={onItemClick} />
+                  <ActionButton text="Update" onClickListener={onUpdateClick} />
                   <ActionButton
                     text="Delete"
                     onClickListener={handleDeleteClick}
@@ -162,7 +153,7 @@ export default function StudySessionCard({
                   id="StudentStudySessionButtonBox"
                   sx={{ width: 1, textAlign: 'center' }}
                 >
-                  <Button variant="contained" size="large">
+                  <Button variant="contained" size="large" onClick={handleContentClick}>
                     Details
                   </Button>
                 </Box>

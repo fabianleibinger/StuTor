@@ -49,9 +49,6 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
               <StudySessionCard
                 studySession={studySession}
                 onDelete={() => {}}
-                tutorFirstName={studySession.tutoredBy.firstname}
-                tutorLastName={studySession.tutoredBy.lastname}
-                tutorPicture={studySession.tutoredBy.picture}
                 role={userRole}
                 onItemClick={() => {}}
                 details={true}
@@ -153,7 +150,7 @@ export default function StudySessionSearch() {
         languages: selectedLanguages,
         department: selectedDepartment,
         rating: selectedRating,
-        userId: user._id
+        user: user
       }),
     {
       retry: false

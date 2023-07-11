@@ -5,7 +5,6 @@ import SearchIcon from '@mui/icons-material/Search';
 export default function StudySessionSearchbar({ handleSearchInputChange }) {
   return (
     <TextField
-      label="Search"
       variant="outlined"
       onChange={handleSearchInputChange}
       placeholder="Search..."
@@ -14,7 +13,8 @@ export default function StudySessionSearchbar({ handleSearchInputChange }) {
       }}
       sx={{
         height: '100%',
-        width: '100%' // Set the width to fill the parent container
+        width: '100%', // Set the width to fill the parent container
+        background: "white"
       }}
     />
   );

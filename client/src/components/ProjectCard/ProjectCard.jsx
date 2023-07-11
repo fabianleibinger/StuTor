@@ -20,7 +20,7 @@ function ProjectCard({ card }) {
     >
       {/* background img */}
       <div className="background">
-        <img src={card.tutorProfilePic} alt="" />
+        <img src={card.tutoredBy.picture} alt="" />
       </div>
 
       <div className="course-description">
@@ -30,16 +30,16 @@ function ProjectCard({ card }) {
 
       <div className="info">
         {/* profile pic */}
-        <img src={card.tutorProfilePic} alt="" />
+        <img src={card.tutoredBy.picture} alt="" />
 
         <div className="texts">
           {/* course name */}
-          <h1 style={{ fontSize: "20px" }}>{card.courseName}</h1>
+          <h1 style={{ fontSize: "20px" }}>{card.course.name}</h1>
 
           {/* tutor name */}
           <h2>
             Tutor:&nbsp;&nbsp;
-            <span style={{ fontStyle: "italic" }}>{card.tutorName}</span>
+            <span style={{ fontStyle: "italic" }}>{card.tutoredBy.username}</span>
           </h2>
 
           {/* Price */}
