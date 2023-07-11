@@ -29,6 +29,7 @@ import RateReviewIcon from "@mui/icons-material/RateReview";
 import CheckIcon from "@mui/icons-material/Check";
 import RecommendIcon from "@mui/icons-material/Recommend";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
@@ -102,6 +103,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                       <TableCell>Status</TableCell>
                       <TableCell>Hours</TableCell>
                       <TableCell>Booking date</TableCell>
+                      <TableCell>Accepted by tutor?</TableCell>
                       <TableCell>Action</TableCell>
                     </TableRow>
                   </TableHead>
@@ -137,6 +139,18 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                               {formatDate(booking.createdAt)}
                             </TableCell>
                             <TableCell>
+                              {booking.isAcceptedByTutor && (
+                                <Icon>
+                                  <CheckIcon color="primary" />
+                                  </Icon>
+                                  )}
+                                  {!booking.isAcceptedByTutor && (
+                                    <Icon>
+                                      <CancelIcon color="error" />
+                                    </Icon>
+                                  )}
+                            </TableCell>
+                            <TableCell>
                               {booking.isConfirmed && !booking.reviewGiven && (
                                 <Tooltip title="Rate your tutor">
                                   <IconButton
@@ -154,6 +168,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                                   <IconButton
                                     aria-label="confirm booking"
                                     onClick={() => handleConfirm(booking._id)}
+                                    disabled={!booking.isAcceptedByTutor}
                                   >
                                     <CheckIcon />
                                   </IconButton>
