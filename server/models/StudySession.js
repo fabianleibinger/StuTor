@@ -5,6 +5,14 @@ const StudysessionSchema = new mongoose.Schema({
     course: {
         type: Schema.Types.ObjectId,
         ref: 'Course',
+        required: false,
+    },
+    courseName: {
+        type: String,
+        required: true,
+    },
+    courseId: {
+        type: String,
         required: true,
     },
     tutoredBy: {

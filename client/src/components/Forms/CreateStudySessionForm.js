@@ -15,6 +15,7 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
 
   const { setUser, user } = useContext(UserContext);
   const [course, setCourse] = useState('');
+  const [courseName, setCourseName] = useState('');
   const [pricePerHourEuro, setPricePerHourEuro] = useState('');
   const [languages, setLanguages] = useState([]);
   const [description, setDescription] = useState('');
@@ -133,6 +134,32 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
               required
             />
           )}
+          <TextField
+            variant="outlined"
+            autoFocus
+            margin="dense"
+            id="courseName"
+            label="Course Name"
+            type="String"
+            fullWidth
+            required
+            onChange={e => setPricePerHourEuro(e.target.value)}
+            value={pricePerHourEuro}
+            sx={{ mt: 0, width: 0.6 }}
+          />
+          <TextField
+            variant="outlined"
+            autoFocus
+            margin="dense"
+            id="courseId"
+            label="Course ID"
+            type="String"
+            fullWidth
+            required
+            onChange={e => setPricePerHourEuro(e.target.value)}
+            value={pricePerHourEuro}
+            sx={{ mt: 0, width: 0.6 }}
+          />
 
           <TextField
             variant="outlined"
