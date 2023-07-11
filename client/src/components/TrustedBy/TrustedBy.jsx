@@ -7,6 +7,10 @@ const TrustedBy = () => {
       <div className="container">
         <span>Trusted by:</span>
         <img
+          src="https://res.cloudinary.com/daefab1lj/image/upload/v1688829042/k4vwmrasjwa7rfd4zqq6.png"
+          alt=""
+        />
+        <img
           src="https://res.cloudinary.com/daefab1lj/image/upload/v1688829042/fuxexnahljc71qzftkfo.png"
           alt=""
         />
