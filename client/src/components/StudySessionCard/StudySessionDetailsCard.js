@@ -153,7 +153,7 @@ export default function StudySessionCard({
                   id="StudentStudySessionButtonBox"
                   sx={{ width: 1, textAlign: 'center' }}
                 >
-                  <Button variant="contained" size="large">
+                  <Button variant="contained" size="large" onClick={handleContentClick}>
                     Details
                   </Button>
                 </Box>
