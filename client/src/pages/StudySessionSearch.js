@@ -49,9 +49,6 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
               <StudySessionCard
                 studySession={studySession}
                 onDelete={() => {}}
-                tutorFirstName={studySession.tutoredBy.firstname}
-                tutorLastName={studySession.tutoredBy.lastname}
-                tutorPicture={studySession.tutoredBy.picture}
                 role={userRole}
                 onItemClick={() => {}}
                 details={true}

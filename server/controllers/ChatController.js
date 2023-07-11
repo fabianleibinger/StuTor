@@ -133,6 +133,10 @@ export const getChatsOfUser = async (req, res) => {
       path: 'studysession.course',
       select: 'name'
     });
+    chats = await Studysession.populate(chats, {
+      path: 'studysession.tutoredBy',
+      select: 'firstname lastname picture'
+    });
     try {
       if (chats.length === 0) {
         res.status(404).send('No chats found!');
