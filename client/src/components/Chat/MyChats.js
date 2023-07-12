@@ -57,6 +57,15 @@ const MyChats = () => {
       </Box>
     );
 
+  if (error)
+    return (
+      <Box sx={boxSx}>
+        <Alert severity="info" sx={{ flexGrow: 1, width: 0.95 }}>
+          Start a chat first!
+        </Alert>
+      </Box>
+    );
+
   if (data)
     return (
       <Box sx={boxSx}>
