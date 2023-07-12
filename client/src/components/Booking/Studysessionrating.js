@@ -42,6 +42,8 @@ const StudysessionRating = ({ studySessionId }) => {
     buttonDisabled = false;
   }
 
+  console.log(data)
+
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <Grid container spacing={2}>
