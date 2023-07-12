@@ -25,8 +25,6 @@ const ChatBox = () => {
     setTyping,
     isTyping,
     setIsTyping,
-    notification,
-    setNotification,
   } = useChatContext();
   const { socketConnected } = useSocketContext();
   const queryClient = useQueryClient();
@@ -50,7 +48,7 @@ const ChatBox = () => {
         selectedChatCompare &&
         selectedChatCompare._id === newMessageReceived.chat._id
       ) {
-        setMessages([...messages, newMessageReceived]);
+        setMessages((prevMessages) => [...prevMessages, newMessageReceived]);
       }
     });
 
@@ -64,6 +62,9 @@ const ChatBox = () => {
     () => getMessagesOfChat(selectedChat?._id),
     {
       enabled: Boolean(selectedChat?._id),
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
       onSuccess: (data) => {
         setMessages(data);
         selectedChatCompare = selectedChat;
@@ -127,6 +128,8 @@ const ChatBox = () => {
   }, [messages]);
 
   const boxSx = {
+    display: "flex",
+    flexDirection: "column",
     width: 1,
     height: 1,
     border: "1px solid lightgrey",
@@ -142,7 +145,7 @@ const ChatBox = () => {
   if (selectedChat) {
     return (
       <Box sx={boxSx}>
-        <Box ref={chatboxRef} overflow={"auto"} height={0.88}>
+        <Box ref={chatboxRef} overflow={"auto"} height={1}>
           <Stack direction="column" spacing={2} sx={stackSx}>
             {data ? (
               messages.map((message, index) => {
