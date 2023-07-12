@@ -8,7 +8,6 @@ import {
 import { Stack, Box, Chip, TextField, Button, Avatar, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import socket from "../../Socket";
-import { useSocketContext } from "../../context/SocketContext";
 import { useUserContext } from "../../context/UserContext";
 
 var selectedChatCompare;
@@ -26,7 +25,6 @@ const ChatBox = () => {
     isTyping,
     setIsTyping,
   } = useChatContext();
-  const { socketConnected } = useSocketContext();
   const { user } = useUserContext();
   const queryClient = useQueryClient();
 
@@ -91,7 +89,6 @@ const ChatBox = () => {
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
-    if (!socketConnected) return;
     if (!typing) {
       setTyping(true);
       socket.emit("typing", selectedChat);

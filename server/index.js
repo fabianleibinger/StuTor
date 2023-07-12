@@ -103,9 +103,9 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("new booking", (studysession) => {
+  socket.on("new booking", (bookingId, tutorId) => {
     socket
-      .in(studysession.tutoredBy._id)
-      .emit("booking received", studysession);
+      .in(tutorId)
+      .emit("booking received", bookingId);
   });
 });

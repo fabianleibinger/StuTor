@@ -59,7 +59,10 @@ const StudysessionDetailsPage = () => {
       },
       onError: error => {
         console.log(error);
-      }
+      },
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
     }
   );
 
