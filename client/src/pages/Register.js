@@ -4,7 +4,7 @@ import { Typography, Input, Step, StepLabel, Stepper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
-import { UserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserContext";
 import { searchUniversities } from "../utils/searchUniversities";
 import {
   FormContainer,
@@ -21,7 +21,7 @@ import studentLogo from "../img/student_logo.png";
 import tutorLogo from "../img/tutor_logo.png";
 
 const Register = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUserContext();
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [profilePicUrl, setProfilePicUrl] = useState("");
   const [allUniversities, setAllUniversities] = useState([]);
