@@ -14,7 +14,6 @@ export const verifyToken = (req, res) => {
       return;
     }
     req.userId = payload.id;
-    req.isSeller = payload.isSeller;
   });
 };
 
@@ -40,6 +39,6 @@ export const authenticate = async (req, res) => {
     // Attach the user object to the request for future use
     req.user = user;
   } catch (err) {
-    res.status(500).send('Failed during authentication.');
+    res.status(500).send("Failed during authentication.");
   }
 };
