@@ -76,28 +76,21 @@ const MyChats = () => {
             overflow: "auto",
           }}
         >
-          {data.map((chat, index) => (
-            <React.Fragment key={chat._id}>
-              {notification.includes(chat._id) ? (
-                <ChatListItem
-                  chat={chat}
-                  selectedChat={selectedChat}
-                  setSelectedChat={setSelectedChat}
-                  isTyping={isTyping}
-                  unread={true}
-                />
-              ) : (
-                <ChatListItem
-                  chat={chat}
-                  selectedChat={selectedChat}
-                  setSelectedChat={setSelectedChat}
-                  isTyping={isTyping}
-                  unread={false}
-                />
-              )}
-              <Divider />
-            </React.Fragment>
-          ))}
+          {data.map(
+            (chat, index) =>
+              chat.latest_message != null && (
+                <React.Fragment key={chat._id}>
+                  <ChatListItem
+                    chat={chat}
+                    selectedChat={selectedChat}
+                    setSelectedChat={setSelectedChat}
+                    isTyping={isTyping}
+                    unread={notification.includes(chat._id)}
+                  />
+                  <Divider />
+                </React.Fragment>
+              )
+          )}
         </List>
       </Box>
     );
