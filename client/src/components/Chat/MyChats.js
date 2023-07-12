@@ -15,8 +15,14 @@ const MyChats = () => {
     setNotification,
   } = useChatContext();
 
-  const { isLoading, error, data } = useQuery(["chatsOfUser"], () =>
-    getChatsOfUser(getCurrentUser()._id)
+  const { isLoading, error, data } = useQuery(
+    ["chatsOfUser"],
+    () => getChatsOfUser(getCurrentUser()._id),
+    {
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
+    }
   );
 
   const boxSx = {
@@ -48,15 +54,6 @@ const MyChats = () => {
         {LoadingSkeleton}
         {LoadingSkeleton}
         {LoadingSkeleton}
-      </Box>
-    );
-
-  if (error)
-    return (
-      <Box sx={boxSx}>
-        <Alert severity="info" sx={{ flexGrow: 1, width: 0.95 }}>
-          Start a chat first!
-        </Alert>
       </Box>
     );
 
