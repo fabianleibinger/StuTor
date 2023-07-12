@@ -33,11 +33,15 @@ export const Socket = ({ children }) => {
       }
     });
 
-    socket.on("booking received", (studysession) => {
-      setBookingNotification((prevNotifications) => [
-        ...prevNotifications,
-        studysession._id,
-      ]);
+    socket.on("booking received", (bookingId) => {
+      if (bookingNotification.includes(bookingId)) {
+        return;
+      } else {
+        setBookingNotification((prevNotifications) => [
+          ...prevNotifications,
+          bookingId,
+        ]);
+      }
     });
 
     return () => {

@@ -39,8 +39,14 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     error: error,
     data: bookings,
     refetch,
-  } = useQuery(["bookings", studySessionId], () =>
-    getBookingsOfStudysessionCreatedByUser(studySessionId, userId)
+  } = useQuery(
+    ["bookings", studySessionId],
+    () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId),
+    {
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
+    }
   );
   const queryClient = useQueryClient();
 

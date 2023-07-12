@@ -1,19 +1,21 @@
 import { useMutation } from "react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createBooking, setBookingIsPayed } from "../api/Booking";
 import { useParams } from "react-router-dom";
 import React from "react";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import socket from "../Socket";
 
 const SuccessPage = () => {
   const [success, setSuccess] = useState(false);
-  const { bookingId } = useParams();
+  const { bookingId, tutorId } = useParams();
   const navigate = useNavigate();
 
   const setBookingPayed = useMutation(() => setBookingIsPayed(bookingId));
-  React.useEffect(() => {
+  useEffect(() => {
     setBookingPayed.mutateAsync();
+    socket.emit("new booking", bookingId, tutorId);;
   }, []);
 
   const handleGoBack = () => {
