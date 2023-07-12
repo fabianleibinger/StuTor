@@ -3,8 +3,8 @@ import { getChatsOfUser } from "../../api/Chat";
 import { useQuery } from "react-query";
 import { Box, Skeleton, Alert, List, Divider } from "@mui/material";
 import { useChatContext } from "../../context/ChatProvider";
-import getCurrentUser from "../../utils/getCurrentUser";
 import ChatListItem from "./ChatListItem";
+import { useUserContext } from "../../context/UserContext";
 
 const MyChats = () => {
   const {
@@ -14,10 +14,11 @@ const MyChats = () => {
     notification,
     setNotification,
   } = useChatContext();
+  const { user } = useUserContext();
 
   const { isLoading, error, data } = useQuery(
     ["chatsOfUser"],
-    () => getChatsOfUser(getCurrentUser()._id),
+    () => getChatsOfUser(user._id),
     {
       retry: (failureCount, error) => {
         return error.status !== 404 && failureCount < 2;

@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useChatContext } from '../../context/ChatProvider';
 import { theme } from '../../styles.js';
-import getCurrentUser from '../../utils/getCurrentUser';
+import { useUserContext } from '../../context/UserContext';
 
 const ChatListItem = ({
   chat,
@@ -18,7 +18,7 @@ const ChatListItem = ({
   unread
 }) => {
   const { notification, setNotification } = useChatContext();
-  const currentUser = getCurrentUser();
+  const { user } = useUserContext();
 
   return (
     <ListItemButton
@@ -41,7 +41,7 @@ const ChatListItem = ({
       <ListItemAvatar>
         <Avatar
           src={
-            chat.users[0]._id === currentUser._id
+            chat.users[0]._id === user._id
               ? chat.users[1].picture
               : chat.users[0].picture
           }
@@ -49,7 +49,7 @@ const ChatListItem = ({
       </ListItemAvatar>
       <ListItemText
         primary={
-          chat.users[0]._id === currentUser._id
+          chat.users[0]._id === user._id
             ? `${chat.users[1].firstname} ${chat.users[1].lastname} - ${chat.studysession?.courseName}`
             : `${chat.users[0].firstname} ${chat.users[0].lastname} - ${chat.studysession?.courseName}`
         }

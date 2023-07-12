@@ -7,9 +7,9 @@ import {
 } from "../../api/Message";
 import { Stack, Box, Chip, TextField, Button, Avatar, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import getCurrentUser from "../../utils/getCurrentUser";
 import socket from "../../Socket";
 import { useSocketContext } from "../../context/SocketContext";
+import { useUserContext } from "../../context/UserContext";
 
 var selectedChatCompare;
 
@@ -27,6 +27,7 @@ const ChatBox = () => {
     setIsTyping,
   } = useChatContext();
   const { socketConnected } = useSocketContext();
+  const { user } = useUserContext();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const ChatBox = () => {
   );
 
   const sendMessage = useMutation(
-    () => sendMessageCall(getCurrentUser()._id, newMessage, selectedChat._id),
+    () => sendMessageCall(user._id, newMessage, selectedChat._id),
     {
       onSuccess: (data) => {
         setMessages([...messages, data]);
@@ -156,17 +157,17 @@ const ChatBox = () => {
                   key={index}
                   direction="row"
                   justifyContent={
-                    getCurrentUser()._id === message.sender._id
+                    user._id === message.sender._id
                       ? "flex-end"
                       : "flex-start"
                   }
                 >
                   <Stack direction="row" alignItems="center" justifyContent={
-                    getCurrentUser()._id === message.sender._id
+                    user._id === message.sender._id
                       ? "flex-end"
                       : "flex-start"
                   } sx={{ maxWidth: 0.7 }}>
-                    {getCurrentUser()._id !== message.sender._id ? (
+                    {user._id !== message.sender._id ? (
                       <Avatar
                         src={message.sender.picture}
                         sx={{ marginRight: 1 }}

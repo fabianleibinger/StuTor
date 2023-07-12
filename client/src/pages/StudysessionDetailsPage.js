@@ -11,14 +11,14 @@ import { accessChat as accessChatCall } from '../api/Chat.js';
 import ChatBox from '../components/Chat/ChatBox';
 import TextTruncate from 'react-text-truncate';
 import GreenCircleComponent from '../components/Booking/GreenCircle.js';
-import getCurrentUser from '../utils/getCurrentUser.js';
 import { LoadingIndicator } from '../components/General/LoadingIndicator.js';
 import { ErrorIndicator } from '../components/General/ErrorIndicator.js';
 import LanguageIcon from '@mui/icons-material/Language';
+import { useUserContext } from '../context/UserContext.js';
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
-  const user = getCurrentUser();
+  const { user } = useUserContext();
   const [studysession, setStudysession] = useState(false);
   const { selectedChat, setSelectedChat } = useChatContext();
 

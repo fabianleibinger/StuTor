@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import { useQueryClient, useMutation } from 'react-query';
 import { createPayment as createPaymentCall } from '../../api/Payment.js';
-import getCurrentUser from '../../utils/getCurrentUser.js';
 import socket from '../../Socket';
+import { useUserContext } from '../../context/UserContext.js'; 
 
 const BookingDialog = ({
   open,
@@ -25,7 +25,7 @@ const BookingDialog = ({
   const [totalAmount, setTotalAmount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const queryClient = useQueryClient();
-  const currentUser = getCurrentUser();
+  const { user } = useUserContext();
 
   // Redirect to Stripe checkout
   const handleRedirect = url => {
@@ -34,10 +34,10 @@ const BookingDialog = ({
 
   const createPayment = useMutation(
     () =>
-      createPaymentCall(currentUser._id, totalAmount, studysession._id, hours),
+      createPaymentCall(user._id, totalAmount, studysession._id, hours),
     {
       onSuccess: url => {
-        socket.emit('new booking', studysession, currentUser._id);
+        socket.emit('new booking', studysession, user._id);
         handleRedirect(url);
         queryClient.invalidateQueries('payment');
       },

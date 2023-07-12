@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import newRequest from "../utils/newRequest";
-import { UserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserContext";
 import {
   LoginFormContainer,
   LoginTitle,
@@ -11,7 +11,7 @@ import {
 } from "../styles";
 
 function Login() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUserContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);

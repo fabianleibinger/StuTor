@@ -1,11 +1,11 @@
 import { createAccountCall, getPaymentInfo, deleteAccountCall, updateAccountCall } from "../../api/Payment.js";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Button, Alert } from "@mui/material";
-import getCurrentUser from "../../utils/getCurrentUser.js";
+import { useUserContext } from "../../context/UserContext.js";
 
 const RegisterStripe = () => {
     const queryClient = useQueryClient();
-    const currentUser = getCurrentUser();
+    const { user } = useUserContext();
     let registerStripeIsPossible = false
     let updateAccountIsPossible = false
     const {
@@ -14,10 +14,10 @@ const RegisterStripe = () => {
         data: data,
         refetch,
       } = useQuery(["payment"], () =>
-        getPaymentInfo(currentUser._id)
+        getPaymentInfo(user._id)
       );
 
-      const createAccount = useMutation(() => createAccountCall(currentUser._id), {
+      const createAccount = useMutation(() => createAccountCall(user._id), {
         onSuccess: (url) => {
             console.log("in create account mutation and url is", url)
             handleRedirect(url);
@@ -28,7 +28,7 @@ const RegisterStripe = () => {
         },
       });
 
-      const updateAccount = useMutation(() => updateAccountCall(currentUser._id), {
+      const updateAccount = useMutation(() => updateAccountCall(user._id), {
         onSuccess: (url) => {
             console.log("in update account mutation and url is", url)
             handleRedirect(url);
@@ -40,7 +40,7 @@ const RegisterStripe = () => {
         });
 
 
-      const deleteAccount = useMutation(() => deleteAccountCall(currentUser._id), {
+      const deleteAccount = useMutation(() => deleteAccountCall(user._id), {
         onSuccess: (url) => {
             registerStripeIsPossible = true
             queryClient.invalidateQueries("payment");
