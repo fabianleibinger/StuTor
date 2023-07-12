@@ -1,14 +1,16 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import getCurrentUser from "../utils/getCurrentUser";
 
 export const UserContext = createContext();
 
 const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState(getCurrentUser());
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   useEffect(() => {
-    setUser(getCurrentUser());
-  }, []);
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
