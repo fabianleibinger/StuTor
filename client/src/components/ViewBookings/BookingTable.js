@@ -22,6 +22,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { acceptBooking as acceptBookingCall } from "../../api/Booking.js";
 import Tooltip from '@mui/material/Tooltip';
 import CheckIcon from '@mui/icons-material/Check';
+import Alert from '@mui/material/Alert';
 
 export default function BookingTable(data) {
   console.log("data in table", data)
@@ -168,19 +169,23 @@ function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Check out the feedback of your student
-              </Typography>
-              <Box display={'flex'} flexDirection={'row'} paddingBottom={'2rem'}>
-              <Box justifyContent={'flex-start'} paddingRight={'1rem'}>
-          <Avatar alt="Profile Picture" src={row.createdBy.picture}/>
+              {row.feedback !== undefined && (
+                <Box display={'flex'} flexDirection={'row'} paddingBottom={'2rem'}>
+                <Box justifyContent={'flex-start'} paddingRight={'1rem'}>
+            <Avatar alt="Profile Picture" src={row.createdBy.picture}/>
+            </Box>
+            <Box flexDirection={'column'}>
+              <Rating value={row.rating} precision={0.5} readOnly />
+              <Typography variant="body2" paddingLeft={'0.25rem'} color={'gray'}>{row.hours} hour{row.hours === 1 ? "" : "s"} booked on {formatDate(row.createdAt)}</Typography>
+              <Typography variant="body1" paddingLeft={'0.25rem'}>{row.feedback}</Typography>
+            </Box>
           </Box>
-          <Box flexDirection={'column'}>
-            <Rating value={row.rating} precision={0.5} readOnly />
-            <Typography variant="body2" paddingLeft={'0.25rem'} color={'gray'}>{row.hours} hour{row.hours === 1 ? "" : "s"} booked on {formatDate(row.createdAt)}</Typography>
-            <Typography variant="body1" paddingLeft={'0.25rem'}>{row.feedback}</Typography>
-          </Box>
-        </Box>
+        )}
+        {row.feedback === undefined && (
+          <Alert severity="info" >
+            Your student did not give you any feedback yet. Check back later!
+            </Alert>
+            )}
             </Box>
           </Collapse>
         </TableCell>
