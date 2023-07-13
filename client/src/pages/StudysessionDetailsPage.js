@@ -11,7 +11,6 @@ import { accessChat as accessChatCall } from '../api/Chat.js';
 import ChatBox from '../components/Chat/ChatBox';
 import TextTruncate from 'react-text-truncate';
 import GreenCircleComponent from '../components/Booking/GreenCircle.js';
-import getCurrentUser from '../utils/getCurrentUser.js';
 import { LoadingIndicator } from '../components/General/LoadingIndicator.js';
 import { ErrorIndicator } from '../components/General/ErrorIndicator.js';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -60,7 +59,10 @@ const StudysessionDetailsPage = () => {
       },
       onError: error => {
         console.log(error);
-      }
+      },
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
     }
   );
 

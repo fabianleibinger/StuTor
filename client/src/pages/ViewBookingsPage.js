@@ -2,17 +2,16 @@ import BookingTable from "../components/ViewBookings/BookingTable";
 import React from "react";
 import { useQuery } from "react-query";
 import { getBookingsOfTutor } from "../api/Booking";
-import { useUserContext } from "../context/UserContext";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import { LoadingIndicator } from "../components/General/LoadingIndicator";
 import { ErrorIndicator } from "../components/General/ErrorIndicator";
+import { useUserContext } from "../context/UserContext";
 
 const ViewBookingsPage = () => {
     const { user } = useUserContext();
-    const userId = user._id;
 
-    const { isLoading, error, data } = useQuery(["tutorBookings"], () => getBookingsOfTutor(userId), {
+    const { isLoading, error, data } = useQuery(["tutorBookings"], () => getBookingsOfTutor(user._id), {
         retry: 2,
     });
 

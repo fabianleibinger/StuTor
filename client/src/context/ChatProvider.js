@@ -4,7 +4,7 @@ const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState();
-  const [newMessage, setNewMessage] = useState();
+  const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);

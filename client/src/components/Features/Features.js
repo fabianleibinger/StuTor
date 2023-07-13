@@ -5,10 +5,12 @@ const Features = () => {
     <div className="features">
       <div className="container">
         <div className="item">
-          <h1>Quality Tutors From Your School At Your Fingertips</h1>
+          <h1 style={{ fontWeight: "bold" }}>
+            Quality Tutors From Your School At Your Fingertips
+          </h1>
           <div className="title">
             {/* <img src="./img/check.png" alt="" /> */}
-            Find a Tutor for Anytime, Anywhere
+            Find a Tutor for You, Anytime, Anywhere
           </div>
           <p>Find the perfect tutor session that fits your busy schedule.</p>
           <div className="title">

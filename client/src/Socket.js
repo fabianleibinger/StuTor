@@ -1,5 +1,4 @@
 import { useEffect, useContext } from "react";
-import getCurrentUser from "./utils/getCurrentUser";
 import io from "socket.io-client";
 import { useSocketContext } from "./context/SocketContext";
 import { useChatContext } from "./context/ChatProvider";
@@ -14,6 +13,7 @@ export const Socket = ({ children }) => {
   const { setUser, user } = useUserContext();
 
   useEffect(() => {
+    if (!user) return;
     socket.emit("setup", user?._id);
     socket.on("connected", () => setSocketConnected(true));
 
@@ -33,11 +33,15 @@ export const Socket = ({ children }) => {
       }
     });
 
-    socket.on("booking received", (studysession) => {
-      setBookingNotification((prevNotifications) => [
-        ...prevNotifications,
-        studysession._id,
-      ]);
+    socket.on("booking received", (bookingId) => {
+      if (bookingNotification.includes(bookingId)) {
+        return;
+      } else {
+        setBookingNotification((prevNotifications) => [
+          ...prevNotifications,
+          bookingId,
+        ]);
+      }
     });
 
     return () => {

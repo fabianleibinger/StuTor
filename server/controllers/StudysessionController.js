@@ -1,3 +1,4 @@
+import { populate } from 'dotenv';
 import Chat from '../models/Chat.js';
 import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
@@ -292,6 +293,10 @@ export const getReviewsOfStudysession = async (req, res) => {
         populate: {
           path: 'studysession',
           model: 'Studysession'
+        },
+        populate: {
+          path: 'createdBy',
+          model: 'User'
         }
       });
       const filteredReviews = reviews.filter(review => review.booking !== null);

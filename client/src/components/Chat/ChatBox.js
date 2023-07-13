@@ -7,9 +7,8 @@ import {
 } from "../../api/Message";
 import { Stack, Box, Chip, TextField, Button, Avatar, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import getCurrentUser from "../../utils/getCurrentUser";
 import socket from "../../Socket";
-import { useSocketContext } from "../../context/SocketContext";
+import { useUserContext } from "../../context/UserContext";
 
 var selectedChatCompare;
 
@@ -25,10 +24,8 @@ const ChatBox = () => {
     setTyping,
     isTyping,
     setIsTyping,
-    notification,
-    setNotification,
   } = useChatContext();
-  const { socketConnected } = useSocketContext();
+  const { user } = useUserContext();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -50,7 +47,7 @@ const ChatBox = () => {
         selectedChatCompare &&
         selectedChatCompare._id === newMessageReceived.chat._id
       ) {
-        setMessages([...messages, newMessageReceived]);
+        setMessages((prevMessages) => [...prevMessages, newMessageReceived]);
       }
     });
 
@@ -64,6 +61,9 @@ const ChatBox = () => {
     () => getMessagesOfChat(selectedChat?._id),
     {
       enabled: Boolean(selectedChat?._id),
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
       onSuccess: (data) => {
         setMessages(data);
         selectedChatCompare = selectedChat;
@@ -73,7 +73,7 @@ const ChatBox = () => {
   );
 
   const sendMessage = useMutation(
-    () => sendMessageCall(getCurrentUser()._id, newMessage, selectedChat._id),
+    () => sendMessageCall(user._id, newMessage, selectedChat._id),
     {
       onSuccess: (data) => {
         setMessages([...messages, data]);
@@ -89,7 +89,6 @@ const ChatBox = () => {
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
-    if (!socketConnected) return;
     if (!typing) {
       setTyping(true);
       socket.emit("typing", selectedChat);
@@ -127,6 +126,8 @@ const ChatBox = () => {
   }, [messages]);
 
   const boxSx = {
+    display: "flex",
+    flexDirection: "column",
     width: 1,
     height: 1,
     border: "1px solid lightgrey",
@@ -142,7 +143,7 @@ const ChatBox = () => {
   if (selectedChat) {
     return (
       <Box sx={boxSx}>
-        <Box ref={chatboxRef} overflow={"auto"} height={0.88}>
+        <Box ref={chatboxRef} overflow={"auto"} height={1}>
           <Stack direction="column" spacing={2} sx={stackSx}>
             {data ? (
               messages.map((message, index) => {
@@ -153,17 +154,17 @@ const ChatBox = () => {
                   key={index}
                   direction="row"
                   justifyContent={
-                    getCurrentUser()._id === message.sender._id
+                    user._id === message.sender._id
                       ? "flex-end"
                       : "flex-start"
                   }
                 >
                   <Stack direction="row" alignItems="center" justifyContent={
-                    getCurrentUser()._id === message.sender._id
+                    user._id === message.sender._id
                       ? "flex-end"
                       : "flex-start"
                   } sx={{ maxWidth: 0.7 }}>
-                    {getCurrentUser()._id !== message.sender._id ? (
+                    {user._id !== message.sender._id ? (
                       <Avatar
                         src={message.sender.picture}
                         sx={{ marginRight: 1 }}

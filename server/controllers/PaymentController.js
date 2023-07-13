@@ -123,7 +123,7 @@ export const createPayment = async (req, res) => {
   console.log("student id", req.body.studentId)
   const studentId = new ObjectId(req.body.studentId);
   const student = await User.findById(studentId);
-  console.log("studensId", studentId);
+  console.log("studentId", studentId);
   console.log("student", student);
   const tutorId = new ObjectId(studysession.tutoredBy);
   const tutor = await User.findById(tutorId);
@@ -180,7 +180,7 @@ export const createPayment = async (req, res) => {
               destination: existingAccount.customerId,
             },
           },
-          success_url: `http://localhost:3000/success/${bookingId}`,
+          success_url: `http://localhost:3000/success/${bookingId}/${tutorId}`,
           cancel_url: `http://localhost:3000/success/${bookingId}`,
         });
         await Booking.findByIdAndUpdate(bookingId, {
