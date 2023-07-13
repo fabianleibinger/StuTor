@@ -266,7 +266,8 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
-                {bookingNotification.length === 0 ? (
+                { user.role === "tutor" && (
+                bookingNotification.length === 0 ? (
                   <MenuItem
                     onClick={handleMenuCloseBookings}
                     component={Link}
@@ -285,6 +286,7 @@ const Navbar = () => {
                   >
                     View Bookings
                   </MenuItem>
+                )
                 )}
 
                 <MenuItem onClick={handleLogout}>
