@@ -91,6 +91,8 @@ const Navbar = () => {
       // Find user by user.username
       const res = await newRequest.get("/user/byUsername/" + user.username);
       await newRequest.delete("/user/deleteUser/" + res.data._id);
+      setBookingNotification([]);
+      setNotification([]);
       setUser(null);
       localStorage.removeItem("user"); // Remove user data from localStorage
       navigate("/");
