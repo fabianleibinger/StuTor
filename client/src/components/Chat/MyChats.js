@@ -3,8 +3,8 @@ import { getChatsOfUser } from "../../api/Chat";
 import { useQuery } from "react-query";
 import { Box, Skeleton, Alert, List, Divider } from "@mui/material";
 import { useChatContext } from "../../context/ChatProvider";
-import getCurrentUser from "../../utils/getCurrentUser";
 import ChatListItem from "./ChatListItem";
+import { useUserContext } from "../../context/UserContext";
 
 const MyChats = () => {
   const {
@@ -14,9 +14,16 @@ const MyChats = () => {
     notification,
     setNotification,
   } = useChatContext();
+  const { user } = useUserContext();
 
-  const { isLoading, error, data } = useQuery(["chatsOfUser"], () =>
-    getChatsOfUser(getCurrentUser()._id)
+  const { isLoading, error, data } = useQuery(
+    ["chatsOfUser"],
+    () => getChatsOfUser(user._id),
+    {
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
+    }
   );
 
   const boxSx = {
@@ -69,28 +76,21 @@ const MyChats = () => {
             overflow: "auto",
           }}
         >
-          {data.map((chat, index) => (
-            <React.Fragment key={chat._id}>
-              {notification.includes(chat._id) ? (
-                <ChatListItem
-                  chat={chat}
-                  selectedChat={selectedChat}
-                  setSelectedChat={setSelectedChat}
-                  isTyping={isTyping}
-                  unread={true}
-                />
-              ) : (
-                <ChatListItem
-                  chat={chat}
-                  selectedChat={selectedChat}
-                  setSelectedChat={setSelectedChat}
-                  isTyping={isTyping}
-                  unread={false}
-                />
-              )}
-              <Divider />
-            </React.Fragment>
-          ))}
+          {data.map(
+            (chat, index) =>
+              chat.latest_message != null && (
+                <React.Fragment key={chat._id}>
+                  <ChatListItem
+                    chat={chat}
+                    selectedChat={selectedChat}
+                    setSelectedChat={setSelectedChat}
+                    isTyping={isTyping}
+                    unread={notification.includes(chat._id)}
+                  />
+                  <Divider />
+                </React.Fragment>
+              )
+          )}
         </List>
       </Box>
     );

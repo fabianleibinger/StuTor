@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,48 +7,45 @@ import {
   Button,
   Typography,
   Alert,
-  Box
-} from '@mui/material';
-import { useQueryClient, useMutation } from 'react-query';
-import { createPayment as createPaymentCall } from '../../api/Payment.js';
-import getCurrentUser from '../../utils/getCurrentUser.js';
-import socket from '../../Socket';
+  Box,
+} from "@mui/material";
+import { useQueryClient, useMutation } from "react-query";
+import { createPayment as createPaymentCall } from "../../api/Payment.js";
+import { useUserContext } from "../../context/UserContext.js";
 
 const BookingDialog = ({
   open,
   onClose,
   priceEuro,
   createdBy,
-  studysession
+  studysession,
 }) => {
-  const [hours, setHours] = useState('');
+  const [hours, setHours] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const queryClient = useQueryClient();
-  const currentUser = getCurrentUser();
+  const { user } = useUserContext();
 
   // Redirect to Stripe checkout
-  const handleRedirect = url => {
+  const handleRedirect = (url) => {
     window.location.replace(url);
   };
 
   const createPayment = useMutation(
-    () =>
-      createPaymentCall(currentUser._id, totalAmount, studysession._id, hours),
+    () => createPaymentCall(user._id, totalAmount, studysession._id, hours),
     {
-      onSuccess: url => {
-        socket.emit('new booking', studysession, currentUser._id);
+      onSuccess: (url) => {
         handleRedirect(url);
-        queryClient.invalidateQueries('payment');
+        queryClient.invalidateQueries("payment");
       },
-      onError: error => {
+      onError: (error) => {
         setShowAlert(true);
         console.log(error);
-      }
+      },
     }
   );
 
-  const handleHoursChange = event => {
+  const handleHoursChange = (event) => {
     const { value } = event.target;
     setHours(value);
 
@@ -69,8 +66,8 @@ const BookingDialog = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Book studysession for {studysession.courseName}</DialogTitle>
       <DialogContent>
-        <Typography variant="subtitle1" color={'grey'}>
-          Here you can book the studysession offered by{' '}
+        <Typography variant="subtitle1" color={"grey"}>
+          Here you can book the studysession offered by{" "}
           {studysession.tutoredBy.firstname} for {priceEuro}€ per hour. Please
           enter the number of hours that you agreed on with your tutor!
         </Typography>

@@ -233,7 +233,13 @@ const Navbar = () => {
                 aria-haspopup="true"
               >
                 <Avatar src={user.picture || ""} alt="" />
-                <StyledBadge badgeContent={bookingNotification.length}>
+                <StyledBadge
+                  badgeContent={
+                    Number.isInteger(bookingNotification.length / 4)
+                      ? bookingNotification.length / 4
+                      : null
+                  }
+                >
                   <UserFullName>{`${user.firstname} ${user.lastname}`}</UserFullName>
                 </StyledBadge>
               </AvatarIconButton>
