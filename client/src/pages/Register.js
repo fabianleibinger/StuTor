@@ -64,15 +64,14 @@ const Register = () => {
     });
   };
 
-  const handleProfilePicChange = (e) => {
+  const handleProfilePicChange = async (e) => {
     const selectedFile = e.target.files[0];
     setProfilePicFile(selectedFile);
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setProfilePicUrl(event.target.result);
-    };
-    reader.readAsDataURL(selectedFile);
+    const url = await uploadProfilePic(selectedFile);
+    setProfilePicUrl(url);
+    setNewUser((prev) => {
+      return { ...prev, picture: url };
+    });
   };
 
   const handleRoleChange = (role) => {
@@ -127,30 +126,11 @@ const Register = () => {
       return;
     }
 
-    if (profilePicFile) {
-      try {
-        await uploadProfilePic(profilePicFile);
-      } catch (error) {
-        console.log(error);
-        setErrorMessage("Error uploading the picture");
-        return;
-      }
-    }
-
     try {
-      console.log(newUser);
+      console.log("NEW USER: ", newUser);
       await newRequest.post("/auth/register", {
         ...newUser,
-        picture: profilePicUrl,
       });
-
-      // Log in the newUser
-      const loginRes = await newRequest.post("/auth/login", {
-        username: newUser.username,
-        password: newUser.password,
-      });
-      console.log("logging in with: ", newUser.username, newUser.password);
-      setUser(newUser);
     } catch (err) {
       console.log(err.response.status);
       if (err.response?.status === 409) {
@@ -160,7 +140,22 @@ const Register = () => {
         const errorMessage =
           err.response?.data?.message || "An error occurred when registering.";
         setErrorMessage(errorMessage);
+        console.log("err: ", err);
         return;
+      }
+    }
+
+    try {
+      const res = await newRequest.post("/auth/login", {
+        username: newUser.username,
+        password: newUser.password,
+      });
+      setUser(res.data);
+    } catch (err) {
+      if (err.response && err.response.data) {
+        setError(err.response.data);
+      } else {
+        setError("An error occurred during Log-in. Please try again later.");
       }
     }
 
