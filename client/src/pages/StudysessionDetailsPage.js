@@ -119,6 +119,7 @@ const StudysessionDetailsPage = () => {
     width: 1,
     height: 1,
     border: "1px solid lightgrey",
+    backgroundColor: '#f5f5f5',
     borderRadius: "6px",
     flexWrap: 'wrap'}}>
       <Box component="div" sx={{overflow: 'auto', padding: 2, height: 0.85, marginBottom: '5vh'}}>
@@ -193,7 +194,7 @@ const StudysessionDetailsPage = () => {
             <Grid
             container
             spacing={2}
-            sx={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}
+            sx={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: "auto", marginBottom: "auto" }}
           >
             <Box
               sx={{
