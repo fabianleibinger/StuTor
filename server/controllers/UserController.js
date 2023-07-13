@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import Chat from "../models/Chat.js";
+import Message from "../models/Message.js";
 import Studysession from "../models/Studysession.js";
 import University from "../models/University.js";
 import User from "../models/User.js";
@@ -11,6 +12,25 @@ export const getUser = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.userId);
     const user = await User.findById(userId);
+    try {
+      if (!user) {
+        res.status(404).send("User not found!");
+      } else {
+        res.status(200).send(user);
+      }
+    } catch (err) {
+      res.status(500).send("Failed to retrieve user!");
+    }
+  } catch (err) {
+    res.status(400).send("Bad request!");
+  }
+};
+
+export const getUserByUsername = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username });
+
     try {
       if (!user) {
         res.status(404).send("User not found!");
@@ -184,31 +204,69 @@ export const changePassword = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const userId = new ObjectId(req.params.userId);
-    if (req.userId !== userId.toString()) {
-      res.status(403).send("You can delete only your account!");
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).send("User not found!");
       return;
     }
+
+    // Delete all achievement and studysession associations (student and tutor) of this user.
     try {
-      const user = await User.findByIdAndDelete(userId);
-      // Delete all achievement and studysession associations (student and tutor) of this user.
       await UserAchievement.deleteMany({ user: userId });
-      await UserStudysession.deleteMany({ student: userId });
-      // Delete all studysessions tutored by this user including related chats.
-      const deletedStudysessions = await Studysession.deleteMany({
-        tutor: userId,
-      });
-      for (const studysession of deletedStudysessions) {
-        await Chat.deleteMany({ studysession: studysession._id });
-      }
-      if (!user) {
-        res.status(404).send("User not found!");
-      } else {
-        res.status(200).send("User deleted!");
-      }
     } catch (err) {
-      res.status(500).send("Failed to delete user!");
+      res.status(500).send("Failed to delete user achievements!");
+      return;
     }
+
+    try {
+      await UserStudysession.deleteMany({ student: userId });
+    } catch (err) {
+      res.status(500).send("Failed to delete user's study sessions!");
+      return;
+    }
+
+    try {
+      await Studysession.deleteMany({
+        tutoredBy: userId,
+      });
+    } catch (err) {
+      res.status(500).send("Failed to delete user's tutor sessions!");
+      return;
+    }
+
+    // Delete Chat Objects
+    const deletedChats = await Chat.find({
+      users: { $elemMatch: { $eq: userId } },
+    });
+    const deletedChatIds = deletedChats.map((chat) => chat._id);
+    console.log("deletedChatIds: ", deletedChatIds);
+
+    try {
+      const deletedChatObjects = await Chat.deleteMany({
+        users: { $elemMatch: { $eq: userId } },
+      });
+      const deletedCountChat = deletedChatObjects.deletedCount;
+      console.log("deletedCountChat: ", deletedCountChat);
+    } catch (err) {
+      res.status(500).send("Failed to delete user's chat objects!");
+      return;
+    }
+
+    try {
+      // Delete Chat Messages
+      const deletedMessages = await Message.deleteMany({
+        chat: { $in: deletedChatIds },
+      });
+      console.log("deletedMessages: ", deletedMessages);
+    } catch (err) {
+      res.status(500).send("Failed to delete user's chat messages!");
+      return;
+    }
+
+    await User.findByIdAndDelete(userId);
+    res.status(200).send("User deleted!");
   } catch (err) {
-    res.status(400).send("Bad request!");
+    res.status(500).send("Failed to delete user!");
+    return;
   }
 };
