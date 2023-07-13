@@ -22,8 +22,9 @@ const StudysessionRating = ({ studySessionId }) => {
   let buttonDisabled = true;
 
   const queryOptions = {
-    retries: 1, // Number of retries before giving up
-    retryDelay: 1000, // Delay in milliseconds between retries
+      retry: (failureCount, error) => {
+        return error.response.status !== 404 && failureCount < 2;
+      }
   };
 
   const { isLoading, error, data } = useQuery(
@@ -41,8 +42,6 @@ const StudysessionRating = ({ studySessionId }) => {
     reviews = data.reviews;
     buttonDisabled = false;
   }
-
-  console.log(data)
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>

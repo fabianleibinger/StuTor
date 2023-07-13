@@ -47,7 +47,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId),
     {
       retry: (failureCount, error) => {
-        return error.status !== 404 && failureCount < 2;
+        return error.response.status !== 404 && failureCount < 2;
       },
     }
   );
@@ -94,7 +94,9 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
         <DialogTitle>Bookings</DialogTitle>
         <DialogContent>
           {isloading && <div>Loading...</div>}
-          {error && <div>No bookings found!</div>}
+          {error && <Alert severity="info">
+              You didn't book any hours for this studysession yet.
+            </Alert>}
           {!isloading && !error && (
             <div>
               <div style={{ paddingBottom: "1rem" }}>
