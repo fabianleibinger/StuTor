@@ -140,7 +140,7 @@ const StudysessionDetailsPage = () => {
             <Avatar
               src={data.tutoredBy.picture}
               alt=""
-              sx={{ width: 120, height: 120 }}
+              sx={{ width: 150, height: 150 }}
             />
           </Box>
           <Grid container spacing={2}>
@@ -149,7 +149,7 @@ const StudysessionDetailsPage = () => {
                 {data.tutoredBy.firstname + ' ' + data.tutoredBy.lastname}
               </Typography>
               <Typography variant="subtitle2" sx={{ marginBottom: '1.5rem' }}>
-                {data.tutoredBy.university}
+                {data.tutoredBy.university.name}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} alignContent={'center'}>
