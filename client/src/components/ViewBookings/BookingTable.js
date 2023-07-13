@@ -171,27 +171,16 @@ function Row(props) {
               <Typography variant="h6" gutterBottom component="div">
                 Check out the feedback of your student
               </Typography>
-              <Box
-                sx={{
-                  backgroundColor: '#D3D3D3',
-                  borderRadius: '8px',
-                  padding: '16px'
-                }}
-              >
-                <Rating
-                  name="read-only"
-                  value={row.rating}
-                  readOnly
-                  style={feedbackstyles.rating}
-                />
-                <Typography variant="body1">
-                  {row.feedback !== undefined && row.feedback}
-                </Typography>
-                <Typography variant="body1" color={'gray'}>
-                  {row.feedback === undefined &&
-                    'No feedback yet. Check back later!'}
-                </Typography>
-              </Box>
+              <Box display={'flex'} flexDirection={'row'} paddingBottom={'2rem'}>
+              <Box justifyContent={'flex-start'} paddingRight={'1rem'}>
+          <Avatar alt="Profile Picture" src={row.createdBy.picture}/>
+          </Box>
+          <Box flexDirection={'column'}>
+            <Rating value={row.rating} precision={0.5} readOnly />
+            <Typography variant="body2" paddingLeft={'0.25rem'} color={'gray'}>{row.hours} hour{row.hours === 1 ? "" : "s"} booked on {formatDate(row.createdAt)}</Typography>
+            <Typography variant="body1" paddingLeft={'0.25rem'}>{row.feedback}</Typography>
+          </Box>
+        </Box>
             </Box>
           </Collapse>
         </TableCell>
