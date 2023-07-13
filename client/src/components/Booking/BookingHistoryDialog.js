@@ -51,6 +51,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
       },
     }
   );
+
   const queryClient = useQueryClient();
 
   const confirmBooking = useMutation(
@@ -86,8 +87,6 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     return formattedDate;
   };
 
-  console.log(bookings);
-
   return (
     <>
       <Dialog open={open} onClose={onClose}>
@@ -99,6 +98,14 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
             </Alert>}
           {!isloading && !error && (
             <div>
+              { bookings[bookings.length - 1].isPayed && 
+              bookings[bookings.length - 1].isAcceptedByTutor && !bookings[bookings.length -1].reviewGiven && (
+              <div style={{ paddingBottom: "1rem" }}>
+                <Alert severity="warning">
+                  Do not forget to give valuable feedback to your tutor after the studysession!
+                </Alert>
+              </div>
+              )}
               <div style={{ paddingBottom: "1rem" }}>
                 <Alert severity="info">
                   Here you can see all your bookings for this studysession and
