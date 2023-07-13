@@ -1,16 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
+import { useQuery } from 'react-query';
 import "./Home.scss";
 import SearchBar from "../components/SearchBar/SearchBar";
 import TrustedBy from "../components/TrustedBy/TrustedBy";
 import Features from "../components/Features/Features";
+
+//import studySessions from "../components/projectCard/studySessions";
+import { getStudysessionFiltered } from "../api/StudySession";
+import { LoadingIndicator } from "../components/General/LoadingIndicator";
+import { ErrorIndicator } from "../components/General/ErrorIndicator";
+
+import useDebounce from '../hooks/useDebounce';
+
 import Slide from "../components/Slide/Slide";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
-import studySessions from "../components/ProjectCard/studySessions";
 
 function Home() {
+  const [search, setSearch] = useState("");
+  const [studySessions, setStudySessions] = useState([]);
+
+  const handleSearchInputChange = e => {
+    setSearch(e.target.value);
+  };
+
+  const debouncedSearchTerm = useDebounce(search, 200);
+  const queryKey = {
+    searchTerm: debouncedSearchTerm,
+  };
+
+  useQuery(
+    ['HomeStudySessionSearch', queryKey],
+    () =>
+      getStudysessionFiltered(debouncedSearchTerm, {
+        maxPrice: "",
+        languages: [],
+        department: "",
+        rating: 0,
+        user: null
+      }),
+    {
+      retry: false,
+      onSuccess: (data) => {
+        setStudySessions(data);
+      },
+      onLoading: (isLoading) => {
+          console.log("StudySessions are loading")
+      },
+      onError: (error) => {
+        // Perform any actions you want on error here
+        console.error("An error occured");
+      }
+    },
+  );
+
   return (
     <div className="home">
-      <SearchBar />
+      <SearchBar handleSearchInputChange={handleSearchInputChange}/>
 
       <TrustedBy />
 

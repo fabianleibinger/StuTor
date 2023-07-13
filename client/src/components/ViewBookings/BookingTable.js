@@ -57,23 +57,23 @@ export default function BookingTable(data) {
     );
 }
 
-const formatDate = (dateString) => {
+const formatDate = dateString => {
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString('en-GB');
   return formattedDate;
 };
 
 const matchData = (booking, reviews) => {
-    const review = reviews.find((review) => review.booking === booking._id);
-    let newBooking = booking;
-    if (review) {
-        newBooking.rating = review.rating;
-        newBooking.feedback = review.feedback;
-        return newBooking;
-    } else {
-        return booking;
-    }
-}
+  const review = reviews.find(review => review.booking === booking._id);
+  let newBooking = booking;
+  if (review) {
+    newBooking.rating = review.rating;
+    newBooking.feedback = review.feedback;
+    return newBooking;
+  } else {
+    return booking;
+  }
+};
 
 function Row(props) {
   const { row } = props;
@@ -85,11 +85,11 @@ function Row(props) {
       padding: '16px',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     rating: {
-      marginBottom: '8px',
-    },
+      marginBottom: '8px'
+    }
   };
 
   const acceptBooking = useMutation(
@@ -127,27 +127,25 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.studysession.course.name}
+          {row.studysession.courseName}
         </TableCell>
         <TableCell>
-            <Grid container alignItems='center' spacing={2}>
-                <Grid item>
-                <Avatar src={row.createdBy.picture} />
-                </Grid>
-                <Grid item>
-            <span>{row.createdBy.firstname} {row.createdBy.lastname}</span>
-                </Grid>
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item>
+              <Avatar src={row.createdBy.picture} />
             </Grid>
-            </TableCell>
+            <Grid item>
+              <span>
+                {row.createdBy.firstname} {row.createdBy.lastname}
+              </span>
+            </Grid>
+          </Grid>
+        </TableCell>
         <TableCell>{formatDate(row.createdAt)}</TableCell>
         <TableCell>{row.hours}</TableCell>
         <TableCell>
-            {row.isConfirmed && (
-            <CheckCircleIcon style={{ color: 'green' }}/>
-        )}
-        {!row.isConfirmed && (
-            <CancelIcon style={{ color: 'red' }}/>
-        )}
+          {row.isConfirmed && <CheckCircleIcon style={{ color: 'green' }} />}
+          {!row.isConfirmed && <CancelIcon style={{ color: 'red' }} />}
         </TableCell>
         <TableCell>
             <Rating name="read-only" value={row.rating} readOnly />
@@ -167,30 +165,36 @@ function Row(props) {
                                 </TableCell>
       </TableRow>
       <TableRow>
-      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1}}>
+            <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
                 Check out the feedback of your student
               </Typography>
-                  <Box sx={ {backgroundColor: '#D3D3D3', borderRadius: '8px', padding: '16px'}}>
-                    <Rating
-                      name="read-only"
-                      value={row.rating}
-                      readOnly
-                      style={feedbackstyles.rating} />
-                    <Typography variant="body1">
-                      {row.feedback !== undefined && (
-                        row.feedback)}
-                    </Typography>
-                    <Typography variant="body1" color={'gray'}>
-                    {row.feedback === undefined && (
-                        "No feedback yet. Check back later!")}
-                    </Typography>
-                  </Box>
+              <Box
+                sx={{
+                  backgroundColor: '#D3D3D3',
+                  borderRadius: '8px',
+                  padding: '16px'
+                }}
+              >
+                <Rating
+                  name="read-only"
+                  value={row.rating}
+                  readOnly
+                  style={feedbackstyles.rating}
+                />
+                <Typography variant="body1">
+                  {row.feedback !== undefined && row.feedback}
+                </Typography>
+                <Typography variant="body1" color={'gray'}>
+                  {row.feedback === undefined &&
+                    'No feedback yet. Check back later!'}
+                </Typography>
+              </Box>
             </Box>
           </Collapse>
-      </TableCell>
+        </TableCell>
       </TableRow>
     </React.Fragment>
   );
@@ -229,7 +233,7 @@ function CollapsibleTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map(row => (
             <Row key={row.name} row={row} />
           ))}
         </TableBody>

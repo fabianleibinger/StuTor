@@ -120,6 +120,7 @@ export const createPayment = async (req, res) => {
   console.log(req.body);
   const studysessionId = new ObjectId(req.body.studysession);
   const studysession = await Studysession.findById(studysessionId);
+  console.log("student id", req.body.studentId)
   const studentId = new ObjectId(req.body.studentId);
   const student = await User.findById(studentId);
   console.log("studensId", studentId);

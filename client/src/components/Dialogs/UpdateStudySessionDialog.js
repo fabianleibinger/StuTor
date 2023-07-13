@@ -18,7 +18,7 @@ export default function UpdateStudySessionDialog({
   return (
     <BootstrapDialog open={openDialog} onClose={onUpdateDialogClose}>
       <DialogTitle sx={{ textAlign: 'center' }} variant="h4">
-        {selectedStudySession.course.name || 'Loading...'}
+        {selectedStudySession.courseName || 'Loading...'}
       </DialogTitle>
       <DialogContent>
         <CreateStudySessionForm
