@@ -7,7 +7,7 @@ const ChatProvider = ({ children }) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTypingInChats, setIsTypingInChats] = useState([]);
   const [notification, setNotification] = useState([]);
 
   return (
@@ -21,8 +21,8 @@ const ChatProvider = ({ children }) => {
         setMessages,
         typing,
         setTyping,
-        isTyping,
-        setIsTyping,
+        isTypingInChats,
+        setIsTypingInChats,
         notification,
         setNotification,
       }}

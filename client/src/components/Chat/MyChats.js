@@ -10,9 +10,8 @@ const MyChats = () => {
   const {
     selectedChat,
     setSelectedChat,
-    isTyping,
+    isTypingInChats,
     notification,
-    setNotification,
   } = useChatContext();
   const { user } = useUserContext();
 
@@ -84,7 +83,7 @@ const MyChats = () => {
                     chat={chat}
                     selectedChat={selectedChat}
                     setSelectedChat={setSelectedChat}
-                    isTyping={isTyping}
+                    isTypingInChats={isTypingInChats}
                     unread={notification.includes(chat._id)}
                   />
                   <Divider />

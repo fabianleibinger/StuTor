@@ -14,7 +14,7 @@ const ChatListItem = ({
   chat,
   selectedChat,
   setSelectedChat,
-  isTyping,
+  isTypingInChats,
   unread,
 }) => {
   const { notification, setNotification } = useChatContext();
@@ -55,7 +55,7 @@ const ChatListItem = ({
             ? `${chat.users[1].firstname} ${chat.users[1].lastname} - ${chat.studysession?.courseName}`
             : `${chat.users[0].firstname} ${chat.users[0].lastname} - ${chat.studysession?.courseName}`
         }
-        secondary={isTyping ? "Typing..." : chat.latest_message?.content}
+        secondary={isTypingInChats.includes(chat._id) ? "Typing..." : chat.latest_message?.content}
         sx={{
           overflow: "hidden",
           textOverflow: "ellipsis",
