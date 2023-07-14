@@ -66,6 +66,8 @@ const StudysessionDetailsPage = () => {
     }
   );
 
+  console.log("data", data)
+
   const accessChat = useMutation(
     () =>
       accessChatCall([studysession.tutoredBy._id, user._id], studySessionId),
@@ -105,26 +107,26 @@ const StudysessionDetailsPage = () => {
         alignItems: 'stretch',
         alignContent: 'stretch',
         width: '97vw',
-        height: '90vh',
+        height: '100vh',
         mx: 'auto',
         marginTop: '2vh',
-        marginBottom: '1vh'
+        marginBottom: '2vh'
       }}
     >
-      <Box width={0.49} height={1}>
-        <Box
-          sx={{
-            padding: 2,
-            width: 0.94,
-            height: 0.98,
-            backgroundColor: '#f5f5f5',
-            borderRadius: '8px'
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+       <Box width={0.49} height={1}>
+      <Box sx={{display: "flex",
+    flexDirection: "column",
+    width: 1,
+    height: 1,
+    border: "1px solid lightgrey",
+    backgroundColor: '#f5f5f5',
+    borderRadius: "6px",
+    flexWrap: 'wrap'}}>
+      <Box component="div" sx={{overflow: 'auto', padding: 2, height: 0.85, marginBottom: '5vh'}}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
           </Box>
-          <Typography variant="h3" sx={{ marginBottom: '1rem' }}>
+      <Typography variant="h3" sx={{ marginBottom: '1rem' }}>
             {data.courseName}
           </Typography>
           <Box
@@ -138,7 +140,7 @@ const StudysessionDetailsPage = () => {
             <Avatar
               src={data.tutoredBy.picture}
               alt=""
-              sx={{ width: 120, height: 120 }}
+              sx={{ width: 150, height: 150 }}
             />
           </Box>
           <Grid container spacing={2}>
@@ -181,25 +183,18 @@ const StudysessionDetailsPage = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Typography variant="h6" sx={{ marginBottom: '0.5rem' }}>
-            Course description
+          <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
+            Course Description
           </Typography>
-          <Typography variant="body1" marginBottom={6}>
-            <TextTruncate
-              line={20}
-              truncateText="..."
-              text={data.description}
-              textTruncateChild={
-                <Button onClick={() => setExpanded(true)}>Read More</Button>
-              }
-              expanded={expanded}
-              onTruncate={() => setExpanded(false)}
-            />
-          </Typography>
-          <Grid
+          <Typography>
+            {data.description}
+            </Typography>
+              
+            </Box>
+            <Grid
             container
             spacing={2}
-            sx={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}
+            sx={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: "auto", marginBottom: "auto" }}
           >
             <Box
               sx={{
@@ -227,8 +222,8 @@ const StudysessionDetailsPage = () => {
                   Book now
                 </Button>
               </Grid>
-            </Box>
-          </Grid>
+              </Box>
+              </Grid>
 
           <BookingHistoryDialog
             open={historyDialogOpen}
@@ -244,7 +239,7 @@ const StudysessionDetailsPage = () => {
             createdBy={user._id}
             studysession={data}
           />
-        </Box>
+      </Box>
       </Box>
       <Box width={0.49} height={1}>
         {<ChatBox />}

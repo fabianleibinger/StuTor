@@ -17,41 +17,45 @@ import { Avatar, Button, Tab } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import Rating from '@mui/material/Rating';
+import Rating from "@mui/material/Rating";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { acceptBooking as acceptBookingCall } from "../../api/Booking.js";
+import Tooltip from '@mui/material/Tooltip';
+import CheckIcon from '@mui/icons-material/Check';
+import Alert from '@mui/material/Alert';
 
 export default function BookingTable(data) {
-  console.log('data in table', data);
-  const bookings = data.children[1].bookings;
-  console.log('bookings in table', bookings);
-  const reviews = data.children[1].reviews;
-  const bookingsWithReviews = bookings.map(booking =>
-    matchData(booking, reviews)
-  );
-  console.log('bookings with reviews', bookingsWithReviews);
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Studysession</TableCell>
-            <TableCell>Student</TableCell>
-            <TableCell>Booking date</TableCell>
-            <TableCell>Number of hours</TableCell>
-            <TableCell>Is confirmed by student</TableCell>
-            <TableCell>Rating</TableCell>
-            <TableCell>Need help?</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {bookingsWithReviews.map(
-            booking =>
-              booking.isPayed && <Row key={booking._id} row={booking} />
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+  console.log("data in table", data)
+    const bookings = data.children[1].bookings;
+    console.log("bookings in table", bookings)
+    const reviews = data.children[1].reviews;
+    const bookingsWithReviews = bookings.map((booking) => matchData(booking, reviews));
+    console.log("bookings with reviews", bookingsWithReviews)
+    return (
+        <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="collapsible table">
+            <TableHead>
+            <TableRow>
+                <TableCell />
+                <TableCell>Studysession</TableCell>
+                <TableCell>Student</TableCell>
+                <TableCell>Booking date</TableCell>
+                <TableCell>Number of hours</TableCell>
+                <TableCell>Is confirmed by student</TableCell>
+                <TableCell>Rating</TableCell>
+                <TableCell>Do you want to accept this booking?</TableCell>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            {bookingsWithReviews.map((booking) => (
+              booking.isPayed && (
+                <Row key={booking._id} row={booking} />
+              )
+            ))}
+            </TableBody>
+        </Table>
+        </TableContainer>
+    );
 }
 
 const formatDate = dateString => {
@@ -89,6 +93,28 @@ function Row(props) {
     }
   };
 
+  const acceptBooking = useMutation(
+    (bookingId) => acceptBookingCall(bookingId),
+    {
+      onSuccess: () => {
+        row.isAcceptedByTutor = true;
+        queryClient.invalidateQueries(["bookings", studySessionId]);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
+
+  const handleAccept = async (bookingId) => {
+    try {
+      await acceptBooking.mutateAsync(bookingId);
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -123,40 +149,43 @@ function Row(props) {
           {!row.isConfirmed && <CancelIcon style={{ color: 'red' }} />}
         </TableCell>
         <TableCell>
-          <Rating name="read-only" value={row.rating} readOnly />
-        </TableCell>
+            <Rating name="read-only" value={row.rating} readOnly />
+          </TableCell>
         <TableCell>
-          <Button>Contact customer support</Button>
-        </TableCell>
+          {!row.isAcceptedByTutor && (
+          <Tooltip title="Confirm that you want to teach the booked sessions" >
+                                  <IconButton
+                                    aria-label="accept booking"
+                                    onClick={() => handleAccept(row._id)}
+                                  >
+                                    <CheckIcon />
+                                  </IconButton>
+                                </Tooltip>)}
+                                {row.isAcceptedByTutor && (
+                                  <Typography>You already accepted this booking!</Typography>)}
+                                </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Check out the feedback of your student
-              </Typography>
-              <Box
-                sx={{
-                  backgroundColor: '#D3D3D3',
-                  borderRadius: '8px',
-                  padding: '16px'
-                }}
-              >
-                <Rating
-                  name="read-only"
-                  value={row.rating}
-                  readOnly
-                  style={feedbackstyles.rating}
-                />
-                <Typography variant="body1">
-                  {row.feedback !== undefined && row.feedback}
-                </Typography>
-                <Typography variant="body1" color={'gray'}>
-                  {row.feedback === undefined &&
-                    'No feedback yet. Check back later!'}
-                </Typography>
-              </Box>
+              {row.feedback !== undefined && (
+                <Box display={'flex'} flexDirection={'row'} paddingBottom={'2rem'}>
+                <Box justifyContent={'flex-start'} paddingRight={'1rem'}>
+            <Avatar alt="Profile Picture" src={row.createdBy.picture}/>
+            </Box>
+            <Box flexDirection={'column'}>
+              <Rating value={row.rating} precision={0.5} readOnly />
+              <Typography variant="body2" paddingLeft={'0.25rem'} color={'gray'}>{row.hours} hour{row.hours === 1 ? "" : "s"} booked on {formatDate(row.createdAt)}</Typography>
+              <Typography variant="body1" paddingLeft={'0.25rem'}>{row.feedback}</Typography>
+            </Box>
+          </Box>
+        )}
+        {row.feedback === undefined && (
+          <Alert severity="info" >
+            Your student did not give you any feedback yet. Check back later!
+            </Alert>
+            )}
             </Box>
           </Collapse>
         </TableCell>

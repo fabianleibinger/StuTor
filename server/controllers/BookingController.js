@@ -268,6 +268,24 @@ export const confirmBooking = async (req, res) => {
     }  
 };
 
+export const acceptBooking = async (req, res) => {
+    try {
+        const bookingId = new ObjectId(req.params.bookingId);
+        const booking = await Booking.findByIdAndUpdate(bookingId,
+            {
+                isAcceptedByTutor: true,
+            });
+        if (!booking) {
+            res.status(404).send('Booking not found!');
+        } else {
+            res.status(200).send('Booking accepted!');
+        }
+    } catch (err) {
+        res.status(500).send('Failed to accept booking!');
+    }
+};
+
+
 export const deleteBooking = async (req, res) => {
     try {
         const bookingId = new ObjectId(req.params.bookingId);

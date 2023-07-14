@@ -9,7 +9,8 @@ import {
     deleteBooking,
     confirmBooking, 
     setBookingIsPayed,
-    getBookingsOfTutor
+    getBookingsOfTutor,
+    acceptBooking
 } from '../controllers/BookingController.js';
 
 const router = express.Router();
@@ -25,5 +26,6 @@ router.put('/confirmBooking/:bookingId', confirmBooking);
 router.put('/payBooking/:bookingId', setBookingIsPayed);
 router.get('/bookingsOfTutor/:userId', getBookingsOfTutor);
 router.post('/createBooking', createBooking);
+router.put('/acceptBooking/:bookingId', acceptBooking);
 
 export default router;
