@@ -7,7 +7,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button
+  Button,
+  Box
 } from '@mui/material';
 
 export default function UpdateStudySessionDialog({
@@ -26,21 +27,23 @@ export default function UpdateStudySessionDialog({
           handleClose={onUpdateDialogClose}
           usage="UPDATE"
         />
+        <Box id="cancelUpdateButtonBox" sx={{ textAlign: 'center', mt: 3 }}>
+          <Button
+            id="cancelCreationButton"
+            variant="contained"
+            size="large"
+            sx={{
+              margin: '0 auto',
+              backgroundColor: 'lightgray',
+              color: 'black',
+              width: '175px'
+            }}
+            onClick={() => onUpdateDialogClose()}
+          >
+            Cancel
+          </Button>
+        </Box>
       </DialogContent>
-      <Button
-        id="cancelCreationButton"
-        variant="contained"
-        size="large"
-        sx={{
-          margin: '0 auto',
-          backgroundColor: 'lightgray',
-          color: 'black',
-          width: '175px'
-        }}
-        onClick={() => onUpdateDialogClose()}
-      >
-        Cancel
-      </Button>
       <DialogActions>{/* Dialog actions here */}</DialogActions>
     </BootstrapDialog>
   );
