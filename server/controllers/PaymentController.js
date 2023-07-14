@@ -42,6 +42,25 @@ export const createAccount = async (req, res) => {
   }
 };
 
+export const createAccountForNewUser = async (req, res) => {
+  try {
+    const customer = await stripe.accounts.create({
+      type: "standard",
+    });
+
+    const accountLink = await stripe.accountLinks.create({
+      account: customer.id,
+      refresh_url: "http://localhost:3000/register",
+      return_url: "http://localhost:3000/register",
+      type: "account_onboarding",
+    });
+    console.log("accountLink", accountLink);
+    res.status(200).send({ url: accountLink.url, accountId: customer.id });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
 export const updateAccount = async (req, res) => {
   console.log("in update account");
   const user = req.params.userId;
