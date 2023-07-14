@@ -91,15 +91,17 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("typing", (chat) => {
+  socket.on("typing in chat", (chat) => {
+    console.log("typing in chat " + chat._id);
     chat.users.forEach((user) => {
-      socket.in(user._id).emit("typing");
+      socket.in(user._id).emit("typing in chat", chat._id);
     });
   });
 
-  socket.on("stop typing", (chat) => {
+  socket.on("stop typing in chat", (chat) => {
+    console.log("stop typing in chat " + chat._id);
     chat.users.forEach((user) => {
-      socket.in(user._id).emit("stop typing");
+      socket.in(user._id).emit("stop typing in chat", chat._id);
     });
   });
 
