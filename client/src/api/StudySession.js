@@ -43,7 +43,7 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
   // optional parameters
   url += `&maxPrice=${maxPrice}`;
   url += `&languages=${languages}`;
-  url += `&department=${department}`;
+  //url += `&department=${department}`;
   url += `&rating=${rating}`;
 
   try {

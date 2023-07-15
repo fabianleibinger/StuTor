@@ -9,10 +9,14 @@ import { Stack } from '@mui/system';
 import LanguageSelection from '../Filters/LanguageSelection';
 import { createStudysession, updateStudysession } from '../../api/StudySession';
 
-const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
+const CreateStudySessionForm = ({
+  handleClose,
+  oldStudySession,
+  usage,
+  step,
+  setStep
+}) => {
   const queryClient = useQueryClient();
-
-  const [step, setStep] = useState(1);
 
   const { setUser, user } = useContext(UserContext);
   const [courseName, setCourseName] = useState('');
@@ -191,12 +195,15 @@ const CreateStudySessionForm = ({ handleClose, oldStudySession, usage }) => {
             rows={10}
             onChange={e => setDescription(e.target.value)}
             value={description}
+            InputLabelProps={{ shrink: !!description || undefined }}
+            placeholder="Please describe your experience, methods and everything you want to tell your students"
             sx={{
               mt: 0,
               width: '90%',
               resize: 'vertical'
             }}
           />
+
           <Box sx={{ mt: 10 }}>
             {usage === 'CREATE' ? (
               <Button type="submit" variant="contained" size="large">
