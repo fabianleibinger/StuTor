@@ -24,11 +24,10 @@ import newRequest from "../utils/newRequest";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import { searchUniversities } from "../utils/searchUniversities";
 import RegisterStripe from "../components/Payment/RegisterStripe";
-import { useQuery } from "react-query";
-import { getAchievementsOfUser } from "../api/Achievement";
+import AchievementsDisplay from "../components/Achievement/AchievementsDisplay";
 
 const UserProfile = () => {
-  const { user, setUser, userAchievements, setUserAchievements } = useUserContext();
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
   // Check if the user is logged in, if not, redirect to login page
   useEffect(() => {
@@ -89,19 +88,6 @@ const UserProfile = () => {
     };
     fetchCurrUserUniversity();
   }, []);
-
-  const { receivedUserAchievements } = useQuery(
-    ["userAchievements"],
-    async () => getAchievementsOfUser(user._id),
-    {
-      onSuccess: (data) => {
-        setUserAchievements(data);
-      },
-      retry: (failureCount, error) => {
-        return error.status !== 404 && failureCount < 2;
-      },
-    }
-  );
 
   useEffect(() => {
     const isFormValid = oldPassword && newPassword && newPasswordRepeat;
@@ -320,8 +306,8 @@ const UserProfile = () => {
             </Grid>
           </Grid>
         </FormControl>
-        {/* -------------------------- Achievements and Badges -------------------------- */}
-        {/* TODO: Add your achievements and badges components here */}
+        {/* -------------------------- Achievements -------------------------- */}
+        {/* TODO: Add your achievements components here */}
       </Container>
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
@@ -450,15 +436,15 @@ const UserProfile = () => {
       </ProfileFormContainer>
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
+          Achievements
+        </Typography>
+        <AchievementsDisplay user={user} />
+      </ProfileFormContainer>
+      <ProfileFormContainer>
+        <Typography variant="h5" align="center" gutterBottom>
           Payment Information
         </Typography>
         <RegisterStripe />
-      </ProfileFormContainer>
-
-      <ProfileFormContainer>
-        <Typography variant="h5" align="center" gutterBottom>
-          Achievements and Badges
-        </Typography>
       </ProfileFormContainer>
     </div>
   );
