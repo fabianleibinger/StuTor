@@ -6,7 +6,7 @@ import { useUserContext } from "../../context/UserContext";
 import { useQuery } from "react-query";
 import { getAchievementsOfUser } from "../../api/Achievement";
 
-const AchievementsDisplay = ({ user }) => {
+const AchievementsDisplay = ({ user, size=100, showTitle=false }) => {
   const { userAchievements, setUserAchievements } = useUserContext();
 
   const { receivedUserAchievements } = useQuery(
@@ -29,8 +29,6 @@ const AchievementsDisplay = ({ user }) => {
         flexDirection: "row",
         overflow: "auto",
         justifyContent: "center",
-        alignItems: "center",
-        alignContent: "center",
       }}
     >
       {userAchievements.map((userAchievement, index) => (
@@ -44,21 +42,27 @@ const AchievementsDisplay = ({ user }) => {
           }}
         >
           <Tooltip
-            title={userAchievement.achievement.description}
+            title={
+              <React.Fragment>
+                {userAchievement.achievement.name + ":"}
+                <br />
+                {userAchievement.achievement.description}
+              </React.Fragment>
+            }
             placement="top"
             followCursor
           >
             <Avatar
               sx={{
-                width: 115,
-                height: 115,
+                width: size,
+                height: size,
                 marginBottom: 1,
                 marginTop: 1,
               }}
             >
               <img src={userAchievement.achievement.badge} />
             </Avatar>
-            <div>{userAchievement.achievement.name}</div>
+            {showTitle ? <div>{userAchievement.achievement.name}</div> : null}
           </Tooltip>
         </Box>
       ))}

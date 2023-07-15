@@ -438,7 +438,7 @@ const UserProfile = () => {
         <Typography variant="h5" align="center" gutterBottom>
           Achievements
         </Typography>
-        <AchievementsDisplay user={user} />
+        <AchievementsDisplay user={user} size={125} showTitle={true} />
       </ProfileFormContainer>
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
