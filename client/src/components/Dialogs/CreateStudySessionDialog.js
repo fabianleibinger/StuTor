@@ -70,6 +70,7 @@ export default function CreateStudySessionDialog({ role }) {
   };
   const handleClose = () => {
     setOpen(false);
+    setStep(1);
   };
   return (
     <Box>
@@ -103,11 +104,18 @@ export default function CreateStudySessionDialog({ role }) {
           Create a new Study Session
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <Typography sx={{ textAlign: 'center', pb: 3 }} variant="h5">
-            Create a new study session that you want ot offer for other
-            students. Provide necessary data such that new students get to know
-            you and your offer.
-          </Typography>
+          {step == 1 ? (
+            <Typography sx={{ textAlign: 'center', pb: 3 }} variant="h5">
+              Create a new study session that you want ot offer for other
+              students.
+            </Typography>
+          ) : (
+            <Typography sx={{ textAlign: 'center', pb: 3 }} variant="h5">
+              Provide necessary information such that new students get to know
+              you and your offer.
+            </Typography>
+          )}
+          
           <CreateStudySessionForm
             handleClose={handleClose}
             oldStudySession={null}

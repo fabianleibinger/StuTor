@@ -13,7 +13,6 @@ import { styled } from '@mui/system';
 
 // context
 import { Box } from '@mui/material';
-import CreateStudySessionDialog from '../Dialogs/CreateStudySessionDialog';
 
 const ScrollableCardContent = styled(CardContent)({
   maxHeight: '30vh',
@@ -68,7 +67,11 @@ export default function StudySessionCard({
           ml: 1,
           mt: 1,
           alignItems: 'center',
-          textAlign: 'center'
+          textAlign: 'center',
+          '&:hover': {
+            color: 'gray',
+            cursor: 'pointer'
+          },
         }}
         onClick={handleContentClick}
       >
