@@ -12,15 +12,11 @@ const UserContextProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
-  const [userAchievements, setUserAchievements] = useState([]);
-
   return (
     <UserContext.Provider
       value={{
         user,
         setUser,
-        userAchievements,
-        setUserAchievements,
       }}
     >
       {children}

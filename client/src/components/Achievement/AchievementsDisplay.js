@@ -1,40 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
-import { useUserContext } from "../../context/UserContext";
 import { useQuery } from "react-query";
 import { getAchievementsOfUser } from "../../api/Achievement";
 
 const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
-  const { userAchievements, setUserAchievements } = useUserContext();
+  const [userAchievements, setUserAchievements] = useState([]);
 
-  const { receivedUserAchievements, refetch } = useQuery(
-    "receivedUserAchievements",
+  const { receivedUserAchievements } = useQuery(
+    ["receivedUserAchievements", user._id], 
     () => getAchievementsOfUser(user._id),
     {
       onSuccess: (data) => {
         setUserAchievements(data);
-      },
-      onError: (error) => {
-        setUserAchievements([]);
       },
       retry: (failureCount, error) => {
         return error.status !== 404 && failureCount < 2;
       },
     }
   );
-
-  useEffect(() => {
-    refetch();
-    return () => {
-      setUserAchievements([]);
-    };
-  }, []);
-
-  useEffect(() => {
-    refetch();
-  }, [user._id]);
 
   return (
     <Box
@@ -76,8 +61,8 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
             >
               <img src={userAchievement.achievement.badge} alt="Badge" />
             </Avatar>
-            {showTitle ? <div>{userAchievement.achievement.name}</div> : null}
           </Tooltip>
+          {showTitle && <div>{userAchievement.achievement.name}</div>}
         </Box>
       ))}
     </Box>
