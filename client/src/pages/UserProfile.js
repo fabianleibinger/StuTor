@@ -19,14 +19,16 @@ import {
 } from "../styles";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserContext";
 import newRequest from "../utils/newRequest";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import { searchUniversities } from "../utils/searchUniversities";
 import RegisterStripe from "../components/Payment/RegisterStripe";
+import { useQuery } from "react-query";
+import { getAchievementsOfUser } from "../api/Achievement";
 
 const UserProfile = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, userAchievements, setUserAchievements } = useUserContext();
   const navigate = useNavigate();
   // Check if the user is logged in, if not, redirect to login page
   useEffect(() => {
@@ -87,6 +89,19 @@ const UserProfile = () => {
     };
     fetchCurrUserUniversity();
   }, []);
+
+  const { receivedUserAchievements } = useQuery(
+    ["userAchievements"],
+    async () => getAchievementsOfUser(user._id),
+    {
+      onSuccess: (data) => {
+        setUserAchievements(data);
+      },
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
+    }
+  );
 
   useEffect(() => {
     const isFormValid = oldPassword && newPassword && newPasswordRepeat;
