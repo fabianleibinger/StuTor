@@ -22,7 +22,7 @@ const CreateStudySessionForm = ({
   const [courseName, setCourseName] = useState('');
   const [courseId, setCourseId] = useState('');
   const [pricePerHourEuro, setPricePerHourEuro] = useState('');
-  const [languages, setLanguages] = useState([]);
+  const [languages, setLanguages] = useState(oldStudySession ? oldStudySession.languages : []);
   const [description, setDescription] = useState('');
   const [postError, setPostError] = useState('');
   const [emptyFields, setEmptyFields] = useState([]);
@@ -165,9 +165,7 @@ const CreateStudySessionForm = ({
             />
             <LanguageSelection
               handleLanguageChange={handleSelectedLanguages}
-              initialSelection={
-                oldStudySession !== null ? oldStudySession.languages : []
-              }
+              initialSelection={ languages }
             />
             <Box sx={{ mt: 10 }}>
               <Button type="submit" variant="contained" size="large">

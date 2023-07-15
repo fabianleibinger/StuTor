@@ -13,28 +13,11 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
+import LanguageEnum from '../../enums/LanguageEnum';
+
 const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const LanguagesEnum = {
-    English: 'English',
-    Spanish: 'Spanish',
-    French: 'French',
-    German: 'German',
-    Italian: 'Italian',
-    Portuguese: 'Portuguese',
-    Russian: 'Russian',
-    Chinese: 'Chinese',
-    Japanese: 'Japanese',
-    Arabic: 'Arabic',
-    Hindi: 'Hindi',
-    Bengali: 'Bengali',
-    Punjabi: 'Punjabi',
-    Turkish: 'Turkish',
-    Urdu: 'Urdu',
-    Other: 'Other'
-  };
 
   const clearSelection = () => {
     handleLanguageChange([]);
@@ -128,7 +111,7 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
           size="small"
         >
           <FormGroup>
-            {Object.keys(LanguagesEnum).map(key => (
+            {Object.keys(LanguageEnum).map(key => (
               <MenuItem key={key}>
                 <FormControlLabel
                   control={
@@ -137,7 +120,7 @@ const LanguageFilter = forwardRef(({ handleLanguageChange }, ref) => {
                       color="primary"
                     />
                   }
-                  label={LanguagesEnum[key]}
+                  label={LanguageEnum[key]}
                   onChange={() => handleMenuItemClick(key)}
                 />
               </MenuItem>
