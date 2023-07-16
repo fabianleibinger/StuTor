@@ -127,7 +127,7 @@ const MyStudySessions = () => {
       role: role,
       university: user.university
     };
-    console.log('Switch Role for user', newUser);
+    console.log('Switch Role to user', newUser);
     await switchRoleMutation.mutateAsync(newUser, {
       onSuccess: () => {
         setUser(newUser);

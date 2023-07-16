@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import LanguageEnum from '../../enums/LanguageEnum';
+
 import {
   Box,
   FormGroup,
@@ -21,24 +23,7 @@ export default function LanguageSelection({
 }) {
   const [selectedItems, setSelectedItems] = useState(initialSelection);
   const [menuOpen, setMenuOpen] = useState(false);
-  const LanguagesEnum = {
-    English: 'English',
-    Spanish: 'Spanish',
-    French: 'French',
-    German: 'German',
-    Italian: 'Italian',
-    Portuguese: 'Portuguese',
-    Russian: 'Russian',
-    Chinese: 'Chinese',
-    Japanese: 'Japanese',
-    Arabic: 'Arabic',
-    Hindi: 'Hindi',
-    Bengali: 'Bengali',
-    Punjabi: 'Punjabi',
-    Turkish: 'Turkish',
-    Urdu: 'Urdu',
-    Other: 'Other'
-  };
+  
 
   const handleMenuItemClick = item => {
     const index = selectedItems.indexOf(item);
@@ -70,7 +55,14 @@ export default function LanguageSelection({
   return (
     <Box sx={{ width: 0.6 }}>
       <FormControl sx={{ width: 1 }}>
-        <InputLabel> Languages *</InputLabel>
+      <InputLabel
+          sx={{
+            background: '#FFF',
+          }}
+        >
+          {' '}
+          Languages *
+        </InputLabel>
         <Select
           open={menuOpen}
           onClose={handleMenuClose}
@@ -100,7 +92,7 @@ export default function LanguageSelection({
         >
           <FormGroup>
             <MenuItem disabled>Languages</MenuItem>
-            {Object.keys(LanguagesEnum).map(key => (
+            {Object.keys(LanguageEnum).map(key => (
               <MenuItem key={key}>
                 <FormControlLabel
                   control={
@@ -109,7 +101,7 @@ export default function LanguageSelection({
                       color="primary"
                     />
                   }
-                  label={LanguagesEnum[key]}
+                  label={LanguageEnum[key]}
                   onChange={() => handleMenuItemClick(key)}
                 />
               </MenuItem>
