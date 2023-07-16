@@ -43,6 +43,11 @@ const BookingSchema = new Schema({
         type: String,
         required: false,
     },
+    isAcceptedByTutor: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 const Booking = mongoose.model('Booking', BookingSchema);

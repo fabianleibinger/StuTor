@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SearchIcon from "@mui/icons-material/Search";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import {
   Typography,
@@ -70,6 +71,33 @@ const Navbar = () => {
       localStorage.removeItem("user"); // Remove user data from localStorage
       navigate("/");
     } catch (err) {
+      console.log("Error occured while trying to log out.");
+
+      console.log(err);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      // Prompt the user for confirmation
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete your account? This action cannot be undone."
+      );
+
+      if (!confirmDelete) {
+        return; // User canceled the deletion
+      }
+
+      // Find user by user.username
+      const res = await newRequest.get("/user/byUsername/" + user.username);
+      await newRequest.delete("/user/deleteUser/" + res.data._id);
+      setBookingNotification([]);
+      setNotification([]);
+      setUser(null);
+      localStorage.removeItem("user"); // Remove user data from localStorage
+      navigate("/");
+    } catch (err) {
+      console.log("An error occurred while trying to delete the user account.");
       console.log(err);
     }
   };
@@ -266,7 +294,8 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
-                {bookingNotification.length === 0 ? (
+                { user.role === "tutor" && (
+                bookingNotification.length === 0 ? (
                   <MenuItem
                     onClick={handleMenuCloseBookings}
                     component={Link}
@@ -285,11 +314,20 @@ const Navbar = () => {
                   >
                     View Bookings
                   </MenuItem>
+                )
                 )}
 
                 <MenuItem onClick={handleLogout}>
                   <ExitToAppIcon fontSize="small" />
                   Logout
+                </MenuItem>
+
+                <MenuItem
+                  onClick={handleDeleteAccount}
+                  style={{ color: "red" }}
+                >
+                  <DeleteIcon fontSize="small" />
+                  Delete Account
                 </MenuItem>
               </Menu>
             </>

@@ -42,6 +42,25 @@ export const createAccount = async (req, res) => {
   }
 };
 
+export const createAccountForNewUser = async (req, res) => {
+  try {
+    const customer = await stripe.accounts.create({
+      type: "standard",
+    });
+
+    const accountLink = await stripe.accountLinks.create({
+      account: customer.id,
+      refresh_url: "http://localhost:3000/register",
+      return_url: "http://localhost:3000/register",
+      type: "account_onboarding",
+    });
+    console.log("accountLink", accountLink);
+    res.status(200).send({ url: accountLink.url, accountId: customer.id });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
 export const updateAccount = async (req, res) => {
   console.log("in update account");
   const user = req.params.userId;
@@ -120,6 +139,7 @@ export const createPayment = async (req, res) => {
   console.log(req.body);
   const studysessionId = new ObjectId(req.body.studysession);
   const studysession = await Studysession.findById(studysessionId);
+  console.log("student id", req.body.studentId)
   const studentId = new ObjectId(req.body.studentId);
   const student = await User.findById(studentId);
   console.log("studentId", studentId);

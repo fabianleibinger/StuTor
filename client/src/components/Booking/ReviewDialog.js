@@ -7,6 +7,7 @@ import {
   DialogActions,
   Rating,
   TextField,
+  Box,
 } from "@mui/material";
 import { useMutation, useQueryClient } from "react-query";
 import { createReview } from "../../api/Review.js";
@@ -46,9 +47,20 @@ const ReviewDialog = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Give Review</DialogTitle>
+    <Dialog open={open} onClose={onClose} maxWidth={'sm'} fullWidth={true}>
+      <DialogTitle>
+        Give Review</DialogTitle>
       <DialogContent>
+        <Box display="flex" flexDirection="column" justifyContent="flex-start">
+        <Rating
+          name="simple-controlled"
+          value={rating}
+          onChange={(event, newValue) => {
+            setRating(newValue);
+          }}
+          marginBottom={3}
+          marginTop={3}
+        />
         <TextField
           value={review}
           onChange={handleReviewChange}
@@ -56,17 +68,16 @@ const ReviewDialog = ({
           multiline
           fullWidth
           autoFocus
+          minRows={4}
+          marginTop={10}
         />
-        <Rating
-          name="simple-controlled"
-          value={rating}
-          onChange={(event, newValue) => {
-            setRating(newValue);
-          }}
-        />
+        </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleReviewSubmit} color="primary">
+        <Button 
+        onClick={handleReviewSubmit} 
+        color="primary"
+        disabled={review==="" || rating === 0}>
           Submit
         </Button>
       </DialogActions>

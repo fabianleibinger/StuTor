@@ -5,7 +5,15 @@ import {
   getMessagesOfChat,
   sendMessage as sendMessageCall,
 } from "../../api/Message";
-import { Stack, Box, Chip, TextField, Button, Avatar, Typography } from "@mui/material";
+import {
+  Stack,
+  Box,
+  Chip,
+  TextField,
+  Button,
+  Avatar,
+  Typography,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import socket from "../../Socket";
 import { useUserContext } from "../../context/UserContext";
@@ -22,19 +30,25 @@ const ChatBox = () => {
     setNewMessage,
     typing,
     setTyping,
-    isTyping,
-    setIsTyping,
+    isTypingInChats,
+    setIsTypingInChats,
   } = useChatContext();
   const { user } = useUserContext();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    socket.on("typing", () => setIsTyping(true));
-    socket.on("stop typing", () => setIsTyping(false));
+    socket.on("typing in chat", (chatId) =>
+      setIsTypingInChats((prevTypingInChat) => [...prevTypingInChat, chatId])
+    );
+    socket.on("stop typing in chat", (chatId) =>
+      setIsTypingInChats((prevTypingInChat) =>
+        prevTypingInChat.filter((id) => id !== chatId)
+      )
+    );
 
     return () => {
-      socket.off("typing");
-      socket.off("stop typing");
+      socket.off("typing in chat");
+      socket.off("stop typing in chat");
       // Page is not visible, reset selectedChat to null
       setSelectedChat(null);
     };
@@ -91,7 +105,7 @@ const ChatBox = () => {
     setNewMessage(event.target.value);
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", selectedChat);
+      socket.emit("typing in chat", selectedChat);
     }
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
@@ -99,7 +113,7 @@ const ChatBox = () => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat);
+        socket.emit("stop typing in chat", selectedChat);
         setTyping(false);
       }
     }, timerLength);
@@ -107,7 +121,7 @@ const ChatBox = () => {
 
   const handleSendClick = async () => {
     await sendMessage.mutateAsync();
-    socket.emit("stop typing", selectedChat);
+    socket.emit("stop typing in chat", selectedChat);
     setNewMessage("");
   };
 
@@ -148,42 +162,57 @@ const ChatBox = () => {
             {data ? (
               messages.map((message, index) => {
                 const createdAt = new Date(message.createdAt);
-                const timeString = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const timeString = createdAt.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
 
-                return (<Stack
-                  key={index}
-                  direction="row"
-                  justifyContent={
-                    user._id === message.sender._id
-                      ? "flex-end"
-                      : "flex-start"
-                  }
-                >
-                  <Stack direction="row" alignItems="center" justifyContent={
-                    user._id === message.sender._id
-                      ? "flex-end"
-                      : "flex-start"
-                  } sx={{ maxWidth: 0.7 }}>
-                    {user._id !== message.sender._id ? (
-                      <Avatar
-                        src={message.sender.picture}
-                        sx={{ marginRight: 1 }}
+                return (
+                  <Stack
+                    key={index}
+                    direction="row"
+                    justifyContent={
+                      user._id === message.sender._id
+                        ? "flex-end"
+                        : "flex-start"
+                    }
+                  >
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent={
+                        user._id === message.sender._id
+                          ? "flex-end"
+                          : "flex-start"
+                      }
+                      sx={{ maxWidth: 0.7 }}
+                    >
+                      {user._id !== message.sender._id ? (
+                        <Avatar
+                          src={message.sender.picture}
+                          sx={{ marginRight: 1 }}
+                        />
+                      ) : null}
+                      <Chip
+                        label={message.content}
+                        sx={{
+                          height: "auto",
+                          padding: 0.75,
+                          "& .MuiChip-label": {
+                            display: "block",
+                            whiteSpace: "normal",
+                          },
+                        }}
                       />
-                    ) : null}
-                    <Chip
-                      label={message.content}
-                      sx={{
-                        height: "auto",
-                        padding: 0.75,
-                        "& .MuiChip-label": {
-                          display: "block",
-                          whiteSpace: "normal",
-                        },
-                      }}
-                    />
+                    </Stack>
+                    <Typography
+                      variant="caption"
+                      color="textSecondary"
+                      sx={{ padding: 0.75 }}
+                    >
+                      {timeString}
+                    </Typography>
                   </Stack>
-                  <Typography variant="caption" color="textSecondary" sx={{ padding: 0.75 }}>{timeString}</Typography>
-                </Stack>
                 );
               })
             ) : (
@@ -200,7 +229,11 @@ const ChatBox = () => {
           }}
         >
           <TextField
-            label={isTyping ? "Typing..." : "Message"}
+            label={
+              isTypingInChats.includes(selectedChat._id)
+                ? "Typing..."
+                : "Message"
+            }
             value={newMessage}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
@@ -220,8 +253,7 @@ const ChatBox = () => {
   } else {
     return (
       <Box sx={boxSx}>
-        <Stack direction="column" spacing={2} sx={stackSx}>
-        </Stack>
+        <Stack direction="column" spacing={2} sx={stackSx}></Stack>
       </Box>
     );
   }

@@ -1,3 +1,4 @@
+import { populate } from 'dotenv';
 import Chat from '../models/Chat.js';
 import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
@@ -64,9 +65,14 @@ export const getStudysession = async (req, res) => {
     const studysession = await Studysession.findById(studysessionId);
     try {
       const studysessionId = new ObjectId(req.params.studysessionId);
-      const studysession = await Studysession.findById(studysessionId).populate(
-        'tutoredBy'
-      );
+      const studysession = await Studysession.findById(studysessionId)
+      .populate({
+        path: 'tutoredBy',
+        populate: {
+          path: 'university',
+          model: 'University'
+        },
+      });
       try {
         if (!studysession) {
           res.status(404).send('Studysession not found!');
@@ -291,6 +297,10 @@ export const getReviewsOfStudysession = async (req, res) => {
         populate: {
           path: 'studysession',
           model: 'Studysession'
+        },
+        populate: {
+          path: 'createdBy',
+          model: 'User'
         }
       });
       const filteredReviews = reviews.filter(review => review.booking !== null);

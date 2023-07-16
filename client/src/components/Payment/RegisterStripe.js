@@ -1,13 +1,25 @@
 import { createAccountCall, getPaymentInfo, deleteAccountCall, updateAccountCall } from "../../api/Payment.js";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Button, Alert } from "@mui/material";
+import { Button, Alert, Dialog } from "@mui/material";
 import { useUserContext } from "../../context/UserContext.js";
+import React, { useState } from "react";
+import { DialogTitle, DialogActions } from "@mui/material";
 
 const RegisterStripe = () => {
     const queryClient = useQueryClient();
     const { user } = useUserContext();
     let registerStripeIsPossible = false
     let updateAccountIsPossible = false
+    const [showDialog, setShowDialog] = useState(false);
+
+    const handleOpenDialog = () => {
+      setShowDialog(true);
+    };
+
+    const handleCancel = () => {
+      setShowDialog(false);
+      refetch()
+    };
     const {
         isLoading: isLoading,
         error: error,
@@ -44,6 +56,7 @@ const RegisterStripe = () => {
         onSuccess: (url) => {
             registerStripeIsPossible = true
             queryClient.invalidateQueries("payment");
+            setShowDialog(false);
         },
         onError: (error) => {
             console.log(error);
@@ -87,6 +100,7 @@ const RegisterStripe = () => {
         try {
           await deleteAccount.mutateAsync();
           console.log("in handle delete tripe account")
+          await refetch()
         } catch (error) {
           console.log(error);
         }
@@ -100,6 +114,7 @@ const RegisterStripe = () => {
     //navigate(path);
   };
   console.log("before return")
+
    return (
     <>
     {registerStripeIsPossible && (
@@ -115,7 +130,7 @@ const RegisterStripe = () => {
         <Button
         variant="contained"
         color="primary"
-        onClick={handleDeleteStripeAccount}
+        onClick={handleOpenDialog}
       >
         Delete Stripe account
       </Button>
@@ -132,6 +147,17 @@ const RegisterStripe = () => {
         </Button>
         </>
     )}
+    <Dialog open={showDialog} onClose={handleCancel}>
+      <DialogTitle>Do you really want to delete your stripe account?</DialogTitle>
+      <DialogActions>
+        <Button onClick={handleCancel} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleDeleteStripeAccount} color="primary">
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
 
     </>
     

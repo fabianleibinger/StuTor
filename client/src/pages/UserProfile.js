@@ -19,14 +19,15 @@ import {
 } from "../styles";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserContext";
 import newRequest from "../utils/newRequest";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import { searchUniversities } from "../utils/searchUniversities";
 import RegisterStripe from "../components/Payment/RegisterStripe";
+import AchievementsDisplay from "../components/Achievement/AchievementsDisplay";
 
 const UserProfile = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
   // Check if the user is logged in, if not, redirect to login page
   useEffect(() => {
@@ -305,8 +306,8 @@ const UserProfile = () => {
             </Grid>
           </Grid>
         </FormControl>
-        {/* -------------------------- Achievements and Badges -------------------------- */}
-        {/* TODO: Add your achievements and badges components here */}
+        {/* -------------------------- Achievements -------------------------- */}
+        {/* TODO: Add your achievements components here */}
       </Container>
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
@@ -435,15 +436,15 @@ const UserProfile = () => {
       </ProfileFormContainer>
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
+          Achievements
+        </Typography>
+        <AchievementsDisplay user={user} size={125} showTitle={true} />
+      </ProfileFormContainer>
+      <ProfileFormContainer>
+        <Typography variant="h5" align="center" gutterBottom>
           Payment Information
         </Typography>
         <RegisterStripe />
-      </ProfileFormContainer>
-
-      <ProfileFormContainer>
-        <Typography variant="h5" align="center" gutterBottom>
-          Achievements and Badges
-        </Typography>
       </ProfileFormContainer>
     </div>
   );
