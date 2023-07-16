@@ -3,7 +3,11 @@ import "./SearchBar.scss";
 import StudySessionSearchbar from "../Searchbars/StudySessionSearchbar";
 import { Button } from "@mui/material";
 
-function SearchBar({ handleSearchInputChange, handleSearchButtonClick }) {
+function SearchBar({
+  handleSearchInputChange,
+  handleSearchButtonClick,
+  handlePopularButtonClick,
+}) {
   return (
     <div className="featured">
       <div className="container">
@@ -22,7 +26,11 @@ function SearchBar({ handleSearchInputChange, handleSearchButtonClick }) {
           <div className="popular">
             <span>Popular:</span>
             {/* TO-DO: Link the button to course offerings */}
-            <button>Machine Learning</button>
+            <button
+              onClick={() => handlePopularButtonClick("Machine Learning")}
+            >
+              Machine Learning
+            </button>{" "}
             <button>Introduction to Deep Learning</button>
             <button>Robotics</button>
             <button>Natural Language Processing</button>

@@ -23,6 +23,10 @@ function Home() {
     setSearch(e.target.value);
   };
 
+  const handlePopularButtonClick = (query) => {
+    console.log(query);
+  };
+
   const handleSearchButtonClick = (e) => {
     console.log("SearchButton pressed");
   };
@@ -62,6 +66,7 @@ function Home() {
       <SearchBar
         handleSearchInputChange={handleSearchInputChange}
         handleSearchButtonClick={handleSearchButtonClick}
+        handlePopularButtonClick={handlePopularButtonClick}
       />
 
       <TrustedBy />
