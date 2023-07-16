@@ -24,11 +24,12 @@ export default function UpdateStudySessionDialog({
     <BootstrapDialog open={openDialog} onClose={onUpdateDialogClose}>
       {step === 2 && (
         <IconButton
+          id="updateBackButton"
           onClick={() => setStep(1)}
           sx={{
             position: 'absolute',
             left: 5,
-            top: 5,
+            top: 10,
             '&:hover': {
               backgroundColor: 'lightgray'
             }
@@ -38,7 +39,7 @@ export default function UpdateStudySessionDialog({
           <ArrowBackIcon />
         </IconButton>
       )}
-      <DialogTitle sx={{ textAlign: 'center' }} variant="h4">
+      <DialogTitle sx={{ textAlign: 'center',  ml: 3 }} variant="h4">
         {selectedStudySession.courseName || 'Loading...'}
       </DialogTitle>
       <DialogContent>

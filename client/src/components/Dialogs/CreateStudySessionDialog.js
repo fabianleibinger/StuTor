@@ -34,7 +34,7 @@ function BootstrapDialogTitle(props) {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 1, p: 2, textAlign: 'center' }} {...other}>
+    <DialogTitle sx={{ m: 1, p: 2, pt: 1, textAlign: 'center' }} {...other}>
       <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
         {children}
       </Typography>
@@ -94,7 +94,14 @@ export default function CreateStudySessionDialog({ role }) {
         {step === 2 && (
           <IconButton
             onClick={() => setStep(1)}
-            sx={{ position: 'absolute', left: '8px', top: '8px' }}
+            sx={{
+              position: 'absolute',
+              left: 5,
+              top: 10,
+              '&:hover': {
+                backgroundColor: 'lightgray'
+              }
+            }}
             size="large"
           >
             <ArrowBackIcon />
