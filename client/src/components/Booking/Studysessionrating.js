@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Skeleton, Grid } from "@mui/material";
+import { Button, Skeleton, Grid, Typography } from "@mui/material";
 import { getReviewsAndRatingOfStudysession } from "../../api/StudySession";
 import { useQuery } from "react-query";
 import { useState } from "react";
@@ -22,9 +22,9 @@ const StudysessionRating = ({ studySessionId }) => {
   let buttonDisabled = true;
 
   const queryOptions = {
-      retry: (failureCount, error) => {
-        return error.response.status !== 404 && failureCount < 2;
-      }
+    retry: (failureCount, error) => {
+      return error.response.status !== 404 && failureCount < 2;
+    },
   };
 
   const { isLoading, error, data } = useQuery(
@@ -46,9 +46,29 @@ const StudysessionRating = ({ studySessionId }) => {
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <Grid container spacing={2}>
+        {/* ----------- Average Rating Number----------- */}
+        <Grid item>
+          <Typography variant="body1">Average Rating:</Typography>
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            style={{ color: "#FFD700" }}
+          >
+            {rating.toFixed(1)}
+          </Typography>
+        </Grid>
+
+        {/* ----------- Star Ratings Graphics ----------- */}
         <Grid item>
           <StarRating rating={rating} isReadOnly={true} />
         </Grid>
+
+        {/* ----------- Count Number of Reviews ----------- */}
+        <Grid item>
+          <Typography variant="body1">{reviews.length} Ratings</Typography>
+        </Grid>
+
+        {/* ----------- See Reviews Button ----------- */}
         <Grid item>
           <Button
             variant="outlined"

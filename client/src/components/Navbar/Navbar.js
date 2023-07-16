@@ -294,28 +294,27 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
-                { user.role === "tutor" && (
-                bookingNotification.length === 0 ? (
-                  <MenuItem
-                    onClick={handleMenuCloseBookings}
-                    component={Link}
-                    to="/viewBookings"
-                  >
-                    View Bookings
-                  </MenuItem>
-                ) : (
-                  <MenuItem
-                    onClick={handleMenuCloseBookings}
-                    component={Link}
-                    to="/viewBookings"
-                    style={{
-                      backgroundColor: theme.palette.primary.notification,
-                    }}
-                  >
-                    View Bookings
-                  </MenuItem>
-                )
-                )}
+                {user.role === "TUTOR" &&
+                  (bookingNotification.length === 0 ? (
+                    <MenuItem
+                      onClick={handleMenuCloseBookings}
+                      component={Link}
+                      to="/viewBookings"
+                    >
+                      View Bookings
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      onClick={handleMenuCloseBookings}
+                      component={Link}
+                      to="/viewBookings"
+                      style={{
+                        backgroundColor: theme.palette.primary.notification,
+                      }}
+                    >
+                      View Bookings
+                    </MenuItem>
+                  ))}
 
                 <MenuItem onClick={handleLogout}>
                   <ExitToAppIcon fontSize="small" />

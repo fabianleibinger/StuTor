@@ -166,7 +166,9 @@ const StudysessionDetailsPage = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} alignContent={"center"}>
+                {/* ---------------------------- StudysessionRating ---------------------------- */}
                 <StudysessionRating studySessionId={studySessionId} />
+                {/* ---------------------------- StudysessionRating ---------------------------- */}
               </Grid>
             </Grid>
             <Grid
@@ -210,10 +212,9 @@ const StudysessionDetailsPage = () => {
                     <EmojiEventsIcon sx={{ marginRight: "0.5rem" }} />
                   </Grid>
                   <Grid item>
-                    <AchievementsDisplay
-                      user={data.tutoredBy}
-                      size={100}
-                    />
+                    {/* ---------------------------- Achievements ---------------------------- */}
+                    <AchievementsDisplay user={data.tutoredBy} size={100} />
+                    {/* ---------------------------- Achievements ---------------------------- */}
                   </Grid>
                 </Grid>
               </Grid>

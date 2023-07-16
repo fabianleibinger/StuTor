@@ -25,6 +25,8 @@ import uploadProfilePic from "../utils/uploadProfilePic";
 import { searchUniversities } from "../utils/searchUniversities";
 import RegisterStripe from "../components/Payment/RegisterStripe";
 import AchievementsDisplay from "../components/Achievement/AchievementsDisplay";
+import TutorHourProgressBar from "../components/Achievement/TutorHourProgressBar";
+import TutorCourseRatings from "../components/Achievement/TutorCourseRatings";
 
 const UserProfile = () => {
   const { user, setUser } = useUserContext();
@@ -306,8 +308,6 @@ const UserProfile = () => {
             </Grid>
           </Grid>
         </FormControl>
-        {/* -------------------------- Achievements -------------------------- */}
-        {/* TODO: Add your achievements components here */}
       </Container>
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
@@ -434,12 +434,27 @@ const UserProfile = () => {
           </Typography>
         </form>
       </ProfileFormContainer>
+
+      {/* -------------------------- Achievements -------------------------- */}
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
           Achievements
         </Typography>
+
         <AchievementsDisplay user={user} size={125} showTitle={true} />
+
+        {/* Tutor Hour Progress Bar */}
+        <div style={{ paddingTop: "80px" }}>
+          <TutorHourProgressBar hoursTutored={8} />
+        </div>
+
+        {/* Tutor Course Ratings */}
+        <div style={{ paddingTop: "100px" }}>
+          <TutorCourseRatings tutorId={user._id} />
+        </div>
       </ProfileFormContainer>
+
+      {/* -------------------------- Payment -------------------------- */}
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
           Payment Information
