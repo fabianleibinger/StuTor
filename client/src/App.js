@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { theme, AppContainer, Content } from "./styles";
 import { ThemeProvider } from "@mui/material";
 import Home from "./pages/Home.js";
@@ -12,16 +10,11 @@ import MyStudySessions from "./pages/MyStudySessions.js";
 import StudySessionSearch from "./pages/StudySessionSearch.js";
 import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js";
 import UserProfile from "./pages/UserProfile.js";
-import { UserContext, useUserContext } from "./context/UserProvider.js";
 import ChatPage from "./pages/ChatPage";
 import SuccessPage from "./pages/SuccessPage.js";
 import ViewBookingsPage from "./pages/ViewBookingsPage.js";
-import { Stack } from "@mui/system";
 
 function App() {
-  const queryClient = new QueryClient();
-  const { user, setUser } = useUserContext();
-
   return (
     <ThemeProvider theme={theme}>
       <Router>

@@ -2,6 +2,9 @@ import { createContext, useContext, useState } from "react";
 
 const BookingContext = createContext();
 
+/**
+ * Provider for the booking context variables (notification).
+ */
 const BookingProvider = ({ children }) => {
   const [bookingNotification, setBookingNotification] = useState([]);
 

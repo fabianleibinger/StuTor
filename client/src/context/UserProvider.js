@@ -2,6 +2,9 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 
 export const UserContext = createContext();
 
+/**
+ * Provider for the user context variables (current user).
+ */
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
