@@ -171,8 +171,7 @@ export const getStudysessionsFiltered = async (req, res) => {
     const searchString = req.query.searchTerm;
     const maxPrice = req.query.maxPrice;
     const languages = req.query.languages;
-    const languageArray = languages.split(",");
-    const department = req.query.department;
+    const languageArray = languages.split(',');
 
     let query = Studysession.find().populate("tutoredBy");
 

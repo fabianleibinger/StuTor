@@ -79,7 +79,6 @@ export default function StudySessionSearch() {
   const [showClearButton, setShowClearButton] = useState(false);
 
   const [selectedLanguages, setSelectedLanguages] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedRating, setSelectedRating] = useState(0);
 
   const { user, setUser } = useContext(UserContext);
@@ -115,19 +114,7 @@ export default function StudySessionSearch() {
     }
   };
 
-  // handle department filter
-  const handleDepartmentChange = (value) => {
-    setSelectedDepartment(value);
-  };
-
-  const clearDepartment = () => {
-    handleDepartmentChange("");
-    if (departmentSelectRef.current) {
-      departmentSelectRef.current.clearSelection();
-    }
-  };
-
-  const handleRatingChange = (value) => {
+  const handleRatingChange = value => {
     console.log(value);
     setSelectedRating(value);
   };
@@ -143,8 +130,7 @@ export default function StudySessionSearch() {
     searchTerm: debouncedSearchTerm,
     maxPrice: maxPrice,
     languages: selectedLanguages,
-    department: selectedDepartment,
-    rating: selectedRating,
+    rating: selectedRating
   };
 
   const { data, error, isLoading } = useQuery(
@@ -153,7 +139,6 @@ export default function StudySessionSearch() {
       getStudysessionFiltered(debouncedSearchTerm, {
         maxPrice: maxPrice,
         languages: selectedLanguages,
-        department: selectedDepartment,
         rating: selectedRating,
         user: user,
       }),
@@ -212,19 +197,19 @@ export default function StudySessionSearch() {
       <Box
         id="studySearchPageBox"
         sx={{
-          width: "90vw",
-          height: "90vh",
+          width: '90vw',
+          height: '90vh',
           minheight: 1,
-          justifyContent: "center",
-          flexDirection: "column",
-          alignItems: "right",
+          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'right',
           pb: 1,
           pt: 2,
           pl: 1,
-          pr: 1,
+          pr: 1
         }}
       >
-        <Box id="searchBarBox" sx={{ maxHeight: "10", width: "100%" }}>
+        <Box id="searchBarBox" sx={{ maxHeight: '10', width: '100%' }}>
           <StudySessionSearchbar
             handleSearchInputChange={handleSearchInputChange}
           />
@@ -232,21 +217,21 @@ export default function StudySessionSearch() {
         <Box
           id="filterBox"
           sx={{
-            display: "flex",
-            gap: "3px",
-            maxHeight: "60px",
-            mt: 1,
+            display: 'flex',
+            gap: '3px',
+            maxHeight: '60px',
+            mt: 1
           }}
         >
           <FilterContainer>
             <ClearFilterButton handleClick={clearMaxPrice} />
             <StandardFilter
               handleValueChange={handleMaxPriceChange}
-              label={"Max Price"}
+              label={'Max Price'}
               items={{
-                "10€": 10,
-                "20€": 20,
-                "30€": 30,
+                '10€': 10,
+                '20€': 20,
+                '30€': 30
               }}
               ref={maxPriceSelectRef}
             />
@@ -259,34 +244,21 @@ export default function StudySessionSearch() {
             />
           </FilterContainer>
           <FilterContainer>
-            <ClearFilterButton handleClick={clearDepartment} />
-            <StandardFilter
-              handleValueChange={handleDepartmentChange}
-              label={"Department"}
-              items={{
-                Informatics: "Informatics",
-                Physics: "Physics",
-                Other: "Other",
-              }}
-              ref={departmentSelectRef}
-            />
-          </FilterContainer>
-          <FilterContainer>
             <ClearFilterButton handleClick={clearRating} />
             <StandardFilter
               handleValueChange={handleRatingChange}
-              label={"Rating"}
-              items={{ "2 Stars": 2, "3 Stars": 3, "4 Stars": 4 }}
+              label={'Rating'}
+              items={{ '2 Stars': 2, '3 Stars': 3, '4 Stars': 4 }}
               ref={ratingSelectRef}
             />
           </FilterContainer>
         </Box>
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             mt: 4,
-            maxHeight: "70vh",
-            alignItems: "stretch",
+            maxHeight: '70vh',
+            alignItems: 'stretch'
           }}
         >
           <StudySessionsSearchResult

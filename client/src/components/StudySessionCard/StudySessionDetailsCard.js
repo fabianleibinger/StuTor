@@ -66,9 +66,14 @@ export default function StudySessionCard({
         sx={{
           ml: 1,
           mt: 1,
-          alignItems: "center",
-          textAlign: "center",
+          alignItems: 'center',
+          textAlign: 'center',
+          '&:hover': {
+            color: 'gray',
+            cursor: 'pointer'
+          },
         }}
+        onClick={handleContentClick}
       >
         <Avatar
           src={studySession.tutoredBy.picture || ""}
