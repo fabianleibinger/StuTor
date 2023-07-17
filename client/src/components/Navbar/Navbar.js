@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import SearchIcon from "@mui/icons-material/Search";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SearchIcon from '@mui/icons-material/Search';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import {
   Typography,
   Avatar,
@@ -13,8 +13,8 @@ import {
   Button,
   Dialog,
   DialogActions,
-  Slide,
-} from "@mui/material";
+  Slide
+} from '@mui/material';
 import {
   RootAppBar,
   RootToolbar,
@@ -27,20 +27,20 @@ import {
   UserFullName,
   AboutUsButton,
   theme,
-  StyledBadge,
-} from "../../styles";
-import { useChatContext } from "../../context/ChatProvider";
-import newRequest from "../../utils/newRequest";
-import { UserContext } from "../../context/UserProvider";
-import { useBookingContext } from "../../context/BookingProvider";
-import MissionStatementDialog from "../Dialogs/MissionStatementDialog";
+  StyledBadge
+} from '../../styles';
+import { useChatContext } from '../../context/ChatProvider';
+import newRequest from '../../utils/newRequest';
+import { useUserContext } from '../../context/UserProvider';
+import { useBookingContext } from '../../context/BookingProvider';
+import MissionStatementDialog from '../Dialogs/MissionStatementDialog';
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const Navbar = () => {
-  const { setUser, user } = useContext(UserContext);
+  const { user, setUser } = useUserContext();
   const [active, setActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
@@ -56,20 +56,20 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", isActive);
+    window.addEventListener('scroll', isActive);
     return () => {
-      window.removeEventListener("scroll", isActive);
+      window.removeEventListener('scroll', isActive);
     };
   }, []);
 
   const handleLogout = async () => {
     try {
-      await newRequest.post("/auth/logout");
+      await newRequest.post('/auth/logout');
       setUser(null);
-      localStorage.removeItem("user"); // Remove user data from localStorage
-      navigate("/");
+      localStorage.removeItem('user'); // Remove user data from localStorage
+      navigate('/');
     } catch (err) {
-      console.log("Error occured while trying to log out.");
+      console.log('Error occured while trying to log out.');
 
       console.log(err);
     }
@@ -79,7 +79,7 @@ const Navbar = () => {
     try {
       // Prompt the user for confirmation
       const confirmDelete = window.confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
+        'Are you sure you want to delete your account? This action cannot be undone.'
       );
 
       if (!confirmDelete) {
@@ -87,15 +87,15 @@ const Navbar = () => {
       }
 
       // Find user by user.username
-      const res = await newRequest.get("/user/byUsername/" + user.username);
-      await newRequest.delete("/user/deleteUser/" + res.data._id);
+      const res = await newRequest.get('/user/byUsername/' + user.username);
+      await newRequest.delete('/user/deleteUser/' + res.data._id);
       setBookingNotification([]);
       setNotification([]);
       setUser(null);
-      localStorage.removeItem("user"); // Remove user data from localStorage
-      navigate("/");
+      localStorage.removeItem('user'); // Remove user data from localStorage
+      navigate('/');
     } catch (err) {
-      console.log("An error occurred while trying to delete the user account.");
+      console.log('An error occurred while trying to delete the user account.');
       console.log(err);
     }
   };
@@ -135,7 +135,7 @@ const Navbar = () => {
       <RootToolbar>
         {/* ---------- LOGO ----------*/}
         <LogoContainer to="/">
-          <Typography variant="h6" component="div" sx={{ fontSize: "2rem" }}>
+          <Typography variant="h6" component="div" sx={{ fontSize: '2rem' }}>
             STUTOR
           </Typography>
           <span className="dot">.</span>
@@ -143,27 +143,27 @@ const Navbar = () => {
 
         {/* ---------- LINKS ----------*/}
         <LinksContainer>
-          <StyledLink to="/SearchSessions">
+          <StyledLink to="/SearchSessions/">
             <SearchIcon />
-            <Typography sx={{ fontSize: "1.2rem" }}>Search Sessions</Typography>
+            <Typography sx={{ fontSize: '1.2rem' }}>Search Sessions</Typography>
           </StyledLink>
           <StyledLink to="/MyStudySessions">
             <CalendarMonthIcon />
-            <Typography sx={{ fontSize: "1.2rem" }}>
-              {" "}
+            <Typography sx={{ fontSize: '1.2rem' }}>
+              {' '}
               My Study Sessions
             </Typography>
           </StyledLink>
           {notification.length === 0 ? (
             <StyledLink to="/myChats">
               <ChatBubbleIcon />
-              <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
+              <Typography sx={{ fontSize: '1.2rem' }}>My Chats</Typography>
             </StyledLink>
           ) : (
             <StyledBadge badgeContent={notification.length}>
               <StyledLink to="/myChats">
                 <ChatBubbleIcon />
-                <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
+                <Typography sx={{ fontSize: '1.2rem' }}>My Chats</Typography>
               </StyledLink>
             </StyledBadge>
           )}
@@ -182,12 +182,12 @@ const Navbar = () => {
             open={aboutUsOpen}
             onClose={handleAboutUsClose}
             anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
+              vertical: 'bottom',
+              horizontal: 'center'
             }}
             transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
+              vertical: 'top',
+              horizontal: 'center'
             }}
           >
             <MenuItem onClick={handleDialog}>Our Mission Statement</MenuItem>
@@ -217,7 +217,7 @@ const Navbar = () => {
                 aria-controls="profile-menu"
                 aria-haspopup="true"
               >
-                <Avatar src={user.picture || ""} alt="" />
+                <Avatar src={user.picture || ''} alt="" />
                 <StyledBadge
                   badgeContent={
                     Number.isInteger(bookingNotification.length / 4)
@@ -236,12 +236,12 @@ const Navbar = () => {
                 open={menuOpen}
                 onClose={handleMenuClose}
                 anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
+                  vertical: 'bottom',
+                  horizontal: 'right'
                 }}
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
               >
                 <MenuItem
@@ -251,7 +251,7 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
-                {user.role === "TUTOR" &&
+                {user.role === 'TUTOR' &&
                   (bookingNotification.length === 0 ? (
                     <MenuItem
                       onClick={handleMenuCloseBookings}
@@ -266,7 +266,7 @@ const Navbar = () => {
                       component={Link}
                       to="/viewBookings"
                       style={{
-                        backgroundColor: theme.palette.primary.notification,
+                        backgroundColor: theme.palette.primary.notification
                       }}
                     >
                       View Bookings
@@ -280,7 +280,7 @@ const Navbar = () => {
 
                 <MenuItem
                   onClick={handleDeleteAccount}
-                  style={{ color: "red" }}
+                  style={{ color: 'red' }}
                 >
                   <DeleteIcon fontSize="small" />
                   Delete Account

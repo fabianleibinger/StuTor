@@ -1,48 +1,84 @@
-import React, { useRef } from "react";
-import StudySessionSearchbar from "../components/Searchbars/StudySessionSearchbar";
-import LanguageFilter from "../components/Filters/LanguageFilter";
-import StandardFilter from "../components/Filters/StandardFilter";
-import ClearFilterButton from "../components/Filters/ClearFilterButton";
-import { FilterContainer } from "../styles";
+import React, { useRef } from 'react';
 
-import { Box, Button, Grid, Typography } from "@mui/material";
-import { styled } from "@mui/system";
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 
-import { useState, useContext } from "react";
-import { useQuery } from "react-query";
-import { UserContext } from "../context/UserProvider";
+// context
+import { useUserContext } from '../context/UserProvider';
 
-import { getStudysessionFiltered } from "../api/StudySession";
-import StudySessionCard from "../components/StudySessionCard/StudySessionDetailsCard";
-import useDebounce from "../hooks/useDebounce";
+// api
+import { getStudysessionFiltered } from '../api/StudySession';
+import useDebounce from '../hooks/useDebounce';
 
-const ScrollableContainer = styled("div")({
-  maxHeight: "70vh",
-  overflow: "auto",
+// frontend
+import { Box, Grid } from '@mui/material';
+import { styled } from '@mui/system';
+import { FilterContainer } from '../styles';
+import StudySessionSearchbar from '../components/Searchbars/StudySessionSearchbar';
+import LanguageFilter from '../components/Filters/LanguageFilter';
+import StandardFilter from '../components/Filters/StandardFilter';
+import ClearFilterButton from '../components/Filters/ClearFilterButton';
+import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
+import ErrorDialog from '../components/Dialogs/ErrorDialog';
+
+const ScrollableContainer = styled('div')({
+  // adjustable, scrollable container holding the search results
+  maxHeight: '70vh',
+  overflow: 'auto'
 });
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
+  /**
+   * StudySessionsSearchResult provides the necessary component for the study sessions, which passed all filter
+   *
+   * args:
+   *    isLoading: if the query is still loading
+   *    data: an array of study sessions, if the query was successfull
+   *    error: an error if the query failed
+   *
+   * return:
+   *    A Scrollable Container holding all, filtered, study sessions
+   */
+
+  // colors define the possible background colors of the study session cards
   const colors = [
-    "#0fab3c",
-    "#98f5ff",
-    "#ee6363",
-    "#ffa500",
-    "	#eeaeee",
-    "#1e90ff",
+    '#0fab3c',
+    '#98f5ff',
+    '#ee6363',
+    '#ffa500',
+    '	#eeaeee',
+    '#1e90ff'
   ];
 
-  // always student
-  const userRole = "STUDENT";
+  // always student since the search results do not include the tutors study sessions. Thus, the searcher should not be able to update or delete them
+  const userRole = 'STUDENT';
   if (error) {
+    if (error.message.includes('404')) {
+      return (
+        <ErrorDialog
+          errorMessage={
+            'Seems like there are no offers available for your search. Maybe you should think about offering one.'
+          }
+          dialogOpen={true}
+        />
+      );
+    }
     return <div>Error: {error.message}</div>;
-    // error.status? => replace a nice string
   }
 
   if (isLoading) {
     return <div key="loading StudySessions">Loading...</div>;
   }
   if (!data || data.length === 0) {
-    return <Typography>No results found.</Typography>;
+    return (
+      <ErrorDialog
+        errorMessage={
+          'Seems like there are no offers available for your search. Maybe you should think about offering one.'
+        }
+        dialogOpen={true}
+      />
+    );
   }
   if (data) {
     return (
@@ -54,6 +90,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
             return (
               <Grid item xs={12} sm={6} md={4} lg={3} key={studySession._id}>
                 <StudySessionCard
+                  tutoredBy={studySession.tutoredBy}
                   studySession={studySession}
                   onDelete={() => {}}
                   role={userRole}
@@ -74,36 +111,47 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
 }
 
 export default function StudySessionSearch() {
-  const [search, setSearch] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [showClearButton, setShowClearButton] = useState(false);
+  /**
+   * The StudySession Search function provides to complete Search Page. Using Components like the Search, Filters and the Search Results
+   *
+   * It returns the Box component holding the Search page
+   */
 
+  // filter constants
+  const { searchString } = useParams();
+  const [search, setSearch] = useState(searchString ? searchString : '');
+  const [maxPrice, setMaxPrice] = useState('');
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
 
-  const { user, setUser } = useContext(UserContext);
+  // references for the filters to be able to clear their internal value as well
+  const maxPriceSelectRef = useRef(null);
+  const languageSelectRef = useRef(null);
+  const ratingSelectRef = useRef(null);
 
+  // the current user
+  const { user, setUser } = useUserContext();
+
+  // debounceSearchTerm is used to update the search only every 200ms and not every time the user types something in.
   const debouncedSearchTerm = useDebounce(search, 200);
 
-  const handleSearchInputChange = (e) => {
+  const handleSearchInputChange = e => {
     setSearch(e.target.value);
   };
 
-  // handle Max Price lilter
-  const handleMaxPriceChange = (value) => {
+  // handling of the maxPrice filter
+  const handleMaxPriceChange = value => {
     setMaxPrice(value);
-    setShowClearButton(Boolean(value));
   };
-
   const clearMaxPrice = () => {
-    handleMaxPriceChange("");
+    handleMaxPriceChange('');
     if (maxPriceSelectRef.current) {
       maxPriceSelectRef.current.clearSelection();
     }
   };
 
-  // handle language filter
-  const handleLanguageChange = (value) => {
+  // handling of the language filter
+  const handleLanguageChange = value => {
     setSelectedLanguages(value);
   };
 
@@ -114,13 +162,14 @@ export default function StudySessionSearch() {
     }
   };
 
+  // handling of the rating filter
   const handleRatingChange = value => {
     console.log(value);
     setSelectedRating(value);
   };
 
   const clearRating = () => {
-    handleRatingChange("");
+    handleRatingChange('');
     if (ratingSelectRef.current) {
       ratingSelectRef.current.clearSelection();
     }
@@ -133,65 +182,28 @@ export default function StudySessionSearch() {
     rating: selectedRating
   };
 
+  // the StudySessionSearch query is used to receive all study sessions dependend on the filters and the search
   const { data, error, isLoading } = useQuery(
-    ["StudySessionSearch", queryKey],
+    ['StudySessionSearch', queryKey],
     () =>
+      // use debounceSearchTerm to dealy the filtering, use all filters as object to filter the sessions additionally
       getStudysessionFiltered(debouncedSearchTerm, {
         maxPrice: maxPrice,
         languages: selectedLanguages,
         rating: selectedRating,
-        user: user,
+        user: user
       }),
     {
-      retry: false,
+      retry: false
     }
   );
-
-  const maxPriceSelectRef = useRef(null);
-  const languageSelectRef = useRef(null);
-  const departmentSelectRef = useRef(null);
-  const ratingSelectRef = useRef(null);
-
-  const clearFilters = () => {
-    setMaxPrice("");
-    setSelectedLanguages([]);
-    setSelectedDepartment("");
-    setSelectedRating(0);
-
-    // Reset the Select components to their initial state
-    // Clear the value of the Select components
-    if (maxPriceSelectRef.current) {
-      maxPriceSelectRef.current.clearSelection();
-    }
-    if (languageSelectRef.current) {
-      languageSelectRef.current.clearSelection();
-    }
-    if (departmentSelectRef.current) {
-      departmentSelectRef.current.clearSelection();
-    }
-    if (ratingSelectRef.current) {
-      ratingSelectRef.current.clearSelection();
-    }
-  };
-
-  const ClearButton = styled(Button)(({ theme }) => ({
-    width: "fit-content",
-    height: "fit-content",
-    float: "right",
-    minWidth: "auto",
-    padding: "1px",
-    fontSize: "0.6rem",
-    textTransform: "none",
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  }));
 
   return (
     <Box
       id="pageWrapper"
       sx={{
-        display: "flex",
-        justifyContent: "center",
+        display: 'flex',
+        justifyContent: 'center'
       }}
     >
       <Box
@@ -212,6 +224,7 @@ export default function StudySessionSearch() {
         <Box id="searchBarBox" sx={{ maxHeight: '10', width: '100%' }}>
           <StudySessionSearchbar
             handleSearchInputChange={handleSearchInputChange}
+            searchString={search}
           />
         </Box>
         <Box

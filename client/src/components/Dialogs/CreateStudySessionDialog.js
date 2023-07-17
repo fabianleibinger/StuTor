@@ -118,11 +118,11 @@ export default function CreateStudySessionDialog({ role }) {
             </Typography>
           ) : (
             <Typography sx={{ textAlign: 'center', pb: 3 }} variant="h5">
-              Provide necessary information such that new students get to know
-              you and your offer.
+              Provide necessary information so that students can get to know you
+              better.
             </Typography>
           )}
-          
+
           <CreateStudySessionForm
             handleClose={handleClose}
             oldStudySession={null}

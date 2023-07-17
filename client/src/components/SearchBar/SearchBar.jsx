@@ -1,13 +1,22 @@
-import React from "react";
-import "./SearchBar.scss";
-import StudySessionSearchbar from "../Searchbars/StudySessionSearchbar";
-import { Button } from "@mui/material";
+import React, { useState } from 'react';
+import './SearchBar.scss';
 
-function SearchBar({
-  handleSearchInputChange,
-  handleSearchButtonClick,
-  handlePopularButtonClick,
-}) {
+import StudySessionSearchbar from '../Searchbars/StudySessionSearchbar';
+import { useNavigate } from 'react-router-dom';
+
+function SearchBar() {
+  const [search, setSerach] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleSearchInputChange = e => {
+    setSerach(e.target.value);
+  };
+
+  const handleSearchClick = () => {
+    navigate(`/SearchSessions/${search}`);
+  };
+
   return (
     <div className="featured">
       <div className="container">
@@ -19,18 +28,18 @@ function SearchBar({
             <StudySessionSearchbar
               handleSearchInputChange={handleSearchInputChange}
             />
-
-            {/* TO-DO: ADD FUNCTION TO SEARCH BUTTON */}
-            <Button onClick={handleSearchButtonClick}>Search</Button>
+            <button style={{ height: '56px' }} onClick={handleSearchClick}>
+              Search
+            </button>
           </div>
           <div className="popular">
             <span>Popular:</span>
             {/* TO-DO: Link the button to course offerings */}
             <button
-              onClick={() => handlePopularButtonClick("Machine Learning")}
+              onClick={() => handlePopularButtonClick('Machine Learning')}
             >
               Machine Learning
-            </button>{" "}
+            </button>{' '}
             <button>Introduction to Deep Learning</button>
             <button>Robotics</button>
             <button>Natural Language Processing</button>
