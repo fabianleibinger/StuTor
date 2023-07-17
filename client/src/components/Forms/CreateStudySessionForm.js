@@ -7,6 +7,7 @@ import { Stack } from '@mui/system';
 
 // import other components
 import LanguageSelection from '../Filters/LanguageSelection';
+import ErrorDialog from '../Dialogs/ErrorDialog';
 import { createStudysession, updateStudysession } from '../../api/StudySession';
 
 const CreateStudySessionForm = ({
@@ -22,7 +23,9 @@ const CreateStudySessionForm = ({
   const [courseName, setCourseName] = useState('');
   const [courseId, setCourseId] = useState('');
   const [pricePerHourEuro, setPricePerHourEuro] = useState('');
-  const [languages, setLanguages] = useState(oldStudySession ? oldStudySession.languages : []);
+  const [languages, setLanguages] = useState(
+    oldStudySession ? oldStudySession.languages : []
+  );
   const [description, setDescription] = useState('');
   const [postError, setPostError] = useState('');
   const [emptyFields, setEmptyFields] = useState([]);
@@ -165,7 +168,7 @@ const CreateStudySessionForm = ({
             />
             <LanguageSelection
               handleLanguageChange={handleSelectedLanguages}
-              initialSelection={ languages }
+              initialSelection={languages}
             />
             <Box sx={{ mt: 10 }}>
               <Button type="submit" variant="contained" size="large">
@@ -194,7 +197,7 @@ const CreateStudySessionForm = ({
             onChange={e => setDescription(e.target.value)}
             value={description}
             InputLabelProps={{ shrink: !!description || undefined }}
-            placeholder="Please describe your experience, methods and everything you want to tell your students"
+            placeholder="Please describe your experience in the field, tutoring methods and everything you want to tell your students, e.g. content of your sessions, preferred location, in person or online sessions, preferred time..."
             sx={{
               mt: 0,
               width: '90%',
@@ -220,10 +223,12 @@ const CreateStudySessionForm = ({
         <div className="error">Please fill out all empty fields</div>
       )}
       {createMutation.isError && emptyFields.length == 0 && (
-        <div className="error">
-          Please check if you already offer a study session for this course{' '}
-          {postError}
-        </div>
+        <ErrorDialog
+          errorMessage={
+            'Please check if you already offer a study session for this course'
+          }
+          dialogOpen={true}
+        />
       )}
       {updateMutation.isError && emptyFields.length == 0 && (
         <div className="error">{postError} </div>

@@ -42,6 +42,12 @@ const MyStudySessions = () => {
     '#1e90ff'
   ];
 
+  const emptyStudySessionTexts = [
+    'This could be your next study session!',
+    "Don't you want to offer more different study session?",
+    'The next opportunity to earn money is just around the corner!'
+  ];
+
   const [studySessions, setStudySessions] = useState([]);
 
   // use mutation to update data
@@ -258,6 +264,7 @@ const MyStudySessions = () => {
                     sx={{ alignItems: 'left' }}
                   >
                     <StudySessionCard
+                      tutoredBy={studySession.tutoredBy}
                       studySession={studySession}
                       onDelete={() => {
                         handleDeleteConfirmationNeeded(studySession._id);
@@ -274,7 +281,30 @@ const MyStudySessions = () => {
                 );
               })
             ) : user.role === 'TUTOR' ? (
-              <Typography>Create your first Study Session</Typography>
+              emptyStudySessionTexts.map((text, index) => (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  key={index}
+                  sx={{ alignItems: 'left' }}
+                >
+                  <StudySessionCard
+                    key={index}
+                    tutoredBy={user}
+                    text={text}
+                    studySession={null}
+                    onDelete={() => {}}
+                    role={user.role}
+                    onUpdateClick={() => {}}
+                    details={true}
+                    addStudySessionComponent={null}
+                    backgroundColor={'#d3d3d3'}
+                  />
+                </Grid>
+              ))
             ) : (
               <Typography>
                 Your StudySessions are listed here as soon as you are chatting

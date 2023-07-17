@@ -4,6 +4,7 @@ import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
 import UserStudysession from '../models/UserStudysession.js';
+import University from '../models/University.js';
 import { ObjectId, ReturnDocument } from 'mongodb';
 
 export const createStudysession = async (req, res) => {
@@ -65,14 +66,15 @@ export const getStudysession = async (req, res) => {
     const studysession = await Studysession.findById(studysessionId);
     try {
       const studysessionId = new ObjectId(req.params.studysessionId);
-      const studysession = await Studysession.findById(studysessionId)
-      .populate({
-        path: 'tutoredBy',
-        populate: {
-          path: 'university',
-          model: 'University'
-        },
-      });
+      const studysession = await Studysession.findById(studysessionId).populate(
+        {
+          path: 'tutoredBy',
+          populate: {
+            path: 'university',
+            model: 'University'
+          }
+        }
+      );
       try {
         if (!studysession) {
           res.status(404).send('Studysession not found!');

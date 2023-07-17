@@ -1,11 +1,23 @@
-import React from "react";
-import "./SearchBar.scss";
-import { StyledSearchIcon } from "../../styles";
-import StudySessionSearchbar from "../Searchbars/StudySessionSearchbar";
+import React, { useState } from 'react';
+import './SearchBar.scss';
+
+import StudySessionSearchbar from '../Searchbars/StudySessionSearchbar';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
+function SearchBar() {
+  const [search, setSerach] = useState('');
 
-function SearchBar({handleSearchInputChange}) {
+  const navigate = useNavigate();
+
+  const handleSearchInputChange = e => {
+    setSerach(e.target.value);
+  };
+
+  const handleSearchClick = () => {
+    navigate(`/SearchSessions/${search}`);
+  };
+
   return (
     <div className="featured">
       <div className="container">
@@ -14,12 +26,12 @@ function SearchBar({handleSearchInputChange}) {
             Find the perfect <span>tutor</span> for your courses now
           </h1>
           <div className="search">
-          <StudySessionSearchbar
-            handleSearchInputChange={handleSearchInputChange}
-          />
-
-            {/* TO-DO: ADD FUNCTION TO SEARCH BUTTON */}
-            {/*<Button sx={{ height: '100%' }}>Search</Button>*/}
+            <StudySessionSearchbar
+              handleSearchInputChange={handleSearchInputChange}
+            />
+            <button style={{ height: '56px' }} onClick={handleSearchClick}>
+              Search
+            </button>
           </div>
           <div className="popular">
             <span>Popular:</span>

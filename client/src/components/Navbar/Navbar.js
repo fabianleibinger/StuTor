@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import SearchIcon from "@mui/icons-material/Search";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import React, { useEffect, useState, useRef, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SearchIcon from '@mui/icons-material/Search';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import {
   Typography,
   Avatar,
@@ -16,8 +16,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide,
-} from "@mui/material";
+  Slide
+} from '@mui/material';
 import {
   RootAppBar,
   RootToolbar,
@@ -30,12 +30,12 @@ import {
   UserFullName,
   AboutUsButton,
   theme,
-  StyledBadge,
-} from "../../styles";
-import { useChatContext } from "../../context/ChatProvider";
-import newRequest from "../../utils/newRequest";
-import { UserContext } from "../../context/UserContext";
-import { useBookingContext } from "../../context/BookingProvider";
+  StyledBadge
+} from '../../styles';
+import { useChatContext } from '../../context/ChatProvider';
+import newRequest from '../../utils/newRequest';
+import { UserContext } from '../../context/UserContext';
+import { useBookingContext } from '../../context/BookingProvider';
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -58,20 +58,20 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", isActive);
+    window.addEventListener('scroll', isActive);
     return () => {
-      window.removeEventListener("scroll", isActive);
+      window.removeEventListener('scroll', isActive);
     };
   }, []);
 
   const handleLogout = async () => {
     try {
-      await newRequest.post("/auth/logout");
+      await newRequest.post('/auth/logout');
       setUser(null);
-      localStorage.removeItem("user"); // Remove user data from localStorage
-      navigate("/");
+      localStorage.removeItem('user'); // Remove user data from localStorage
+      navigate('/');
     } catch (err) {
-      console.log("Error occured while trying to log out.");
+      console.log('Error occured while trying to log out.');
 
       console.log(err);
     }
@@ -81,7 +81,7 @@ const Navbar = () => {
     try {
       // Prompt the user for confirmation
       const confirmDelete = window.confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
+        'Are you sure you want to delete your account? This action cannot be undone.'
       );
 
       if (!confirmDelete) {
@@ -89,15 +89,15 @@ const Navbar = () => {
       }
 
       // Find user by user.username
-      const res = await newRequest.get("/user/byUsername/" + user.username);
-      await newRequest.delete("/user/deleteUser/" + res.data._id);
+      const res = await newRequest.get('/user/byUsername/' + user.username);
+      await newRequest.delete('/user/deleteUser/' + res.data._id);
       setBookingNotification([]);
       setNotification([]);
       setUser(null);
-      localStorage.removeItem("user"); // Remove user data from localStorage
-      navigate("/");
+      localStorage.removeItem('user'); // Remove user data from localStorage
+      navigate('/');
     } catch (err) {
-      console.log("An error occurred while trying to delete the user account.");
+      console.log('An error occurred while trying to delete the user account.');
       console.log(err);
     }
   };
@@ -137,7 +137,7 @@ const Navbar = () => {
       <RootToolbar>
         {/* ---------- LOGO ----------*/}
         <LogoContainer to="/">
-          <Typography variant="h6" component="div" sx={{ fontSize: "2rem" }}>
+          <Typography variant="h6" component="div" sx={{ fontSize: '2rem' }}>
             STUTOR
           </Typography>
           <span className="dot">.</span>
@@ -145,27 +145,27 @@ const Navbar = () => {
 
         {/* ---------- LINKS ----------*/}
         <LinksContainer>
-          <StyledLink to="/SearchSessions">
+          <StyledLink to="/SearchSessions/">
             <SearchIcon />
-            <Typography sx={{ fontSize: "1.2rem" }}>Search Sessions</Typography>
+            <Typography sx={{ fontSize: '1.2rem' }}>Search Sessions</Typography>
           </StyledLink>
           <StyledLink to="/MyStudySessions">
             <CalendarMonthIcon />
-            <Typography sx={{ fontSize: "1.2rem" }}>
-              {" "}
+            <Typography sx={{ fontSize: '1.2rem' }}>
+              {' '}
               My Study Sessions
             </Typography>
           </StyledLink>
           {notification.length === 0 ? (
             <StyledLink to="/myChats">
               <ChatBubbleIcon />
-              <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
+              <Typography sx={{ fontSize: '1.2rem' }}>My Chats</Typography>
             </StyledLink>
           ) : (
             <StyledBadge badgeContent={notification.length}>
               <StyledLink to="/myChats">
                 <ChatBubbleIcon />
-                <Typography sx={{ fontSize: "1.2rem" }}>My Chats</Typography>
+                <Typography sx={{ fontSize: '1.2rem' }}>My Chats</Typography>
               </StyledLink>
             </StyledBadge>
           )}
@@ -184,12 +184,12 @@ const Navbar = () => {
             open={aboutUsOpen}
             onClose={handleAboutUsClose}
             anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
+              vertical: 'bottom',
+              horizontal: 'center'
             }}
             transformOrigin={{
-              vertical: "top",
-              horizontal: "center",
+              vertical: 'top',
+              horizontal: 'center'
             }}
           >
             <MenuItem onClick={handleDialog}>Our Mission Statement</MenuItem>
@@ -204,12 +204,12 @@ const Navbar = () => {
             onClose={handleDialogClose}
             aria-describedby="alert-dialog-slide-description"
           >
-            <DialogTitle>{"The StuTor Mission Statement"}</DialogTitle>
+            <DialogTitle>{'The StuTor Mission Statement'}</DialogTitle>
             <DialogContent>
               <img
                 src="https://res.cloudinary.com/daefab1lj/image/upload/v1688829580/anhz4srs4pgrwr5woyav.png"
                 alt="Mission Statement"
-                style={{ maxWidth: "550px", maxHeight: "550px" }}
+                style={{ maxWidth: '550px', maxHeight: '550px' }}
               />
               <DialogContentText id="alert-dialog-slide-description">
                 "At StuTor, our mission is to foster a culture of collaboration
@@ -260,7 +260,7 @@ const Navbar = () => {
                 aria-controls="profile-menu"
                 aria-haspopup="true"
               >
-                <Avatar src={user.picture || ""} alt="" />
+                <Avatar src={user.picture || ''} alt="" />
                 <StyledBadge
                   badgeContent={
                     Number.isInteger(bookingNotification.length / 4)
@@ -279,12 +279,12 @@ const Navbar = () => {
                 open={menuOpen}
                 onClose={handleMenuClose}
                 anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
+                  vertical: 'bottom',
+                  horizontal: 'right'
                 }}
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
               >
                 <MenuItem
@@ -294,28 +294,27 @@ const Navbar = () => {
                 >
                   User Profile
                 </MenuItem>
-                { user.role === "tutor" && (
-                bookingNotification.length === 0 ? (
-                  <MenuItem
-                    onClick={handleMenuCloseBookings}
-                    component={Link}
-                    to="/viewBookings"
-                  >
-                    View Bookings
-                  </MenuItem>
-                ) : (
-                  <MenuItem
-                    onClick={handleMenuCloseBookings}
-                    component={Link}
-                    to="/viewBookings"
-                    style={{
-                      backgroundColor: theme.palette.primary.notification,
-                    }}
-                  >
-                    View Bookings
-                  </MenuItem>
-                )
-                )}
+                {user.role === 'tutor' &&
+                  (bookingNotification.length === 0 ? (
+                    <MenuItem
+                      onClick={handleMenuCloseBookings}
+                      component={Link}
+                      to="/viewBookings"
+                    >
+                      View Bookings
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      onClick={handleMenuCloseBookings}
+                      component={Link}
+                      to="/viewBookings"
+                      style={{
+                        backgroundColor: theme.palette.primary.notification
+                      }}
+                    >
+                      View Bookings
+                    </MenuItem>
+                  ))}
 
                 <MenuItem onClick={handleLogout}>
                   <ExitToAppIcon fontSize="small" />
@@ -324,7 +323,7 @@ const Navbar = () => {
 
                 <MenuItem
                   onClick={handleDeleteAccount}
-                  style={{ color: "red" }}
+                  style={{ color: 'red' }}
                 >
                   <DeleteIcon fontSize="small" />
                   Delete Account

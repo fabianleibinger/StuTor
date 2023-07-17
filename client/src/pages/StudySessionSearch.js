@@ -5,15 +5,17 @@ import StandardFilter from '../components/Filters/StandardFilter';
 import ClearFilterButton from '../components/Filters/ClearFilterButton';
 import { FilterContainer } from '../styles';
 
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 
 import { useState, useContext } from 'react';
 import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 import { getStudysessionFiltered } from '../api/StudySession';
 import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
+import ErrorDialog from '../components/Dialogs/ErrorDialog';
 import useDebounce from '../hooks/useDebounce';
 
 const ScrollableContainer = styled('div')({
@@ -34,15 +36,31 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
   // always student
   const userRole = 'STUDENT';
   if (error) {
+    if (error.message.includes('404')) {
+      return (
+        <ErrorDialog
+          errorMessage={
+            'Seems like there are no offers available for your search. Maybe you should think about offering one.'
+          }
+          dialogOpen={true}
+        />
+      );
+    }
     return <div>Error: {error.message}</div>;
-    // error.status? => replace a nice string
   }
 
   if (isLoading) {
     return <div key="loading StudySessions">Loading...</div>;
   }
   if (!data || data.length === 0) {
-    return <Typography>No results found.</Typography>;
+    return (
+      <ErrorDialog
+        errorMessage={
+          'Seems like there are no offers available for your search. Maybe you should think about offering one.'
+        }
+        dialogOpen={true}
+      />
+    );
   }
   if (data) {
     return (
@@ -54,6 +72,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
             return (
               <Grid item xs={12} sm={6} md={4} lg={3} key={studySession._id}>
                 <StudySessionCard
+                  tutoredBy={studySession.tutoredBy}
                   studySession={studySession}
                   onDelete={() => {}}
                   role={userRole}
@@ -74,9 +93,10 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
 }
 
 export default function StudySessionSearch() {
-  const [search, setSearch] = useState('');
+  const { searchString } = useParams();
+  console.log(searchString);
+  const [search, setSearch] = useState(searchString ? searchString : '');
   const [maxPrice, setMaxPrice] = useState('');
-  const [showClearButton, setShowClearButton] = useState(false);
 
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -92,7 +112,6 @@ export default function StudySessionSearch() {
   // handle Max Price lilter
   const handleMaxPriceChange = value => {
     setMaxPrice(value);
-    setShowClearButton(Boolean(value));
   };
 
   const clearMaxPrice = () => {
@@ -149,42 +168,7 @@ export default function StudySessionSearch() {
 
   const maxPriceSelectRef = useRef(null);
   const languageSelectRef = useRef(null);
-  const departmentSelectRef = useRef(null);
   const ratingSelectRef = useRef(null);
-
-  const clearFilters = () => {
-    setMaxPrice('');
-    setSelectedLanguages([]);
-    setSelectedDepartment('');
-    setSelectedRating(0);
-
-    // Reset the Select components to their initial state
-    // Clear the value of the Select components
-    if (maxPriceSelectRef.current) {
-      maxPriceSelectRef.current.clearSelection();
-    }
-    if (languageSelectRef.current) {
-      languageSelectRef.current.clearSelection();
-    }
-    if (departmentSelectRef.current) {
-      departmentSelectRef.current.clearSelection();
-    }
-    if (ratingSelectRef.current) {
-      ratingSelectRef.current.clearSelection();
-    }
-  };
-
-  const ClearButton = styled(Button)(({ theme }) => ({
-    width: 'fit-content',
-    height: 'fit-content',
-    float: 'right',
-    minWidth: 'auto',
-    padding: '1px',
-    fontSize: '0.6rem',
-    textTransform: 'none',
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
-  }));
 
   return (
     <Box
@@ -212,6 +196,7 @@ export default function StudySessionSearch() {
         <Box id="searchBarBox" sx={{ maxHeight: '10', width: '100%' }}>
           <StudySessionSearchbar
             handleSearchInputChange={handleSearchInputChange}
+            searchString={search}
           />
         </Box>
         <Box
