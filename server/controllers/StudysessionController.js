@@ -1,10 +1,9 @@
-import { populate } from "dotenv";
 import Chat from "../models/Chat.js";
 import Review from "../models/Review.js";
 import Studysession from "../models/Studysession.js";
 import User from "../models/User.js";
 import UserStudysession from "../models/UserStudysession.js";
-import { ObjectId, ReturnDocument } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export const createStudysession = async (req, res) => {
   try {
@@ -171,7 +170,7 @@ export const getStudysessionsFiltered = async (req, res) => {
     const searchString = req.query.searchTerm;
     const maxPrice = req.query.maxPrice;
     const languages = req.query.languages;
-    const languageArray = languages.split(',');
+    const languageArray = languages.split(",");
 
     let query = Studysession.find().populate("tutoredBy");
 

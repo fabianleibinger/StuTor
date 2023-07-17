@@ -1,15 +1,22 @@
 import React from "react";
 import {
   Avatar,
-  Divider,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
 } from "@mui/material";
 import { useChatContext } from "../../context/ChatProvider";
 import { theme } from "../../styles.js";
-import { useUserContext } from "../../context/UserContext";
+import { useUserContext } from "../../context/UserProvider";
 
+/**
+ * Displays a single chat in the MyChats component.
+ * @param { object } chat The chat to be displayed.
+ * @param { object } selectedChat The currently selected chat.
+ * @param { function } setSelectedChat Sets the currently selected chat.
+ * @param { array } isTypingInChats Array of chats in which a user is typing.
+ * @param { array } unread wether the chat has unread messages.
+ */
 const ChatListItem = ({
   chat,
   selectedChat,
@@ -55,7 +62,11 @@ const ChatListItem = ({
             ? `${chat.users[1].firstname} ${chat.users[1].lastname} - ${chat.studysession?.courseName}`
             : `${chat.users[0].firstname} ${chat.users[0].lastname} - ${chat.studysession?.courseName}`
         }
-        secondary={isTypingInChats.includes(chat._id) ? "Typing..." : chat.latest_message?.content}
+        secondary={
+          isTypingInChats.includes(chat._id)
+            ? "Typing..."
+            : chat.latest_message?.content
+        }
         sx={{
           overflow: "hidden",
           textOverflow: "ellipsis",

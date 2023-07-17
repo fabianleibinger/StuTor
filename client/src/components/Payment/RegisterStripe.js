@@ -6,7 +6,7 @@ import {
 } from "../../api/Payment.js";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { Button, Alert, Dialog } from "@mui/material";
-import { useUserContext } from "../../context/UserContext.js";
+import { useUserContext } from "../../context/UserProvider.js";
 import React, { useState } from "react";
 import { DialogTitle, DialogActions } from "@mui/material";
 

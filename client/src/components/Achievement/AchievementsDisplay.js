@@ -5,6 +5,14 @@ import Avatar from "@mui/material/Avatar";
 import { useQuery } from "react-query";
 import { getAchievementsOfUser } from "../../api/Achievement";
 
+/**
+ * Displays the achievements of a user in form of badges.
+ * The badges are clickable and show a tooltip with the name and description of the achievement.
+ * To be used in the profile page and on studysession details page.
+ * @param {Object} user The user whose achievements should be displayed
+ * @param {number} size The size of the avatar
+ * @param {boolean} showTitle Whether to show the title of the achievement
+ */
 const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
   const [userAchievements, setUserAchievements] = useState([]);
 

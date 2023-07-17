@@ -4,7 +4,7 @@ import { Typography, Input, Step, StepLabel, Stepper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
-import { useUserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserProvider";
 import { searchUniversities } from "../utils/searchUniversities";
 import {
   FormContainer,

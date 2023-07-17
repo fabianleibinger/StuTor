@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useQueryClient, useMutation } from "react-query";
 import { createPayment as createPaymentCall } from "../../api/Payment.js";
-import { useUserContext } from "../../context/UserContext.js";
+import { useUserContext } from "../../context/UserProvider.js";
 
 const BookingDialog = ({
   open,
