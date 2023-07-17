@@ -74,7 +74,6 @@ export const getChat = async (req, res) => {
   }
 };
 
-// Should only be accessible by the tutor.
 export const getChatsOfStudysession = async (req, res) => {
   try {
     // Check if studysession exists.
@@ -108,7 +107,6 @@ export const getChatsOfStudysession = async (req, res) => {
   }
 };
 
-// Should only be accessible by the user.
 export const getChatsOfUser = async (req, res) => {
   try {
     var chats = await Chat.find({
@@ -141,7 +139,6 @@ export const getChatsOfUser = async (req, res) => {
   }
 };
 
-// Should only be accessible by the tutor.
 export const getChatsOfStudysessionAndUser = async (req, res) => {
   try {
     // Check if studysession and user exist.

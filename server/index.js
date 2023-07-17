@@ -113,8 +113,6 @@ io.on("connection", (socket) => {
 
   // Notify the tutor that he received a booking.
   socket.on("new booking", (bookingId, tutorId) => {
-    socket
-      .in(tutorId)
-      .emit("booking received", bookingId);
+    socket.in(tutorId).emit("booking received", bookingId);
   });
 });
