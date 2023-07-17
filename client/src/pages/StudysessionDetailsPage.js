@@ -14,7 +14,7 @@ import { LoadingIndicator } from "../components/General/LoadingIndicator.js";
 import { ErrorIndicator } from "../components/General/ErrorIndicator.js";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import { useUserContext } from "../context/UserContext.js";
+import { useUserContext } from "../context/UserProvider.js";
 import AchievementsDisplay from "../components/Achievement/AchievementsDisplay.js";
 
 const StudysessionDetailsPage = () => {

@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 //react-query
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/UserProvider';
 
 // frontend
 import { Box, Grid, Typography } from '@mui/material';

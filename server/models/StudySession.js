@@ -1,62 +1,62 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const StudysessionSchema = new mongoose.Schema({
   course: {
     type: Schema.Types.ObjectId,
-    ref: 'Course',
+    ref: "Course",
     required: false,
-    default: null
+    default: null,
   },
   courseName: {
     type: String,
-    required: true
+    required: true,
   },
   courseId: {
     type: String,
-    required: true
+    required: true,
   },
   tutoredBy: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: "User",
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   pricePerHourEuro: {
     type: Number,
-    required: true
+    required: true,
   },
   languages: {
     type: Array,
     item: {
       type: String,
       enum: [
-        'English',
-        'Spanish',
-        'French',
-        'German',
-        'Italian',
-        'Portuguese',
-        'Russian',
-        'Chinese',
-        'Japanese',
-        'Arabic',
-        'Hindi',
-        'Bengali',
-        'Punjabi',
-        'Turkish',
-        'Urdu',
-        'Other'
-      ]
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Italian",
+        "Portuguese",
+        "Russian",
+        "Chinese",
+        "Japanese",
+        "Arabic",
+        "Hindi",
+        "Bengali",
+        "Punjabi",
+        "Turkish",
+        "Urdu",
+        "Other",
+      ],
     },
-    default: ['English'],
-    required: true
-  }
+    default: ["English"],
+    required: true,
+  },
 });
 
-const Studysession = mongoose.model('Studysession', StudysessionSchema);
+const Studysession = mongoose.model("Studysession", StudysessionSchema);
 
 export default Studysession;

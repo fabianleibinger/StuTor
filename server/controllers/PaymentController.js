@@ -77,13 +77,11 @@ export const updateAccount = async (req, res) => {
           return_url: "http://localhost:3000/userProfile",
           type: "account_onboarding",
         });
-        res
-          .status(200)
-          .send({
-            url: accountLink.url,
-            userId: user,
-            accountId: existingPayment.id,
-          });
+        res.status(200).send({
+          url: accountLink.url,
+          userId: user,
+          accountId: existingPayment.id,
+        });
       } catch (err) {
         res.status(500).send("Failed to update account!");
       }
@@ -139,7 +137,7 @@ export const createPayment = async (req, res) => {
   console.log(req.body);
   const studysessionId = new ObjectId(req.body.studysession);
   const studysession = await Studysession.findById(studysessionId);
-  console.log("student id", req.body.studentId)
+  console.log("student id", req.body.studentId);
   const studentId = new ObjectId(req.body.studentId);
   const student = await User.findById(studentId);
   console.log("studentId", studentId);
@@ -175,42 +173,42 @@ export const createPayment = async (req, res) => {
     );
 
     if (existingAccount && stripeAccount.charges_enabled == true) {
-        // Create booking.
-        const newBooking = new Booking({
-          studysession: studysessionId,
-          hours: req.body.hours,
-          priceEuro: amount,
-          createdAt: Date.now(),
-          createdBy: studentId,
-        });
-        const savedBooking = await newBooking.save();
-        const bookingId = savedBooking._id;
-        const session = await stripe.checkout.sessions.create({
-          mode: "payment",
-          line_items: [
-            {
-              price: price.id,
-              quantity: 1,
-            },
-          ],
-          payment_intent_data: {
-            application_fee_amount: fee,
-            transfer_data: {
-              destination: existingAccount.customerId,
-            },
+      // Create booking.
+      const newBooking = new Booking({
+        studysession: studysessionId,
+        hours: req.body.hours,
+        priceEuro: amount,
+        createdAt: Date.now(),
+        createdBy: studentId,
+      });
+      const savedBooking = await newBooking.save();
+      const bookingId = savedBooking._id;
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [
+          {
+            price: price.id,
+            quantity: 1,
           },
-          success_url: `http://localhost:3000/success/${bookingId}/${tutorId}`,
-          cancel_url: `http://localhost:3000/success/${bookingId}`,
-        });
-        await Booking.findByIdAndUpdate(bookingId, {
-          paymentSession: session.id,
-        });
-        console.log(bookingId);
-  
-        res.status(200).send(session);
-      } else {
-        res.status(400).send("User has no payment account!");
-      }
+        ],
+        payment_intent_data: {
+          application_fee_amount: fee,
+          transfer_data: {
+            destination: existingAccount.customerId,
+          },
+        },
+        success_url: `http://localhost:3000/success/${bookingId}/${tutorId}`,
+        cancel_url: `http://localhost:3000/success/${bookingId}`,
+      });
+      await Booking.findByIdAndUpdate(bookingId, {
+        paymentSession: session.id,
+      });
+      console.log(bookingId);
+
+      res.status(200).send(session);
+    } else {
+      res.status(400).send("User has no payment account!");
+    }
   } catch (err) {
     res.status(400).send("Tutor doesn't have a payment account!");
     return;

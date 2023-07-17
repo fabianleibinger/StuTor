@@ -12,7 +12,6 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  // save in a encrypted way
   password: {
     type: String,
     required: true,
