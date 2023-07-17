@@ -26,12 +26,13 @@
 
       .search {
         background-color: white;
-        border-radius: 5px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         overflow: hidden;
         font-size: 20px;
+        height: 50px;
 
         .searchInput {
           display: flex;
@@ -55,7 +56,7 @@
         }
 
         button {
-          width: 120px;
+          width: 150px;
           height: 100%;
           border: none;
           background-color: #1dbf73;

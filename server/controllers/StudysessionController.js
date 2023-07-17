@@ -4,8 +4,7 @@ import Review from '../models/Review.js';
 import Studysession from '../models/Studysession.js';
 import User from '../models/User.js';
 import UserStudysession from '../models/UserStudysession.js';
-import University from '../models/University.js';
-import { ObjectId, ReturnDocument } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 export const createStudysession = async (req, res) => {
   try {
@@ -270,7 +269,7 @@ export const getAverageRating = async (req, res) => {
 
     reviews = reviews.filter(review => review.booking !== null);
     if (reviews.length === 0) {
-      res.status(404).send('No ratings found!');
+      res.status(200).send('0');
     } else {
       const averageRating =
         reviews.reduce((acc, review) => acc + review.rating, 0) /
@@ -278,7 +277,6 @@ export const getAverageRating = async (req, res) => {
       res.status(200).send(averageRating.toString());
     }
   } catch (err) {
-    console.log(err);
     res.status(400).send('Bad request!');
   }
 };

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -19,13 +19,15 @@ import {
 } from '../styles';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../context/UserContext';
+import { useUserContext } from '../context/UserProvider';
 import newRequest from '../utils/newRequest';
 import uploadProfilePic from '../utils/uploadProfilePic';
 import { searchUniversities } from '../utils/searchUniversities';
 import RegisterStripe from '../components/Payment/RegisterStripe';
 import AchievementsDisplay from '../components/Achievement/AchievementsDisplay';
+import TutorHourProgressBar from '../components/Achievement/TutorHourProgressBar';
 import SwitchRoleButton from '../components/SwitchRoleButton';
+import TutorCourseRatings from '../components/Achievement/TutorCourseRatings';
 
 const UserProfile = () => {
   const { user, setUser } = useUserContext();
@@ -53,6 +55,8 @@ const UserProfile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+  const [hoursTutored, setHoursTutored] = useState(0);
 
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSucessMessage] = useState('');
@@ -95,6 +99,25 @@ const UserProfile = () => {
     const isFormValid = oldPassword && newPassword && newPasswordRepeat;
     setIsPasswordValid(isFormValid);
   }, [oldPassword, newPassword, newPasswordRepeat]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Fetch the user by _id from the MongoDB database
+        const tutorResponse = await newRequest.get('/user/byId/' + user._id);
+        if (tutorResponse) {
+          // If the user is found, update the hoursTutored state
+          setHoursTutored(tutorResponse.data.hours_tutored);
+        }
+      } catch (error) {
+        console.log('Error fetching user:', error);
+      }
+    };
+
+    if (user && user._id) {
+      fetchUser();
+    }
+  }, [user]);
 
   const handleUniversityChange = (e, value) => {
     // handleCloseMenu(); // Close the Autocomplete menu
@@ -331,8 +354,6 @@ const UserProfile = () => {
             </Grid>
           </Grid>
         </FormControl>
-        {/* -------------------------- Achievements -------------------------- */}
-        {/* TODO: Add your achievements components here */}
       </Container>
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
@@ -459,12 +480,27 @@ const UserProfile = () => {
           </Typography>
         </form>
       </ProfileFormContainer>
+
+      {/* -------------------------- Achievements -------------------------- */}
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
           Achievements
         </Typography>
-        <AchievementsDisplay user={user} size={125} showTitle={true} />
+
+        {/* <AchievementsDisplay user={user} size={125} showTitle={true} /> */}
+
+        {/* Tutor Hour Progress Bar */}
+        <div style={{ paddingTop: '80px' }}>
+          <TutorHourProgressBar hoursTutored={hoursTutored} />
+        </div>
+
+        {/* Tutor Course Ratings */}
+        <div style={{ paddingTop: '100px' }}>
+          <TutorCourseRatings tutorId={user._id} />
+        </div>
       </ProfileFormContainer>
+
+      {/* -------------------------- Payment -------------------------- */}
       <ProfileFormContainer>
         <Typography variant="h5" align="center" gutterBottom>
           Payment Information

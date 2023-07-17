@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import newRequest from "../utils/newRequest";
-import { useUserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserProvider";
 import {
   LoginFormContainer,
   LoginTitle,

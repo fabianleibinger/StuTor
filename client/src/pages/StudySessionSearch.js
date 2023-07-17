@@ -1,29 +1,47 @@
 import React, { useRef } from 'react';
+
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+
+// context
+import { useUserContext } from '../context/UserProvider';
+
+// api
+import { getStudysessionFiltered } from '../api/StudySession';
+import useDebounce from '../hooks/useDebounce';
+
+// frontend
+import { Box, Grid } from '@mui/material';
+import { styled } from '@mui/system';
+import { FilterContainer } from '../styles';
 import StudySessionSearchbar from '../components/Searchbars/StudySessionSearchbar';
 import LanguageFilter from '../components/Filters/LanguageFilter';
 import StandardFilter from '../components/Filters/StandardFilter';
 import ClearFilterButton from '../components/Filters/ClearFilterButton';
-import { FilterContainer } from '../styles';
-
-import { Box, Grid, Typography } from '@mui/material';
-import { styled } from '@mui/system';
-
-import { useState, useContext } from 'react';
-import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
-
-import { getStudysessionFiltered } from '../api/StudySession';
 import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
 import ErrorDialog from '../components/Dialogs/ErrorDialog';
-import useDebounce from '../hooks/useDebounce';
 
 const ScrollableContainer = styled('div')({
+  // adjustable, scrollable container holding the search results
   maxHeight: '70vh',
   overflow: 'auto'
 });
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
+  /**
+   * StudySessionsSearchResult provides the necessary component for the study sessions, which passed all filter
+   *
+   * args:
+   *    isLoading: if the query is still loading
+   *    data: an array of study sessions, if the query was successfull
+   *    error: an error if the query failed
+   *
+   * return:
+   *    A Scrollable Container holding all, filtered, study sessions
+   */
+
+  // colors define the possible background colors of the study session cards
   const colors = [
     '#0fab3c',
     '#98f5ff',
@@ -33,7 +51,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
     '#1e90ff'
   ];
 
-  // always student
+  // always student since the search results do not include the tutors study sessions. Thus, the searcher should not be able to update or delete them
   const userRole = 'STUDENT';
   if (error) {
     if (error.message.includes('404')) {
@@ -93,27 +111,38 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
 }
 
 export default function StudySessionSearch() {
+  /**
+   * The StudySession Search function provides to complete Search Page. Using Components like the Search, Filters and the Search Results
+   *
+   * It returns the page as a component wrapped in a Box
+   */
+
+  // filter constants
   const { searchString } = useParams();
-  console.log(searchString);
   const [search, setSearch] = useState(searchString ? searchString : '');
   const [maxPrice, setMaxPrice] = useState('');
-
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
 
-  const { user, setUser } = useContext(UserContext);
+  // references for the filters to be able to clear their internal value as well
+  const maxPriceSelectRef = useRef(null);
+  const languageSelectRef = useRef(null);
+  const ratingSelectRef = useRef(null);
 
+  // the current user
+  const { user, setUser } = useUserContext();
+
+  // debounceSearchTerm is used to update the search only every 200ms and not every time the user types something in.
   const debouncedSearchTerm = useDebounce(search, 200);
 
   const handleSearchInputChange = e => {
     setSearch(e.target.value);
   };
 
-  // handle Max Price lilter
+  // handling of the maxPrice filter
   const handleMaxPriceChange = value => {
     setMaxPrice(value);
   };
-
   const clearMaxPrice = () => {
     handleMaxPriceChange('');
     if (maxPriceSelectRef.current) {
@@ -121,7 +150,7 @@ export default function StudySessionSearch() {
     }
   };
 
-  // handle language filter
+  // handling of the language filter
   const handleLanguageChange = value => {
     setSelectedLanguages(value);
   };
@@ -133,6 +162,7 @@ export default function StudySessionSearch() {
     }
   };
 
+  // handling of the rating filter
   const handleRatingChange = value => {
     console.log(value);
     setSelectedRating(value);
@@ -152,9 +182,11 @@ export default function StudySessionSearch() {
     rating: selectedRating
   };
 
+  // the StudySessionSearch query is used to receive all study sessions dependend on the filters and the search
   const { data, error, isLoading } = useQuery(
     ['StudySessionSearch', queryKey],
     () =>
+      // use debounceSearchTerm to dealy the filtering, use all filters as object to filter the sessions additionally
       getStudysessionFiltered(debouncedSearchTerm, {
         maxPrice: maxPrice,
         languages: selectedLanguages,
@@ -165,10 +197,6 @@ export default function StudySessionSearch() {
       retry: false
     }
   );
-
-  const maxPriceSelectRef = useRef(null);
-  const languageSelectRef = useRef(null);
-  const ratingSelectRef = useRef(null);
 
   return (
     <Box

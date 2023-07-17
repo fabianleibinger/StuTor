@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './SearchBar.scss';
 
 import StudySessionSearchbar from '../Searchbars/StudySessionSearchbar';
-import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function SearchBar() {
@@ -36,7 +35,11 @@ function SearchBar() {
           <div className="popular">
             <span>Popular:</span>
             {/* TO-DO: Link the button to course offerings */}
-            <button>Machine Learning</button>
+            <button
+              onClick={() => handlePopularButtonClick('Machine Learning')}
+            >
+              Machine Learning
+            </button>{' '}
             <button>Introduction to Deep Learning</button>
             <button>Robotics</button>
             <button>Natural Language Processing</button>

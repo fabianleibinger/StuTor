@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { UserContext } from '../../context/UserContext';
+import { useUserContext } from '../../context/UserProvider';
 
 import { Button, Box, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
@@ -19,7 +19,7 @@ const CreateStudySessionForm = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const { setUser, user } = useContext(UserContext);
+  const { user, setUser } = useUserContext();
   const [courseName, setCourseName] = useState('');
   const [courseId, setCourseId] = useState('');
   const [pricePerHourEuro, setPricePerHourEuro] = useState('');

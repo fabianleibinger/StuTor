@@ -2,6 +2,9 @@ import { createContext, useContext, useState } from "react";
 
 const ChatContext = createContext();
 
+/**
+ * Provider for the chat context variables (selected chat, messages, typing, notification).
+ */
 const ChatProvider = ({ children }) => {
   const [selectedChat, setSelectedChat] = useState();
   const [newMessage, setNewMessage] = useState("");

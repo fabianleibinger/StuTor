@@ -70,20 +70,24 @@ const io = new Server(server, {
   },
 });
 
+// Socket functionality.
 io.on("connection", (socket) => {
   console.log("*********** Connected to socket.io ***********");
 
+  // Setup a room for a user.
   socket.on("setup", (userId) => {
     socket.join(userId);
     console.log(userId + " connected");
     socket.emit("connected");
   });
 
+  // Setup a room for a chat.
   socket.on("join chat", (chatId) => {
     socket.join(chatId);
     console.log("User joined chat " + chatId);
   });
 
+  // Send a message to the receiver.
   socket.on("new message", (newMessageReceived) => {
     newMessageReceived.chat.users.forEach((userId) => {
       if (userId == newMessageReceived.sender._id) return;
@@ -91,6 +95,7 @@ io.on("connection", (socket) => {
     });
   });
 
+  // Notify a user that someone is typing in a chat.
   socket.on("typing in chat", (chat) => {
     console.log("typing in chat " + chat._id);
     chat.users.forEach((user) => {
@@ -98,6 +103,7 @@ io.on("connection", (socket) => {
     });
   });
 
+  // Notify a user that someone stopped typing in a chat.
   socket.on("stop typing in chat", (chat) => {
     console.log("stop typing in chat " + chat._id);
     chat.users.forEach((user) => {
@@ -105,9 +111,8 @@ io.on("connection", (socket) => {
     });
   });
 
+  // Notify the tutor that he received a booking.
   socket.on("new booking", (bookingId, tutorId) => {
-    socket
-      .in(tutorId)
-      .emit("booking received", bookingId);
+    socket.in(tutorId).emit("booking received", bookingId);
   });
 });
