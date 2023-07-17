@@ -30,7 +30,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import RecommendIcon from "@mui/icons-material/Recommend";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import CancelIcon from "@mui/icons-material/Cancel";
-import HelpIcon from '@mui/icons-material/Help';
+import HelpIcon from "@mui/icons-material/Help";
 import { yellow } from "@mui/material/colors";
 
 const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
@@ -47,7 +47,7 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
     () => getBookingsOfStudysessionCreatedByUser(studySessionId, userId),
     {
       retry: (failureCount, error) => {
-        return error.response.status !== 404 && failureCount < 2;
+        return error.response?.status !== 404 && failureCount < 2;
       },
     }
   );
@@ -93,19 +93,23 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
         <DialogTitle>Bookings</DialogTitle>
         <DialogContent>
           {isloading && <div>Loading...</div>}
-          {error && <Alert severity="info">
+          {error && (
+            <Alert severity="info">
               You didn't book any hours for this studysession yet.
-            </Alert>}
+            </Alert>
+          )}
           {!isloading && !error && (
             <div>
-              { bookings[bookings.length - 1].isPayed && 
-              bookings[bookings.length - 1].isAcceptedByTutor && !bookings[bookings.length -1].reviewGiven && (
-              <div style={{ paddingBottom: "1rem" }}>
-                <Alert severity="warning">
-                  Do not forget to give valuable feedback to your tutor after the studysession!
-                </Alert>
-              </div>
-              )}
+              {bookings[bookings.length - 1].isPayed &&
+                bookings[bookings.length - 1].isAcceptedByTutor &&
+                !bookings[bookings.length - 1].reviewGiven && (
+                  <div style={{ paddingBottom: "1rem" }}>
+                    <Alert severity="warning">
+                      Do not forget to give valuable feedback to your tutor
+                      after the studysession!
+                    </Alert>
+                  </div>
+                )}
               <div style={{ paddingBottom: "1rem" }}>
                 <Alert severity="info">
                   Here you can see all your bookings for this studysession and
@@ -134,32 +138,37 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                             }}
                           >
                             <TableCell>
-                              {booking.isPayed && booking.isAcceptedByTutor && !booking.isConfirmed && (
-                                <Tooltip title="You didn't confirm that all studysession hours are used yet">
-                                <Icon>
-                                  <HourglassEmptyIcon sx={{ color: yellow[500] }} />
-                                </Icon>
-                                </Tooltip>
-                              )}
-                              {booking.isPayed && !booking.isAcceptedByTutor && (
-                                <Tooltip title="Your tutor has not accepted your booking yet">
-                                <Icon>
-                                  <HelpIcon color="warning" />
-                                </Icon>
-                                </Tooltip>
-                              )}
+                              {booking.isPayed &&
+                                booking.isAcceptedByTutor &&
+                                !booking.isConfirmed && (
+                                  <Tooltip title="You didn't confirm that all studysession hours are used yet">
+                                    <Icon>
+                                      <HourglassEmptyIcon
+                                        sx={{ color: yellow[500] }}
+                                      />
+                                    </Icon>
+                                  </Tooltip>
+                                )}
+                              {booking.isPayed &&
+                                !booking.isAcceptedByTutor && (
+                                  <Tooltip title="Your tutor has not accepted your booking yet">
+                                    <Icon>
+                                      <HelpIcon color="warning" />
+                                    </Icon>
+                                  </Tooltip>
+                                )}
                               {booking.isConfirmed && booking.reviewGiven && (
                                 <Tooltip title="All done! Ready for the next studysession?">
-                                <Icon>
-                                  <RecommendIcon color="success" />
-                                </Icon>
+                                  <Icon>
+                                    <RecommendIcon color="success" />
+                                  </Icon>
                                 </Tooltip>
                               )}
                               {booking.isConfirmed && !booking.reviewGiven && (
                                 <Tooltip title="Please rate your tutor!">
-                                <Icon>
-                                  <CheckIcon color="primary" />
-                                </Icon>
+                                  <Icon>
+                                    <CheckIcon color="primary" />
+                                  </Icon>
                                 </Tooltip>
                               )}
                             </TableCell>

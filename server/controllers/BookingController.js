@@ -43,9 +43,7 @@ export const createBooking = async (req, res) => {
 export const getBooking = async (req, res) => {
   try {
     const bookingId = new ObjectId(req.params.bookingId);
-    console.log(bookingId);
     const booking = await Booking.findById(bookingId);
-    console.log(booking);
     try {
       if (!booking) {
         res.status(404).send("Booking not found!");
@@ -190,15 +188,11 @@ export const getBookingsOfTutor = async (req, res) => {
       })
       .populate("createdBy");
 
-    console.log("bookings", bookings);
-
     // Find the booking ids
     const bookingIds = bookings.map((booking) => booking._id);
 
     // Find the reviews corresponding to the booking ids
     const reviews = await Review.find({ booking: { $in: bookingIds } });
-    console.log(reviews);
-    console.log("response", { bookings, reviews });
     try {
       if (bookings.length === 0) {
         res.status(404).send("No bookings found!");
@@ -253,43 +247,68 @@ export const updateBooking = async (req, res) => {
   }
 };
 
+export const updateTutorHoursAndBadge = async (booking, User) => {
+  try {
+    const levelMilestones = [0, 2, 5, 10, 15, 20, 50, 100, 200, 500];
+
+    const tutorId = booking.studysession.tutoredBy;
+    const tutor = await User.findById(tutorId);
+    const hours_tutored_before = tutor.hours_tutored;
+    const hours_tutored_after = hours_tutored_before + booking.hours;
+    await User.findByIdAndUpdate(tutorId, {
+      hours_tutored: hours_tutored_after,
+    });
+
+    // Determine the current level based on the user's tutoring hours
+    const beforeLevel =
+      levelMilestones.findIndex(
+        (milestone) => hours_tutored_before < milestone
+      ) - 1;
+    const afterLevel =
+      levelMilestones.findIndex(
+        (milestone) => hours_tutored_after < milestone
+      ) - 1;
+    console.log("afterLevel: ", afterLevel);
+    console.log("beforeLevel: ", beforeLevel);
+
+    // Loop from 0 to afterLevel and update badges
+    for (let level = 0; level <= afterLevel; level++) {
+      // achievement corresponds to current level
+
+      // Check if the user has this achievement
+
+      if (!badgeAchieved) {
+        // If not achieved, update the tutor's badges to include the new badge
+        // Post the badge as an UserAchievement
+        // await newRequest.post("/UserAchievement", { user: tutorId, achievement: `Tutor-Hour ${level}` });
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to update tutor hours and badge!");
+  }
+};
+
 export const confirmBooking = async (req, res) => {
   try {
     const bookingId = new ObjectId(req.params.bookingId);
     const booking = await Booking.findByIdAndUpdate(bookingId, {
       isConfirmed: true,
     }).populate("studysession");
+
     if (!booking) {
-      res.status(404).send("Booking not found!");
-    } else {
-      res.status(200).send("Booking confirmed!");
+      return res.status(404).send("Booking not found!");
+    }
 
-      // After a booking is confirmed
-      const levelMilestones = [0, 1, 3, 5, 10, 15, 20, 50, 100, 200, 500];
-      const tutorId = new ObjectId(booking.studysession.tutoredBy);
-      const tutor = await User.findById(tutorId);
-      const hours_tutored_before = tutor.hours_tutored;
-      const hours_tutored_after = hours_tutored_before + booking.hours;
-      await User.findByIdAndUpdate(tutorId, {
-        hours_tutored: hours_tutored_after,
-      });
-
-      // Determine the current level based on the user's tutoring hours
-      const beforetLevel =
-        levelMilestones.findIndex(
-          (milestone) => hours_tutored_before < milestone
-        ) - 1;
-      const afterLevel =
-        levelMilestones.findIndex(
-          (milestone) => hours_tutored_after < milestone
-        ) - 1;
-
-      if (afterLevel > beforetLevel) {
-        // Receives a new Tutor-Hour badge at afterLevel
-      }
+    // After a booking is confirmed
+    try {
+      await updateTutorHoursAndBadge(booking, User);
+      return res.status(200).send("Booking confirmed!");
+    } catch (err) {
+      return res.status(500).send("Failed to update tutor's hours and badges!");
     }
   } catch (err) {
-    res.status(500).send("Failed to confirm booking!");
+    return res.status(500).send("Failed to confirm booking!");
   }
 };
 

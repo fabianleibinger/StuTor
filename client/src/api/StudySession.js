@@ -84,7 +84,7 @@ export const getStudysessionFiltered = async (searchTerm, filters) => {
     }
   } catch (error) {
     if (error.response) {
-      console.log("Response Status:", error.response.status);
+      console.log("Response Status:", error.response?.status);
     }
     throw error;
   }
@@ -113,7 +113,7 @@ export const getAverageRating = async (studysessionId) => {
     );
     return rating.data;
   } catch (error) {
-    if (error.response.status === 404) {
+    if (error.response?.status === 404) {
       return -1;
     } else {
       console.log(error);
@@ -146,7 +146,7 @@ export const getReviewsAndRatingOfStudysession = async (studysessionId) => {
       rating = ratingResponse.data;
     }
   } catch (error) {
-    if (error.response.status !== 404) {
+    if (error.response?.status !== 404) {
       console.log(error);
     }
   }

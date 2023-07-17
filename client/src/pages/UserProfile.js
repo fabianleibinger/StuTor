@@ -462,7 +462,7 @@ const UserProfile = () => {
           Achievements
         </Typography>
 
-        {/* <AchievementsDisplay user={user} size={125} showTitle={true} /> */}
+        <AchievementsDisplay user={user} size={125} showTitle={true} />
 
         {/* Tutor Hour Progress Bar */}
         <div style={{ paddingTop: "80px" }}>
@@ -473,6 +473,8 @@ const UserProfile = () => {
         <div style={{ paddingTop: "100px" }}>
           <TutorCourseRatings tutorId={user._id} />
         </div>
+
+        {/* Badges */}
       </ProfileFormContainer>
 
       {/* -------------------------- Payment -------------------------- */}

@@ -3,7 +3,7 @@ import { LinearProgress, Typography } from "@mui/material";
 
 const TutorHourProgressBar = ({ hoursTutored }) => {
   // Define the level milestones and corresponding level names
-  const levelMilestones = [0, 1, 3, 5, 10, 15, 20, 50, 100, 200, 500];
+  const levelMilestones = [0, 2, 5, 10, 15, 20, 50, 100, 200, 500];
   //   const levelNames = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
   // Determine the current level based on the user's tutoring hours

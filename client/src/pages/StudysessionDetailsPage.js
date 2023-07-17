@@ -67,8 +67,6 @@ const StudysessionDetailsPage = () => {
     }
   );
 
-  console.log("data", data);
-
   const accessChat = useMutation(
     () =>
       accessChatCall([studysession.tutoredBy._id, user._id], studySessionId),
@@ -242,7 +240,7 @@ const StudysessionDetailsPage = () => {
                 alignItems: "center",
               }}
             >
-              <Grid item marginRight={8}>
+              <Grid item marginRight={8} key="booking-history">
                 <Button
                   variant="contained"
                   color="primary"
@@ -252,7 +250,7 @@ const StudysessionDetailsPage = () => {
                   View bookings
                 </Button>
               </Grid>
-              <Grid item marginLeft={8}>
+              <Grid item marginLeft={8} key="book-now">
                 <Button
                   variant="contained"
                   color="primary"

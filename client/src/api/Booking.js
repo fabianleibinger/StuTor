@@ -39,10 +39,10 @@ export const setBookingIsPayed = async (bookingId) => {
     await axios.put(`${BOOKING_URL}/payBooking/${bookingId}`);
     return "You succesfully booked a study session! Please wait for Tutor to comfirm...";
   } catch (error) {
-    if (error.response.status == 400) {
+    if (error.response?.status == 400) {
       console.log("Booking has already been payed!");
       return "You didn't pay correctly! Try to book again and make sure you checkout via stripe.";
-    } else if (error.response.status == 404) {
+    } else if (error.response?.status == 404) {
       console.log("Booking not found!");
       return "Something went wrong! Try again.";
     } else {

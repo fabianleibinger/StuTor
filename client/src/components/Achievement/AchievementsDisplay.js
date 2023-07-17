@@ -9,7 +9,7 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
   const [userAchievements, setUserAchievements] = useState([]);
 
   const { receivedUserAchievements } = useQuery(
-    ["receivedUserAchievements", user._id], 
+    ["receivedUserAchievements", user._id],
     () => getAchievementsOfUser(user._id),
     {
       onSuccess: (data) => {
@@ -32,12 +32,14 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
     >
       {userAchievements.map((userAchievement, index) => (
         <Box
+          key={userAchievement._id} // Add a unique key prop here
           sx={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
             alignContent: "center",
+            margin: "8px", // Add margin here to create the gap between each userAchievement
           }}
         >
           <Tooltip
@@ -59,7 +61,15 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
                 marginTop: 1,
               }}
             >
-              <img src={userAchievement.achievement.badge} alt="Badge" />
+              <img
+                src={userAchievement.achievement.badge}
+                alt="Badge"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "#f5f5f5",
+                }}
+              />
             </Avatar>
           </Tooltip>
           {showTitle && <div>{userAchievement.achievement.name}</div>}

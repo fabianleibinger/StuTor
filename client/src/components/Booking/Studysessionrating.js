@@ -23,7 +23,7 @@ const StudysessionRating = ({ studySessionId }) => {
 
   const queryOptions = {
     retry: (failureCount, error) => {
-      return error.response.status !== 404 && failureCount < 2;
+      return error.response?.status !== 404 && failureCount < 2;
     },
   };
 
