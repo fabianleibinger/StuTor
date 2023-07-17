@@ -207,8 +207,9 @@ const StudysessionDetailsPage = () => {
               mt={2}
               sx={{
                 display: "flex",
-                justifyContent: "center",
-                gap: "0.5rem",
+                justifyContent: "left",
+                gap: "2rem",
+                marginBottom: "2rem",
               }}
             >
               <Grid item key="booking-history">
