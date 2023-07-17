@@ -99,7 +99,7 @@ function Row(props) {
     {
       onSuccess: () => {
         row.isAcceptedByTutor = true;
-        queryClient.invalidateQueries(["bookings", studySessionId]);
+        queryClient.invalidateQueries(["bookings", row.studysession._id]);
       },
       onError: (error) => {
         console.log(error);
