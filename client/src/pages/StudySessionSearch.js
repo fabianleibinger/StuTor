@@ -114,7 +114,7 @@ export default function StudySessionSearch() {
   /**
    * The StudySession Search function provides to complete Search Page. Using Components like the Search, Filters and the Search Results
    *
-   * It returns the page as a component wrapped in a Box
+   * It returns the Box component holding the Search page
    */
 
   // filter constants
