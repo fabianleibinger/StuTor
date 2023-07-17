@@ -19,7 +19,7 @@ import {
 } from "../styles";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserProvider";
 import newRequest from "../utils/newRequest";
 import uploadProfilePic from "../utils/uploadProfilePic";
 import { searchUniversities } from "../utils/searchUniversities";

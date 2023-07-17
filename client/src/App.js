@@ -12,7 +12,7 @@ import MyStudySessions from "./pages/MyStudySessions.js";
 import StudySessionSearch from "./pages/StudySessionSearch.js";
 import StudysessionDetailsPage from "./pages/StudysessionDetailsPage.js";
 import UserProfile from "./pages/UserProfile.js";
-import { UserContext, useUserContext } from "./context/UserContext";
+import { UserContext, useUserContext } from "./context/UserProvider.js";
 import ChatPage from "./pages/ChatPage";
 import SuccessPage from "./pages/SuccessPage.js";
 import ViewBookingsPage from "./pages/ViewBookingsPage.js";
@@ -40,7 +40,10 @@ function App() {
                 path="/StudysessionDetailsPage/:studySessionId"
                 element={<StudysessionDetailsPage />}
               />
-              <Route path="/success/:bookingId/:tutorId" element={<SuccessPage />} />
+              <Route
+                path="/success/:bookingId/:tutorId"
+                element={<SuccessPage />}
+              />
               <Route path="/viewBookings" element={<ViewBookingsPage />} />
             </Routes>
           </Content>

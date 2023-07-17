@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useChatContext } from "../../context/ChatProvider";
 import { theme } from "../../styles.js";
-import { useUserContext } from "../../context/UserContext";
+import { useUserContext } from "../../context/UserProvider";
 
 const ChatListItem = ({
   chat,

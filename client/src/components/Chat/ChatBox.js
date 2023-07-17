@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import socket from "../../Socket";
-import { useUserContext } from "../../context/UserContext";
+import { useUserContext } from "../../context/UserProvider";
 
 var selectedChatCompare;
 

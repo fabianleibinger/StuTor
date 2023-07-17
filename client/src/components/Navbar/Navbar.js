@@ -34,7 +34,7 @@ import {
 } from "../../styles";
 import { useChatContext } from "../../context/ChatProvider";
 import newRequest from "../../utils/newRequest";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../context/UserProvider";
 import { useBookingContext } from "../../context/BookingProvider";
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {

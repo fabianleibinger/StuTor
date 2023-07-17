@@ -6,7 +6,7 @@ import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import { LoadingIndicator } from "../components/General/LoadingIndicator";
 import { ErrorIndicator } from "../components/General/ErrorIndicator";
-import { useUserContext } from "../context/UserContext";
+import { useUserContext } from "../context/UserProvider";
 
 const ViewBookingsPage = () => {
     const { user } = useUserContext();

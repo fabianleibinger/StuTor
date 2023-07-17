@@ -10,7 +10,7 @@ import { styled } from "@mui/system";
 
 import { useState, useContext } from "react";
 import { useQuery } from "react-query";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/UserProvider";
 
 import { getStudysessionFiltered } from "../api/StudySession";
 import StudySessionCard from "../components/StudySessionCard/StudySessionDetailsCard";

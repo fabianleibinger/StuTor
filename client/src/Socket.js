@@ -1,9 +1,9 @@
 import { useEffect, useContext } from "react";
 import io from "socket.io-client";
-import { useSocketContext } from "./context/SocketContext";
+import { useSocketContext } from "./context/SocketProvider";
 import { useChatContext } from "./context/ChatProvider";
 import { useBookingContext } from "./context/BookingProvider";
-import { useUserContext } from "./context/UserContext";
+import { useUserContext } from "./context/UserProvider";
 
 export const ENDPOINT = "localhost:3001";
 const socket = io(ENDPOINT);

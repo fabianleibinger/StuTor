@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { Box, Skeleton, Alert, List, Divider } from "@mui/material";
 import { useChatContext } from "../../context/ChatProvider";
 import ChatListItem from "./ChatListItem";
-import { useUserContext } from "../../context/UserContext";
+import { useUserContext } from "../../context/UserProvider";
 
 const MyChats = () => {
   const {
