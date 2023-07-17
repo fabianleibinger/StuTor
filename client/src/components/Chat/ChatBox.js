@@ -20,6 +20,11 @@ import { useUserContext } from "../../context/UserProvider";
 
 var selectedChatCompare;
 
+/*
+ * Displays the messages of the selected chat in a box.
+ * Also contains the input field to send a new message.
+ * Handles real-time chat functionality.
+ */
 const ChatBox = () => {
   const {
     selectedChat,
@@ -36,6 +41,7 @@ const ChatBox = () => {
   const { user } = useUserContext();
   const queryClient = useQueryClient();
 
+  // Listening for chats that are being typed in.
   useEffect(() => {
     socket.on("typing in chat", (chatId) =>
       setIsTypingInChats((prevTypingInChat) => [...prevTypingInChat, chatId])
@@ -54,8 +60,10 @@ const ChatBox = () => {
     };
   }, []);
 
+  // Listening for new messages from other users.
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
+      // MyChats component has to be updated to display the latest message.
       queryClient.invalidateQueries("chatsOfUser");
       if (
         selectedChatCompare &&
@@ -70,6 +78,7 @@ const ChatBox = () => {
     };
   });
 
+  // Fetch all messages of the selected chat
   const { data } = useQuery(
     ["messagesOfChat", selectedChat?._id],
     () => getMessagesOfChat(selectedChat?._id),
@@ -81,17 +90,21 @@ const ChatBox = () => {
       onSuccess: (data) => {
         setMessages(data);
         selectedChatCompare = selectedChat;
+        // Build a real-time connection to the other users of the chat.
         socket.emit("join chat", selectedChat._id);
       },
     }
   );
 
+  // Send a new message to the selected chat.
   const sendMessage = useMutation(
     () => sendMessageCall(user._id, newMessage, selectedChat._id),
     {
       onSuccess: (data) => {
         setMessages([...messages, data]);
+        // Inform users of the chat that a new message has been sent.
         socket.emit("new message", data);
+        // ChatBox and myChats component have to be updated.
         queryClient.invalidateQueries("messagesOfChat");
         queryClient.invalidateQueries("chatsOfUser");
       },
@@ -103,6 +116,7 @@ const ChatBox = () => {
 
   const handleInputChange = (event) => {
     setNewMessage(event.target.value);
+    // Inform other users of the chat that I am typing.
     if (!typing) {
       setTyping(true);
       socket.emit("typing in chat", selectedChat);
@@ -113,6 +127,7 @@ const ChatBox = () => {
       var timeNow = new Date().getTime();
       var timeDiff = timeNow - lastTypingTime;
       if (timeDiff >= timerLength && typing) {
+        // Inform other users of the chat when I stopped typing.
         socket.emit("stop typing in chat", selectedChat);
         setTyping(false);
       }
@@ -122,6 +137,7 @@ const ChatBox = () => {
   const handleSendClick = async () => {
     await sendMessage.mutateAsync();
     socket.emit("stop typing in chat", selectedChat);
+    setTyping(false);
     setNewMessage("");
   };
 

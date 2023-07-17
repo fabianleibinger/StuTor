@@ -6,24 +6,14 @@ import { useChatContext } from "../../context/ChatProvider";
 import ChatListItem from "./ChatListItem";
 import { useUserContext } from "../../context/UserProvider";
 
+/*
+ * Displays all started chats of a user.
+ * A user can select a chat by clicking on the corresponding tile.
+ */
 const MyChats = () => {
-  const {
-    selectedChat,
-    setSelectedChat,
-    isTypingInChats,
-    notification,
-  } = useChatContext();
+  const { selectedChat, setSelectedChat, isTypingInChats, notification } =
+    useChatContext();
   const { user } = useUserContext();
-
-  const { isLoading, error, data } = useQuery(
-    ["chatsOfUser"],
-    () => getChatsOfUser(user._id),
-    {
-      retry: (failureCount, error) => {
-        return error.status !== 404 && failureCount < 2;
-      },
-    }
-  );
 
   const boxSx = {
     display: "flex",
@@ -41,6 +31,18 @@ const MyChats = () => {
       variant="rounded"
       sx={{ flexGrow: 1, width: 1, marginBottom: "3vh" }}
     />
+  );
+
+  // Fetch all chats of the user
+  // 3 states of the query: isLoading, error, data lead to 3 diferent states of the component.
+  const { isLoading, error, data } = useQuery(
+    ["chatsOfUser"],
+    () => getChatsOfUser(user._id),
+    {
+      retry: (failureCount, error) => {
+        return error.status !== 404 && failureCount < 2;
+      },
+    }
   );
 
   if (isLoading)
