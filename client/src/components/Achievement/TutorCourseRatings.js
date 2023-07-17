@@ -5,6 +5,7 @@ import StarRating from "../Booking/StarRating";
 import { getStudysessionsTutoredByUser } from "../../api/StudySession";
 import { getReviewsAndRatingOfStudysession } from "../../api/StudySession";
 import StudysessionRating from "../Booking/Studysessionrating.js";
+import newRequest from "../../utils/newRequest";
 
 const TutorCourseRatings = ({ tutorId }) => {
   const [studySessions, setStudySessions] = useState([]);
@@ -12,14 +13,20 @@ const TutorCourseRatings = ({ tutorId }) => {
   const [totalRatings, setTotalRatings] = useState(0);
 
   useEffect(() => {
-    // Fetch the Study Sessions for the tutor using the API function
-    getStudysessionsTutoredByUser(tutorId)
-      .then((data) => {
-        setStudySessions(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching study sessions:", error);
-      });
+    const fetchStudySessions = async () => {
+      try {
+        const studySessionsResponse = await newRequest.get(
+          `studysession/tutoredBy/${tutorId}`
+        );
+        setStudySessions(studySessionsResponse.data);
+      } catch (err) {
+        if (err.response?.status !== 404) {
+          console.error("Error fetching study sessions:", err);
+        }
+      }
+    };
+
+    fetchStudySessions();
   }, [tutorId]);
 
   useEffect(() => {
@@ -33,10 +40,14 @@ const TutorCourseRatings = ({ tutorId }) => {
         const { reviews, rating } = await getReviewsAndRatingOfStudysession(
           studySession._id
         );
-        rating_sum += rating * reviews.length;
-        total_ratings += reviews.length;
+        if (reviews) {
+          rating_sum += rating * reviews.length;
+          total_ratings += reviews.length;
+        }
       } catch (error) {
-        console.error("Error fetching reviews and rating:", error);
+        if (error.response?.status !== 404) {
+          console.error("Error fetching reviews and rating:", error);
+        }
       }
     });
 

@@ -40,7 +40,9 @@ const StudysessionRating = ({ studySessionId }) => {
   } else {
     rating = data.rating;
     reviews = data.reviews;
-    buttonDisabled = false;
+    if (reviews.length > 0) {
+      buttonDisabled = false;
+    }
   }
 
   return (

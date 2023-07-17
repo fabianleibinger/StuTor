@@ -54,6 +54,8 @@ const UserProfile = () => {
   const [newPasswordRepeat, setNewPasswordRepeat] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
 
+  const [hoursTutored, setHoursTutored] = useState(0);
+
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSucessMessage] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -95,6 +97,25 @@ const UserProfile = () => {
     const isFormValid = oldPassword && newPassword && newPasswordRepeat;
     setIsPasswordValid(isFormValid);
   }, [oldPassword, newPassword, newPasswordRepeat]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Fetch the user by _id from the MongoDB database
+        const tutorResponse = await newRequest.get("/user/byId/" + user._id);
+        if (tutorResponse) {
+          // If the user is found, update the hoursTutored state
+          setHoursTutored(tutorResponse.data.hours_tutored);
+        }
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
+    };
+
+    if (user && user._id) {
+      fetchUser();
+    }
+  }, [user]);
 
   const handleUniversityChange = (e, value) => {
     // handleCloseMenu(); // Close the Autocomplete menu
@@ -441,11 +462,11 @@ const UserProfile = () => {
           Achievements
         </Typography>
 
-        <AchievementsDisplay user={user} size={125} showTitle={true} />
+        {/* <AchievementsDisplay user={user} size={125} showTitle={true} /> */}
 
         {/* Tutor Hour Progress Bar */}
         <div style={{ paddingTop: "80px" }}>
-          <TutorHourProgressBar hoursTutored={8} />
+          <TutorHourProgressBar hoursTutored={hoursTutored} />
         </div>
 
         {/* Tutor Course Ratings */}

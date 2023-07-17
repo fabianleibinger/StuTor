@@ -26,7 +26,12 @@ const StudysessionReviewDialog = ({ isOpen, onClose, reviews }) => {
       <DialogTitle>Reviews of other students</DialogTitle>
       <DialogContent>
         {reviews.map((review) => (
-          <Box display={"flex"} flexDirection={"row"} paddingBottom={"2rem"}>
+          <Box
+            key={review._id}
+            display={"flex"}
+            flexDirection={"row"}
+            paddingBottom={"2rem"}
+          >
             <Box justifyContent={"flex-start"} paddingRight={"1rem"}>
               <Avatar
                 alt="Profile Picture"

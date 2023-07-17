@@ -265,25 +265,28 @@ export const confirmBooking = async (req, res) => {
       res.status(200).send("Booking confirmed!");
 
       // After a booking is confirmed
-      // 1. Tutor.hours_tutored, check threshhold
-      // 2. Tutor.hours_tutored += current session hours
-      // 3. check threshhold again, if new, then Toto receives a new badge
-      // Need: threshold array, 10, 20, 30, 50, 75, 100, 150, 200, 300, 500
-      const hours_tutored_achievement_threshold = [
-        10, 20, 30, 50, 75, 100, 150, 200, 300, 500,
-      ];
+      const levelMilestones = [0, 1, 3, 5, 10, 15, 20, 50, 100, 200, 500];
       const tutorId = new ObjectId(booking.studysession.tutoredBy);
       const tutor = await User.findById(tutorId);
       const hours_tutored_before = tutor.hours_tutored;
-      console.log("tutorId: ", tutorId);
-      console.log("tutor: ", tutor);
       const hours_tutored_after = hours_tutored_before + booking.hours;
       await User.findByIdAndUpdate(tutorId, {
         hours_tutored: hours_tutored_after,
       });
 
-      console.log("hours_tutored_before: ", hours_tutored_before);
-      console.log("hours_tutored_after: ", hours_tutored_after);
+      // Determine the current level based on the user's tutoring hours
+      const beforetLevel =
+        levelMilestones.findIndex(
+          (milestone) => hours_tutored_before < milestone
+        ) - 1;
+      const afterLevel =
+        levelMilestones.findIndex(
+          (milestone) => hours_tutored_after < milestone
+        ) - 1;
+
+      if (afterLevel > beforetLevel) {
+        // Receives a new Tutor-Hour badge at afterLevel
+      }
     }
   } catch (err) {
     res.status(500).send("Failed to confirm booking!");

@@ -3,7 +3,7 @@ import { LinearProgress, Typography } from "@mui/material";
 
 const TutorHourProgressBar = ({ hoursTutored }) => {
   // Define the level milestones and corresponding level names
-  const levelMilestones = [1, 3, 5, 10, 15, 20, 50, 100, 200, 500];
+  const levelMilestones = [0, 1, 3, 5, 10, 15, 20, 50, 100, 200, 500];
   //   const levelNames = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
   // Determine the current level based on the user's tutoring hours
@@ -12,9 +12,7 @@ const TutorHourProgressBar = ({ hoursTutored }) => {
 
   // Calculate the progress percentage
   const progress = Math.min(
-    ((hoursTutored - levelMilestones[currentLevel]) /
-      (levelMilestones[currentLevel + 1] - levelMilestones[currentLevel])) *
-      100,
+    (hoursTutored / levelMilestones[currentLevel + 1]) * 100,
     100
   );
 
