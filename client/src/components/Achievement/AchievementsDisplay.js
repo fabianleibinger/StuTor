@@ -26,8 +26,9 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        overflow: "auto",
-        justifyContent: "center",
+        overflowX: "auto", // Add the horizontal scrollbar
+        justifyContent: "left",
+        maxWidth: "100%", // Ensure the container takes full width
       }}
     >
       {userAchievements.map((userAchievement, index) => (
@@ -45,9 +46,9 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
           <Tooltip
             title={
               <React.Fragment>
-                {userAchievement.achievement.name + ":"}
+                {userAchievement.achievement?.name + ":"}
                 <br />
-                {userAchievement.achievement.description}
+                {userAchievement.achievement?.description}
               </React.Fragment>
             }
             placement="top"
@@ -62,7 +63,7 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
               }}
             >
               <img
-                src={userAchievement.achievement.badge}
+                src={userAchievement.achievement?.badge}
                 alt="Badge"
                 style={{
                   width: "100%",
@@ -72,7 +73,7 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
               />
             </Avatar>
           </Tooltip>
-          {showTitle && <div>{userAchievement.achievement.name}</div>}
+          {showTitle && <div>{userAchievement.achievement?.name}</div>}
         </Box>
       ))}
     </Box>

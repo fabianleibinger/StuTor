@@ -458,11 +458,21 @@ const UserProfile = () => {
 
       {/* -------------------------- Achievements -------------------------- */}
       <ProfileFormContainer>
-        <Typography variant="h5" align="center" gutterBottom>
-          Achievements
-        </Typography>
+        <div style={{ paddingBottom: "50px" }}>
+          <Typography variant="h5" align="center" gutterBottom>
+            Achievements
+          </Typography>
+        </div>
 
-        <AchievementsDisplay user={user} size={125} showTitle={true} />
+        {/* Badges */}
+        <div
+          style={{
+            width: "100%", // Set a fixed width to occupy the entire available space
+            overflowX: "auto",
+          }}
+        >
+          <AchievementsDisplay user={user} size={120} showTitle={true} />
+        </div>
 
         {/* Tutor Hour Progress Bar */}
         <div style={{ paddingTop: "80px" }}>
@@ -473,8 +483,6 @@ const UserProfile = () => {
         <div style={{ paddingTop: "100px" }}>
           <TutorCourseRatings tutorId={user._id} />
         </div>
-
-        {/* Badges */}
       </ProfileFormContainer>
 
       {/* -------------------------- Payment -------------------------- */}

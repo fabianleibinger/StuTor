@@ -1,6 +1,8 @@
 import Stripe from "stripe";
 import Booking from "../models/Booking.js";
 import Studysession from "../models/Studysession.js";
+import Achievement from "../models/Achievement.js";
+import UserAchievement from "../models/UserAchievement.js";
 import User from "../models/User.js";
 import { ObjectId } from "mongodb";
 import Review from "../models/Review.js";
@@ -247,7 +249,19 @@ export const updateBooking = async (req, res) => {
   }
 };
 
-export const updateTutorHoursAndBadge = async (booking, User) => {
+const findAchievementsByMilestones = async (milestones) => {
+  try {
+    const achievements = await Achievement.find({
+      name: { $in: milestones.map((level) => `${level}h of Experience`) },
+    });
+    return achievements;
+  } catch (err) {
+    console.log(err);
+    throw new Error(`Failed to find achievements for level ${milestones}!`);
+  }
+};
+
+const updateTutorHoursAndBadge = async (booking, User) => {
   try {
     const levelMilestones = [0, 2, 5, 10, 15, 20, 50, 100, 200, 500];
 
@@ -268,19 +282,27 @@ export const updateTutorHoursAndBadge = async (booking, User) => {
       levelMilestones.findIndex(
         (milestone) => hours_tutored_after < milestone
       ) - 1;
-    console.log("afterLevel: ", afterLevel);
-    console.log("beforeLevel: ", beforeLevel);
 
     // Loop from 0 to afterLevel and update badges
-    for (let level = 0; level <= afterLevel; level++) {
-      // achievement corresponds to current level
+    for (let level = 1; level <= afterLevel; level++) {
+      // Find tutor-hour achievement corresponds to current level
+      const currentLevelAchievement = await findAchievementsByMilestones([
+        levelMilestones[level],
+      ]);
 
-      // Check if the user has this achievement
-
-      if (!badgeAchieved) {
+      // Check if the user has an achievement with the desired name
+      const userAchievement = await UserAchievement.findOne({
+        user: tutorId,
+        achievement: currentLevelAchievement[0]._id,
+      });
+      if (!userAchievement) {
         // If not achieved, update the tutor's badges to include the new badge
         // Post the badge as an UserAchievement
-        // await newRequest.post("/UserAchievement", { user: tutorId, achievement: `Tutor-Hour ${level}` });
+        const newUserAchievement = new UserAchievement({
+          user: tutorId,
+          achievement: currentLevelAchievement[0]._id,
+        });
+        await newUserAchievement.save();
       }
     }
   } catch (err) {

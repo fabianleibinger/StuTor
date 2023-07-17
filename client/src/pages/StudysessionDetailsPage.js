@@ -1,5 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Grid, Button, Box, Typography, Avatar } from "@mui/material";
+import {
+  Grid,
+  Button,
+  Box,
+  Typography,
+  Avatar,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useQuery, useMutation } from "react-query";
 import BookingDialog from "../components/Booking/BookingDialog.js";
 import { getStudySessionbyId, getStudysessions } from "../api/StudySession.js";
@@ -22,6 +30,11 @@ const StudysessionDetailsPage = () => {
   const { user } = useUserContext();
   const [studysession, setStudysession] = useState(false);
   const { selectedChat, setSelectedChat } = useChatContext();
+
+  // Check if the screen width is below the breakpoint (sm or xs)
+  const theme = useTheme();
+  const isSmScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXsScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   // states and functions for read more
   const [expanded, setExpanded] = useState(false);
@@ -97,32 +110,28 @@ const StudysessionDetailsPage = () => {
   if (error) return <ErrorIndicator />;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        alignItems: "stretch",
-        alignContent: "stretch",
-        width: "97vw",
-        height: "100vh",
-        mx: "auto",
-        marginTop: "2vh",
-        marginBottom: "2vh",
-      }}
-    >
-      <Box width={0.49} height={1}>
+    <Grid container>
+      <Grid
+        item
+        xs={12}
+        sm={isSmScreen ? 12 : 6}
+        md={isXsScreen ? 12 : 6}
+        lg={6}
+      >
+        {/* Course Details */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: 1,
-            height: 1,
             border: "1px solid lightgrey",
             backgroundColor: "#f5f5f5",
-            borderRadius: "6px",
+            borderRadius: "30px",
             flexWrap: "wrap",
+            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+            padding: "1rem",
+            margin: "2rem",
+            overflow: "auto",
+            height: "85vh", // Set a specific height to limit vertical scrolling
           }}
         >
           <Box
@@ -130,22 +139,27 @@ const StudysessionDetailsPage = () => {
             sx={{
               overflow: "auto",
               padding: 2,
-              height: 0.85,
               marginBottom: "5vh",
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between", // Change to "space-between"
+                alignItems: "center", // Align items to the center vertically
+                width: "90%",
+                paddingBottom: "2rem",
+              }}
+            >
+              <Typography variant="h3">{data.courseName}</Typography>
             </Box>
-            <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
-              {data.courseName}
-            </Typography>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 marginBottom: "1rem",
+                width: "90%",
               }}
             >
               <Avatar
@@ -153,20 +167,16 @@ const StudysessionDetailsPage = () => {
                 alt=""
                 sx={{ width: 150, height: 150 }}
               />
+              <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Typography variant="h5">
                   {data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
                 </Typography>
-                <Typography variant="subtitle2" sx={{ marginBottom: "1.5rem" }}>
+                <Typography variant="subtitle2">
                   {data.tutoredBy.university.name}
                 </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6} alignContent={"center"}>
-                {/* ---------------------------- StudysessionRating ---------------------------- */}
-                <StudysessionRating studySessionId={studySessionId} />
-                {/* ---------------------------- StudysessionRating ---------------------------- */}
               </Grid>
             </Grid>
             <Grid
@@ -183,12 +193,8 @@ const StudysessionDetailsPage = () => {
                     <LanguageIcon sx={{ marginRight: "0.5rem" }} />
                   </Grid>
                   {data.languages.map((language) => (
-                    <Grid item>
-                      <Typography
-                        variant="subtitle2"
-                        key={language}
-                        marginRight={"0.5rem"}
-                      >
+                    <Grid item key={language}>
+                      <Typography variant="subtitle2" marginRight={"0.5rem"}>
                         {language}
                       </Typography>
                     </Grid>
@@ -206,21 +212,62 @@ const StudysessionDetailsPage = () => {
             >
               <Grid item>
                 <Grid container alignItems="center">
+                  {/* ---------------------------- StudysessionRating ---------------------------- */}
+                  <Box>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        marginBottom: "1rem",
+                        color: "#1976d2",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Course Rating
+                    </Typography>
+                    <StudysessionRating studySessionId={studySessionId} />
+                  </Box>
+                  {/* ---------------------------- StudysessionRating ---------------------------- */}
+
                   <Grid item>
-                    <EmojiEventsIcon sx={{ marginRight: "0.5rem" }} />
-                  </Grid>
-                  <Grid item>
-                    {/* ---------------------------- Achievements ---------------------------- */}
-                    <AchievementsDisplay user={data.tutoredBy} size={100} />
-                    {/* ---------------------------- Achievements ---------------------------- */}
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        marginBottom: "1rem",
+                        color: "#1976d2",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Achievements{" "}
+                    </Typography>{" "}
+                    {/* Badges */}
+                    <div
+                      style={{
+                        width: "90%", // Set a fixed width to occupy the entire available space for four badges
+                        overflowX: "auto", // Add horizontal scrolling when badges exceed the container's width
+                      }}
+                    >
+                      <AchievementsDisplay
+                        user={data.tutoredBy}
+                        size={100}
+                        showTitle={true}
+                      />
+                    </div>
+                    {/* Badges */}
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-            <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                marginBottom: "1rem",
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
+            >
               Course Description
             </Typography>
-            <Typography>{data.description}</Typography>
+            <Typography sx={{ width: "85%" }}>{data.description}</Typography>
           </Box>
           <Grid
             container
@@ -277,11 +324,28 @@ const StudysessionDetailsPage = () => {
             studysession={data}
           />
         </Box>
-      </Box>
-      <Box width={0.49} height={1}>
-        {<ChatBox />}
-      </Box>
-    </Box>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={isSmScreen ? 12 : 6}
+        md={isXsScreen ? 12 : 6}
+        lg={6}
+      >
+        {/* Chat Box */}
+        <Box
+          sx={{
+            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+            borderRadius: "30px",
+            padding: "1rem",
+            margin: "2rem",
+            height: "85vh",
+          }}
+        >
+          {<ChatBox />}
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
