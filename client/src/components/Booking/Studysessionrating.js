@@ -50,13 +50,13 @@ const StudysessionRating = ({ studySessionId }) => {
       <Grid container spacing={2}>
         {/* ----------- Average Rating Number----------- */}
         <Grid item>
-          <Typography variant="body1">Average Rating:</Typography>
+          {/* <Typography variant="body1">Average Rating:</Typography> */}
           <Typography
             variant="h5"
             fontWeight="bold"
             style={{ color: "#FFD700" }}
           >
-            {rating.toFixed(1)}
+            {rating.toFixed(1)} / 5.0
           </Typography>
         </Grid>
 

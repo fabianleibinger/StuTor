@@ -77,7 +77,11 @@ const TutorHourProgressBar = ({ hoursTutored }) => {
       <LinearProgress
         variant="determinate"
         value={progress}
-        sx={{ height: 20 }} // Set the height to make the progress bar thicker
+        sx={{
+          height: 20, // Set the height to make the progress bar thicker
+          borderRadius: "10px", // Set the border radius to make the ends rounded
+          overflow: "hidden", // Hide any overflowing content within the progress bar
+        }}
       />
       {/* Display the user's tutoring hours */}
       <Typography variant="h6" fontWeight="bold">

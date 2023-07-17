@@ -81,7 +81,7 @@ const TutorCourseRatings = ({ tutorId }) => {
           fontWeight="bold"
           style={{ textAlign: "left", color: "#FFD700" }}
         >
-          {(ratingSum / totalRatings).toFixed(1)}
+          {(ratingSum / totalRatings).toFixed(1)} / 5.0
         </Typography>
       </div>
 
