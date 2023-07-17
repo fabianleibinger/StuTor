@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Navigate } from "react-router-dom";
-import { useUserContext } from "../context/UserContext";
+import { UserContext } from "../context/UserProvider";
 
 const PrivateRoute = ({ path, element }) => {
-  const { user } = useUserContext();
+  const { user } = UserContext();
 
   return user ? (
     <Route path={path} element={element} />

@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 //react-query
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/UserProvider";
 
 // frontend
 import { Box, Grid, Typography } from "@mui/material";
@@ -29,6 +29,7 @@ const MyStudySessions = () => {
   const queryClient = useQueryClient();
 
   const { user, setUser } = useContext(UserContext);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStudySession, setSelectedStudySession] = useState(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);

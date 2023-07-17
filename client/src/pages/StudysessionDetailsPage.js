@@ -110,7 +110,7 @@ const StudysessionDetailsPage = () => {
   if (error) return <ErrorIndicator />;
 
   return (
-    <Grid container>
+    <Grid container spacing={2}>
       <Grid
         item
         xs={12}
@@ -202,6 +202,36 @@ const StudysessionDetailsPage = () => {
                 </Grid>
               </Grid>
             </Grid>
+            {/* ---------------------------- Buttons ---------------------------- */}
+            <Box
+              mt={2}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <Grid item key="booking-history">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleHistoryOpenDialog}
+                >
+                  View bookings
+                </Button>
+              </Grid>
+              <Grid item key="book-now">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpenDialog}
+                >
+                  Book now
+                </Button>
+              </Grid>
+            </Box>
+            {/* ---------------------------- Buttons ---------------------------- */}
+
             <Grid
               container
               direction="row"
@@ -227,36 +257,36 @@ const StudysessionDetailsPage = () => {
                     <StudysessionRating studySessionId={studySessionId} />
                   </Box>
                   {/* ---------------------------- StudysessionRating ---------------------------- */}
-
-                  <Grid item>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        marginBottom: "1rem",
-                        color: "#1976d2",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Achievements{" "}
-                    </Typography>{" "}
-                    {/* Badges */}
-                    <div
-                      style={{
-                        width: "90%", // Set a fixed width to occupy the entire available space for four badges
-                        overflowX: "auto", // Add horizontal scrolling when badges exceed the container's width
-                      }}
-                    >
-                      <AchievementsDisplay
-                        user={data.tutoredBy}
-                        size={100}
-                        showTitle={true}
-                      />
-                    </div>
-                    {/* Badges */}
-                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
+            {/* ---------------------------- Achievements ---------------------------- */}
+            <Box mt={2} mb={2}>
+              <Typography
+                variant="h5"
+                sx={{
+                  marginBottom: "1rem",
+                  color: "#1976d2",
+                  fontWeight: "bold",
+                }}
+              >
+                Achievements
+              </Typography>{" "}
+              <div
+                style={{
+                  width: "90%", // Set a fixed width to occupy the entire available space for four badges
+                  overflowX: "auto", // Add horizontal scrolling when badges exceed the container's width
+                }}
+              >
+                <AchievementsDisplay
+                  user={data.tutoredBy}
+                  size={100}
+                  showTitle={true}
+                />
+              </div>
+            </Box>
+            {/* ---------------------------- Achievements ---------------------------- */}
+
             <Typography
               variant="h5"
               sx={{
@@ -267,47 +297,19 @@ const StudysessionDetailsPage = () => {
             >
               Course Description
             </Typography>
-            <Typography sx={{ width: "85%" }}>{data.description}</Typography>
-          </Box>
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "0.5rem",
-              marginTop: "auto",
-              marginBottom: "auto",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+
+            {/* ---------------------------- Course Description ---------------------------- */}
+            <div
+              style={{
+                width: "85%",
+                maxHeight: "40vh",
+                overflowY: "auto",
               }}
             >
-              <Grid item marginRight={8} key="booking-history">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleHistoryOpenDialog}
-                  style={{ width: "auto" }}
-                >
-                  View bookings
-                </Button>
-              </Grid>
-              <Grid item marginLeft={8} key="book-now">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleOpenDialog}
-                >
-                  Book now
-                </Button>
-              </Grid>
-            </Box>
-          </Grid>
+              <Typography>{data.description}</Typography>
+            </div>
+            {/* ---------------------------- Course Description ---------------------------- */}
+          </Box>
 
           <BookingHistoryDialog
             open={historyDialogOpen}
@@ -325,6 +327,7 @@ const StudysessionDetailsPage = () => {
           />
         </Box>
       </Grid>
+
       <Grid
         item
         xs={12}
