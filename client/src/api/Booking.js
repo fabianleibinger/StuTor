@@ -37,7 +37,7 @@ export const confirmBooking = async (bookingId) => {
 export const setBookingIsPayed = async (bookingId) => {
   try {
     await axios.put(`${BOOKING_URL}/payBooking/${bookingId}`);
-    return "You succesfully booked a study session! Please wait for Tutor to comfirm...";
+    return "You successfully booked a study session! Please wait for your tutor to confirm...";
   } catch (error) {
     if (error.response.status == 400) {
       console.log("Booking has already been payed!");
