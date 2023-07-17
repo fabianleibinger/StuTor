@@ -23,6 +23,14 @@ function Home() {
     setSearch(e.target.value);
   };
 
+  const handlePopularButtonClick = (query) => {
+    console.log(query);
+  };
+
+  const handleSearchButtonClick = (e) => {
+    console.log("SearchButton pressed");
+  };
+
   const debouncedSearchTerm = useDebounce(search, 200);
   const queryKey = {
     searchTerm: debouncedSearchTerm,
@@ -55,7 +63,11 @@ function Home() {
 
   return (
     <div className="home">
-      <SearchBar handleSearchInputChange={handleSearchInputChange} />
+      <SearchBar
+        handleSearchInputChange={handleSearchInputChange}
+        handleSearchButtonClick={handleSearchButtonClick}
+        handlePopularButtonClick={handlePopularButtonClick}
+      />
 
       <TrustedBy />
 

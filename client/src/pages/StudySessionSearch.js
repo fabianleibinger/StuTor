@@ -1,38 +1,38 @@
-import React, { useRef } from 'react';
-import StudySessionSearchbar from '../components/Searchbars/StudySessionSearchbar';
-import LanguageFilter from '../components/Filters/LanguageFilter';
-import StandardFilter from '../components/Filters/StandardFilter';
-import ClearFilterButton from '../components/Filters/ClearFilterButton';
-import { FilterContainer } from '../styles';
+import React, { useRef } from "react";
+import StudySessionSearchbar from "../components/Searchbars/StudySessionSearchbar";
+import LanguageFilter from "../components/Filters/LanguageFilter";
+import StandardFilter from "../components/Filters/StandardFilter";
+import ClearFilterButton from "../components/Filters/ClearFilterButton";
+import { FilterContainer } from "../styles";
 
-import { Box, Button, Grid, Typography } from '@mui/material';
-import { styled } from '@mui/system';
+import { Box, Button, Grid, Typography } from "@mui/material";
+import { styled } from "@mui/system";
 
-import { useState, useContext } from 'react';
-import { useQuery } from 'react-query';
-import { UserContext } from '../context/UserContext';
+import { useState, useContext } from "react";
+import { useQuery } from "react-query";
+import { UserContext } from "../context/UserContext";
 
-import { getStudysessionFiltered } from '../api/StudySession';
-import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
-import useDebounce from '../hooks/useDebounce';
+import { getStudysessionFiltered } from "../api/StudySession";
+import StudySessionCard from "../components/StudySessionCard/StudySessionDetailsCard";
+import useDebounce from "../hooks/useDebounce";
 
-const ScrollableContainer = styled('div')({
-  maxHeight: '70vh',
-  overflow: 'auto'
+const ScrollableContainer = styled("div")({
+  maxHeight: "70vh",
+  overflow: "auto",
 });
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
   const colors = [
-    '#0fab3c',
-    '#98f5ff',
-    '#ee6363',
-    '#ffa500',
-    '	#eeaeee',
-    '#1e90ff'
+    "#0fab3c",
+    "#98f5ff",
+    "#ee6363",
+    "#ffa500",
+    "	#eeaeee",
+    "#1e90ff",
   ];
 
   // always student
-  const userRole = 'STUDENT';
+  const userRole = "STUDENT";
   if (error) {
     return <div>Error: {error.message}</div>;
     // error.status? => replace a nice string
@@ -74,8 +74,8 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
 }
 
 export default function StudySessionSearch() {
-  const [search, setSearch] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [search, setSearch] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const [showClearButton, setShowClearButton] = useState(false);
 
   const [selectedLanguages, setSelectedLanguages] = useState([]);
@@ -85,25 +85,25 @@ export default function StudySessionSearch() {
 
   const debouncedSearchTerm = useDebounce(search, 200);
 
-  const handleSearchInputChange = e => {
+  const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
   };
 
   // handle Max Price lilter
-  const handleMaxPriceChange = value => {
+  const handleMaxPriceChange = (value) => {
     setMaxPrice(value);
     setShowClearButton(Boolean(value));
   };
 
   const clearMaxPrice = () => {
-    handleMaxPriceChange('');
+    handleMaxPriceChange("");
     if (maxPriceSelectRef.current) {
       maxPriceSelectRef.current.clearSelection();
     }
   };
 
   // handle language filter
-  const handleLanguageChange = value => {
+  const handleLanguageChange = (value) => {
     setSelectedLanguages(value);
   };
 
@@ -120,7 +120,7 @@ export default function StudySessionSearch() {
   };
 
   const clearRating = () => {
-    handleRatingChange('');
+    handleRatingChange("");
     if (ratingSelectRef.current) {
       ratingSelectRef.current.clearSelection();
     }
@@ -134,16 +134,16 @@ export default function StudySessionSearch() {
   };
 
   const { data, error, isLoading } = useQuery(
-    ['StudySessionSearch', queryKey],
+    ["StudySessionSearch", queryKey],
     () =>
       getStudysessionFiltered(debouncedSearchTerm, {
         maxPrice: maxPrice,
         languages: selectedLanguages,
         rating: selectedRating,
-        user: user
+        user: user,
       }),
     {
-      retry: false
+      retry: false,
     }
   );
 
@@ -153,9 +153,9 @@ export default function StudySessionSearch() {
   const ratingSelectRef = useRef(null);
 
   const clearFilters = () => {
-    setMaxPrice('');
+    setMaxPrice("");
     setSelectedLanguages([]);
-    setSelectedDepartment('');
+    setSelectedDepartment("");
     setSelectedRating(0);
 
     // Reset the Select components to their initial state
@@ -175,23 +175,23 @@ export default function StudySessionSearch() {
   };
 
   const ClearButton = styled(Button)(({ theme }) => ({
-    width: 'fit-content',
-    height: 'fit-content',
-    float: 'right',
-    minWidth: 'auto',
-    padding: '1px',
-    fontSize: '0.6rem',
-    textTransform: 'none',
+    width: "fit-content",
+    height: "fit-content",
+    float: "right",
+    minWidth: "auto",
+    padding: "1px",
+    fontSize: "0.6rem",
+    textTransform: "none",
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    paddingRight: theme.spacing(2),
   }));
 
   return (
     <Box
       id="pageWrapper"
       sx={{
-        display: 'flex',
-        justifyContent: 'center'
+        display: "flex",
+        justifyContent: "center",
       }}
     >
       <Box
