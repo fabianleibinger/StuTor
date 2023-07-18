@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.post("/", verifyToken, createUserAchievement);
-router.get("/id/:userAchievementId", verifyToken, getUserAchievement);
+router.post("/", createUserAchievement);
+router.get("/id/:userAchievementId", getUserAchievement);
 router.delete("/:userAchievementId", verifyToken, deleteUserAchievement);
 
 export default router;

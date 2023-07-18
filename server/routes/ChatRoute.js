@@ -12,7 +12,7 @@ import {
 
 const router = express.Router();
 
-router.post("/:userId", accessChat);
+router.post("/:userId", verifyToken, accessChat);
 router.get("/id/:chatId", getChat);
 router.get("/ofStudysession/:studysessionId", getChatsOfStudysession);
 router.get("/ofUser/:userId", getChatsOfUser);
