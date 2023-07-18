@@ -32,33 +32,6 @@ function Footer() {
           </FooterItem>
 
           <FooterItem>
-            <h2>Enginnering</h2>
-            <span>Robotics</span>
-            <span>Computational Fluid Dynamics</span>
-            <span>Sustanable Mobile Power Trains</span>
-            <span>Finite Element Analysis</span>
-            <span>Electric Motors</span>
-          </FooterItem>
-
-          <FooterItem>
-            <h2>Physics</h2>
-            <span>Machine Learning</span>
-            <span>Physics & Astronomy</span>
-            <span>Electrical & Electronic Engineering</span>
-            <span>Mechanical, Aeronautical and Manufacturing Engineering</span>
-            <span>Chemistry</span>
-          </FooterItem>
-
-          <FooterItem>
-            <h2>Chemistry</h2>
-            <span>Machine Learning</span>
-            <span>Physics & Astronomy</span>
-            <span>Electrical & Electronic Engineering</span>
-            <span>Mechanical, Aeronautical and Manufacturing Engineering</span>
-            <span>Chemistry</span>
-          </FooterItem>
-
-          <FooterItem>
             <h2>About Us</h2>
             <span>The Team</span>
             <span>Partnerships</span>

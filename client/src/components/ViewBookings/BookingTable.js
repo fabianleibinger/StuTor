@@ -25,6 +25,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Alert from "@mui/material/Alert";
 
 export default function BookingTable(data) {
+  console.log("data: ", data);
   const bookings = data.children[1].bookings;
   const reviews = data.children[1].reviews;
   const bookingsWithReviews = bookings.map((booking) =>

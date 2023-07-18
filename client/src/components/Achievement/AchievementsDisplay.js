@@ -34,45 +34,60 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        overflow: "auto",
-        justifyContent: "center",
+        overflowX: "auto", // Add the horizontal scrollbar
+        justifyContent: "left",
+        maxWidth: "100%", // Ensure the container takes full width
       }}
     >
-      {userAchievements.map((userAchievement, index) => (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            alignContent: "center",
-          }}
-        >
-          <Tooltip
-            title={
-              <React.Fragment>
-                {userAchievement.achievement.name + ":"}
-                <br />
-                {userAchievement.achievement.description}
-              </React.Fragment>
-            }
-            placement="top"
-            followCursor
+      {userAchievements.length === 0 ? (
+        <div>This tutor has not earned any cool badges yet!</div>
+      ) : (
+        userAchievements.map((userAchievement, index) => (
+          <Box
+            key={userAchievement._id} // Add a unique key prop here
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center",
+              margin: "8px", // Add margin here to create the gap between each userAchievement
+            }}
           >
-            <Avatar
-              sx={{
-                width: size,
-                height: size,
-                marginBottom: 1,
-                marginTop: 1,
-              }}
+            <Tooltip
+              title={
+                <React.Fragment>
+                  {userAchievement.achievement?.name + ":"}
+                  <br />
+                  {userAchievement.achievement?.description}
+                </React.Fragment>
+              }
+              placement="top"
+              followCursor
             >
-              <img src={userAchievement.achievement.badge} alt="Badge" />
-            </Avatar>
-          </Tooltip>
-          {showTitle && <div>{userAchievement.achievement.name}</div>}
-        </Box>
-      ))}
+              <Avatar
+                sx={{
+                  width: size,
+                  height: size,
+                  marginBottom: 1,
+                  marginTop: 1,
+                }}
+              >
+                <img
+                  src={userAchievement.achievement?.badge}
+                  alt="Badge"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#f5f5f5",
+                  }}
+                />
+              </Avatar>
+            </Tooltip>
+            {showTitle && <div>{userAchievement.achievement?.name}</div>}
+          </Box>
+        ))
+      )}
     </Box>
   );
 };

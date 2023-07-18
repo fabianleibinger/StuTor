@@ -1,4 +1,4 @@
-import { styled, Box } from '@mui/system';
+import { styled, Box } from "@mui/system";
 import {
   Badge,
   Button,
@@ -51,28 +51,28 @@ export const RootContainer = styled("div")({
 });
 
 export const CardContainer = styled(Card)({
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: theme => theme.spacing(3)
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: (theme) => theme.spacing(3),
 });
 export const LogoContainer = styled(Link)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  textDecoration: 'none',
-  color: 'inherit'
+  display: "flex",
+  alignItems: "center",
+  textDecoration: "none",
+  color: "inherit",
 }));
-export const LinksContainer = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center'
+export const LinksContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
 }));
 
 export const FilterContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-end'
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
 }));
 
 export const LoginFormContainer = styled("form")(({ theme }) => ({
@@ -125,10 +125,10 @@ export const ProfileFormContainer = styled("div")({
 
 // -------------------------- Titles --------------------------
 export const Title = styled(Typography)({
-  marginBottom: theme => theme.spacing(4)
+  marginBottom: (theme) => theme.spacing(4),
 });
 export const CardTitle = styled(Typography)({
-  marginBottom: theme => theme.spacing(2)
+  marginBottom: (theme) => theme.spacing(2),
 });
 export const LoginTitle = styled(Typography)(({ theme }) => ({
   // marginTop: theme.spacing(2), // Add top margin
@@ -156,32 +156,32 @@ export const SubmitButton = styled(Button)(({ theme }) => ({
 }));
 
 export const CardButton = styled(Button)({
-  marginTop: theme => theme.spacing(2)
+  marginTop: (theme) => theme.spacing(2),
 });
 export const AvatarIconButton = styled(IconButton)(({ theme }) => ({
   marginLeft: theme.spacing(3),
   marginRight: theme.spacing(1),
-  display: 'flex',
-  alignItems: 'center'
+  display: "flex",
+  alignItems: "center",
 }));
 export const SignInButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.button,
   marginLeft: theme.spacing(5),
   color: theme.palette.primary.main,
-  textTransform: 'none',
-  fontSize: '16px',
-  '&:hover': {
+  textTransform: "none",
+  fontSize: "16px",
+  "&:hover": {
     backgroundColor: theme.palette.primary.hoverBackground,
-    color: theme.palette.primary.hoverText
+    color: theme.palette.primary.hoverText,
   },
-  width: '100px'
+  width: "100px",
 }));
 export const JoinButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.main,
   color: theme.palette.secondary.contrastText,
-  textTransform: 'none',
-  fontSize: '16px',
-  width: '100px'
+  textTransform: "none",
+  fontSize: "16px",
+  width: "100px",
 }));
 export const AboutUsButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -234,7 +234,7 @@ export const StyledLink = styled(Link)(({ theme }) => ({
 // -------------------------- Textfields --------------------------
 export const LoginTextField = styled(TextField)(({ theme }) => ({
   marginBottom: theme.spacing(2),
-  width: '80%'
+  width: "80%",
 }));
 
 // -------------------------- Texts --------------------------
@@ -244,25 +244,25 @@ export const UserFullName = styled("div")(({ theme }) => ({
   fontSize: "1.2rem",
 }));
 export const ErrorMessage = styled(Typography)(({ theme }) => ({
-  color: 'red',
+  color: "red",
   marginTop: theme.spacing(2),
-  textAlign: 'center' // Center-align the error message
+  textAlign: "center", // Center-align the error message
 }));
 
 // --------------------------- Dialogs ---------------------------------------
 export const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2)
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
   },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1)
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
   },
-  '& .MuiPaper-root': {
-    maxWidth: '600px',
-    minWidth: '45vw',
-    minHeight: '40vh',
-    maxHeight: '65vh'
-  }
+  "& .MuiPaper-root": {
+    maxWidth: "600px",
+    minWidth: "45vw",
+    minHeight: "40vh",
+    maxHeight: "65vh",
+  },
 }));
 
 export const AutocompleteWrapper = styled(Autocomplete)(({ theme }) => ({
@@ -322,6 +322,7 @@ export const stepContentContainer = {
   width: "500px",
   height: "600px",
   justifyContent: "center",
+  textAlign: "center",
   // marginBottom: "50px", // Adjust this margin based on your preference
 };
 

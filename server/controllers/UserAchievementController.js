@@ -19,8 +19,12 @@ export const createUserAchievement = async (req, res) => {
     const achievement = await Achievement.findById(achievementId);
     const userId = new ObjectId(req.body.user);
     const user = await User.findById(userId);
-    if (!achievement || !user) {
-      res.status(404).send("Object reference not found!");
+    if (!achievement) {
+      res.status(404).send("Achievement not found!");
+      return;
+    }
+    if (!user) {
+      res.status(404).send("User not found!");
       return;
     }
     // Create userAchievement.

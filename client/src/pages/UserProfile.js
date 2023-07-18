@@ -160,8 +160,8 @@ const UserProfile = () => {
 
     // if not, throw error message.
     if (!isOldPasswordCorrect) {
-      setSucessMessage('');
-      setErrorMessage('Incorrect Old Password!');
+      setSucessMessage("");
+      setErrorMessage("Incorrect Old Password or Password Reset Token!");
       return;
     }
 
@@ -173,9 +173,11 @@ const UserProfile = () => {
         newPassword
       };
       console.log(requestBody);
-      await newRequest.put('user/changePassword', requestBody);
-      setErrorMessage('');
-      setSucessMessage('Successfully changed password.');
+      await newRequest.put("user/changePassword", requestBody);
+      setErrorMessage("");
+      setSucessMessage(
+        "Successfully changed password and deleted password reset token."
+      );
     } catch (error) {
       console.log('Failed to change user password');
       console.log(error);
@@ -355,8 +357,54 @@ const UserProfile = () => {
           </Grid>
         </FormControl>
       </Container>
+
+      {/* -------------------------- Achievements -------------------------- */}
       <ProfileFormContainer>
-        <Typography variant="h5" align="center" gutterBottom>
+        <div style={{ paddingBottom: "50px" }}>
+          <Typography
+            variant="h5"
+            sx={{
+              marginBottom: "1rem",
+              color: "#1976d2",
+              fontWeight: "bold",
+            }}
+          >
+            Achievements
+          </Typography>
+        </div>
+
+        {/* Badges */}
+        <div
+          style={{
+            width: "100%", // Set a fixed width to occupy the entire available space
+            overflowX: "auto",
+          }}
+        >
+          <AchievementsDisplay user={user} size={120} showTitle={true} />
+        </div>
+
+        {/* Tutor Hour Progress Bar */}
+        <div style={{ paddingTop: "80px" }}>
+          <TutorHourProgressBar hoursTutored={hoursTutored} />
+        </div>
+
+        {/* Tutor Course Ratings */}
+        <div style={{ paddingTop: "100px" }}>
+          <TutorCourseRatings tutorId={user._id} />
+        </div>
+      </ProfileFormContainer>
+
+      {/* -------------------------- User Information -------------------------- */}
+      <ProfileFormContainer>
+        <Typography
+          variant="h5"
+          sx={{
+            marginBottom: "1rem",
+            color: "#1976d2",
+            fontWeight: "bold",
+          }}
+        >
+          {" "}
           User Information
         </Typography>
         <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
@@ -432,7 +480,7 @@ const UserProfile = () => {
               {/* -------------------------- PASSWORD -------------------------- */}
               <TextField
                 fullWidth
-                label="Old Password"
+                label="Old Password or Reset Token"
                 name="oldPassword"
                 type="password"
                 value={oldPassword}
@@ -481,28 +529,17 @@ const UserProfile = () => {
         </form>
       </ProfileFormContainer>
 
-      {/* -------------------------- Achievements -------------------------- */}
-      <ProfileFormContainer>
-        <Typography variant="h5" align="center" gutterBottom>
-          Achievements
-        </Typography>
-
-        {/* <AchievementsDisplay user={user} size={125} showTitle={true} /> */}
-
-        {/* Tutor Hour Progress Bar */}
-        <div style={{ paddingTop: '80px' }}>
-          <TutorHourProgressBar hoursTutored={hoursTutored} />
-        </div>
-
-        {/* Tutor Course Ratings */}
-        <div style={{ paddingTop: '100px' }}>
-          <TutorCourseRatings tutorId={user._id} />
-        </div>
-      </ProfileFormContainer>
-
       {/* -------------------------- Payment -------------------------- */}
       <ProfileFormContainer>
-        <Typography variant="h5" align="center" gutterBottom>
+        <Typography
+          variant="h5"
+          sx={{
+            marginBottom: "1rem",
+            color: "#1976d2",
+            fontWeight: "bold",
+          }}
+        >
+          {" "}
           Payment Information
         </Typography>
         <RegisterStripe />

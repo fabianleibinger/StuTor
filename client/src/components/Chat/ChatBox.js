@@ -232,7 +232,17 @@ const ChatBox = () => {
                 );
               })
             ) : (
-              <Chip label="Start a conversation!" />
+              <Chip
+                label="Start a Conversation With the Tutor!"
+                variant="outlined" // Add an outline to the chip
+                color="primary" // Use the primary color for the chip background
+                sx={{
+                  fontSize: "1.2rem", // Adjust the font size as desired
+                  fontWeight: "bold", // Add bold font weight
+                  padding: "0.5rem 1rem", // Add padding to the chip to make it larger
+                  borderRadius: "50px", // Set a higher value for a more rounded shape
+                }}
+              />
             )}
           </Stack>
         </Box>

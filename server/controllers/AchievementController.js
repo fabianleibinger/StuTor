@@ -10,7 +10,7 @@ export const createAchievement = async (req, res) => {
       name: req.body.name,
     });
     if (existingAchievement) {
-      res.status(409).send("Object already exists!");
+      res.status(409).send("Achievement already exists!");
       return;
     }
     // Create achievement.
@@ -61,13 +61,13 @@ export const getAchievement = async (req, res) => {
   }
 };
 
-export const getAchievementsOfUser = async (req, res) => {
+export const getUserAchievementsOfUser = async (req, res) => {
   try {
     // Check if user exists.
-    const userId = new ObjectId(req.params.userId);
+    const userId = req.params.userId;
     const user = await User.findById(userId);
     if (!user) {
-      res.status(404).send("Object reference not found!");
+      res.status(404).send("User not found!");
       return;
     }
     try {
@@ -75,9 +75,8 @@ export const getAchievementsOfUser = async (req, res) => {
         user: userId,
       }).populate("achievement");
       if (userAchievements.length === 0) {
-        res.status(404).send("No achievements found!");
+        res.status(200).send([]);
       } else {
-        console.log(userAchievements);
         res.status(200).send(userAchievements);
       }
     } catch (err) {

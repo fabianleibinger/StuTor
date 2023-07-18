@@ -12,7 +12,7 @@ export const getPaymentInfo = async (userId) => {
     const response = await axios.get(`${PAYMENT_URL}/account/${userId}`);
     return response.data;
   } catch (error) {
-    if (error.response.status == 400) {
+    if (error.response?.status == 400) {
       console.log("User has no payment account!");
       return [];
     }

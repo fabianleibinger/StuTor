@@ -43,6 +43,9 @@ const UserSchema = new Schema({
     type: Number,
     default: 0,
   },
+  resetToken: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
