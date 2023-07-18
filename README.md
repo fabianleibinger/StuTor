@@ -20,5 +20,7 @@ Prerequisite: Make sure to have installed node.js on your device.
 10. Run `npm start`.
 11. A browser window should have opened automatically. (Otherwise connect to localhost:3000).
 
+### 12. Enjoy using the app!!!
 
-12. Enjoy using the app!!!
+
+
