@@ -1,4 +1,6 @@
 import express from "express";
+import { verifyToken } from "../middleware/jwt.js";
+
 import {
   createUserStudysession,
   getUserStudysession,
@@ -9,6 +11,6 @@ const router = express.Router();
 
 router.post("/", createUserStudysession);
 router.get("/id/:userStudysessionId", getUserStudysession);
-router.delete("/:userStudysessionId", deleteUserStudysession);
+router.delete("/:userStudysessionId", verifyToken, deleteUserStudysession);
 
 export default router;

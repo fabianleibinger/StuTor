@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-export const verifyToken = (req, res) => {
+export const verifyToken = (req, res, next) => {
+  console.log("----------- VERIFYING TOKEN -----------");
+
   const token = req.cookies.accessToken;
   if (!token) {
     res.status(401).send("You are not authenticated!");
@@ -9,11 +11,16 @@ export const verifyToken = (req, res) => {
   }
 
   jwt.verify(token, process.env.JWT_KEY, async (err, payload) => {
+    console.log("req: ", req);
+    console.log("payload: ", payload);
+
     if (err) {
       res.status(403).send("Token is not valid!");
       return;
     }
+    // res.status(200).send("Token is valid!");
     req.userId = payload.id;
+    next();
   });
 };
 

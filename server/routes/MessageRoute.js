@@ -1,4 +1,5 @@
 import express from "express";
+import { verifyToken } from "../middleware/jwt.js";
 
 import {
   sendMessage,
@@ -9,9 +10,9 @@ import {
 
 const router = express.Router();
 
-router.post("/:userId", sendMessage);
-router.get("/id/:messageId", getMessage);
-router.get("/ofChat/:chatId", getMessagesOfChat);
-router.delete("/:messageId", deleteMessage);
+router.post("/:userId", verifyToken, sendMessage);
+router.get("/id/:messageId", verifyToken, getMessage);
+router.get("/ofChat/:chatId", verifyToken, getMessagesOfChat);
+router.delete("/:messageId", verifyToken, deleteMessage);
 
 export default router;

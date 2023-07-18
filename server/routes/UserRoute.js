@@ -1,4 +1,6 @@
 import express from "express";
+import { verifyToken } from "../middleware/jwt.js";
+
 import {
   getUser,
   getUsersOfUniversity,
@@ -12,13 +14,17 @@ import {
 
 const router = express.Router();
 
-router.get("/byId/:userId", getUser);
-router.get("/byUsername/:username", getUserByUsername);
-router.get("/ofUniversity/:universityId", getUsersOfUniversity);
-router.get("/thatAchieved/:achievementId", getUsersThatAchieved);
-router.get("/ofStudysession/:studysessionId", getUsersOfStudysession);
-router.put("/updateUser/:userId", updateUser);
-router.put("/changePassword", changePassword);
-router.delete("/deleteUser/:userId", deleteUser);
+router.get("/byId/:userId", verifyToken, getUser);
+router.get("/byUsername/:username", verifyToken, getUserByUsername);
+router.get("/ofUniversity/:universityId", verifyToken, getUsersOfUniversity);
+router.get("/thatAchieved/:achievementId", verifyToken, getUsersThatAchieved);
+router.get(
+  "/ofStudysession/:studysessionId",
+  verifyToken,
+  getUsersOfStudysession
+);
+router.put("/updateUser/:userId", verifyToken, updateUser);
+router.put("/changePassword", verifyToken, changePassword);
+router.delete("/deleteUser/:userId", verifyToken, deleteUser);
 
 export default router;

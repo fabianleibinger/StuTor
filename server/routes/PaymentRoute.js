@@ -1,4 +1,6 @@
 import express from "express";
+import { verifyToken } from "../middleware/jwt.js";
+
 import {
   createAccount,
   getAccount,
@@ -15,7 +17,7 @@ const router = express.Router();
 router.post("/createAccount/:userId", createAccount);
 router.get("/account/:userId", getAccount);
 router.post("/createPayment", createPayment);
-router.delete("/deleteAccount/:userId", deleteAccount);
+router.delete("/deleteAccount/:userId", verifyToken, deleteAccount);
 router.put("/updateAccount/:userId", updateAccount);
 router.post("/createAccountForNewUser", createAccountForNewUser);
 

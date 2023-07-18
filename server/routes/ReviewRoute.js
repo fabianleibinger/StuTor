@@ -1,4 +1,5 @@
 import express from "express";
+import { verifyToken } from "../middleware/jwt.js";
 import {
   createReview,
   getReview,
@@ -8,9 +9,9 @@ import {
 
 const router = express.Router();
 
-router.post("/", createReview);
-router.get("/id/:reviewId", getReview);
-router.get("/ofBooking/:bookingId", getReviewOfBooking);
-router.delete("/:reviewId", deleteReview);
+router.post("/", verifyToken, createReview);
+router.get("/id/:reviewId", verifyToken, getReview);
+router.get("/ofBooking/:bookingId", verifyToken, getReviewOfBooking);
+router.delete("/:reviewId", verifyToken, deleteReview);
 
 export default router;
