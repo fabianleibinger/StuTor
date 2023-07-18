@@ -34,9 +34,9 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        overflowX: "auto", // Add the horizontal scrollbar
+        overflowX: "auto",
         justifyContent: "left",
-        maxWidth: "100%", // Ensure the container takes full width
+        maxWidth: "100%",
       }}
     >
       {userAchievements.length === 0 ? (
