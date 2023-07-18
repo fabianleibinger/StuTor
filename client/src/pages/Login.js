@@ -47,7 +47,7 @@ function Login() {
       }}
     >
       <LoginFormContainer onSubmit={handleSubmit}>
-        <LoginTitle>Sign in</LoginTitle>
+        <LoginTitle sx={{ marginBottom: "8rem" }}>Sign in</LoginTitle>
         <LoginTextField
           label="Username or Email"
           name="username"

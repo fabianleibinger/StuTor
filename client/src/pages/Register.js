@@ -6,6 +6,7 @@ import uploadProfilePic from "../utils/uploadProfilePic";
 import newRequest from "../utils/newRequest";
 import { useUserContext } from "../context/UserProvider";
 import { searchUniversities } from "../utils/searchUniversities";
+import RegisterStripe from "../components/Payment/RegisterStripe";
 import {
   FormContainer,
   LoginTitle,
@@ -159,6 +160,11 @@ const Register = () => {
       }
     }
 
+    setActiveStep((prevStep) => prevStep + 1);
+    setErrorMessage("");
+  };
+
+  const handleFinish = async (e) => {
     navigate("/");
   };
 
@@ -200,7 +206,12 @@ const Register = () => {
             <Typography
               variant="h5"
               align="center"
-              sx={{ marginBottom: "70px", marginTop: "50px" }}
+              sx={{
+                marginBottom: "70px",
+                marginTop: "50px",
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
             >
               Which Role Do You Want to be Today? ...
             </Typography>
@@ -291,7 +302,12 @@ const Register = () => {
             <Typography
               variant="h5"
               align="center"
-              sx={{ marginBottom: "70px", marginTop: "50px" }}
+              sx={{
+                marginBottom: "70px",
+                marginTop: "50px",
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
             >
               Please Select Your University ...
             </Typography>
@@ -330,13 +346,18 @@ const Register = () => {
             <Typography
               variant="h5"
               align="center"
-              sx={{ marginBottom: "70px", marginTop: "50px" }}
+              sx={{
+                marginBottom: "70px",
+                marginTop: "50px",
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
             >
               Please Upload a Profile Picture ...
             </Typography>
 
             <ProfilePicInputLabel htmlFor="profile-pic">
-              Profile Picture
+              Profile Picture (Optional)
             </ProfilePicInputLabel>
             <Input
               id="profile-pic"
@@ -364,17 +385,22 @@ const Register = () => {
           </div>
         )}
 
-        {/* ------------------- STEP 5: SELECT PAYMENT METHODS ------------------- */}
-        {activeStep === 4 && (
-          <div style={stepContentContainer}>
-            {/* ------------------- PAYPAL ------------------- */}
-            PAYPAL
-          </div>
-        )}
-
         {/* ------------------- STEP 4: TEXTFIELDS AND SELECTIONS ------------------- */}
         {activeStep === 3 && (
-          <div style={{ textAlign: "center" }}>
+          <div style={stepContentContainer}>
+            {/* ------------------- HEADING ------------------- */}
+            <Typography
+              variant="h5"
+              align="center"
+              sx={{
+                marginBottom: "70px",
+                marginTop: "50px",
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
+            >
+              Please Provide Basic Information ...
+            </Typography>
             {/* ------------------- USERNAME ------------------- */}
             <LoginTextField
               label="Username*"
@@ -425,6 +451,36 @@ const Register = () => {
             </Typography>
           </div>
         )}
+
+        {/* ------------------- STEP 5: SELECT PAYMENT METHODS ------------------- */}
+        {activeStep === 4 && (
+          <div
+            style={{
+              ...stepContentContainer,
+              alignItems: "center",
+            }}
+          >
+            {" "}
+            {/* ------------------- Payment ------------------- */}
+            <Typography
+              variant="h5"
+              align="center"
+              sx={{
+                marginBottom: "200px",
+                marginTop: "50px",
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
+            >
+              Set Up Payment Method
+            </Typography>
+            <RegisterStripe />
+            <Typography marginTop="2rem" align="center" color="textSecondary">
+              (Can complete this step later in your profile page)
+            </Typography>
+          </div>
+        )}
+
         {/* ------------------- NEXT AND BACK BUTTONS ------------------- */}
         {[0, 1, 2, 3, 4].includes(activeStep) && (
           <div
@@ -454,10 +510,18 @@ const Register = () => {
                 (activeStep === 0 && selectedRole === "") ||
                 (activeStep === 1 && newUser.university === "")
               }
-              onClick={activeStep === 3 ? handleSubmit : handleNext}
+              onClick={
+                activeStep < 3
+                  ? handleNext
+                  : activeStep === 3
+                  ? handleSubmit
+                  : activeStep === 4
+                  ? handleFinish
+                  : undefined // Add any fallback action if needed
+              }
               style={{ width: "200px" }}
             >
-              {activeStep === 3 ? "Register" : "Next"}
+              {activeStep < 4 ? "Next" : "Finish"}
             </SubmitButton>
           </div>
         )}
