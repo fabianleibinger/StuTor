@@ -123,7 +123,6 @@ const StudysessionDetailsPage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            border: "1px solid lightgrey",
             backgroundColor: "#f5f5f5",
             borderRadius: "30px",
             flexWrap: "wrap",
