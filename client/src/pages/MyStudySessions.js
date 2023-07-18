@@ -26,14 +26,26 @@ import { updateUser } from "../api/User";
 import ConfirmationDialog from "../components/Dialogs/ConfirmationDialog";
 
 const MyStudySessions = () => {
+  /**
+   * MyStudySession hold the MyStudySession page.
+   * For a Tutor a page that shows all study sessions that are tutored by the user. These can be created, updated or deleted here.
+   *
+   * For a Student a page that shows all study sessions for which the student contacted the Tutor via chat. The user can also go to the details and chat pages directly by clicking on a study session.
+   *
+   * MyStudySessions returns a container showing the study sessions + a possibility to switch the current role.
+   */
   const queryClient = useQueryClient();
 
-  const { user, setUser } = useContext(UserContext);
-
+  // context variables
+  const { user, setUser } = useUserContext();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStudySession, setSelectedStudySession] = useState(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [idToDelete, setIdToDelete] = useState("");
+  const [idToDelete, setIdToDelete] = useState('');
+
+  const [studySessions, setStudySessions] = useState([]);
+
+  // Background colors for the study sessions shown on this page
   const myStudySessionColors = [
     "#0fab3c",
     "#98f5ff",
@@ -43,18 +55,24 @@ const MyStudySessions = () => {
     "#1e90ff",
   ];
 
-  const [studySessions, setStudySessions] = useState([]);
+  // The texts shown if a Tutor does not offer any study sessions
+  const emptyStudySessionTexts = [
+    'This could be your next study session!',
+    "Don't you want to offer more different study session?",
+    'The next opportunity to earn money is just around the corner!'
+  ];
 
   // use mutation to update data
   const deleteStudySessionMutation = useMutation(deleteStudysession, {});
   const switchRoleMutation = useMutation(updateUser, {});
 
+  // these keys trigger the myStudySession query
   const queryKey = {
     role: user.role,
     user: user._id,
   };
 
-  // fetch data
+  // fetch the wanted study sessions (as a tutor your own, as a student the ones you started chatting with)
   useQuery(
     ["myStudySessions", queryKey],
     () => {
@@ -102,11 +120,7 @@ const MyStudySessions = () => {
     setIdToDelete(id);
   };
 
-  const onConfirmationDialogClose = () => {
-    setOpenConfirmDialog(false);
-  };
-
-  const handleDeleteStudySession = async (studySessionId) => {
+  const handleDeleteStudySession = async studySessionId => {
     setOpenConfirmDialog(false);
     await deleteStudySessionMutation.mutateAsync(studySessionId, {
       // Manually refetch the query after successful deletion
@@ -130,7 +144,7 @@ const MyStudySessions = () => {
       role: role,
       university: user.university,
     };
-    console.log("Switch Role to user", newUser);
+
     await switchRoleMutation.mutateAsync(newUser, {
       onSuccess: () => {
         setUser(newUser);
@@ -261,6 +275,7 @@ const MyStudySessions = () => {
                     sx={{ alignItems: "left" }}
                   >
                     <StudySessionCard
+                      tutoredBy={studySession.tutoredBy}
                       studySession={studySession}
                       onDelete={() => {
                         handleDeleteConfirmationNeeded(studySession._id);
@@ -276,8 +291,31 @@ const MyStudySessions = () => {
                   </Grid>
                 );
               })
-            ) : user.role === "TUTOR" ? (
-              <Typography>Create your first Study Session</Typography>
+            ) : user.role === 'TUTOR' ? (
+              emptyStudySessionTexts.map((text, index) => (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  key={index}
+                  sx={{ alignItems: 'left' }}
+                >
+                  <StudySessionCard
+                    key={index}
+                    tutoredBy={user}
+                    text={text}
+                    studySession={null}
+                    onDelete={() => {}}
+                    role={user.role}
+                    onUpdateClick={() => {}}
+                    details={true}
+                    addStudySessionComponent={null}
+                    backgroundColor={'#d3d3d3'}
+                  />
+                </Grid>
+              ))
             ) : (
               <Typography>
                 Your StudySessions are listed here as soon as you are chatting

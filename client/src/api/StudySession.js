@@ -43,13 +43,12 @@ export const getStudysessionsForCourse = async (courseId) => {
 };
 
 export const getStudysessionFiltered = async (searchTerm, filters) => {
-  const { maxPrice, languages, department, rating, user } = filters;
+  const { maxPrice, languages, rating, user } = filters;
   let url = `${STUDYSESSION_URL}/search?searchTerm=${searchTerm}`;
   let resultSessions = [];
   // optional parameters
   url += `&maxPrice=${maxPrice}`;
   url += `&languages=${languages}`;
-  //url += `&department=${department}`;
   url += `&rating=${rating}`;
 
   try {

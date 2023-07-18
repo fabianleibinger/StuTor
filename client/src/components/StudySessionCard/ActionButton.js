@@ -2,6 +2,13 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 export default function ActionButton({ text, onClickListener }) {
+  /**
+   * A standardized action button that can be re used for different usages
+   * 
+   * args: 
+   *    text: String that will be displayed on the button
+   *    onClickListener: a function that will be called if the button is clicked
+   *  */ 
   return (
     <Button
       sx={{

@@ -1,6 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 
+// the StandardFilter can be used for further filters in the future as well
 const StandardFilter = forwardRef(
   ({ handleValueChange, label, items }, ref) => {
     const [value, setValue] = useState('');

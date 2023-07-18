@@ -65,18 +65,18 @@ const StudysessionDetailsPage = () => {
   };
 
   const { isLoading, error, data } = useQuery(
-    ["studysession", studySessionId],
+    ['studysession', studySessionId],
     () => getStudySessionbyId(studySessionId),
     {
-      onSuccess: (data) => {
+      onSuccess: data => {
         setStudysession(data);
       },
-      onError: (error) => {
+      onError: error => {
         console.log(error);
       },
       retry: (failureCount, error) => {
         return error.status !== 404 && failureCount < 2;
-      },
+      }
     }
   );
 
@@ -84,12 +84,12 @@ const StudysessionDetailsPage = () => {
     () =>
       accessChatCall([studysession.tutoredBy._id, user._id], studySessionId),
     {
-      onSuccess: (data) => {
+      onSuccess: data => {
         setSelectedChat(data);
       },
-      onError: (error) => {
+      onError: error => {
         console.log(error);
-      },
+      }
     }
   );
 
@@ -137,7 +137,7 @@ const StudysessionDetailsPage = () => {
           <Box
             component="div"
             sx={{
-              overflow: "auto",
+              overflow: 'auto',
               padding: 2,
               marginBottom: "5vh",
             }}
@@ -172,7 +172,7 @@ const StudysessionDetailsPage = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Typography variant="h5">
-                  {data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
+                  {data.tutoredBy.firstname + ' ' + data.tutoredBy.lastname}
                 </Typography>
                 <Typography variant="subtitle2">
                   {data.tutoredBy.university.name}
@@ -185,12 +185,12 @@ const StudysessionDetailsPage = () => {
               justifyContent="flex-start"
               alignItems="center"
               spacing={2}
-              marginBottom={"1.5rem"}
+              marginBottom={'1.5rem'}
             >
               <Grid item>
                 <Grid container alignItems="center">
                   <Grid item>
-                    <LanguageIcon sx={{ marginRight: "0.5rem" }} />
+                    <LanguageIcon sx={{ marginRight: '0.5rem' }} />
                   </Grid>
                   {data.languages.map((language) => (
                     <Grid item key={language}>

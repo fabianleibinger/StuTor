@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import {
@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import CreateStudySessionForm from '../Forms/CreateStudySessionForm';
 
+// Styled dialog component using MUI styles
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2)
@@ -30,6 +31,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   }
 }));
 
+// Customizing the dialog title component with close button
 function BootstrapDialogTitle(props) {
   const { children, onClose, ...other } = props;
 
@@ -62,18 +64,21 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function CreateStudySessionDialog({ role }) {
-  const [open, setOpen] = React.useState(false);
-  const [step, setStep] = React.useState(1);
+  const [open, setOpen] = useState(false);
+  const [step, setStep] = useState(1);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
     setStep(1);
   };
+
   return (
     <Box>
+      {/* Button to open the dialog */}
       <Button
         variant="contained"
         onClick={handleClickOpen}
@@ -86,11 +91,10 @@ export default function CreateStudySessionDialog({ role }) {
       >
         + Add new Study Session
       </Button>
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="createNewStudySession"
-        open={open}
-      >
+
+      {/* The dialog component */}
+      <BootstrapDialog onClose={handleClose} aria-labelledby="createNewStudySession" open={open}>
+        {/* Back button (visible only on step 2) */}
         {step === 2 && (
           <IconButton
             onClick={() => setStep(1)}
@@ -107,22 +111,25 @@ export default function CreateStudySessionDialog({ role }) {
             <ArrowBackIcon />
           </IconButton>
         )}
+
+        {/* Dialog title */}
         <BootstrapDialogTitle id="createNewStudySession" onClose={handleClose}>
           Create a new Study Session
         </BootstrapDialogTitle>
+
+        {/* Dialog content */}
         <DialogContent dividers>
           {step == 1 ? (
             <Typography sx={{ textAlign: 'center', pb: 3 }} variant="h5">
-              Create a new study session that you want ot offer for other
-              students.
+              Create a new study session that you want to offer for other students.
             </Typography>
           ) : (
             <Typography sx={{ textAlign: 'center', pb: 3 }} variant="h5">
-              Provide necessary information such that new students get to know
-              you and your offer.
+              Provide necessary information so that students can get to know you better.
             </Typography>
           )}
-          
+
+          {/* Form for creating a study session */}
           <CreateStudySessionForm
             handleClose={handleClose}
             oldStudySession={null}
@@ -131,6 +138,8 @@ export default function CreateStudySessionDialog({ role }) {
             step={step}
             setStep={setStep}
           />
+
+          {/* Cancel button */}
           <Box id="cancelCreationButtonBox" sx={{ textAlign: 'center', mt: 3 }}>
             <Button
               id="cancelCreationButton"
