@@ -9,6 +9,7 @@ import {
   deleteUser,
   getUserByUsername,
 } from "../controllers/UserController.js";
+import { verifyToken } from "../middleware/jwt.js";
 
 const router = express.Router();
 

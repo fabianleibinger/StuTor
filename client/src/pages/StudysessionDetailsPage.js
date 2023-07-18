@@ -262,7 +262,6 @@ const StudysessionDetailsPage = () => {
               marginBottom={"1.5rem"}
             >
               {/* ---------------------------- Tutor Hour Progress Bar ---------------------------- */}
-
               <Grid item xs={12} md={6}>
                 <Box
                   mt={2}
@@ -283,8 +282,8 @@ const StudysessionDetailsPage = () => {
                   </Typography>
                   <div
                     style={{
-                      marginLeft: "100px",
-                      width: "500px",
+                      marginLeft: "36px",
+                      width: "400px",
                       marginBottom: "40px",
                     }}
                   >
@@ -292,11 +291,10 @@ const StudysessionDetailsPage = () => {
                   </div>
                 </Box>
               </Grid>
-
               {/* ---------------------------- Tutor Hour Progress Bar ---------------------------- */}
               <Grid item>
                 <Grid container alignItems="center">
-                  {/* ---------------------------- StudysessionRating ---------------------------- */}
+                  {/* ---------------------------- StudysessionRating  Start ---------------------------- */}
                   <Box>
                     <Typography
                       variant="h5"
@@ -310,7 +308,7 @@ const StudysessionDetailsPage = () => {
                     </Typography>
                     <StudysessionRating studySessionId={studySessionId} />
                   </Box>
-                  {/* ---------------------------- StudysessionRating ---------------------------- */}
+                  {/* ---------------------------- StudysessionRating End---------------------------- */}
                 </Grid>
               </Grid>
             </Grid>

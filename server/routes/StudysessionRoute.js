@@ -12,6 +12,7 @@ import {
   getAverageRating,
   getReviewsOfStudysession,
 } from "../controllers/StudysessionController.js";
+import { verifyToken } from "../middleware/jwt.js";
 
 const router = express.Router();
 
