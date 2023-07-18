@@ -1,5 +1,10 @@
 # StuTor Web App
 
+StuTor is a tutoring platform to help students with their exam preparation and course
+studies, by providing them with trustworthy and reliable student tutors who have excelled in
+the same course at the same university. StuTor also allows student tutors to contribute in a
+much easier, compensated fashion.
+
 ## How to build and run
 
 Prerequisite: Make sure to have installed node.js on your device.
