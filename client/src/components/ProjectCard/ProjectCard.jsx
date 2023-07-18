@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import './ProjectCard.scss';
+import React, { useEffect, useState } from "react";
+import "./ProjectCard.scss";
+import { useNavigate } from "react-router-dom";
 
 function ProjectCard({ card }) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate(); // Access the navigate function
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -12,11 +14,16 @@ function ProjectCard({ card }) {
     setIsHovered(false);
   };
 
+  const handleClick = () => {
+    navigate(`/StudysessionDetailsPage/${card._id}`);
+  };
+
   return (
     <div
-      className={`projectCard ${isHovered ? 'hovered' : ''}`}
+      className={`projectCard ${isHovered ? "hovered" : ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     >
       {/* background img */}
       <div className="background">
@@ -24,8 +31,7 @@ function ProjectCard({ card }) {
       </div>
 
       <div className="course-description">
-        {/* course description */}
-        <p>Course Description: {card.description}</p>
+        <p>Price: {card.pricePerHourEuro} Euros per Hour</p>
       </div>
 
       <div className="info">
@@ -34,27 +40,21 @@ function ProjectCard({ card }) {
 
         <div className="texts">
           {/* course name */}
-          <h1 style={{ fontSize: '20px' }}>{card.courseName}</h1>
+          <h1 style={{ fontSize: "20px" }}>{card.courseName}</h1>
 
           {/* tutor name */}
           <h2>
             Tutor:&nbsp;&nbsp;
-            <span style={{ fontStyle: 'italic' }}>
+            <span style={{ fontStyle: "italic" }}>
               {card.tutoredBy.username}
             </span>
           </h2>
 
-          {/* Price */}
-          <h2>
-            Price:&nbsp;&nbsp;
-            <span style={{ fontStyle: 'italic' }}>{card.pricePerHourEuro}</span>
-          </h2>
-
           {/* Languages */}
           <h2>
-            Languages:{' '}
-            <span style={{ fontStyle: 'italic' }}>
-              {card.languages.join(', ')}
+            Languages:{" "}
+            <span style={{ fontStyle: "italic" }}>
+              {card.languages.join(", ")}
             </span>
           </h2>
         </div>

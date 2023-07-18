@@ -18,28 +18,19 @@ const TutorHourProgressBar = ({ hoursTutored }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      {/* Display the marker at the beginning of the progress bar
-      <div
-        style={{
-          position: "absolute",
-          left: `${progress}%`,
-          top: "0", // Adjust the value as needed to align the marker
-          height: "20px",
-          width: "8px",
-          background: "#1976d2", // Change the color of the marker as desired
-          zIndex: 1, // Ensure the marker is placed above the progress bar
-          transform: "translateX(-50%)", // Center the marker at the starting point
-        }}
-      ></div> */}
+      {/* Display the user's tutoring hours */}
+      <Typography variant="h6" fontWeight="bold">
+        {hoursTutored} Hours Tutored
+      </Typography>
 
       {/* Display the golden marker at the current progress */}
       <div
         style={{
           position: "absolute",
           left: `${progress}%`,
-          top: "-5px", // Adjust the value as needed to position the marker above the progress bar
+          top: "27px", // Adjust the value as needed to position the marker above the progress bar
           height: "30px",
-          width: "10px",
+          width: "13px",
           background: "gold", // Change the color of the marker as desired (here, goldenrod)
           zIndex: 2, // Ensure the marker is placed above the progress bar and other elements
           transform: "translateX(-50%)",
@@ -51,7 +42,7 @@ const TutorHourProgressBar = ({ hoursTutored }) => {
         style={{
           position: "absolute",
           left: "0",
-          top: "30px", // Adjust the value as needed to move the section down
+          top: "60px", // Adjust the value as needed to move the section down
           transform: "translateX(-50%)",
         }}
       >
@@ -65,7 +56,7 @@ const TutorHourProgressBar = ({ hoursTutored }) => {
         style={{
           position: "absolute",
           right: "0",
-          top: "30px", // Adjust the value as needed to move the section down
+          top: "60px", // Adjust the value as needed to move the section down
           transform: "translateX(50%)",
         }}
       >
@@ -83,10 +74,6 @@ const TutorHourProgressBar = ({ hoursTutored }) => {
           overflow: "hidden", // Hide any overflowing content within the progress bar
         }}
       />
-      {/* Display the user's tutoring hours */}
-      <Typography variant="h6" fontWeight="bold">
-        {hoursTutored} Hours Tutored
-      </Typography>
     </div>
   );
 };

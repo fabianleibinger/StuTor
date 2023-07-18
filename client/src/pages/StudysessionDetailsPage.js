@@ -24,14 +24,16 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { useUserContext } from "../context/UserProvider.js";
 import AchievementsDisplay from "../components/Achievement/AchievementsDisplay.js";
+import TutorHourProgressBar from "../components/Achievement/TutorHourProgressBar.js";
+import newRequest from "../utils/newRequest.js";
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
   const { user } = useUserContext();
   const [studysession, setStudysession] = useState(false);
   const { selectedChat, setSelectedChat } = useChatContext();
+  const [hoursTutored, setHoursTutored] = useState(0);
 
-  // Check if the screen width is below the breakpoint (sm or xs)
   const theme = useTheme();
   const isSmScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isXsScreen = useMediaQuery(theme.breakpoints.down("xs"));
@@ -65,31 +67,50 @@ const StudysessionDetailsPage = () => {
   };
 
   const { isLoading, error, data } = useQuery(
-    ['studysession', studySessionId],
+    ["studysession", studySessionId],
     () => getStudySessionbyId(studySessionId),
     {
-      onSuccess: data => {
+      onSuccess: (data) => {
         setStudysession(data);
       },
-      onError: error => {
+      onError: (error) => {
         console.log(error);
       },
       retry: (failureCount, error) => {
         return error.status !== 404 && failureCount < 2;
-      }
+      },
     }
   );
+
+  useEffect(() => {
+    const fetchTutor = async () => {
+      try {
+        // Fetch the user by _id from the MongoDB database
+        const tutor = data.tutoredBy;
+        const tutorResponse = await newRequest.get("/user/byId/" + tutor._id);
+        if (tutorResponse) {
+          // If the user is found, update the hoursTutored state
+          setHoursTutored(tutorResponse.data.hours_tutored);
+        }
+      } catch (error) {
+        console.log("Error fetching user:", error);
+      }
+    };
+    if (data) {
+      fetchTutor();
+    }
+  }, [data]);
 
   const accessChat = useMutation(
     () =>
       accessChatCall([studysession.tutoredBy._id, user._id], studySessionId),
     {
-      onSuccess: data => {
+      onSuccess: (data) => {
         setSelectedChat(data);
       },
-      onError: error => {
+      onError: (error) => {
         console.log(error);
-      }
+      },
     }
   );
 
@@ -126,17 +147,17 @@ const StudysessionDetailsPage = () => {
             backgroundColor: "#f5f5f5",
             borderRadius: "30px",
             flexWrap: "wrap",
-            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)",
             padding: "1rem",
             margin: "2rem",
             overflow: "auto",
-            height: "85vh", // Set a specific height to limit vertical scrolling
+            height: "85vh",
           }}
         >
           <Box
             component="div"
             sx={{
-              overflow: 'auto',
+              overflow: "auto",
               padding: 2,
               marginBottom: "5vh",
             }}
@@ -144,8 +165,8 @@ const StudysessionDetailsPage = () => {
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "space-between", // Change to "space-between"
-                alignItems: "center", // Align items to the center vertically
+                justifyContent: "space-between",
+                alignItems: "center",
                 width: "90%",
                 paddingBottom: "2rem",
               }}
@@ -171,7 +192,7 @@ const StudysessionDetailsPage = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Typography variant="h5">
-                  {data.tutoredBy.firstname + ' ' + data.tutoredBy.lastname}
+                  {data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
                 </Typography>
                 <Typography variant="subtitle2">
                   {data.tutoredBy.university.name}
@@ -184,12 +205,12 @@ const StudysessionDetailsPage = () => {
               justifyContent="flex-start"
               alignItems="center"
               spacing={2}
-              marginBottom={'1.5rem'}
+              marginBottom={"1.5rem"}
             >
               <Grid item>
                 <Grid container alignItems="center">
                   <Grid item>
-                    <LanguageIcon sx={{ marginRight: '0.5rem' }} />
+                    <LanguageIcon sx={{ marginRight: "0.5rem" }} />
                   </Grid>
                   {data.languages.map((language) => (
                     <Grid item key={language}>
@@ -240,6 +261,39 @@ const StudysessionDetailsPage = () => {
               spacing={2}
               marginBottom={"1.5rem"}
             >
+              {/* ---------------------------- Tutor Hour Progress Bar ---------------------------- */}
+
+              <Grid item xs={12} md={6}>
+                <Box
+                  mt={2}
+                  mb={2}
+                  display="flex"
+                  flexDirection="column"
+                  width="100%" // Set the container to take full width of the grid item
+                >
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      marginBottom: "1rem",
+                      color: "#1976d2",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Tutor Experience
+                  </Typography>
+                  <div
+                    style={{
+                      marginLeft: "100px",
+                      width: "500px",
+                      marginBottom: "40px",
+                    }}
+                  >
+                    <TutorHourProgressBar hoursTutored={hoursTutored} />
+                  </div>
+                </Box>
+              </Grid>
+
+              {/* ---------------------------- Tutor Hour Progress Bar ---------------------------- */}
               <Grid item>
                 <Grid container alignItems="center">
                   {/* ---------------------------- StudysessionRating ---------------------------- */}
@@ -274,8 +328,8 @@ const StudysessionDetailsPage = () => {
               </Typography>{" "}
               <div
                 style={{
-                  width: "90%", // Set a fixed width to occupy the entire available space for four badges
-                  overflowX: "auto", // Add horizontal scrolling when badges exceed the container's width
+                  width: "90%",
+                  overflowX: "auto",
                 }}
               >
                 <AchievementsDisplay
@@ -287,6 +341,7 @@ const StudysessionDetailsPage = () => {
             </Box>
             {/* ---------------------------- Achievements ---------------------------- */}
 
+            {/* ---------------------------- Course Description ---------------------------- */}
             <Typography
               variant="h5"
               sx={{
@@ -298,7 +353,6 @@ const StudysessionDetailsPage = () => {
               Course Description
             </Typography>
 
-            {/* ---------------------------- Course Description ---------------------------- */}
             <div
               style={{
                 width: "85%",
@@ -338,7 +392,7 @@ const StudysessionDetailsPage = () => {
         {/* Chat Box */}
         <Box
           sx={{
-            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)",
             borderRadius: "30px",
             padding: "1rem",
             margin: "2rem",
