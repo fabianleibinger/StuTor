@@ -55,6 +55,14 @@ function App() {
                   element={<StudysessionDetailsPage />}
                 />
               </Route>
+
+              <Route path="/" element={<PrivateRoute />}>
+                <Route
+                  path="/SearchSessions/:searchString?"
+                  element={<StudySessionSearch />}
+                />
+              </Route>
+
               <Route path="/" element={<PrivateRoute />}>
                 <Route
                   path="/success/:bookingId/:tutorId"

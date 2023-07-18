@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 import {
   Button,
@@ -6,8 +6,8 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
-} from '@mui/material';
+  DialogTitle,
+} from "@mui/material";
 
 export default function ErrorDialog({ errorMessage, dialogOpen }) {
   const [open, setOpen] = useState(dialogOpen);
@@ -23,17 +23,19 @@ export default function ErrorDialog({ errorMessage, dialogOpen }) {
       onClose={handleDialogClose}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle sx={{ color: 'red', textAlign: 'center', fontSize: '25' }}>
-        {'STOP, SOMETHING BAD HAPPEND'}
+      <DialogTitle
+        sx={{ color: "#1976d2", textAlign: "center", fontSize: "25" }}
+      >
+        {"Sorry, no study session with this name available at this moment"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText
           id="alert-dialog-slide-description"
           sx={{
-            fontWeight: 'bold',
-            color: 'black',
-            fontSize: '20px',
-            textAlign: 'center'
+            fontWeight: "bold",
+            color: "black",
+            fontSize: "20px",
+            textAlign: "center",
           }}
         >
           {errorMessage}

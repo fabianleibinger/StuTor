@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 //react-query
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { UserContext } from "../context/UserProvider";
+import { useUserContext } from "../context/UserProvider";
 
 // frontend
 import { Box, Grid, Typography } from "@mui/material";
@@ -41,7 +41,7 @@ const MyStudySessions = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStudySession, setSelectedStudySession] = useState(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [idToDelete, setIdToDelete] = useState('');
+  const [idToDelete, setIdToDelete] = useState("");
 
   const [studySessions, setStudySessions] = useState([]);
 
@@ -57,9 +57,9 @@ const MyStudySessions = () => {
 
   // The texts shown if a Tutor does not offer any study sessions
   const emptyStudySessionTexts = [
-    'This could be your next study session!',
+    "This could be your next study session!",
     "Don't you want to offer more different study session?",
-    'The next opportunity to earn money is just around the corner!'
+    "The next opportunity to earn money is just around the corner!",
   ];
 
   // use mutation to update data
@@ -120,7 +120,7 @@ const MyStudySessions = () => {
     setIdToDelete(id);
   };
 
-  const handleDeleteStudySession = async studySessionId => {
+  const handleDeleteStudySession = async (studySessionId) => {
     setOpenConfirmDialog(false);
     await deleteStudySessionMutation.mutateAsync(studySessionId, {
       // Manually refetch the query after successful deletion
@@ -271,7 +271,7 @@ const MyStudySessions = () => {
                     sm={6}
                     md={4}
                     lg={3}
-                    key={studySession._id}
+                    key={`${studySession._id}-${index}`} // Use a combination of _id and index as the unique key
                     sx={{ alignItems: "left" }}
                   >
                     <StudySessionCard
@@ -291,7 +291,7 @@ const MyStudySessions = () => {
                   </Grid>
                 );
               })
-            ) : user.role === 'TUTOR' ? (
+            ) : user.role === "TUTOR" ? (
               emptyStudySessionTexts.map((text, index) => (
                 <Grid
                   item
@@ -300,7 +300,7 @@ const MyStudySessions = () => {
                   md={4}
                   lg={3}
                   key={index}
-                  sx={{ alignItems: 'left' }}
+                  sx={{ alignItems: "left" }}
                 >
                   <StudySessionCard
                     key={index}
@@ -312,7 +312,7 @@ const MyStudySessions = () => {
                     onUpdateClick={() => {}}
                     details={true}
                     addStudySessionComponent={null}
-                    backgroundColor={'#d3d3d3'}
+                    backgroundColor={"#d3d3d3"}
                   />
                 </Grid>
               ))
