@@ -1,27 +1,40 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Grid, Button, Box, Typography, Avatar } from '@mui/material';
-import { useQuery, useMutation } from 'react-query';
-import BookingDialog from '../components/Booking/BookingDialog.js';
-import { getStudySessionbyId, getStudysessions } from '../api/StudySession.js';
-import BookingHistoryDialog from '../components/Booking/BookingHistoryDialog.js';
-import StudysessionRating from '../components/Booking/Studysessionrating.js';
-import { useParams } from 'react-router-dom';
-import { useChatContext } from '../context/ChatProvider.js';
-import { accessChat as accessChatCall } from '../api/Chat.js';
-import ChatBox from '../components/Chat/ChatBox';
-import GreenCircleComponent from '../components/Booking/GreenCircle.js';
-import { LoadingIndicator } from '../components/General/LoadingIndicator.js';
-import { ErrorIndicator } from '../components/General/ErrorIndicator.js';
-import LanguageIcon from '@mui/icons-material/Language';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { useUserContext } from '../context/UserProvider.js';
-import AchievementsDisplay from '../components/Achievement/AchievementsDisplay.js';
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Grid,
+  Button,
+  Box,
+  Typography,
+  Avatar,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { useQuery, useMutation } from "react-query";
+import BookingDialog from "../components/Booking/BookingDialog.js";
+import { getStudySessionbyId, getStudysessions } from "../api/StudySession.js";
+import BookingHistoryDialog from "../components/Booking/BookingHistoryDialog.js";
+import StudysessionRating from "../components/Booking/Studysessionrating.js";
+import { useParams } from "react-router-dom";
+import { useChatContext } from "../context/ChatProvider.js";
+import { accessChat as accessChatCall } from "../api/Chat.js";
+import ChatBox from "../components/Chat/ChatBox";
+import GreenCircleComponent from "../components/Booking/GreenCircle.js";
+import { LoadingIndicator } from "../components/General/LoadingIndicator.js";
+import { ErrorIndicator } from "../components/General/ErrorIndicator.js";
+import LanguageIcon from "@mui/icons-material/Language";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { useUserContext } from "../context/UserProvider.js";
+import AchievementsDisplay from "../components/Achievement/AchievementsDisplay.js";
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
   const { user } = useUserContext();
   const [studysession, setStudysession] = useState(false);
   const { selectedChat, setSelectedChat } = useChatContext();
+
+  // Check if the screen width is below the breakpoint (sm or xs)
+  const theme = useTheme();
+  const isSmScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXsScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   // states and functions for read more
   const [expanded, setExpanded] = useState(false);
@@ -67,8 +80,6 @@ const StudysessionDetailsPage = () => {
     }
   );
 
-  console.log('data', data);
-
   const accessChat = useMutation(
     () =>
       accessChatCall([studysession.tutoredBy._id, user._id], studySessionId),
@@ -99,32 +110,28 @@ const StudysessionDetailsPage = () => {
   if (error) return <ErrorIndicator />;
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        alignItems: 'stretch',
-        alignContent: 'stretch',
-        width: '97vw',
-        height: '100vh',
-        mx: 'auto',
-        marginTop: '2vh',
-        marginBottom: '2vh'
-      }}
-    >
-      <Box width={0.49} height={1}>
+    <Grid container spacing={2}>
+      <Grid
+        item
+        xs={12}
+        sm={isSmScreen ? 12 : 6}
+        md={isXsScreen ? 12 : 6}
+        lg={6}
+      >
+        {/* Course Details */}
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: 1,
-            height: 1,
-            border: '1px solid lightgrey',
-            backgroundColor: '#f5f5f5',
-            borderRadius: '6px',
-            flexWrap: 'wrap'
+            display: "flex",
+            flexDirection: "column",
+            border: "1px solid lightgrey",
+            backgroundColor: "#f5f5f5",
+            borderRadius: "30px",
+            flexWrap: "wrap",
+            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+            padding: "1rem",
+            margin: "2rem",
+            overflow: "auto",
+            height: "85vh", // Set a specific height to limit vertical scrolling
           }}
         >
           <Box
@@ -132,22 +139,27 @@ const StudysessionDetailsPage = () => {
             sx={{
               overflow: 'auto',
               padding: 2,
-              height: 0.85,
-              marginBottom: '5vh'
+              marginBottom: "5vh",
             }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
-            </Box>
-            <Typography variant="h3" sx={{ marginBottom: '1rem' }}>
-              {data.courseName}
-            </Typography>
             <Box
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '1rem'
+                display: "flex",
+                justifyContent: "space-between", // Change to "space-between"
+                alignItems: "center", // Align items to the center vertically
+                width: "90%",
+                paddingBottom: "2rem",
+              }}
+            >
+              <Typography variant="h3">{data.courseName}</Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "1rem",
+                width: "90%",
               }}
             >
               <Avatar
@@ -155,20 +167,16 @@ const StudysessionDetailsPage = () => {
                 alt=""
                 sx={{ width: 150, height: 150 }}
               />
+              <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Typography variant="h5">
                   {data.tutoredBy.firstname + ' ' + data.tutoredBy.lastname}
                 </Typography>
-                <Typography variant="subtitle2" sx={{ marginBottom: '1.5rem' }}>
+                <Typography variant="subtitle2">
                   {data.tutoredBy.university.name}
                 </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6} alignContent={'center'}>
-                {/* ---------------------------- StudysessionRating ---------------------------- */}
-                <StudysessionRating studySessionId={studySessionId} />
-                {/* ---------------------------- StudysessionRating ---------------------------- */}
               </Grid>
             </Grid>
             <Grid
@@ -184,13 +192,9 @@ const StudysessionDetailsPage = () => {
                   <Grid item>
                     <LanguageIcon sx={{ marginRight: '0.5rem' }} />
                   </Grid>
-                  {data.languages.map(language => (
-                    <Grid item>
-                      <Typography
-                        variant="subtitle2"
-                        key={language}
-                        marginRight={'0.5rem'}
-                      >
+                  {data.languages.map((language) => (
+                    <Grid item key={language}>
+                      <Typography variant="subtitle2" marginRight={"0.5rem"}>
                         {language}
                       </Typography>
                     </Grid>
@@ -198,61 +202,26 @@ const StudysessionDetailsPage = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-              spacing={2}
-              marginBottom={'1.5rem'}
-            >
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <EmojiEventsIcon sx={{ marginRight: '0.5rem' }} />
-                  </Grid>
-                  <Grid item>
-                    {/* ---------------------------- Achievements ---------------------------- */}
-                    <AchievementsDisplay user={data.tutoredBy} size={100} />
-                    {/* ---------------------------- Achievements ---------------------------- */}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Typography variant="h5" sx={{ marginBottom: '1rem' }}>
-              Course Description
-            </Typography>
-            <Typography>{data.description}</Typography>
-          </Box>
-          <Grid
-            container
-            spacing={2}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              marginTop: 'auto',
-              marginBottom: 'auto'
-            }}
-          >
+            {/* ---------------------------- Buttons ---------------------------- */}
             <Box
+              mt={2}
               sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
+                display: "flex",
+                justifyContent: "left",
+                gap: "2rem",
+                marginBottom: "2rem",
               }}
             >
-              <Grid item marginRight={8}>
+              <Grid item key="booking-history">
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleHistoryOpenDialog}
-                  style={{ width: 'auto' }}
                 >
                   View bookings
                 </Button>
               </Grid>
-              <Grid item marginLeft={8}>
+              <Grid item key="book-now">
                 <Button
                   variant="contained"
                   color="primary"
@@ -262,7 +231,86 @@ const StudysessionDetailsPage = () => {
                 </Button>
               </Grid>
             </Box>
-          </Grid>
+            {/* ---------------------------- Buttons ---------------------------- */}
+
+            <Grid
+              container
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              spacing={2}
+              marginBottom={"1.5rem"}
+            >
+              <Grid item>
+                <Grid container alignItems="center">
+                  {/* ---------------------------- StudysessionRating ---------------------------- */}
+                  <Box>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        marginBottom: "1rem",
+                        color: "#1976d2",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Course Rating
+                    </Typography>
+                    <StudysessionRating studySessionId={studySessionId} />
+                  </Box>
+                  {/* ---------------------------- StudysessionRating ---------------------------- */}
+                </Grid>
+              </Grid>
+            </Grid>
+            {/* ---------------------------- Achievements ---------------------------- */}
+            <Box mt={2} mb={2}>
+              <Typography
+                variant="h5"
+                sx={{
+                  marginBottom: "1rem",
+                  color: "#1976d2",
+                  fontWeight: "bold",
+                }}
+              >
+                Achievements
+              </Typography>{" "}
+              <div
+                style={{
+                  width: "90%", // Set a fixed width to occupy the entire available space for four badges
+                  overflowX: "auto", // Add horizontal scrolling when badges exceed the container's width
+                }}
+              >
+                <AchievementsDisplay
+                  user={data.tutoredBy}
+                  size={100}
+                  showTitle={true}
+                />
+              </div>
+            </Box>
+            {/* ---------------------------- Achievements ---------------------------- */}
+
+            <Typography
+              variant="h5"
+              sx={{
+                marginBottom: "1rem",
+                color: "#1976d2",
+                fontWeight: "bold",
+              }}
+            >
+              Course Description
+            </Typography>
+
+            {/* ---------------------------- Course Description ---------------------------- */}
+            <div
+              style={{
+                width: "85%",
+                maxHeight: "40vh",
+                overflowY: "auto",
+              }}
+            >
+              <Typography>{data.description}</Typography>
+            </div>
+            {/* ---------------------------- Course Description ---------------------------- */}
+          </Box>
 
           <BookingHistoryDialog
             open={historyDialogOpen}
@@ -279,11 +327,29 @@ const StudysessionDetailsPage = () => {
             studysession={data}
           />
         </Box>
-      </Box>
-      <Box width={0.49} height={1}>
-        {<ChatBox />}
-      </Box>
-    </Box>
+      </Grid>
+
+      <Grid
+        item
+        xs={12}
+        sm={isSmScreen ? 12 : 6}
+        md={isXsScreen ? 12 : 6}
+        lg={6}
+      >
+        {/* Chat Box */}
+        <Box
+          sx={{
+            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)", // Increased shadow values
+            borderRadius: "30px",
+            padding: "1rem",
+            margin: "2rem",
+            height: "85vh",
+          }}
+        >
+          {<ChatBox />}
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
