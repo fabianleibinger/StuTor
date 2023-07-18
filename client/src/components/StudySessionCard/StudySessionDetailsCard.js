@@ -86,7 +86,7 @@ export default function StudySessionCard({
         onClick={handleContentClick}
       >
         <Avatar
-          src={tutoredBy.picture || '/img/noavatar.jpg'}
+          src={tutoredBy.picture || ''}
           sx={{ width: 68, height: 68 }}
           aria-label="recipe"
         />

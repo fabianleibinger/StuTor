@@ -267,7 +267,7 @@ const MyStudySessions = () => {
                     sm={6}
                     md={4}
                     lg={3}
-                    key={studySession._id}
+                    key={`${studySession._id}-${index}`} // Use a combination of _id and index as the unique key
                     sx={{ alignItems: 'left' }}
                   >
                     <StudySessionCard

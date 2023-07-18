@@ -23,8 +23,10 @@ export default function ErrorDialog({ errorMessage, dialogOpen }) {
       onClose={handleDialogClose}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle sx={{ color: 'red', textAlign: 'center', fontSize: '25' }}>
-        {'STOP, SOMETHING BAD HAPPENED'}
+      <DialogTitle
+        sx={{ color: '#1976d2', textAlign: 'center', fontSize: '25' }}
+      >
+        {'Sorry, no study session with this name available at this moment'}
       </DialogTitle>
       <DialogContent>
         <DialogContentText

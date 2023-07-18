@@ -1,31 +1,31 @@
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 
-import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 
 // context
-import { useUserContext } from '../context/UserProvider';
+import { useUserContext } from "../context/UserProvider";
 
 // api
-import { getStudysessionFiltered } from '../api/StudySession';
-import useDebounce from '../hooks/useDebounce';
+import { getStudysessionFiltered } from "../api/StudySession";
+import useDebounce from "../hooks/useDebounce";
 
 // frontend
-import { Box, Grid } from '@mui/material';
-import { styled } from '@mui/system';
-import { FilterContainer } from '../styles';
-import StudySessionSearchbar from '../components/Searchbars/StudySessionSearchbar';
-import LanguageFilter from '../components/Filters/LanguageFilter';
-import StandardFilter from '../components/Filters/StandardFilter';
-import ClearFilterButton from '../components/Filters/ClearFilterButton';
-import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
-import ErrorDialog from '../components/Dialogs/ErrorDialog';
+import { Box, Grid } from "@mui/material";
+import { styled } from "@mui/system";
+import { FilterContainer } from "../styles";
+import StudySessionSearchbar from "../components/Searchbars/StudySessionSearchbar";
+import LanguageFilter from "../components/Filters/LanguageFilter";
+import StandardFilter from "../components/Filters/StandardFilter";
+import ClearFilterButton from "../components/Filters/ClearFilterButton";
+import StudySessionCard from "../components/StudySessionCard/StudySessionDetailsCard";
+import ErrorDialog from "../components/Dialogs/ErrorDialog";
 
-const ScrollableContainer = styled('div')({
+const ScrollableContainer = styled("div")({
   // adjustable, scrollable container holding the search results
-  maxHeight: '70vh',
-  overflow: 'auto'
+  maxHeight: "70vh",
+  overflow: "auto",
 });
 
 function StudySessionsSearchResult({ isLoading, data, error }) {
@@ -43,26 +43,26 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
 
   // colors define the possible background colors of the study session cards
   const colors = [
-    '#0fab3c',
-    '#98f5ff',
-    '#ee6363',
-    '#ffa500',
-    '	#eeaeee',
-    '#1e90ff'
+    "#0fab3c",
+    "#98f5ff",
+    "#ee6363",
+    "#ffa500",
+    "	#eeaeee",
+    "#1e90ff",
   ];
 
   // always student since the search results do not include the tutors study sessions.
   // Thus, the searcher should not be able to update or delete any resulting sessions.
-  const userRole = 'STUDENT';
+  const userRole = "STUDENT";
 
   // Error needs to be devided into a 404 or another error since 404 just shows that for a specific search
   // no results are available
   if (error) {
-    if (error.message.includes('404')) {
+    if (error.message.includes("404")) {
       return (
         <ErrorDialog
           errorMessage={
-            'Seems like there are no offers available for your search. Maybe you should think about offering one.'
+            "Maybe you can be the first to offer tutoring for this course :)"
           }
           dialogOpen={true}
         />
@@ -78,7 +78,7 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
     return (
       <ErrorDialog
         errorMessage={
-          'Seems like there are no offers available for your search. Maybe you should think about offering one.'
+          "Seems like there are no offers available for your search. Maybe you should think about offering one."
         }
         dialogOpen={true}
       />
@@ -123,8 +123,8 @@ export default function StudySessionSearch() {
 
   // filter constants
   const { searchString } = useParams();
-  const [search, setSearch] = useState(searchString ? searchString : '');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [search, setSearch] = useState(searchString ? searchString : "");
+  const [maxPrice, setMaxPrice] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState([]);
   const [selectedRating, setSelectedRating] = useState(0);
 
@@ -139,23 +139,23 @@ export default function StudySessionSearch() {
   // debounceSearchTerm is used to update the search only every 200ms and not every time the user types something in.
   const debouncedSearchTerm = useDebounce(search, 200);
 
-  const handleSearchInputChange = e => {
+  const handleSearchInputChange = (e) => {
     setSearch(e.target.value);
   };
 
   // handling of the maxPrice filter
-  const handleMaxPriceChange = value => {
+  const handleMaxPriceChange = (value) => {
     setMaxPrice(value);
   };
   const clearMaxPrice = () => {
-    handleMaxPriceChange('');
+    handleMaxPriceChange("");
     if (maxPriceSelectRef.current) {
       maxPriceSelectRef.current.clearSelection();
     }
   };
 
   // handling of the language filter
-  const handleLanguageChange = value => {
+  const handleLanguageChange = (value) => {
     setSelectedLanguages(value);
   };
 
@@ -167,13 +167,13 @@ export default function StudySessionSearch() {
   };
 
   // handling of the rating filter
-  const handleRatingChange = value => {
+  const handleRatingChange = (value) => {
     console.log(value);
     setSelectedRating(value);
   };
 
   const clearRating = () => {
-    handleRatingChange('');
+    handleRatingChange("");
     if (ratingSelectRef.current) {
       ratingSelectRef.current.clearSelection();
     }
@@ -184,22 +184,22 @@ export default function StudySessionSearch() {
     searchTerm: debouncedSearchTerm,
     maxPrice: maxPrice,
     languages: selectedLanguages,
-    rating: selectedRating
+    rating: selectedRating,
   };
 
   // the StudySessionSearch query is used to receive all study sessions dependend on the filters and the search
   const { data, error, isLoading } = useQuery(
-    ['StudySessionSearch', queryKey],
+    ["StudySessionSearch", queryKey],
     () =>
       // use debounceSearchTerm to dealy the filtering, use all filters as object to filter the sessions additionally
       getStudysessionFiltered(debouncedSearchTerm, {
         maxPrice: maxPrice,
         languages: selectedLanguages,
         rating: selectedRating,
-        user: user
+        user: user,
       }),
     {
-      retry: false
+      retry: false,
     }
   );
 
@@ -207,26 +207,27 @@ export default function StudySessionSearch() {
     <Box
       id="pageWrapper"
       sx={{
-        display: 'flex',
-        justifyContent: 'center'
+        display: "flex",
+        justifyContent: "center",
+        marginTop: 3,
       }}
     >
       <Box
         id="studySearchPageBox"
         sx={{
-          width: '90vw',
-          height: '90vh',
+          width: "90vw",
+          height: "90vh",
           minheight: 1,
-          justifyContent: 'center',
-          flexDirection: 'column',
-          alignItems: 'right',
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "right",
           pb: 1,
           pt: 2,
           pl: 1,
-          pr: 1
+          pr: 1,
         }}
       >
-        <Box id="searchBarBox" sx={{ maxHeight: '10', width: '100%' }}>
+        <Box id="searchBarBox" sx={{ maxHeight: "10", width: "100%" }}>
           <StudySessionSearchbar
             handleSearchInputChange={handleSearchInputChange}
             searchString={search}
@@ -235,21 +236,21 @@ export default function StudySessionSearch() {
         <Box
           id="filterBox"
           sx={{
-            display: 'flex',
-            gap: '3px',
-            maxHeight: '60px',
-            mt: 1
+            display: "flex",
+            gap: "3px",
+            maxHeight: "60px",
+            mt: 1,
           }}
         >
           <FilterContainer>
             <ClearFilterButton handleClick={clearMaxPrice} />
             <StandardFilter
               handleValueChange={handleMaxPriceChange}
-              label={'Max Price'}
+              label={"Max Price"}
               items={{
-                '10€': 10,
-                '20€': 20,
-                '30€': 30
+                "10€": 10,
+                "20€": 20,
+                "30€": 30,
               }}
               ref={maxPriceSelectRef}
             />
@@ -265,18 +266,18 @@ export default function StudySessionSearch() {
             <ClearFilterButton handleClick={clearRating} />
             <StandardFilter
               handleValueChange={handleRatingChange}
-              label={'Rating'}
-              items={{ '2 Stars': 2, '3 Stars': 3, '4 Stars': 4 }}
+              label={"Rating"}
+              items={{ "2 Stars": 2, "3 Stars": 3, "4 Stars": 4 }}
               ref={ratingSelectRef}
             />
           </FilterContainer>
         </Box>
         <Box
           sx={{
-            width: '100%',
+            width: "100%",
             mt: 4,
-            maxHeight: '70vh',
-            alignItems: 'stretch'
+            maxHeight: "70vh",
+            alignItems: "stretch",
           }}
         >
           <StudySessionsSearchResult
