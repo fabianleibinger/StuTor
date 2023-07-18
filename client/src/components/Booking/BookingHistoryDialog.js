@@ -134,7 +134,9 @@ const BookingHistoryDialog = ({ open, onClose, userId, studySessionId }) => {
                           <TableRow
                             key={booking._id}
                             sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
+                              "&:last-child td, &:last-child th": {
+                                border: 0,
+                              },
                             }}
                           >
                             <TableCell>

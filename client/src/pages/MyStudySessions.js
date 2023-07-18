@@ -212,15 +212,17 @@ const MyStudySessions = () => {
           </Box>
           <Typography
             variant="h4"
+            align="center"
             sx={{
-              padding: 2,
+              marginBottom: "70px",
+              marginTop: "50px",
+              color: "#1976d2",
               fontWeight: "bold",
-              textTransform: "uppercase",
-              letterSpacing: "2px",
-              textAlign: "center",
             }}
           >
-            My StudySessions
+            {user.role === "TUTOR"
+              ? "My Published Tutor Sessions"
+              : "Study Sessions I'm Intrested In"}
           </Typography>
           <Box
             sx={{
@@ -243,14 +245,11 @@ const MyStudySessions = () => {
         <Box
           id="MyStudySessionContainer"
           sx={{
-            //height: 'calc(90vh - 100px)',
             maxHeight: "80vh",
             overflow: "auto",
             display: "flex",
             alignItems: "top-left",
             margin: "10px",
-            border: "1px solid lightgray",
-            borderRadius: "8px",
             padding: "10px",
             scrollMarginTop: "64px",
           }}
