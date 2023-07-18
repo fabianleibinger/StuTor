@@ -1,6 +1,4 @@
 import express from "express";
-import { verifyToken } from "../middleware/jwt.js";
-
 import {
   createCourse,
   getCourses,
@@ -13,12 +11,12 @@ import {
 
 const router = express.Router();
 
-router.post("/", verifyToken, createCourse);
-router.get("/", verifyToken, getCourses);
-router.get("/byId/:courseId", verifyToken, getCourse);
-router.get("/search", verifyToken, getCoursesFilteredBySearchString);
-router.get("/ofUniversity/:universityId", verifyToken, getCoursesOfUniversity);
-router.delete("/:courseId", verifyToken, deleteCourse);
-router.put("/:courseId", verifyToken, updateCourse);
+router.post("/", createCourse);
+router.get("/", getCourses);
+router.get("/byId/:courseId", getCourse);
+router.get("/search", getCoursesFilteredBySearchString);
+router.get("/ofUniversity/:universityId", getCoursesOfUniversity);
+router.delete("/:courseId", deleteCourse);
+router.put("/:courseId", updateCourse);
 
 export default router;
