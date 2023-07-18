@@ -3,16 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, Box } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 import ActionButton from './ActionButton';
 
 import { styled } from '@mui/system';
 //api
-
-// context
-import { Box } from '@mui/material';
 
 // Styled CardContent component with scrollable content
 const ScrollableCardContent = styled(CardContent)({
@@ -45,10 +42,14 @@ export default function StudySessionCard({
   };
 
   // handler for clicking on the delete button
-  const handleDeleteClick = () => {
+  const onDeleteClick = () => {
     if (studySession) {
       onDelete(studySession._id);
     }
+  };
+
+  const onBookingsClick = () => {
+    navigate(`/viewBookings`);
   };
 
   return (
@@ -172,14 +173,17 @@ export default function StudySessionCard({
                 <>
                   {role === 'TUTOR' ? (
                     <>
-                      <ActionButton text="Bookings" />
+                      <ActionButton
+                        text="Bookings"
+                        onClickListener={onBookingsClick}
+                      />
                       <ActionButton
                         text="Update"
                         onClickListener={onUpdateClick}
                       />
                       <ActionButton
                         text="Delete"
-                        onClickListener={handleDeleteClick}
+                        onClickListener={onDeleteClick}
                       />
                     </>
                   ) : (
