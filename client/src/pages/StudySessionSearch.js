@@ -209,6 +209,7 @@ export default function StudySessionSearch() {
       sx={{
         display: "flex",
         justifyContent: "center",
+        marginTop: 3,
       }}
     >
       <Box

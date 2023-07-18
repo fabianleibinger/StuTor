@@ -214,10 +214,11 @@ const MyStudySessions = () => {
             variant="h4"
             align="center"
             sx={{
-              marginBottom: "70px",
-              marginTop: "50px",
-              color: "#1976d2",
+              padding: 2,
               fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "2px",
+              textAlign: "center",
             }}
           >
             {user.role === "TUTOR"

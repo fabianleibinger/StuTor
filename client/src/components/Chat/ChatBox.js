@@ -160,7 +160,6 @@ const ChatBox = () => {
     flexDirection: "column",
     width: 1,
     height: 1,
-    borderRadius: "6px",
   };
 
   const stackSx = {
