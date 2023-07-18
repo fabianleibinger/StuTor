@@ -24,7 +24,7 @@ export default function ErrorDialog({ errorMessage, dialogOpen }) {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle sx={{ color: 'red', textAlign: 'center', fontSize: '25' }}>
-        {'STOP, SOMETHING BAD HAPPEND'}
+        {'STOP, SOMETHING BAD HAPPENED'}
       </DialogTitle>
       <DialogContent>
         <DialogContentText
