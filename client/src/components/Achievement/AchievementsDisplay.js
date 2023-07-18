@@ -21,7 +21,7 @@ const AchievementsDisplay = ({ user, size = 100, showTitle = false }) => {
     () => getAchievementsOfUser(user._id),
     {
       onSuccess: (data) => {
-        setUserAchievements(data);
+        setUserAchievements(data.reverse());
       },
       retry: (failureCount, error) => {
         return error.status !== 404 && failureCount < 2;
