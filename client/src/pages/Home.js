@@ -33,13 +33,13 @@ function Home() {
         user: null,
       });
 
-      console.log("data: ", data);
-      console.log("user._id: ", user._id);
-      // Filter the studySessions to exclude those with tutoredBy === user._id
-      const filteredStudySessions = data.filter(
-        (session) => session.tutoredBy._id !== user._id
-      );
-
+      let filteredStudySessions = data;
+      if (user) {
+        // Filter the studySessions to exclude those with tutoredBy === user._id
+        filteredStudySessions = data.filter(
+          (session) => session.tutoredBy._id !== user._id
+        );
+      }
       return filteredStudySessions;
     },
     {

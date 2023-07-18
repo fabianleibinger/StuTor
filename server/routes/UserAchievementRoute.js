@@ -1,4 +1,6 @@
 import express from "express";
+import { verifyToken } from "../middleware/jwt.js";
+
 import {
   createUserAchievement,
   getUserAchievement,
@@ -7,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.post("/", createUserAchievement);
-router.get("/id/:userAchievementId", getUserAchievement);
-router.delete("/:userAchievementId", deleteUserAchievement);
+router.post("/", verifyToken, createUserAchievement);
+router.get("/id/:userAchievementId", verifyToken, getUserAchievement);
+router.delete("/:userAchievementId", verifyToken, deleteUserAchievement);
 
 export default router;

@@ -7,14 +7,15 @@ import {
   updateAchievement,
   deleteAchievement,
 } from "../controllers/AchievementController.js";
+import { verifyToken } from "../middleware/jwt.js";
 
 const router = express.Router();
 
-router.post("/", createAchievement);
-router.get("/", getAchievements);
-router.get("/id/:achievementId", getAchievement);
-router.get("/ofUser/:userId", getUserAchievementsOfUser);
-router.put("/:achievementId", updateAchievement);
-router.delete("/:achievementId", deleteAchievement);
+router.post("/", verifyToken, createAchievement);
+router.get("/", verifyToken, getAchievements);
+router.get("/id/:achievementId", verifyToken, getAchievement);
+router.get("/ofUser/:userId", verifyToken, getUserAchievementsOfUser);
+router.put("/:achievementId", verifyToken, updateAchievement);
+router.delete("/:achievementId", verifyToken, deleteAchievement);
 
 export default router;
