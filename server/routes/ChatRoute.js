@@ -1,5 +1,5 @@
 import express from "express";
-
+import { verifyToken } from "../middleware/jwt.js";
 import {
   accessChat,
   getChat,
@@ -21,6 +21,6 @@ router.get(
   getChatsOfStudysessionAndUser
 );
 router.put("/:chatId", updateChat);
-router.delete("/:chatId", deleteChat);
+router.delete("/:chatId", verifyToken, deleteChat);
 
 export default router;
