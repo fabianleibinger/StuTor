@@ -51,8 +51,12 @@ function StudySessionsSearchResult({ isLoading, data, error }) {
     '#1e90ff'
   ];
 
-  // always student since the search results do not include the tutors study sessions. Thus, the searcher should not be able to update or delete them
+  // always student since the search results do not include the tutors study sessions.
+  // Thus, the searcher should not be able to update or delete any resulting sessions.
   const userRole = 'STUDENT';
+
+  // Error needs to be devided into a 404 or another error since 404 just shows that for a specific search
+  // no results are available
   if (error) {
     if (error.message.includes('404')) {
       return (
@@ -175,6 +179,7 @@ export default function StudySessionSearch() {
     }
   };
 
+  // query key for which the query should rerun
   const queryKey = {
     searchTerm: debouncedSearchTerm,
     maxPrice: maxPrice,

@@ -6,6 +6,13 @@ export default function StudySessionSearchbar({
   handleSearchInputChange,
   searchString
 }) {
+  /**
+   * StudySessionSearchbar is a simple search bar
+   * 
+   * args:
+   *    handleSearchInputChange: the function that is triggered when the value of the searchbar changes 
+   *    searchString: an init searchString if the SearchBar is called with an input
+   */
   return (
     <TextField
       variant="outlined"

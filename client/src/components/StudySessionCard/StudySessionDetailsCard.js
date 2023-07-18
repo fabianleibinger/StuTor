@@ -14,6 +14,7 @@ import { styled } from '@mui/system';
 // context
 import { Box } from '@mui/material';
 
+// Styled CardContent component with scrollable content
 const ScrollableCardContent = styled(CardContent)({
   maxHeight: '30vh',
   overflow: 'auto'
@@ -32,6 +33,7 @@ export default function StudySessionCard({
 }) {
   const navigate = useNavigate();
 
+  // handler for clicking on the content of the card
   const handleContentClick = () => {
     if (studySession) {
       if (role === 'STUDENT') {
@@ -42,6 +44,7 @@ export default function StudySessionCard({
     }
   };
 
+  // handler for clicking on the delete button
   const handleDeleteClick = () => {
     if (studySession) {
       onDelete(studySession._id);
