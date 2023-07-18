@@ -159,7 +159,7 @@ const UserProfile = () => {
     // if not, throw error message.
     if (!isOldPasswordCorrect) {
       setSucessMessage("");
-      setErrorMessage("Incorrect Old Password!");
+      setErrorMessage("Incorrect Old Password or Password Reset Token!");
       return;
     }
 
@@ -173,7 +173,9 @@ const UserProfile = () => {
       console.log(requestBody);
       await newRequest.put("user/changePassword", requestBody);
       setErrorMessage("");
-      setSucessMessage("Successfully changed password.");
+      setSucessMessage(
+        "Successfully changed password and deleted password reset token."
+      );
     } catch (error) {
       console.log("Failed to change user password");
       console.log(error);
@@ -453,7 +455,7 @@ const UserProfile = () => {
               {/* -------------------------- PASSWORD -------------------------- */}
               <TextField
                 fullWidth
-                label="Old Password"
+                label="Old Password or Reset Token"
                 name="oldPassword"
                 type="password"
                 value={oldPassword}

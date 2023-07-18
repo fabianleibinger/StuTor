@@ -6,6 +6,7 @@ import Home from "./pages/Home.js";
 import Navbar from "./components/Navbar/Navbar.js";
 import Footer from "./components/Footer/Footer.js";
 import Login from "./pages/Login.js";
+import ForgotPassword from "./pages/ForgotPassword.js";
 import Register from "./pages/Register.js";
 import MyStudySessions from "./pages/MyStudySessions.js";
 import StudySessionSearch from "./pages/StudySessionSearch.js";
@@ -27,6 +28,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
 
               <Route path="/" element={<PrivateRoute />}>
                 <Route path="/userProfile" element={<UserProfile />} />

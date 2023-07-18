@@ -175,20 +175,30 @@ export const changePassword = async (req, res) => {
       return;
     }
 
-    const isCorrect = bcrypt.compareSync(
+    const isTokenCorrect = bcrypt.compareSync(
+      req.body.oldPassword,
+      existingUser.resetToken
+    );
+    const isPasswordCorrect = bcrypt.compareSync(
       req.body.oldPassword,
       existingUser.password
     );
-    if (!isCorrect) {
+    if (!isPasswordCorrect && !isTokenCorrect) {
       res.status(400).send("Incorrect old password!");
       return;
     }
 
     const newPassword = bcrypt.hashSync(req.body.newPassword, 5);
-    const updatedUser = { ...existingUser._doc, password: newPassword };
+    const updatedUser = {
+      ...existingUser._doc,
+      password: newPassword,
+      resetToken: null,
+    };
 
     try {
       await User.findByIdAndUpdate(existingUser._id, updatedUser);
+
+      // Delete user resetToken
 
       res.status(200).send("Password has been changed successfully.");
     } catch (err) {

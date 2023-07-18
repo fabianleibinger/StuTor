@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import newRequest from "../utils/newRequest";
 import { useUserContext } from "../context/UserProvider";
 import {
@@ -67,6 +67,10 @@ function Login() {
           Log In
         </SubmitButton>
         {error && <ErrorMessage>{error}</ErrorMessage>}
+        {/* Add the "Forgot Password" link here */}
+        <Link to="/forgot-password" style={{ color: "gray" }}>
+          Forgot Password?
+        </Link>
       </LoginFormContainer>
     </div>
   );
