@@ -17,8 +17,18 @@ const CreateStudySessionForm = ({
   step,
   setStep
 }) => {
+  /**
+   * The CreateStudySessionForm is a form for Creating and Updating StudySessions
+   * 
+   * args:
+   *    handleClose: function for closing the dialog that includes the Form
+   *    oldStudySession: is needed if the usage is to update a study session
+   *    step: context variable 1 or 2 (init with 1) (=> describiton on its own page)
+   *    setStep: context setter for step
+   */ 
   const queryClient = useQueryClient();
 
+  // context variables
   const { user, setUser } = useUserContext();
   const [courseName, setCourseName] = useState('');
   const [courseId, setCourseId] = useState('');
@@ -29,7 +39,8 @@ const CreateStudySessionForm = ({
   const [description, setDescription] = useState('');
   const [postError, setPostError] = useState('');
   const [emptyFields, setEmptyFields] = useState([]);
-
+  
+  // useEffect to check when to reset the current context
   useEffect(() => {
     if (oldStudySession !== null) {
       setCourseName(oldStudySession.courseName);
@@ -40,6 +51,7 @@ const CreateStudySessionForm = ({
     }
   }, [oldStudySession]);
 
+  // handling a Succesfull submission
   const handleSuccesfullSubmit = () => {
     setCourseName('');
     setCourseId('');
@@ -52,6 +64,7 @@ const CreateStudySessionForm = ({
     queryClient.invalidateQueries('myStudySessions');
   };
 
+  // mutations that apply the change to the myStudySession page
   const createMutation = useMutation(createStudysession, {
     onSuccess: () => {
       handleSuccesfullSubmit();
@@ -72,6 +85,7 @@ const CreateStudySessionForm = ({
     }
   });
 
+  // the handleSubmit function when CREATE or UPDATE Button is clicked
   const handleSubmit = event => {
     event.preventDefault();
     setEmptyFields([]);
@@ -97,8 +111,8 @@ const CreateStudySessionForm = ({
       } else {
         const newStudySession = {
           _id: oldStudySession._id,
-          courseName: oldStudySession.courseName,
-          courseId: oldStudySession.courseId,
+          courseName: courseName,
+          courseId: courseId,
           tutoredBy: String(oldStudySession.tutoredBy._id),
           description: description,
           pricePerHourEuro: String(pricePerHourEuro),
@@ -145,13 +159,16 @@ const CreateStudySessionForm = ({
               autoFocus
               margin="dense"
               id="courseId"
-              label="Course Identifier"
+              label={usage=== "CREATE" ? "Course Identifier" : "Course Identifier cannot be updated"}
               type="String"
               fullWidth
               required
               onChange={e => setCourseId(e.target.value)}
               value={courseId}
               sx={{ mt: 0, width: 0.6 }}
+              InputProps={{
+                readOnly: usage !== "CREATE",
+              }}
             />
             <TextField
               variant="outlined"
