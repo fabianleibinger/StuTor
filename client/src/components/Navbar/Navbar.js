@@ -34,6 +34,7 @@ import newRequest from '../../utils/newRequest';
 import { useUserContext } from '../../context/UserProvider';
 import { useBookingContext } from '../../context/BookingProvider';
 import MissionStatementDialog from '../Dialogs/MissionStatementDialog';
+import ContactSupportDialog from '../Dialogs/ContactSupportDialog';
 
 const DialogTransition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -45,6 +46,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [supportDialogOpen, setSupportDialogOpen] = useState(false);
   const { notification, setNotification } = useChatContext();
   const { bookingNotification, setBookingNotification } = useBookingContext();
   const anchorElRef = useRef(null);
@@ -130,6 +132,15 @@ const Navbar = () => {
     setDialogOpen(false);
   };
 
+  const handleSupportDialog = () => {
+    setSupportDialogOpen(true);
+    setAboutUsOpen(false);
+  };
+
+  const handleSupportDialogClose = () => {
+    setSupportDialogOpen(false);
+  };
+
   return (
     <RootAppBar position="static">
       <RootToolbar>
@@ -191,7 +202,7 @@ const Navbar = () => {
             }}
           >
             <MenuItem onClick={handleDialog}>Our Mission Statement</MenuItem>
-            <MenuItem onClick={handleAboutUsClose}>
+            <MenuItem onClick={handleSupportDialog}>
               Contact Customer Support
             </MenuItem>
           </Menu>
@@ -205,6 +216,18 @@ const Navbar = () => {
             <MissionStatementDialog />
             <DialogActions>
               <Button onClick={handleDialogClose}>Let's get studying!</Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={supportDialogOpen}
+            TransitionComponent={DialogTransition}
+            keepMounted
+            onClose={handleSupportDialogClose}
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <ContactSupportDialog />
+            <DialogActions>
+              <Button onClick={handleSupportDialogClose}>Thanks for the help!</Button>
             </DialogActions>
           </Dialog>
 

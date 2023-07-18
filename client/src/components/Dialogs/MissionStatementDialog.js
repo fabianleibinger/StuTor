@@ -26,6 +26,7 @@ function MissionStatementDialog() {
           through our app, we aim to bring together students who can mutually
           benefit from their diverse knowledge and experiences.
         </DialogContentText>
+        <br />
         <DialogContentText id="alert-dialog-slide-description">
           Our primary goal is to help students excel in their studies by
           enabling them to find the perfect tutor from their own university or
@@ -36,6 +37,7 @@ function MissionStatementDialog() {
           access high-quality academic assistance, exchange ideas, and build
           lasting relationships.
         </DialogContentText>
+        <br />
         <DialogContentText id="alert-dialog-slide-description">
           Through our app, we aim to revolutionize the way students approach
           their exams, transforming them into confident, empowered learners. We
@@ -43,6 +45,7 @@ function MissionStatementDialog() {
           environment for students to collaborate, share knowledge, and unlock
           their full potential.
         </DialogContentText>
+        <br />
         <DialogContentText id="alert-dialog-slide-description">
           At StuTor, we are passionate about empowering students to reach new
           heights academically and create a brighter future for themselves.
