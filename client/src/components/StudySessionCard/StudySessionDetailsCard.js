@@ -1,23 +1,20 @@
-import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import { Avatar, Button } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import { Avatar, Button, Box } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
-import ActionButton from "./ActionButton";
+import ActionButton from './ActionButton';
 
-import { styled } from "@mui/system";
+import { styled } from '@mui/system';
 //api
-
-// context
-import { Box } from "@mui/material";
 
 // Styled CardContent component with scrollable content
 const ScrollableCardContent = styled(CardContent)({
-  maxHeight: "30vh",
-  overflow: "auto",
+  maxHeight: '30vh',
+  overflow: 'auto'
 });
 
 export default function StudySessionCard({
@@ -29,14 +26,14 @@ export default function StudySessionCard({
   onUpdateClick,
   details,
   addStudySessionComponent,
-  backgroundColor,
+  backgroundColor
 }) {
   const navigate = useNavigate();
 
   // handler for clicking on the content of the card
   const handleContentClick = () => {
     if (studySession) {
-      if (role === "STUDENT") {
+      if (role === 'STUDENT') {
         navigate(`/StudysessionDetailsPage/${studySession._id}`);
       } else {
         onUpdateClick(studySession);
@@ -45,26 +42,30 @@ export default function StudySessionCard({
   };
 
   // handler for clicking on the delete button
-  const handleDeleteClick = () => {
+  const onDeleteClick = () => {
     if (studySession) {
       onDelete(studySession._id);
     }
+  };
+
+  const onBookingsClick = () => {
+    navigate(`/viewBookings`);
   };
 
   return (
     <Card
       sx={{
         maxWidth: 345,
-        minHeight: "350px",
-        mr: "15px",
+        minHeight: '350px',
+        mr: '15px',
         mt: 2,
         mb: 2,
         pt: 1,
         pb: 1,
-        display: "flex",
-        flexDirection: "column",
-        borderRadius: "12px",
-        background: backgroundColor,
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: '12px',
+        background: backgroundColor
       }}
       raised
     >
@@ -75,17 +76,17 @@ export default function StudySessionCard({
         sx={{
           ml: 1,
           mt: 1,
-          alignItems: "center",
-          textAlign: "center",
-          "&:hover": {
-            color: "gray",
-            cursor: "pointer",
-          },
+          alignItems: 'center',
+          textAlign: 'center',
+          '&:hover': {
+            color: 'gray',
+            cursor: 'pointer'
+          }
         }}
         onClick={handleContentClick}
       >
         <Avatar
-          src={tutoredBy.picture || ""}
+          src={tutoredBy.picture || ''}
           sx={{ width: 68, height: 68 }}
           aria-label="recipe"
         />
@@ -97,24 +98,24 @@ export default function StudySessionCard({
               <Box
                 onClick={handleContentClick}
                 sx={{
-                  "&:hover": {
-                    color: "gray",
-                    cursor: "pointer",
+                  '&:hover': {
+                    color: 'gray',
+                    cursor: 'pointer'
                   },
-                  alignItems: "center",
-                  textAlign: "center",
+                  alignItems: 'center',
+                  textAlign: 'center'
                 }}
               >
                 <Typography
                   fontWeight="bold"
                   sx={{
-                    wordWrap: "break-word",
-                    display: "-webkit-box",
-                    webkitBoxOrient: "vertical",
+                    wordWrap: 'break-word',
+                    display: '-webkit-box',
+                    webkitBoxOrient: 'vertical',
                     webkitLineClamp: 2,
-                    minHeight: "2.6rem",
-                    lineHeight: "1.1rem",
-                    justifyContent: "center",
+                    minHeight: '2.6rem',
+                    lineHeight: '1.1rem',
+                    justifyContent: 'center'
                   }}
                 >
                   {studySession.courseName}
@@ -130,12 +131,12 @@ export default function StudySessionCard({
                     ml: 1,
                     pt: 1,
                     mr: 1,
-                    wordWrap: "break-word",
-                    verticalAlign: "center",
+                    wordWrap: 'break-word',
+                    verticalAlign: 'center'
                   }}
                 >
                   {studySession.description.length > 75
-                    ? studySession.description.slice(0, 75) + "..."
+                    ? studySession.description.slice(0, 75) + '...'
                     : studySession.description}
                 </Typography>
               </Box>
@@ -153,39 +154,42 @@ export default function StudySessionCard({
           </ScrollableCardContent>
           <CardActions
             sx={{
-              mt: "auto",
+              mt: 'auto',
               pt: 0.5,
-              justifyContent: "center",
+              justifyContent: 'center'
             }}
           >
             <Box
               id="ActionButtonswrapper"
               sx={{
-                display: "flex",
+                display: 'flex',
                 width: 1,
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: "10px",
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '10px'
               }}
             >
               {details && (
                 <>
-                  {role === "TUTOR" ? (
+                  {role === 'TUTOR' ? (
                     <>
-                      <ActionButton text="Bookings" />
+                      <ActionButton
+                        text="Bookings"
+                        onClickListener={onBookingsClick}
+                      />
                       <ActionButton
                         text="Update"
                         onClickListener={onUpdateClick}
                       />
                       <ActionButton
                         text="Delete"
-                        onClickListener={handleDeleteClick}
+                        onClickListener={onDeleteClick}
                       />
                     </>
                   ) : (
                     <Box
                       id="StudentStudySessionButtonBox"
-                      sx={{ width: 1, textAlign: "center" }}
+                      sx={{ width: 1, textAlign: 'center' }}
                     >
                       <Button
                         variant="contained"
@@ -205,17 +209,17 @@ export default function StudySessionCard({
         <ScrollableCardContent>
           <Typography
             sx={{
-              textAlign: "center",
-              alignItems: "center",
-              wordWrap: "break-word",
+              textAlign: 'center',
+              alignItems: 'center',
+              wordWrap: 'break-word'
             }}
           >
             {text}
           </Typography>
-          <Typography sx={{ textAlign: "center", mb: 3 }}>
+          <Typography sx={{ textAlign: 'center', mb: 3 }}>
             {tutoredBy.firstname} {tutoredBy.lastname}
           </Typography>
-          <Typography sx={{ textAlign: "center" }}>
+          <Typography sx={{ textAlign: 'center' }}>
             Your description could appear here...
           </Typography>
         </ScrollableCardContent>
