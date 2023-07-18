@@ -97,7 +97,6 @@ io.on("connection", (socket) => {
 
   // Notify a user that someone is typing in a chat.
   socket.on("typing in chat", (chat) => {
-    console.log("typing in chat " + chat._id);
     chat.users.forEach((user) => {
       socket.in(user._id).emit("typing in chat", chat._id);
     });
@@ -105,7 +104,6 @@ io.on("connection", (socket) => {
 
   // Notify a user that someone stopped typing in a chat.
   socket.on("stop typing in chat", (chat) => {
-    console.log("stop typing in chat " + chat._id);
     chat.users.forEach((user) => {
       socket.in(user._id).emit("stop typing in chat", chat._id);
     });
