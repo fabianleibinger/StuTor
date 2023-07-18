@@ -372,8 +372,8 @@ const Register = () => {
           </div>
         )}
 
-        {/* ------------------- STEP 3: TEXTFIELDS AND SELECTIONS ------------------- */}
-        {activeStep === 4 && (
+        {/* ------------------- STEP 4: TEXTFIELDS AND SELECTIONS ------------------- */}
+        {activeStep === 3 && (
           <div style={{ textAlign: "center" }}>
             {/* ------------------- USERNAME ------------------- */}
             <LoginTextField
@@ -454,10 +454,10 @@ const Register = () => {
                 (activeStep === 0 && selectedRole === "") ||
                 (activeStep === 1 && newUser.university === "")
               }
-              onClick={activeStep === 4 ? handleSubmit : handleNext}
+              onClick={activeStep === 3 ? handleSubmit : handleNext}
               style={{ width: "200px" }}
             >
-              {activeStep === 4 ? "Register" : "Next"}
+              {activeStep === 3 ? "Register" : "Next"}
             </SubmitButton>
           </div>
         )}
