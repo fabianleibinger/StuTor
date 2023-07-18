@@ -364,15 +364,15 @@ const Register = () => {
           </div>
         )}
 
-        {/* ------------------- STEP 4: SELECT PAYMENT METHODS ------------------- */}
-        {activeStep === 3 && (
+        {/* ------------------- STEP 5: SELECT PAYMENT METHODS ------------------- */}
+        {activeStep === 4 && (
           <div style={stepContentContainer}>
             {/* ------------------- PAYPAL ------------------- */}
             PAYPAL
           </div>
         )}
 
-        {/* ------------------- STEP 5: TEXTFIELDS AND SELECTIONS ------------------- */}
+        {/* ------------------- STEP 3: TEXTFIELDS AND SELECTIONS ------------------- */}
         {activeStep === 4 && (
           <div style={{ textAlign: "center" }}>
             {/* ------------------- USERNAME ------------------- */}
