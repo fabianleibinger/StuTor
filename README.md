@@ -28,6 +28,14 @@ Prerequisite: Make sure to have installed node.js on your device.
 
 ### 12. Enjoy using the app!!!
 
-## Unknown accounts
+You can freely create accounts on StuTor for testing purpose. Test payments can be made by using the 4242424242424242 iban and random entries in the other fields. If you want to use accounts that are already configured, use the following credentials:
+
+Tutor - username: TotoGogo, pw: togo
+
+Student - username: Susi, pw: 123
+
+## Unknown contributors
 peytonlandyouknow - private github account of Fabian Leibinger
+
+
 
