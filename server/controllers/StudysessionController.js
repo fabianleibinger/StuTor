@@ -256,8 +256,8 @@ export const updateStudysession = async (req, res) => {
 export const getAverageRating = async (req, res) => {
   try {
     const studysessionId = new ObjectId(req.params.studysessionId);
-    console.log('studysessionId', studysessionId);
 
+    // Get all reviews for this studysession
     let reviews = await Review.find().populate({
       path: 'booking',
       match: { studysession: studysessionId },
@@ -267,10 +267,14 @@ export const getAverageRating = async (req, res) => {
       }
     });
 
+    // Filter the reviews for the ones with a booking
     reviews = reviews.filter(review => review.booking !== null);
+    
+    // Send 0 when there are no reviews with booking yet
     if (reviews.length === 0) {
       res.status(200).send('0');
     } else {
+      // Calculate the average rating
       const averageRating =
         reviews.reduce((acc, review) => acc + review.rating, 0) /
         reviews.length;
