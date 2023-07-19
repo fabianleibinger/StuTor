@@ -49,25 +49,15 @@ const StudysessionRating = ({ studySessionId }) => {
     <div style={{ display: "flex", alignItems: "center" }}>
       <Grid container spacing={2}>
         {/* ----------- Average Rating Number----------- */}
-        <Grid item>
-          {/* <Typography variant="body1">Average Rating:</Typography> */}
-          <Typography
-            variant="h5"
-            fontWeight="bold"
-            style={{ color: "#FFD700" }}
-          >
-            {rating.toFixed(1)} / 5.0
-          </Typography>
-        </Grid>
 
         {/* ----------- Star Ratings Graphics ----------- */}
-        <Grid item>
-          <StarRating rating={rating} isReadOnly={true} />
+        <Grid item marginTop={0.75}>
+          <StarRating rating={rating} isReadOnly={true} smallStars={true}/>
         </Grid>
 
         {/* ----------- Count Number of Reviews ----------- */}
-        <Grid item>
-          <Typography variant="body1" paddingTop={'0.25rem'}>({reviews.length})</Typography>
+        <Grid item marginTop={0.75}>
+          <Typography variant="body1">({reviews.length})</Typography>
         </Grid>
 
         {/* ----------- See Reviews Button ----------- */}

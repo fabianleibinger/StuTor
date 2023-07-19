@@ -278,7 +278,6 @@ const StudysessionDetailsPage = () => {
                     sx={{
                       marginBottom: "1rem",
                       color: "#1976d2",
-                      fontWeight: "bold",
                     }}
                   >
                     Tutor Experience
@@ -304,7 +303,6 @@ const StudysessionDetailsPage = () => {
                 sx={{
                   marginBottom: "1rem",
                   color: "#1976d2",
-                  fontWeight: "bold",
                 }}
               >
                 Achievements
@@ -330,7 +328,6 @@ const StudysessionDetailsPage = () => {
               sx={{
                 marginBottom: "1rem",
                 color: "#1976d2",
-                fontWeight: "bold",
               }}
             >
               Course Description
@@ -370,7 +367,7 @@ const StudysessionDetailsPage = () => {
         {/* Chat Box */}
         <Box
           sx={{
-            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)",
+            boxShadow: "0px 5px 8px rgba(0, 0, 0, 0.2)",
             borderRadius: "30px",
             padding: "1rem",
             margin: "2rem",
