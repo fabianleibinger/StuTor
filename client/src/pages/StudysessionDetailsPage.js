@@ -147,6 +147,7 @@ const StudysessionDetailsPage = () => {
     height: 1,
     border: "1px solid lightgrey",
     backgroundColor: '#f5f5f5',
+    boxShadow: "0px 5px 8px rgba(0, 0, 0, 0.2)",
     borderRadius: "6px",
     flexWrap: 'wrap'}}>
       <Box component="div" sx={{overflow: 'auto', padding: 2, height: 0.85, marginBottom: '5vh'}}>
