@@ -11,8 +11,6 @@ import {
 
 const router = express.Router();
 
-//router.post("/onboardUser", onboardUser);
-//router.get("/onboardUserRefresh", onboardUserRefresh);
 router.post("/createAccount/:userId", createAccount);
 router.get("/account/:userId", getAccount);
 router.post("/createPayment", createPayment);
