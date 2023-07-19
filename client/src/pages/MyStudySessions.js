@@ -1,29 +1,29 @@
-import { useState, useContext } from "react";
+import { useState, useContext } from 'react';
 //react-query
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { useUserContext } from "../context/UserProvider";
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useUserContext } from '../context/UserProvider';
 
 // frontend
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from '@mui/material';
 
 // components
-import StudySessionCard from "../components/StudySessionCard/StudySessionDetailsCard";
-import CreateStudySessionDialog from "../components/Dialogs/CreateStudySessionDialog";
-import UpdateStudySessionDialog from "../components/Dialogs/UpdateStudySessionDialog";
-import SwitchRoleButton from "../components/SwitchRoleButton";
+import StudySessionCard from '../components/StudySessionCard/StudySessionDetailsCard';
+import CreateStudySessionDialog from '../components/Dialogs/CreateStudySessionDialog';
+import UpdateStudySessionDialog from '../components/Dialogs/UpdateStudySessionDialog';
+import SwitchRoleButton from '../components/SwitchRoleButton';
 
-import { LoadingIndicator } from "../components/General/LoadingIndicator";
-import { ErrorIndicator } from "../components/General/ErrorIndicator";
+import { LoadingIndicator } from '../components/General/LoadingIndicator';
+import { ErrorIndicator } from '../components/General/ErrorIndicator';
 
 //api
 import {
   getStudysessionsTutoredByUser,
-  deleteStudysession,
-} from "../api/StudySession";
-import { getChatsOfUser } from "../api/Chat";
-import { updateUser } from "../api/User";
+  deleteStudysession
+} from '../api/StudySession';
+import { getChatsOfUser } from '../api/Chat';
+import { updateUser } from '../api/User';
 
-import ConfirmationDialog from "../components/Dialogs/ConfirmationDialog";
+import ConfirmationDialog from '../components/Dialogs/ConfirmationDialog';
 
 const MyStudySessions = () => {
   /**
@@ -41,25 +41,25 @@ const MyStudySessions = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStudySession, setSelectedStudySession] = useState(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [idToDelete, setIdToDelete] = useState("");
+  const [idToDelete, setIdToDelete] = useState('');
 
   const [studySessions, setStudySessions] = useState([]);
 
   // Background colors for the study sessions shown on this page
   const myStudySessionColors = [
-    "#0fab3c",
-    "#98f5ff",
-    "#ee6363",
-    "#ffa500",
-    "#eeaeee",
-    "#1e90ff",
+    '#0fab3c',
+    '#98f5ff',
+    '#ee6363',
+    '#ffa500',
+    '#eeaeee',
+    '#1e90ff'
   ];
 
   // The texts shown if a Tutor does not offer any study sessions
   const emptyStudySessionTexts = [
-    "This could be your next study session!",
+    'This could be your next study session!',
     "Don't you want to offer more different study session?",
-    "The next opportunity to earn money is just around the corner!",
+    'The next opportunity to earn money is just around the corner!'
   ];
 
   // use mutation to update data
@@ -69,14 +69,14 @@ const MyStudySessions = () => {
   // these keys trigger the myStudySession query
   const queryKey = {
     role: user.role,
-    user: user._id,
+    user: user._id
   };
 
   // fetch the wanted study sessions (as a tutor your own, as a student the ones you started chatting with)
   useQuery(
-    ["myStudySessions", queryKey],
+    ['myStudySessions', queryKey],
     () => {
-      if (user.role === "TUTOR") {
+      if (user.role === 'TUTOR') {
         return getStudysessionsTutoredByUser(user._id);
       } else {
         return getChatsOfUser(user._id);
@@ -86,54 +86,54 @@ const MyStudySessions = () => {
       retry: (failureCount, error) => {
         return error.response?.status !== 404;
       },
-      onSuccess: (data) => {
-        if (user.role === "TUTOR") {
+      onSuccess: data => {
+        if (user.role === 'TUTOR') {
           setStudySessions(data || []);
         } else {
+          console.log('LATATEEST: ', data[0].latest_message);
           setStudySessions(
             Array.from(
               new Set(
                 (data || [])
-                  .map((chat) => chat.studysession)
-                  .filter(
-                    (session) => session !== null && session !== undefined
-                  )
+                  .filter(chat => chat.latest_message !== undefined)
+                  .map(chat => chat.studysession)
+                  .filter(session => session !== null && session !== undefined)
               )
-            ).filter((session) => session.tutoredBy._id !== user._id)
+            ).filter(session => session.tutoredBy._id !== user._id)
           );
         }
       },
-      onLoading: (isLoading) => {
+      onLoading: isLoading => {
         return <LoadingIndicator />;
       },
-      onError: (error) => {
+      onError: error => {
         if (!(error.response && error.response?.status === 404)) {
           return <ErrorIndicator />;
         }
-      },
+      }
     }
   );
 
   // first confirm deletion the delete it
-  const handleDeleteConfirmationNeeded = (id) => {
+  const handleDeleteConfirmationNeeded = id => {
     setOpenConfirmDialog(true);
     setIdToDelete(id);
   };
 
-  const handleDeleteStudySession = async (studySessionId) => {
+  const handleDeleteStudySession = async studySessionId => {
     setOpenConfirmDialog(false);
     await deleteStudySessionMutation.mutateAsync(studySessionId, {
       // Manually refetch the query after successful deletion
       onSuccess: () => {
-        queryClient.invalidateQueries("myStudySessions");
-        setStudySessions((prevState) =>
-          prevState.filter((session) => session._id !== studySessionId)
+        queryClient.invalidateQueries('myStudySessions');
+        setStudySessions(prevState =>
+          prevState.filter(session => session._id !== studySessionId)
         );
-      },
+      }
     });
   };
 
-  const handleRoleSwitchClick = async (role) => {
+  const handleRoleSwitchClick = async role => {
     const newUser = {
       _id: user._id,
       username: user.username,
@@ -142,20 +142,20 @@ const MyStudySessions = () => {
       email: user.email,
       picture: user.picture,
       role: role,
-      university: user.university,
+      university: user.university
     };
 
     await switchRoleMutation.mutateAsync(newUser, {
       onSuccess: () => {
         setUser(newUser);
         setStudySessions([]);
-        queryClient.invalidateQueries("myStudySessions");
-      },
+        queryClient.invalidateQueries('myStudySessions');
+      }
     });
   };
 
   // clicking on the StudySession
-  const handleStudySessionUpdateClick = (studySession) => {
+  const handleStudySessionUpdateClick = studySession => {
     setSelectedStudySession(studySession);
     setOpenDialog(true);
   };
@@ -170,39 +170,39 @@ const MyStudySessions = () => {
     <Box
       id="MyStudySessionWrapperPageWrapper"
       sx={{
-        display: "flex",
-        justifyContent: "center",
+        display: 'flex',
+        justifyContent: 'center'
       }}
     >
       <Box
         id="MyStudySessionWrapper"
         sx={{
-          width: "90vw",
-          height: "90vh",
+          width: '90vw',
+          height: '90vh',
           minheight: 1,
-          justifyContent: "center",
-          flexDirection: "column",
-          alignItems: "right",
+          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'right',
           pb: 1,
           pt: 2,
           pl: 1,
-          pr: 1,
+          pr: 1
         }}
       >
         <Box
           id="MyStudySessionHeader"
           sx={{
-            padding: "10px",
-            borderRadius: "8px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            padding: '10px',
+            borderRadius: '8px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
           }}
         >
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-end",
+              display: 'flex',
+              justifyContent: 'space-end'
             }}
           >
             <SwitchRoleButton
@@ -215,23 +215,23 @@ const MyStudySessions = () => {
             align="center"
             sx={{
               padding: 2,
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              letterSpacing: "2px",
-              textAlign: "center",
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              textAlign: 'center'
             }}
           >
-            {user.role === "TUTOR"
-              ? "My Published Tutor Sessions"
-              : "Study Sessions I'm Intrested In"}
+            {user.role === 'TUTOR'
+              ? 'My Published Tutor Sessions'
+              : "Study Sessions I'm Interested In"}
           </Typography>
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-end",
+              display: 'flex',
+              justifyContent: 'space-end'
             }}
           >
-            <CreateStudySessionDialog key={"AddDialog"} role={user.role} />
+            <CreateStudySessionDialog key={'AddDialog'} role={user.role} />
           </Box>
         </Box>
 
@@ -246,19 +246,19 @@ const MyStudySessions = () => {
         <Box
           id="MyStudySessionContainer"
           sx={{
-            maxHeight: "80vh",
-            overflow: "auto",
-            display: "flex",
-            alignItems: "top-left",
-            margin: "10px",
-            padding: "10px",
-            scrollMarginTop: "64px",
+            maxHeight: '80vh',
+            overflow: 'auto',
+            display: 'flex',
+            alignItems: 'top-left',
+            margin: '10px',
+            padding: '10px',
+            scrollMarginTop: '64px'
           }}
         >
           <Grid
             container
             spacing={0}
-            sx={{ height: "100%", alignItems: "top-left" }}
+            sx={{ height: '100%', alignItems: 'top-left' }}
           >
             {studySessions.length > 0 ? (
               studySessions.map((studySession, index) => {
@@ -272,7 +272,7 @@ const MyStudySessions = () => {
                     md={4}
                     lg={3}
                     key={`${studySession._id}-${index}`} // Use a combination of _id and index as the unique key
-                    sx={{ alignItems: "left" }}
+                    sx={{ alignItems: 'left' }}
                   >
                     <StudySessionCard
                       tutoredBy={studySession.tutoredBy}
@@ -291,7 +291,7 @@ const MyStudySessions = () => {
                   </Grid>
                 );
               })
-            ) : user.role === "TUTOR" ? (
+            ) : user.role === 'TUTOR' ? (
               emptyStudySessionTexts.map((text, index) => (
                 <Grid
                   item
@@ -300,7 +300,7 @@ const MyStudySessions = () => {
                   md={4}
                   lg={3}
                   key={index}
-                  sx={{ alignItems: "left" }}
+                  sx={{ alignItems: 'left' }}
                 >
                   <StudySessionCard
                     key={index}
@@ -312,7 +312,7 @@ const MyStudySessions = () => {
                     onUpdateClick={() => {}}
                     details={true}
                     addStudySessionComponent={null}
-                    backgroundColor={"#d3d3d3"}
+                    backgroundColor={'#d3d3d3'}
                   />
                 </Grid>
               ))
