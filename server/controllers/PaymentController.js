@@ -1,30 +1,35 @@
 import Stripe from "stripe";
-import Session from "express-session";
 import Payment from "../models/Payment.js";
 import Studysession from "../models/Studysession.js";
 import User from "../models/User.js";
 import Booking from "../models/Booking.js";
 import { ObjectId } from "mongodb";
+import dotenv from "dotenv";
 
-const stripe = new Stripe(
-  "sk_test_51NHAGjBuAoJ2w5QopNPNnAdWTlA43tOCFfgKofUN2CUKOJArtX9KoKqcbMH5c1VTPl9RvBpTelUnnnmL72RBF2OG00YCMEmF01"
-);
+dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE);
 
 export const createAccount = async (req, res) => {
   const user = req.params.userId;
   // Check if user already has a payment account.
   const existingPayment = await Payment.findOne({ user: user });
+
+  // Only create new account if there is none yet
   if (!existingPayment) {
     try {
+      // Create new stripe customer
       const customer = await stripe.accounts.create({
         type: "express",
       });
+      // Add payment information to database
       const payment = new Payment({
         user: user,
         customerId: customer.id,
       });
       const account = await payment.save();
 
+      // Create account link for user to complete account setup
       const accountLink = await stripe.accountLinks.create({
         account: payment.customerId,
         refresh_url: "http://localhost:3000/userProfile",
@@ -50,9 +55,11 @@ export const updateAccount = async (req, res) => {
     const existingStripeAccount = await stripe.accounts.retrieve(
       existingPayment.customerId
     );
+
     // Only create new account link if user has a payment account and charges are disabled.
     if (existingPayment && existingStripeAccount.charges_enabled == false) {
       try {
+        // Create account link for user to complete account setup
         const accountLink = await stripe.accountLinks.create({
           account: existingPayment.customerId,
           refresh_url: "http://localhost:3000/userProfile",
@@ -116,26 +123,23 @@ export const deleteAccount = async (req, res) => {
 
 export const createPayment = async (req, res) => {
   // Check if studysession and user exist.
-  console.log(req.body);
   const studysessionId = new ObjectId(req.body.studysession);
   const studysession = await Studysession.findById(studysessionId);
-  console.log("student id", req.body.studentId);
+  
   const studentId = new ObjectId(req.body.studentId);
   const student = await User.findById(studentId);
-  console.log("studentId", studentId);
-  console.log("student", student);
+
   const tutorId = new ObjectId(studysession.tutoredBy);
   const tutor = await User.findById(tutorId);
-  console.log("tutor", tutor);
+ 
   let amount = req.body.price;
   if (!studysession || !student) {
-    console.log("studysession", studysession);
     res.status(404).send("Object reference not found!");
     return;
   }
 
   const product = await stripe.products.create({
-    name: "test",
+    name: "studysession",
   });
   const productId = product.id;
   amount = amount * 100;
@@ -145,17 +149,14 @@ export const createPayment = async (req, res) => {
     currency: "eur",
     product: productId,
   });
-  console.log("price", price);
+
   try {
     const existingAccount = await Payment.findOne({ user: tutorId });
-    console.log("existingAccount", existingAccount);
-
     const stripeAccount = await stripe.accounts.retrieve(
       existingAccount.customerId
     );
 
     if (existingAccount && stripeAccount.charges_enabled == true) {
-      // Create booking.
       const newBooking = new Booking({
         studysession: studysessionId,
         hours: req.body.hours,
@@ -164,6 +165,7 @@ export const createPayment = async (req, res) => {
         createdBy: studentId,
       });
       const savedBooking = await newBooking.save();
+
       const bookingId = savedBooking._id;
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
@@ -182,10 +184,10 @@ export const createPayment = async (req, res) => {
         success_url: `http://localhost:3000/success/${bookingId}/${tutorId}`,
         cancel_url: `http://localhost:3000/success/${bookingId}`,
       });
+
       await Booking.findByIdAndUpdate(bookingId, {
         paymentSession: session.id,
       });
-      console.log(bookingId);
 
       res.status(200).send(session);
     } else {
