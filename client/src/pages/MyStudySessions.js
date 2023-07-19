@@ -47,12 +47,12 @@ const MyStudySessions = () => {
 
   // Background colors for the study sessions shown on this page
   const myStudySessionColors = [
-    "#6CA779",
-    "#C7EBFF",
-    "#E08E8E",
-    "#E18734",
-    "#E5BBFF",
-    "#6499FF",
+    '#6CA779',
+    '#C7EBFF',
+    '#E08E8E',
+    '#E18734',
+    '#E5BBFF',
+    '#6499FF'
   ];
 
   // The texts shown if a Tutor does not offer any study sessions
