@@ -16,80 +16,80 @@ import {
   ProfilePicInputLabel,
   theme,
   ProgressContainer,
-  stepContentContainer
-} from '../styles';
-import studentLogo from '../img/student_logo.png';
-import tutorLogo from '../img/tutor_logo.png';
+  stepContentContainer,
+} from "../styles";
+import studentLogo from "../img/student_logo.png";
+import tutorLogo from "../img/tutor_logo.png";
 
 const Register = () => {
   const { user, setUser } = useUserContext();
   const [profilePicFile, setProfilePicFile] = useState(null);
-  const [profilePicUrl, setProfilePicUrl] = useState('');
+  const [profilePicUrl, setProfilePicUrl] = useState("");
   const [allUniversities, setAllUniversities] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedUniversity, setSelectedUniversity] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [selectedRole, setSelectedRole] = useState('');
+  const [selectedUniversity, setSelectedUniversity] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
   const [activeStep, setActiveStep] = useState(0);
 
   const navigate = useNavigate();
 
   const [newUser, setNewUser] = useState({
-    username: '',
-    email: '',
-    password: '',
-    lastname: '',
-    firstname: '',
-    picture: '',
-    university: '',
-    role: ''
+    username: "",
+    email: "",
+    password: "",
+    lastname: "",
+    firstname: "",
+    picture: "",
+    university: "",
+    role: "",
   });
 
   useEffect(() => {
     const fetchAllUniversities = async () => {
       try {
-        const response = await newRequest.get('/university');
+        const response = await newRequest.get("/university");
         setAllUniversities(response.data);
-        setSearchResults(response.data.map(university => university.name));
+        setSearchResults(response.data.map((university) => university.name));
       } catch (error) {
-        console.log('Failed to get universities!');
+        console.log("Failed to get universities!");
         console.log(error);
       }
     };
     fetchAllUniversities();
   }, []);
 
-  const handleChange = e => {
-    setNewUser(prev => {
+  const handleChange = (e) => {
+    setNewUser((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
 
-  const handleProfilePicChange = async e => {
+  const handleProfilePicChange = async (e) => {
     const selectedFile = e.target.files[0];
     setProfilePicFile(selectedFile);
     const url = await uploadProfilePic(selectedFile);
     setProfilePicUrl(url);
-    setNewUser(prev => {
+    setNewUser((prev) => {
       return { ...prev, picture: url };
     });
   };
 
-  const handleRoleChange = role => {
+  const handleRoleChange = (role) => {
     setSelectedRole(role);
-    setNewUser(prev => {
+    setNewUser((prev) => {
       return { ...prev, role: role };
     });
   };
 
   const handleNext = () => {
-    setActiveStep(prevStep => prevStep + 1);
-    setErrorMessage('');
+    setActiveStep((prevStep) => prevStep + 1);
+    setErrorMessage("");
   };
 
   const handleBack = () => {
-    setActiveStep(prevStep => prevStep - 1);
-    setErrorMessage('');
+    setActiveStep((prevStep) => prevStep - 1);
+    setErrorMessage("");
   };
 
   const handleUniversityChange = (e, value) => {
@@ -103,16 +103,16 @@ const Register = () => {
     );
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const fields = ['username', 'firstname', 'lastname', 'email', 'password'];
+    const fields = ["username", "firstname", "lastname", "email", "password"];
     const fieldNames = {
-      username: 'Username',
-      firstname: 'First Name',
-      lastname: 'Last Name',
-      email: 'Valid Email Address',
-      password: 'Password'
+      username: "Username",
+      firstname: "First Name",
+      lastname: "Last Name",
+      email: "Valid Email Address",
+      password: "Password",
     };
 
     for (const field of fields) {
@@ -123,40 +123,40 @@ const Register = () => {
     }
 
     if (!newUser.university) {
-      setErrorMessage('Please Select a University');
+      setErrorMessage("Please Select a University");
       return;
     }
 
     try {
-      console.log('NEW USER: ', newUser);
-      await newRequest.post('/auth/register', {
-        ...newUser
+      console.log("NEW USER: ", newUser);
+      await newRequest.post("/auth/register", {
+        ...newUser,
       });
     } catch (err) {
       console.log(err.response.status);
       if (err.response?.status === 409) {
-        setErrorMessage('Username or email is already taken');
+        setErrorMessage("Username or email is already taken");
         return;
       } else {
         const errorMessage =
-          err.response?.data?.message || 'An error occurred when registering.';
+          err.response?.data?.message || "An error occurred when registering.";
         setErrorMessage(errorMessage);
-        console.log('err: ', err);
+        console.log("err: ", err);
         return;
       }
     }
 
     try {
-      const res = await newRequest.post('/auth/login', {
+      const res = await newRequest.post("/auth/login", {
         username: newUser.username,
-        password: newUser.password
+        password: newUser.password,
       });
       setUser(res.data);
     } catch (err) {
       if (err.response && err.response.data) {
         setError(err.response.data);
       } else {
-        setError('An error occurred during Log-in. Please try again later.');
+        setError("An error occurred during Log-in. Please try again later.");
       }
     }
 
@@ -171,9 +171,9 @@ const Register = () => {
   return (
     <div
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <FormContainer onSubmit={activeStep === 4 ? handleSubmit : undefined}>
@@ -218,74 +218,74 @@ const Register = () => {
 
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '50px',
-                justifyContent: 'center',
-                alignItems: 'center'
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "50px",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <div
-                onClick={() => handleRoleChange('STUDENT')}
+                onClick={() => handleRoleChange("STUDENT")}
                 style={{
                   border: `8px solid ${
-                    selectedRole === 'STUDENT'
+                    selectedRole === "STUDENT"
                       ? theme.palette.primary.main
-                      : 'gray'
+                      : "gray"
                   }`,
-                  padding: '10px',
-                  borderRadius: '30px',
-                  cursor: 'pointer',
-                  position: 'relative'
+                  padding: "10px",
+                  borderRadius: "30px",
+                  cursor: "pointer",
+                  position: "relative",
                 }}
               >
                 <img
                   src={studentLogo}
                   alt="Student Logo"
-                  style={{ width: '300px', height: '300px' }}
+                  style={{ width: "300px", height: "300px" }}
                 />
                 <Typography
                   variant="h5"
                   align="center"
                   sx={{
-                    position: 'absolute',
-                    bottom: '-50px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    fontWeight: selectedRole === 'STUDENT' ? 'bold' : 'normal'
+                    position: "absolute",
+                    bottom: "-50px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    fontWeight: selectedRole === "STUDENT" ? "bold" : "normal",
                   }}
                 >
                   Student
                 </Typography>
               </div>
               <div
-                onClick={() => handleRoleChange('TUTOR')}
+                onClick={() => handleRoleChange("TUTOR")}
                 style={{
                   border: `8px solid ${
-                    selectedRole === 'TUTOR'
+                    selectedRole === "TUTOR"
                       ? theme.palette.primary.main
-                      : 'gray'
+                      : "gray"
                   }`,
-                  padding: '10px',
-                  borderRadius: '30px',
-                  cursor: 'pointer',
-                  position: 'relative'
+                  padding: "10px",
+                  borderRadius: "30px",
+                  cursor: "pointer",
+                  position: "relative",
                 }}
               >
                 <img
                   src={tutorLogo}
                   alt="Tutor Logo"
-                  style={{ width: '300px', height: '300px' }}
+                  style={{ width: "300px", height: "300px" }}
                 />
                 <Typography
                   variant="h5"
                   align="center"
                   sx={{
-                    position: 'absolute',
-                    bottom: '-50px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    fontWeight: selectedRole === 'TUTOR' ? 'bold' : 'normal'
+                    position: "absolute",
+                    bottom: "-50px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    fontWeight: selectedRole === "TUTOR" ? "bold" : "normal",
                   }}
                 >
                   Tutor
@@ -316,8 +316,8 @@ const Register = () => {
               options={searchResults}
               onInputChange={handleUniversityChange}
               onFocus={handleUniversityChange}
-              renderInput={params => (
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+              renderInput={(params) => (
+                <div style={{ display: "flex", justifyContent: "center" }}>
                   <LoginTextField
                     {...params}
                     // label="University*"
@@ -326,11 +326,11 @@ const Register = () => {
                     placeholder={`${
                       newUser.university
                         ? selectedUniversity.name
-                        : 'Universities*'
+                        : "Universities*"
                     }`}
                     inputProps={{
                       ...params.inputProps,
-                      style: { width: '80%', marginTop: '10px' }
+                      style: { width: "80%", marginTop: "10px" },
                     }}
                   />
                 </div>
@@ -363,7 +363,7 @@ const Register = () => {
               id="profile-pic"
               type="file"
               onChange={handleProfilePicChange}
-              style={{ width: '80%' }}
+              style={{ width: "80%" }}
             />
 
             {profilePicFile && (
@@ -375,9 +375,9 @@ const Register = () => {
                   src={URL.createObjectURL(profilePicFile)}
                   alt="Profile Picture"
                   style={{
-                    maxWidth: '40%',
-                    height: 'auto',
-                    marginTop: '10px'
+                    maxWidth: "40%",
+                    height: "auto",
+                    marginTop: "10px",
                   }}
                 />
               </div>
@@ -481,13 +481,20 @@ const Register = () => {
           </div>
         )}
 
+        {/* ------------------- ERROR MESSAGES (shown on all steps) ------------------- */}
+        {errorMessage && (
+          <ErrorMessage variant="body2" align="center" color="error">
+            {errorMessage}
+          </ErrorMessage>
+        )}
+
         {/* ------------------- NEXT AND BACK BUTTONS ------------------- */}
         {[0, 1, 2, 3, 4].includes(activeStep) && (
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '0px'
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "0px",
             }}
           >
             {/* BACK BUTTON */}
@@ -495,7 +502,7 @@ const Register = () => {
               variant="outlined"
               color="primary"
               onClick={handleBack}
-              style={{ width: '200px', marginRight: '300px' }}
+              style={{ width: "200px", marginRight: "300px" }}
               disabled={activeStep === 0}
             >
               Back
@@ -507,8 +514,8 @@ const Register = () => {
               color="primary"
               disabled={
                 !selectedRole ||
-                (activeStep === 0 && selectedRole === '') ||
-                (activeStep === 1 && newUser.university === '')
+                (activeStep === 0 && selectedRole === "") ||
+                (activeStep === 1 && newUser.university === "")
               }
               onClick={
                 activeStep < 3
@@ -524,13 +531,6 @@ const Register = () => {
               {activeStep < 4 ? "Next" : "Finish"}
             </SubmitButton>
           </div>
-        )}
-
-        {/* ------------------- ERROR MESSAGES (shown on all steps) ------------------- */}
-        {errorMessage && (
-          <ErrorMessage variant="body2" align="center" color="error">
-            {errorMessage}
-          </ErrorMessage>
         )}
       </FormContainer>
     </div>
