@@ -25,7 +25,19 @@ Prerequisite: Make sure to have installed node.js on your device.
 10. Run `npm start`.
 11. A browser window should have opened automatically. (Otherwise connect to localhost:3000).
 
+
 ### 12. Enjoy using the app!!!
+
+You can freely create accounts on StuTor for testing purpose. Test payments can be made by using the 4242424242424242 iban and random entries in the other fields. If you want to use accounts that are already configured, use the following credentials:
+
+Tutor - username: TotoGogo, pw: togo
+
+Student - username: Susi, pw: 123
+
+## Unknown contributors
+peytonlandyouknow - private github account of Fabian Leibinger
+
+seba project bot - weird git interface? of Sophie Witt (all commits are made by her)
 
 
 
