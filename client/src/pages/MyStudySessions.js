@@ -90,10 +90,12 @@ const MyStudySessions = () => {
         if (user.role === 'TUTOR') {
           setStudySessions(data || []);
         } else {
+          console.log('LATATEEST: ', data[0].latest_message);
           setStudySessions(
             Array.from(
               new Set(
                 (data || [])
+                  .filter(chat => chat.latest_message !== undefined)
                   .map(chat => chat.studysession)
                   .filter(session => session !== null && session !== undefined)
               )
