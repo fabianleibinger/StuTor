@@ -18,6 +18,7 @@ import { useUserContext } from '../context/UserProvider.js';
 import AchievementsDisplay from '../components/Achievement/AchievementsDisplay.js';
 import TutorHourProgressBar from '../components/Achievement/TutorHourProgressBar.js';
 import { blue } from '@mui/material/colors';
+import newRequest from '../utils/newRequest.js';
 
 
 const StudysessionDetailsPage = () => {
@@ -207,7 +208,7 @@ const StudysessionDetailsPage = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Box sx={{ width: 0.8, justifyContent: 'center', alignContent: 'center', marginLeft: 7, marginBottom: 8}}>
+          <Box sx={{ width: 0.8, justifyContent: 'center', alignContent: 'center', marginLeft: 9, marginBottom: 8}}>
           <TutorHourProgressBar hoursTutored={hoursTutored} />
           </Box>
           <Typography variant="h5" sx={{ marginBottom: '1rem', color: "#1976d2" }}>
