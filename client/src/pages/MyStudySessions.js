@@ -47,12 +47,12 @@ const MyStudySessions = () => {
 
   // Background colors for the study sessions shown on this page
   const myStudySessionColors = [
-    '#0fab3c',
-    '#98f5ff',
-    '#ee6363',
-    '#ffa500',
-    '#eeaeee',
-    '#1e90ff'
+    '#6CA779',
+    '#C7EBFF',
+    '#E08E8E',
+    '#E18734',
+    '#E5BBFF',
+    '#6499FF'
   ];
 
   // The texts shown if a Tutor does not offer any study sessions
@@ -90,6 +90,7 @@ const MyStudySessions = () => {
         if (user.role === 'TUTOR') {
           setStudySessions(data || []);
         } else {
+          console.log('LATATEEST: ', data[0].latest_message);
           setStudySessions(
             Array.from(
               new Set(
@@ -222,7 +223,7 @@ const MyStudySessions = () => {
           >
             {user.role === 'TUTOR'
               ? 'My Published Tutor Sessions'
-              : "Study Sessions I'm Intrested In"}
+              : "Study Sessions I'm Interested In"}
           </Typography>
           <Box
             sx={{

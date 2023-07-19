@@ -12,13 +12,13 @@ const stripe = new Stripe(
 
 export const createAccount = async (req, res) => {
   const user = req.params.userId;
+  // Check if user already has a payment account.
   const existingPayment = await Payment.findOne({ user: user });
   if (!existingPayment) {
     try {
       const customer = await stripe.accounts.create({
-        type: "standard",
+        type: "express",
       });
-      console.log("customerId:", customer.id);
       const payment = new Payment({
         user: user,
         customerId: customer.id,
@@ -35,40 +35,22 @@ export const createAccount = async (req, res) => {
         .status(200)
         .send({ url: accountLink.url, userId: user, accountId: account.id });
     } catch (err) {
-      res.status(500).send(err);
+      res.status(500).send("Failed to create stripe account!");
     }
   } else {
     res.status(400).send("User already has a payment account!");
   }
 };
 
-export const createAccountForNewUser = async (req, res) => {
-  try {
-    const customer = await stripe.accounts.create({
-      type: "standard",
-    });
-
-    const accountLink = await stripe.accountLinks.create({
-      account: customer.id,
-      refresh_url: "http://localhost:3000/register",
-      return_url: "http://localhost:3000/register",
-      type: "account_onboarding",
-    });
-    console.log("accountLink", accountLink);
-    res.status(200).send({ url: accountLink.url, accountId: customer.id });
-  } catch (err) {
-    res.status(500).send(err);
-  }
-};
-
 export const updateAccount = async (req, res) => {
-  console.log("in update account");
   const user = req.params.userId;
   try {
+    // Get existing payment account for user.
     const existingPayment = await Payment.findOne({ user: user });
     const existingStripeAccount = await stripe.accounts.retrieve(
       existingPayment.customerId
     );
+    // Only create new account link if user has a payment account and charges are disabled.
     if (existingPayment && existingStripeAccount.charges_enabled == false) {
       try {
         const accountLink = await stripe.accountLinks.create({

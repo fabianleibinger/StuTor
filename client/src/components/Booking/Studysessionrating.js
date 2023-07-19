@@ -67,7 +67,7 @@ const StudysessionRating = ({ studySessionId }) => {
 
         {/* ----------- Count Number of Reviews ----------- */}
         <Grid item>
-          <Typography variant="body1">{reviews.length} Ratings</Typography>
+          <Typography variant="body1" paddingTop={'0.25rem'}>({reviews.length})</Typography>
         </Grid>
 
         {/* ----------- See Reviews Button ----------- */}
