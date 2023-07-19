@@ -52,7 +52,7 @@ const StudysessionRating = ({ studySessionId }) => {
 
         {/* ----------- Star Ratings Graphics ----------- */}
         <Grid item marginTop={0.75}>
-          <StarRating rating={rating} isReadOnly={true} smallStars={true}/>
+          <StarRating rating={rating} isReadOnly={true}/>
         </Grid>
 
         {/* ----------- Count Number of Reviews ----------- */}
