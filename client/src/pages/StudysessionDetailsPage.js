@@ -1,31 +1,24 @@
-import React, { useState, useContext, useEffect } from "react";
-import {
-  Grid,
-  Button,
-  Box,
-  Typography,
-  Avatar,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import { useQuery, useMutation } from "react-query";
-import BookingDialog from "../components/Booking/BookingDialog.js";
-import { getStudySessionbyId, getStudysessions } from "../api/StudySession.js";
-import BookingHistoryDialog from "../components/Booking/BookingHistoryDialog.js";
-import StudysessionRating from "../components/Booking/Studysessionrating.js";
-import { useParams } from "react-router-dom";
-import { useChatContext } from "../context/ChatProvider.js";
-import { accessChat as accessChatCall } from "../api/Chat.js";
-import ChatBox from "../components/Chat/ChatBox";
-import GreenCircleComponent from "../components/Booking/GreenCircle.js";
-import { LoadingIndicator } from "../components/General/LoadingIndicator.js";
-import { ErrorIndicator } from "../components/General/ErrorIndicator.js";
-import LanguageIcon from "@mui/icons-material/Language";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import { useUserContext } from "../context/UserProvider.js";
-import AchievementsDisplay from "../components/Achievement/AchievementsDisplay.js";
-import TutorHourProgressBar from "../components/Achievement/TutorHourProgressBar.js";
-import newRequest from "../utils/newRequest.js";
+import React, { useState, useContext, useEffect } from 'react';
+import { Grid, Button, Box, Typography, Avatar, useTheme, useMediaQuery } from '@mui/material';
+import { useQuery, useMutation } from 'react-query';
+import BookingDialog from '../components/Booking/BookingDialog.js';
+import { getStudySessionbyId, getStudysessions } from '../api/StudySession.js';
+import BookingHistoryDialog from '../components/Booking/BookingHistoryDialog.js';
+import StudysessionRating from '../components/Booking/Studysessionrating.js';
+import { useParams } from 'react-router-dom';
+import { useChatContext } from '../context/ChatProvider.js';
+import { accessChat as accessChatCall } from '../api/Chat.js';
+import ChatBox from '../components/Chat/ChatBox';
+import TextTruncate from 'react-text-truncate';
+import GreenCircleComponent from '../components/Booking/GreenCircle.js';
+import { LoadingIndicator } from '../components/General/LoadingIndicator.js';
+import { ErrorIndicator } from '../components/General/ErrorIndicator.js';
+import LanguageIcon from '@mui/icons-material/Language';
+import { useUserContext } from '../context/UserProvider.js';
+import AchievementsDisplay from '../components/Achievement/AchievementsDisplay.js';
+import TutorHourProgressBar from '../components/Achievement/TutorHourProgressBar.js';
+import { blue } from '@mui/material/colors';
+
 
 const StudysessionDetailsPage = () => {
   const { studySessionId } = useParams();
@@ -67,13 +60,13 @@ const StudysessionDetailsPage = () => {
   };
 
   const { isLoading, error, data } = useQuery(
-    ["studysession", studySessionId],
+    ['studysession', studySessionId],
     () => getStudySessionbyId(studySessionId),
     {
-      onSuccess: (data) => {
+      onSuccess: data => {
         setStudysession(data);
       },
-      onError: (error) => {
+      onError: error => {
         console.log(error);
       },
       retry: (failureCount, error) => {
@@ -105,12 +98,12 @@ const StudysessionDetailsPage = () => {
     () =>
       accessChatCall([studysession.tutoredBy._id, user._id], studySessionId),
     {
-      onSuccess: (data) => {
+      onSuccess: data => {
         setSelectedChat(data);
       },
-      onError: (error) => {
+      onError: error => {
         console.log(error);
-      },
+      }
     }
   );
 
@@ -131,117 +124,130 @@ const StudysessionDetailsPage = () => {
   if (error) return <ErrorIndicator />;
 
   return (
-    <Grid container spacing={2}>
-      <Grid
-        item
-        xs={12}
-        sm={isSmScreen ? 12 : 6}
-        md={isXsScreen ? 12 : 6}
-        lg={6}
-      >
-        {/* Course Details */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#f5f5f5",
-            borderRadius: "30px",
-            flexWrap: "wrap",
-            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)",
-            padding: "1rem",
-            margin: "2rem",
-            overflow: "auto",
-            height: "85vh",
-          }}
-        >
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        width: '97vw',
+        height: '100vh',
+        mx: 'auto',
+        marginTop: '2vh',
+        marginBottom: '2vh'
+      }}
+    >
+       <Box width={0.49} height={1}>
+      <Box sx={{display: "flex",
+    flexDirection: "column",
+    width: 1,
+    height: 1,
+    border: "1px solid lightgrey",
+    backgroundColor: '#f5f5f5',
+    borderRadius: "6px",
+    flexWrap: 'wrap'}}>
+      <Box component="div" sx={{overflow: 'auto', padding: 2, height: 0.85, marginBottom: '5vh'}}>
+      <Typography variant="h3" sx={{ marginBottom: '1rem' }}>
+            {data.courseName}
+          </Typography>
           <Box
-            component="div"
             sx={{
-              overflow: "auto",
-              padding: 2,
-              marginBottom: "5vh",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1rem'
             }}
+          >
+            <Avatar
+              src={data.tutoredBy.picture}
+              alt=""
+              sx={{ width: 150, height: 150 }}
+            />
+            <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
+          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="h5">
+                {data.tutoredBy.firstname + ' ' + data.tutoredBy.lastname}
+              </Typography>
+              <Typography variant="subtitle2" sx={{ marginBottom: '1.5rem' }}>
+                {data.tutoredBy.university.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} alignContent={'center'}>
+              <StudysessionRating studySessionId={studySessionId} />
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={2}
+            marginBottom={'1.5rem'}
+          >
+            <Grid item>
+              <Grid container alignItems="center">
+                <Grid item>
+                  <LanguageIcon sx={{ marginRight: '0.5rem' }} />
+                </Grid>
+                {data.languages.map(language => (
+                  <Grid item>
+                    <Typography
+                      variant="subtitle2"
+                      key={language}
+                      marginRight={'0.5rem'}
+                    >
+                      {language}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
+          <Box sx={{ width: 0.8, justifyContent: 'center', alignContent: 'center', marginLeft: 7, marginBottom: 8}}>
+          <TutorHourProgressBar hoursTutored={hoursTutored} />
+          </Box>
+          <Typography variant="h5" sx={{ marginBottom: '1rem', color: "#1976d2" }}>
+            Achievements
+          </Typography>
+          <AchievementsDisplay
+                  user={data.tutoredBy}
+                  size={100}
+                  showTitle={true}
+                />
+          <Typography variant="h5" sx={{ marginTop: '1rem', marginBottom: '1rem', color: "#1976d2" }}>
+            Course Description
+          </Typography>
+          <Typography>
+            {data.description}
+            </Typography>
+            </Box>
+            <Grid
+            container
+            spacing={2}
+            sx={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: "auto", marginBottom: "auto" }}
           >
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "90%",
-                paddingBottom: "2rem",
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
             >
-              <Typography variant="h3">{data.courseName}</Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "1rem",
-                width: "90%",
-              }}
-            >
-              <Avatar
-                src={data.tutoredBy.picture}
-                alt=""
-                sx={{ width: 150, height: 150 }}
-              />
-              <GreenCircleComponent pricePerHourEuro={data.pricePerHourEuro} />
-            </Box>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="h5">
-                  {data.tutoredBy.firstname + " " + data.tutoredBy.lastname}
-                </Typography>
-                <Typography variant="subtitle2">
-                  {data.tutoredBy.university.name}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-              spacing={2}
-              marginBottom={"1.5rem"}
-            >
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <LanguageIcon sx={{ marginRight: "0.5rem" }} />
-                  </Grid>
-                  {data.languages.map((language) => (
-                    <Grid item key={language}>
-                      <Typography variant="subtitle2" marginRight={"0.5rem"}>
-                        {language}
-                      </Typography>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Grid>
-            </Grid>
-            {/* ---------------------------- Buttons ---------------------------- */}
-            <Box
-              mt={2}
-              sx={{
-                display: "flex",
-                justifyContent: "left",
-                gap: "2rem",
-                marginBottom: "2rem",
-              }}
-            >
-              <Grid item key="booking-history">
+              <Grid item marginRight={8}>
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleHistoryOpenDialog}
+                  style={{ width: 'auto' }}
                 >
                   View bookings
                 </Button>
               </Grid>
-              <Grid item key="book-now">
+              <Grid item marginLeft={8}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -250,118 +256,8 @@ const StudysessionDetailsPage = () => {
                   Book now
                 </Button>
               </Grid>
-            </Box>
-            {/* ---------------------------- Buttons ---------------------------- */}
-
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-              spacing={2}
-              marginBottom={"1.5rem"}
-            >
-              {/* ---------------------------- Tutor Hour Progress Bar ---------------------------- */}
-              <Grid item xs={12} md={6}>
-                <Box
-                  mt={2}
-                  mb={2}
-                  display="flex"
-                  flexDirection="column"
-                  width="100%" // Set the container to take full width of the grid item
-                >
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      marginBottom: "1rem",
-                      color: "#1976d2",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Tutor Experience
-                  </Typography>
-                  <div
-                    style={{
-                      marginLeft: "36px",
-                      width: "400px",
-                      marginBottom: "40px",
-                    }}
-                  >
-                    <TutorHourProgressBar hoursTutored={hoursTutored} />
-                  </div>
-                </Box>
+              </Box>
               </Grid>
-              {/* ---------------------------- Tutor Hour Progress Bar ---------------------------- */}
-              <Grid item>
-                <Grid container alignItems="center">
-                  {/* ---------------------------- StudysessionRating  Start ---------------------------- */}
-                  <Box>
-                    <Typography
-                      variant="h5"
-                      sx={{
-                        marginBottom: "1rem",
-                        color: "#1976d2",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Course Rating
-                    </Typography>
-                    <StudysessionRating studySessionId={studySessionId} />
-                  </Box>
-                  {/* ---------------------------- StudysessionRating End---------------------------- */}
-                </Grid>
-              </Grid>
-            </Grid>
-            {/* ---------------------------- Achievements ---------------------------- */}
-            <Box mt={2} mb={2}>
-              <Typography
-                variant="h5"
-                sx={{
-                  marginBottom: "1rem",
-                  color: "#1976d2",
-                  fontWeight: "bold",
-                }}
-              >
-                Achievements
-              </Typography>{" "}
-              <div
-                style={{
-                  width: "90%",
-                  overflowX: "auto",
-                }}
-              >
-                <AchievementsDisplay
-                  user={data.tutoredBy}
-                  size={100}
-                  showTitle={true}
-                />
-              </div>
-            </Box>
-            {/* ---------------------------- Achievements ---------------------------- */}
-
-            {/* ---------------------------- Course Description ---------------------------- */}
-            <Typography
-              variant="h5"
-              sx={{
-                marginBottom: "1rem",
-                color: "#1976d2",
-                fontWeight: "bold",
-              }}
-            >
-              Course Description
-            </Typography>
-
-            <div
-              style={{
-                width: "85%",
-                maxHeight: "40vh",
-                overflowY: "auto",
-              }}
-            >
-              <Typography>{data.description}</Typography>
-            </div>
-            {/* ---------------------------- Course Description ---------------------------- */}
-          </Box>
 
           <BookingHistoryDialog
             open={historyDialogOpen}
@@ -377,30 +273,12 @@ const StudysessionDetailsPage = () => {
             createdBy={user._id}
             studysession={data}
           />
-        </Box>
-      </Grid>
-
-      <Grid
-        item
-        xs={12}
-        sm={isSmScreen ? 12 : 6}
-        md={isXsScreen ? 12 : 6}
-        lg={6}
-      >
-        {/* Chat Box */}
-        <Box
-          sx={{
-            boxShadow: "0px 10px 16px rgba(0, 0, 0, 0.2)",
-            borderRadius: "30px",
-            padding: "1rem",
-            margin: "2rem",
-            height: "85vh",
-          }}
-        >
-          {<ChatBox />}
-        </Box>
-      </Grid>
-    </Grid>
+      </Box>
+      </Box>
+      <Box width={0.49} height={1}>
+        {<ChatBox />}
+      </Box>
+    </Box>
   );
 };
 
