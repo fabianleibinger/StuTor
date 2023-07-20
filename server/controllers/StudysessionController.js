@@ -287,7 +287,7 @@ export const getAverageRating = async (req, res) => {
 
 export const getReviewsOfStudysession = async (req, res) => {
   try {
-    // Check if studysession exists.
+    // Check if studysession exists
     const studysessionId = new ObjectId(req.params.studysessionId);
     const studysession = await Studysession.findById(studysessionId);
     if (!studysession) {
@@ -295,6 +295,7 @@ export const getReviewsOfStudysession = async (req, res) => {
       return;
     }
     try {
+      // Get all reviews for this studysession and populate the studysession and createdBy fields
       const reviews = await Review.find().populate({
         path: 'booking',
         match: { studysession: studysessionId },
@@ -307,15 +308,14 @@ export const getReviewsOfStudysession = async (req, res) => {
           model: 'User'
         }
       });
+      // Filter the reviews for the ones with a booking
       const filteredReviews = reviews.filter(review => review.booking !== null);
       res.status(200).send(filteredReviews);
     } catch (err) {
-      console.log(err);
       res.status(500).send('Failed to retrieve reviews!');
       return;
     }
   } catch (err) {
-    console.log('err', err);
     res.status(400).send('Bad request!');
   }
 };
