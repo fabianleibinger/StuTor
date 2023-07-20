@@ -145,8 +145,9 @@ export const getReviewsAndRatingOfStudysession = async (studysessionId) => {
       rating = ratingResponse.data;
     }
   } catch (error) {
+    // only catch error in case there are no reviews yet
     if (error.response?.status !== 404) {
-      console.log(error);
+      throw error;
     }
   }
 

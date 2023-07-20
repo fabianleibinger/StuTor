@@ -12,7 +12,7 @@ const stripe = new Stripe(process.env.STRIPE);
 
 export const createAccount = async (req, res) => {
   const user = req.params.userId;
-  // Check if user already has a payment account.
+  // Check if user already has a payment account
   const existingPayment = await Payment.findOne({ user: user });
 
   // Only create new account if there is none yet
