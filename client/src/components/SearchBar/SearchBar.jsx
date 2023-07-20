@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import './SearchBar.scss';
+import React, { useState } from "react";
+import "./SearchBar.scss";
 
-import StudySessionSearchbar from '../Searchbars/StudySessionSearchbar';
-import { useNavigate } from 'react-router-dom';
+import StudySessionSearchbar from "../Searchbars/StudySessionSearchbar";
+import { useNavigate } from "react-router-dom";
 
 function SearchBar() {
-  const [search, setSerach] = useState('');
+  const [search, setSerach] = useState("");
 
   const navigate = useNavigate();
 
-  const handleSearchInputChange = e => {
+  const handleSearchInputChange = (e) => {
     setSerach(e.target.value);
   };
 
@@ -28,18 +28,14 @@ function SearchBar() {
             <StudySessionSearchbar
               handleSearchInputChange={handleSearchInputChange}
             />
-            <button style={{ height: '56px' }} onClick={handleSearchClick}>
+            <button style={{ height: "56px" }} onClick={handleSearchClick}>
               Search
             </button>
           </div>
           <div className="popular">
             <span>Popular:</span>
             {/* TO-DO: Link the button to course offerings */}
-            <button
-              onClick={() => handlePopularButtonClick('Machine Learning')}
-            >
-              Machine Learning
-            </button>{' '}
+            <button>Machine Learning</button>
             <button>Introduction to Deep Learning</button>
             <button>Robotics</button>
             <button>Natural Language Processing</button>
