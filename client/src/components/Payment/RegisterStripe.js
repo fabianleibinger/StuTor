@@ -13,8 +13,12 @@ import { DialogTitle, DialogActions } from "@mui/material";
 const RegisterStripe = () => {
   const queryClient = useQueryClient();
   const { user } = useUserContext();
+
+  // Determine if the user can register, update or delete his stripe account
   let registerStripeIsPossible = false;
   let updateAccountIsPossible = false;
+
+  // States for the delete dialog
   const [showDialog, setShowDialog] = useState(false);
 
   const handleOpenDialog = () => {
@@ -25,6 +29,7 @@ const RegisterStripe = () => {
     setShowDialog(false);
     refetch();
   };
+
   const {
     isLoading: isLoading,
     error: error,
@@ -32,9 +37,13 @@ const RegisterStripe = () => {
     refetch,
   } = useQuery(["payment"], () => getPaymentInfo(user._id));
 
+  // Redirect to Stripe onboarding page
+  const handleRedirect = (url) => {
+    window.location.replace(url);
+  };
+
   const createAccount = useMutation(() => createAccountCall(user._id), {
     onSuccess: (url) => {
-      console.log("in create account mutation and url is", url);
       handleRedirect(url);
       queryClient.invalidateQueries("payment");
     },
@@ -45,7 +54,6 @@ const RegisterStripe = () => {
 
   const updateAccount = useMutation(() => updateAccountCall(user._id), {
     onSuccess: (url) => {
-      console.log("in update account mutation and url is", url);
       handleRedirect(url);
       queryClient.invalidateQueries("payment");
     },
@@ -64,21 +72,24 @@ const RegisterStripe = () => {
       console.log(error);
     },
   });
+
   if (isLoading) return "Loading...";
   if (error) {
     console.log(error.status);
     return "An error has occurred!";
   }
+
+  // There is no stripe account yet
   if (data.length == 0) registerStripeIsPossible = true;
+
+  // The stripe account is nt set up correctly
   if (data.charges_enabled == false) {
     updateAccountIsPossible = true;
   }
-  //if (paymentInfo) return "You already have a stripe account!"
 
   const handleStripeAccount = async () => {
     try {
       await createAccount.mutateAsync();
-      console.log("in handle stripe account");
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +98,6 @@ const RegisterStripe = () => {
   const handleUpdateStripeAccount = async () => {
     try {
       await updateAccount.mutateAsync();
-      console.log("in handle update stripe account");
     } catch (error) {
       console.log(error);
     }
@@ -96,22 +106,15 @@ const RegisterStripe = () => {
   const handleDeleteStripeAccount = async () => {
     try {
       await deleteAccount.mutateAsync();
-      console.log("in handle delete tripe account");
       await refetch();
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Redirect to Stripe oboarding
-  const handleRedirect = (url) => {
-    //const path = new URL(url).pathname
-    window.location.replace(url);
-    //navigate(path);
-  };
-
   return (
     <>
+    {/* Case that there is no stripe account set up yet */}
       {registerStripeIsPossible && (
         <Button
           variant="contained"
@@ -121,11 +124,13 @@ const RegisterStripe = () => {
           Set up Stripe payment
         </Button>
       )}
+      {/* Case that the stripe account is set up correctly and can be deleted */}
       {!registerStripeIsPossible && !updateAccountIsPossible && (
         <Button variant="contained" color="primary" onClick={handleOpenDialog}>
           Delete Stripe account
         </Button>
       )}
+      {/* Case that the stripe account is not set up correctly and should be updated */}
       {updateAccountIsPossible && (
         <>
           <Alert severity="warning">
@@ -141,6 +146,7 @@ const RegisterStripe = () => {
           </Button>
         </>
       )}
+      { /* Dialog for deleting stripe account */ } 
       <Dialog open={showDialog} onClose={handleCancel}>
         <DialogTitle>
           Do you really want to delete your stripe account?
