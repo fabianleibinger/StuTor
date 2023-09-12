@@ -37,7 +37,7 @@ Student - username: Susi, pw: 123
 ## Unknown contributors
 peytonlandyouknow - private github account of Fabian Leibinger
 
-seba project bot - weird git interface? of Sophie Witt (all commits are made by her)
+seba project bot - seba bot was created automatically when cloning the repository using the GUI "Fork" for Git with an Access Token, all commits are done by Sophie Witt
 
 
 
